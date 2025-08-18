@@ -1,0 +1,632 @@
+.appointment_book_wrapper {
+    /*theextra2remisforpaddingbottom*/
+    height: var(--list-wrapper-height);
+    width: 100%;
+    padding: 2rem;
+    background-color: var(--light-color-4);
+    border-radius: var(--list-wrapper-border-radius);
+    -webkit-border-radius: var(--list-wrapper-border-radius);
+    -moz-border-radius: var(--list-wrapper-border-radius);
+    -ms-border-radius: var(--list-wrapper-border-radius);
+    -o-border-radius: var(--list-wrapper-border-radius);
+}
+
+.appointment_book_wrapper>div:nth-child(1) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4rem;
+    margin-bottom: 1rem;
+
+    &>p {
+        font-size: var(--font-size-1);
+        font-weight: 600;
+    }
+}
+
+.appointment_book_content_wrapper {
+    width: 100%;
+    /* height: var(--list-wrapper-common-height); */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+
+    &>div:nth-child(1) {
+        height: calc(var(--list-wrapper-common-height) - 5rem);
+        /* padding-block: 1rem; */
+        overflow: auto;
+        /* border: 0.1rem solid red; */
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+
+        &>div {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+
+            &>p {
+                font-size: var(--font-size-3);
+                font-weight: 600;
+                line-height: 1.5rem;
+            }
+
+            &>input {
+                width: 100%;
+                height: 4rem;
+                padding-inline: 1rem;
+                font-size: var(--font-size-3);
+                background-color: var(--light-color-3);
+                border: none;
+                outline: none;
+                border-radius: var(--input-border-radius);
+                -webkit-border-radius: var(--input-border-radius);
+                -moz-border-radius: var(--input-border-radius);
+                -ms-border-radius: var(--input-border-radius);
+                -o-border-radius: var(--input-border-radius);
+            }
+        }
+    }
+
+    &>div:nth-child(2) {
+        height: calc(var(--list-wrapper-common-height) - 5rem);
+        /* padding-block: 1rem; */
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+
+        &>div {
+            display: flex;
+            flex-direction: column;
+            width: 99%;
+            margin-inline: auto;
+            gap: 1.5rem;
+            position: relative;
+
+            &>p {
+                font-size: var(--font-size-3);
+                font-weight: 600;
+                line-height: 1.5rem;
+            }
+
+            &>input {
+                width: 100%;
+                height: 4rem;
+                padding-inline: 1rem;
+                font-size: var(--font-size-3);
+                background-color: var(--light-color-3);
+                border: none;
+                outline: none;
+                border-radius: var(--input-border-radius);
+                -webkit-border-radius: var(--input-border-radius);
+                -moz-border-radius: var(--input-border-radius);
+                -ms-border-radius: var(--input-border-radius);
+                -o-border-radius: var(--input-border-radius);
+            }
+
+            &>button {
+                position: absolute;
+                right: 1rem;
+                top: 4rem;
+                background: none;
+                border: none;
+                outline: none;
+                cursor: pointer;
+            }
+
+            &>div:nth-child(4) {
+                position: absolute;
+                top: 8rem;
+                right: 0rem;
+                left: 0rem;
+                height: 35rem;
+                background-color: var(--light-color-3);
+                border: 1px solid rgba(0, 0, 0, 0.2);
+                padding: 1rem;
+                border-radius: 3px;
+                z-index: 100;
+                -webkit-border-radius: 3px;
+                -moz-border-radius: 3px;
+                -ms-border-radius: 3px;
+                -o-border-radius: 3px;
+                box-shadow: var(--cmmn-box-shadow-y);
+                overflow: auto;
+            }
+
+            .barber_content_body {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                overflow: auto;
+
+                &>div {
+                    min-height: 6rem;
+                    border-radius: 3px;
+                    -webkit-border-radius: 3px;
+                    -moz-border-radius: 3px;
+                    -ms-border-radius: 3px;
+                    -o-border-radius: 3px;
+                    padding-inline: 1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 2rem;
+                    background-color: var(--light-color-4);
+                    border: 0.1rem solid rgba(0, 0, 0, 0.2);
+                    cursor: pointer;
+
+                    &>div {
+                        width: 4.5rem;
+                        height: 4.5rem;
+                        border-radius: 10px;
+                        -webkit-border-radius: 10px;
+                        -moz-border-radius: 10px;
+                        -ms-border-radius: 10px;
+                        -o-border-radius: 10px;
+
+                        &>img {
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 10px;
+                            -webkit-border-radius: 10px;
+                            -moz-border-radius: 10px;
+                            -ms-border-radius: 10px;
+                            -o-border-radius: 10px;
+                            border: 0.1rem solid rgba(0, 0, 0, 0.2);
+                        }
+                    }
+
+                    &>p {
+                        font-size: var(--font-size-3);
+                        font-weight: 500;
+                    }
+                }
+            }
+
+            .barber_content_body_error {
+                width: 100%;
+                height: 100%;
+                display: grid;
+                place-items: center;
+
+                &>p {
+                    font-size: var(--font-size-3);
+                    font-weight: 500;
+                }
+            }
+
+            .service_item {
+                position: relative !important;
+                display: flex;
+                align-items: center;
+
+                &>div:nth-child(2) {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    gap: 0.5rem;
+
+                    &>p {
+                        font-size: 1.4rem;
+                    }
+                }
+
+                &>button:nth-child(3) {
+                    position: absolute !important;
+                    right: 1rem;
+                    top: 1rem;
+                    font-size: var(--font-size-3);
+                    font-weight: 500;
+                    /* background-color: var(--color-3);
+                    color: var(--color-2);
+                    border: 0.1rem solid var(--color-2); */
+                    padding-inline: 1rem;
+                    height: 3rem;
+                    cursor: pointer;
+                    transition: 0.3s all ease;
+                    -webkit-transition: 0.3s all ease;
+                    -moz-transition: 0.3s all ease;
+                    -ms-transition: 0.3s all ease;
+                    -o-transition: 0.3s all ease;
+
+                    /* &:hover {
+                        background-color: var(--color-2);
+                        color: var(--light-color-4);
+                    } */
+                }
+
+                .delete_btn {
+                    background-color: var(--color-7);
+                    color: var(--color-6);
+                    border: 0.1rem solid var(--color-6);
+
+                    &:hover {
+                        background-color: var(--color-6);
+                        color: var(--light-color-4);
+                    }
+                }
+
+                .add_btn {
+                    background-color: var(--color-3);
+                    color: var(--color-2);
+                    border: 0.1rem solid var(--color-2);
+
+                    &:hover {
+                        background-color: var(--color-2);
+                        color: var(--light-color-4);
+                    }
+                }
+            }
+        }
+    }
+}
+
+.timeslot_item {
+    height: 6rem;
+    background-color: #fff;
+    padding-inline: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* gap: 2rem; */
+}
+
+.calender_container {
+    position: relative;
+
+    &>span {
+        position: absolute;
+        right: 1rem;
+        top: 4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+}
+
+.calender_drop_container {
+    position: absolute;
+    left: 0;
+    top: 8rem;
+    background-color: var(--light-color-4);
+}
+
+.timeslot_add_btn {
+    padding-inline: 1rem;
+    height: 3rem;
+    background-color: var(--color-3);
+    color: var(--color-2);
+    border: 0.1rem solid var(--color-2);
+    cursor: pointer;
+    transition: 0.3s all ease;
+    -webkit-transition: 0.3s all ease;
+    -moz-transition: 0.3s all ease;
+    -ms-transition: 0.3s all ease;
+    -o-transition: 0.3s all ease;
+
+    &:hover {
+        background-color: var(--color-2);
+        color: var(--light-color-4);
+    }
+}
+
+.book_appointment_btn {
+    background-color: var(--color-3);
+    border: 0.1rem solid var(--color-2);
+    color: var(--color-2);
+    font-weight: 600;
+    transition: var(--btn-transition);
+    -webkit-transition: var(--btn-transition);
+    padding: 1rem 2rem;
+    border-radius: var(--list-btn-border-radius);
+    -webkit-border-radius: var(--list-btn-border-radius);
+    -moz-border-radius: var(--list-btn-border-radius);
+    -ms-border-radius: var(--list-btn-border-radius);
+    -o-border-radius: var(--list-btn-border-radius);
+    cursor: pointer;
+    font-size: var(--font-size-3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-inline: auto;
+    height: 4rem;
+    margin-top: 1rem;
+
+    &:hover {
+        background-color: var(--color-2);
+        color: var(--light-color-4);
+    }
+}
+
+.error_message {
+    font-size: 1.2rem !important;
+    font-weight: 500;
+    color: var(--color-6);
+}
+
+
+.appointment_book_small_content_wrapper {
+    display: none;
+}
+
+
+.modal_container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    padding: 2rem;
+    background-color: var(--light-color-4);
+    border: none;
+    width: 30%;
+    border-radius: var(--input-border-radius);
+    -webkit-border-radius: var(--input-border-radius);
+    -moz-border-radius: var(--input-border-radius);
+    -ms-border-radius: var(--input-border-radius);
+    -o-border-radius: var(--input-border-radius);
+
+    &>div:nth-child(1) {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+
+        &>p {
+            font-size: var(--font-size-1);
+            font-weight: 600;
+        }
+
+        &>button {
+            margin-left: auto;
+            height: 3.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 3.2rem;
+            background-color: var(--color-7);
+            border: 0.1rem solid var(--color-6);
+            cursor: pointer;
+            color: var(--color-6);
+            border-radius: 50%;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            -ms-border-radius: 50%;
+            -o-border-radius: 50%;
+            transition: var(--btn-transition);
+            -webkit-transition: var(--btn-transition);
+            -moz-transition: var(--btn-transition);
+            -ms-transition: var(--btn-transition);
+            -o-transition: var(--btn-transition);
+            font-size: var(--font-size-2);
+            margin-bottom: 1rem;
+
+            &:hover {
+                background-color: var(--color-6);
+                color: var(--light-color-4);
+
+                &>div {
+                    color: var(--light-color-4);
+                }
+            }
+        }
+    }
+
+
+    .modal_content_container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+
+        &>p {
+            font-size: var(--font-size-3);
+            font-weight: 600;
+
+            &>span {
+                font-weight: 500;
+            }
+        }
+
+        .modal_content_service_body {
+            height: 20rem;
+            background-color: var(--light-color-3);
+            padding: 1rem;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+
+            .modal_service_item {
+                position: relative !important;
+                display: flex;
+                align-items: center;
+                gap: 1.5rem;
+                background-color: var(--light-color-4);
+                padding-inline: 1rem;
+                height: 6rem;
+                border: 0.1rem solid rgba(0, 0, 0, 0.2);
+
+                &>div:nth-child(1) {
+                    width: 4.5rem;
+                    height: 4.5rem;
+                    border-radius: 10px;
+                    -webkit-border-radius: 10px;
+                    -moz-border-radius: 10px;
+                    -ms-border-radius: 10px;
+                    -o-border-radius: 10px;
+
+                    &>img {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 10px;
+                        -webkit-border-radius: 10px;
+                        -moz-border-radius: 10px;
+                        -ms-border-radius: 10px;
+                        -o-border-radius: 10px;
+                        border: 0.1rem solid rgba(0, 0, 0, 0.2);
+                    }
+                }
+
+                &>div:nth-child(2) {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5rem;
+
+                    &>p {
+                        font-size: var(--font-size-3);
+                        font-weight: 500;
+                    }
+                }
+
+            }
+        }
+
+        &>button {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            border: none;
+            cursor: pointer;
+            width: var(--mdl-sbt-btn-width);
+            height: var(--mdl-sbt-btn-height);
+            background-color: var(--color-3);
+            border: 0.1rem solid var(--color-2);
+            border-radius: var(--list-btn-border-radius);
+            -webkit-border-radius: var(--list-btn-border-radius);
+            -moz-border-radius: var(--list-btn-border-radius);
+            -ms-border-radius: var(--list-btn-border-radius);
+            -o-border-radius: var(--list-btn-border-radius);
+            transition: var(--btn-transition);
+            -webkit-transition: var(--btn-transition);
+            -moz-transition: var(--btn-transition);
+            -ms-transition: var(--btn-transition);
+            -o-transition: var(--btn-transition);
+            margin-inline: auto;
+            font-size: var(--font-size-2);
+            font-weight: 500;
+            color: var(--color-2);
+
+            &:hover {
+                background-color: var(--color-2);
+                color: var(--light-color-4);
+            }
+        }
+    }
+
+}
+
+/* dark mode  */
+
+.appointment_book_wrapper.dark {
+    background-color: var(--dark-color-2);
+    border: 0.1rem solid rgba(255, 255, 255, 0.2);
+}
+
+.appointment_book_content_wrapper.dark {
+    &>div:nth-child(1) {
+        &>div {
+            &>input {
+                background-color: var(--dark-color-3);
+            }
+        }
+    }
+
+    &>div:nth-child(2) {
+        &>div {
+            &>input {
+                background-color: var(--dark-color-3);
+            }
+
+            &>div:nth-child(4) {
+                background-color: var(--dark-color-1);
+            }
+
+            .barber_content_body.dark {
+                background-color: var(--dark-color-1);
+
+                &>div {
+                    background-color: var(--dark-color-3);
+                    border: 0.1rem solid rgba(255, 255, 255, 0.2);
+
+                    &>div {
+                        &>img {
+                            border: 0.1rem solid rgba(255, 255, 255, 0.2);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.dropicon.dark {
+    color: var(--light-color-4);
+}
+
+.modal_container.dark {
+    background-color: var(--dark-color-2);
+
+    .modal_content_container {
+        &>div {
+            &>div {
+                background-color: var(--dark-color-3);
+
+                &>div {
+                    color: var(--light-color-4);
+                }
+            }
+        }
+    }
+
+    .modal_content_service_body {
+        background-color: var(--dark-color-1);
+
+        .modal_service_item {
+            background-color: var(--dark-color-3);
+
+            &>div:nth-child(1) {
+                &>img {
+                    border: 0.1rem solid rgba(255, 255, 255, 0.2);
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width:0px) and (max-width:430px) {
+    .appointment_book_content_wrapper {
+        grid-template-columns: 1fr;
+        height: calc(var(--list-wrapper-common-height) - 5rem);
+        overflow: auto;
+        gap: 1rem;
+    }
+
+    .modal_container {
+        width: 90vw;
+    }
+}
+
+@media screen and (min-width:431px) and (max-width:768px) {
+    .appointment_book_content_wrapper {
+        grid-template-columns: 1fr;
+        height: calc(var(--list-wrapper-common-height) - 5rem);
+        overflow: auto;
+        gap: 1rem;
+    }
+
+    .modal_container {
+        width: 70vw;
+    }
+}
+
+@media screen and (min-width:769px) and (max-width:1140px) {
+    .modal_container {
+        width: 50%;
+    }
+}

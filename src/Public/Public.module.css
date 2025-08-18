@@ -1,0 +1,94 @@
+.section {
+    height: 100svh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background-color: transparent !important;
+
+    &>div:nth-child(1) {
+        width: 50%;
+        height: inherit;
+        background: linear-gradient(var(--linear-color-1), var(--linear-color-2));
+    }
+
+    &>div:nth-child(2) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: inherit;
+        flex: 1;
+        background-color: var(--bg-primary);
+        width: 85vw;
+        padding-inline: 2rem;
+
+        &>div {
+
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+
+            &>img {
+                margin-inline: auto;
+                margin-bottom: 1rem;
+                box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+                border-radius: var(--border-radius-primary);
+                -webkit-border-radius: var(--border-radius-primary);
+                -moz-border-radius: var(--border-radius-primary);
+                -ms-border-radius: var(--border-radius-primary);
+                -o-border-radius: var(--border-radius-primary);
+            }
+
+            &>h2 {
+                color: var(--text-primary);
+                line-height: inherit;
+                font-family: "AirbnbCereal_Medium";
+                text-transform: capitalize;
+                word-break: break-all;
+            }
+
+            &>div {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                &>a {
+                    height: 3.5rem;
+                    width: min(12rem, 45%);
+                    font-size: 1.4rem;
+                    border-radius: var(--border-radius-primary);
+                    -webkit-border-radius: var(--border-radius-primary);
+                    -moz-border-radius: var(--border-radius-primary);
+                    -ms-border-radius: var(--border-radius-primary);
+                    -o-border-radius: var(--border-radius-primary);
+                    background-color: var(--bg-secondary);
+                    color: var(--btn-text-color);
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+                    transition: var(--common-btn-transition);
+                    -webkit-transition: var(--common-btn-transition);
+                    -moz-transition: var(--common-btn-transition);
+                    -ms-transition: var(--common-btn-transition);
+                    -o-transition: var(--common-btn-transition);
+                    text-decoration: none;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    &:hover {
+                        background-color: var(--bg-secondary-hover);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width:0px) and (max-width:768px) {
+    .section {
+        &>div:nth-child(1) {
+            display: none;
+        }
+    }
+}

@@ -1,0 +1,101 @@
+.calender-box{
+    width: 98%;
+    height: 99%;
+    /* background-color: white; */
+    border-radius: 10px;
+    font-size: 1rem;
+}
+.calender-header{
+    display: grid;
+    grid-template-columns: repeat(7,5rem);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.5rem;
+    font-size: 1.4rem;
+    height: 95%;
+}
+.calender-header>div{
+    height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calender-header>div:nth-child(1){
+    grid-column:span 5;
+    justify-content: flex-start;
+    font-size: 1.4rem;
+    font-weight: bolder;
+    margin-left: 1rem;
+    height: 3rem;
+}
+.calender-header>div:nth-child(1):hover{
+    /* background: white; */
+    border-radius: none;
+}
+
+.calender-header>div:nth-child(2){
+    font-size: 1.4rem;
+}
+
+.calender-header>div:nth-child(2):hover{
+    border-radius: 3px;
+    background-color: #efefef;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+}
+.calender-header>div:nth-child(3){
+    font-size: 1.4rem;
+}
+.calender-header>div:nth-child(3):hover{
+    border-radius: 3px;
+    background-color: #efefef;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+}
+.next-month{
+    color: var(--color-6);
+}
+
+.calender-header > div:nth-child(1):hover {
+    background-color: none;
+}
+
+/* Dark Mode Css */
+
+.calender-header.dark{
+    background-color: var(--dark-mode-bg-color-4);
+    color: var(--light-color-4);
+}
+
+.calender-header.dark>div:nth-child(2):hover,
+.calender-header.dark>div:nth-child(3):hover{
+    background-color: var(--dark-mode-bg-color-1);
+    color: var(--light-color-4);
+}
+
+
+@media screen and (min-width:0px) and (max-width:430px) {
+    .calender-box{
+        height: 30rem;
+    }
+
+    .calender-header{
+        height: 100%;
+    }
+}
+
+@media screen and (min-width:431px) and (max-width:768px) {
+    .calender-box{
+        height: 30rem;
+    }
+
+    .calender-header{
+        height: 100%;
+    }
+}

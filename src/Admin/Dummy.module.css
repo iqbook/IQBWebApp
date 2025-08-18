@@ -1,0 +1,8 @@
+.disabledDay {
+    background-color: red !important;
+    color: white !important;
+    pointer-events: none;
+    opacity: 0.6;
+    border-radius: 5px;
+    color: white !important;
+}

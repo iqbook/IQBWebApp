@@ -1,0 +1,833 @@
+.section {
+    background-color: transparent;
+    height: calc(100svh - 6rem);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    &>div:nth-child(1) {
+        height: 4rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &>h2 {
+            color: var(--text-primary);
+            line-height: inherit;
+            font-family: "AirbnbCereal_Medium";
+        }
+    }
+
+    .stepper_heading {
+        color: var(--text-primary);
+        font-size: 1.6rem;
+        font-family: 'AirbnbCereal_Bold';
+    }
+
+    .form_main_container {
+        flex: 1;
+        overflow: auto;
+
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        .form_container {
+            max-width: 67rem;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding-block: 2rem;
+
+            .form_group {
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
+
+                &>label {
+                    font-size: 1.6rem;
+                    color: var(--text-primary);
+                    font-family: 'AirbnbCereal_Medium';
+                }
+
+                &>input {
+                    height: 3.5rem;
+                    padding-inline: 1rem;
+                    font-size: 1.4rem;
+                    border: 0.1rem solid var(--border-secondary);
+                    border-radius: var(--border-radius-primary);
+                    -webkit-border-radius: var(--border-radius-primary);
+                    -moz-border-radius: var(--border-radius-primary);
+                    -ms-border-radius: var(--border-radius-primary);
+                    -o-border-radius: var(--border-radius-primary);
+                    background-color: var(--bg-primary);
+                    color: var(--text-primary);
+                    outline: none;
+
+                    &::placeholder {
+                        color: var(--text-secondary);
+                        letter-spacing: 0.01rem;
+                    }
+                }
+
+                .select_container {
+                    border: 0.1rem solid var(--border-secondary);
+                    border-radius: var(--border-radius-primary);
+                    -webkit-border-radius: var(--border-radius-primary);
+                    -moz-border-radius: var(--border-radius-primary);
+                    -ms-border-radius: var(--border-radius-primary);
+                    -o-border-radius: var(--border-radius-primary);
+                    background-color: var(--bg-primary);
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    position: relative;
+
+                    &>input {
+                        width: calc(100% - 3rem);
+                        height: 3.5rem;
+                        padding-inline: 1rem;
+                        font-size: 1.4rem;
+                        background: transparent;
+                        color: var(--text-primary);
+                        border: none;
+                        outline: none;
+
+                        &::placeholder {
+                            color: var(--text-secondary);
+                            letter-spacing: 0.01rem;
+                        }
+                    }
+
+                    &>div {
+                        height: 3.5rem;
+                        width: 3.5rem;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 1.4rem;
+                        color: var(--text-primary);
+                        font-family: 'AirbnbCereal_Medium';
+                    }
+
+                    .select_dropdown_container {
+                        height: auto;
+                        /* width: 35rem; */
+                        position: absolute;
+                        top: 5rem;
+                        left: 0rem;
+                        width: 100%;
+                        max-width: 35rem;
+                    }
+                }
+            }
+
+            .button_container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                &>button {
+                    height: 3.5rem;
+                    padding-inline: 1.5rem;
+                    border-radius: var(--border-radius-primary);
+                    -webkit-border-radius: var(--border-radius-primary);
+                    -moz-border-radius: var(--border-radius-primary);
+                    -ms-border-radius: var(--border-radius-primary);
+                    -o-border-radius: var(--border-radius-primary);
+                    background-color: var(--bg-secondary);
+                    color: var(--btn-text-color);
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+                    transition: var(--common-btn-transition);
+                    -webkit-transition: var(--common-btn-transition);
+                    -moz-transition: var(--common-btn-transition);
+                    -ms-transition: var(--common-btn-transition);
+                    -o-transition: var(--common-btn-transition);
+
+                    &:hover {
+                        background-color: var(--bg-secondary-hover);
+                    }
+                }
+            }
+
+        }
+
+        .service_container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding-block: 2rem;
+
+            &>div:nth-child(1) {
+                width: 100%;
+                max-width: 50rem;
+                position: relative;
+
+                &>button {
+                    position: absolute;
+                    top: -6rem;
+                    right: 0;
+                    height: 3.5rem;
+                    padding-inline: 1.5rem;
+                    border-radius: var(--border-radius-primary);
+                    -webkit-border-radius: var(--border-radius-primary);
+                    -moz-border-radius: var(--border-radius-primary);
+                    -ms-border-radius: var(--border-radius-primary);
+                    -o-border-radius: var(--border-radius-primary);
+                    background-color: var(--bg-secondary);
+                    color: var(--btn-text-color);
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+                    transition: var(--common-btn-transition);
+                    -webkit-transition: var(--common-btn-transition);
+                    -moz-transition: var(--common-btn-transition);
+                    -ms-transition: var(--common-btn-transition);
+                    -o-transition: var(--common-btn-transition);
+
+                    &:hover {
+                        background-color: var(--bg-secondary-hover);
+                    }
+                }
+
+                &>div:nth-child(1) {
+                    width: 100%;
+                    max-width: 50rem;
+                    padding: 1rem;
+                    height: 50rem;
+                    overflow: auto;
+                    display: flex;
+                    flex-direction: column;
+                    background-color: var(--bg-hover-primary);
+                    border-radius: var(--border-radius-primary);
+                    -webkit-border-radius: var(--border-radius-primary);
+                    -moz-border-radius: var(--border-radius-primary);
+                    -ms-border-radius: var(--border-radius-primary);
+                    -o-border-radius: var(--border-radius-primary);
+                    overflow-y: auto;
+
+
+                    .service_item {
+                        display: flex;
+                        flex-direction: column;
+                        background-color: var(--bg-primary);
+                        border: 0.1rem solid var(--border-secondary);
+                        border-radius: var(--border-radius-primary);
+                        -webkit-border-radius: var(--border-radius-primary);
+                        -moz-border-radius: var(--border-radius-primary);
+                        -ms-border-radius: var(--border-radius-primary);
+                        -o-border-radius: var(--border-radius-primary);
+                        min-width: 45.5rem;
+                        margin-bottom: 1rem;
+
+                        &>div:nth-child(1) {
+                            flex: 1;
+                            border-bottom: 0.1rem solid var(--border-secondary);
+                            padding: 1.5rem;
+                            position: relative;
+
+
+                            &>div {
+                                display: flex;
+                                gap: 2rem;
+
+                                &>div:nth-child(1) {
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    width: 5rem;
+                                    height: 5rem;
+                                    border-radius: 50%;
+                                    -webkit-border-radius: 50%;
+                                    -moz-border-radius: 50%;
+                                    -ms-border-radius: 50%;
+                                    -o-border-radius: 50%;
+
+                                    &>img {
+                                        width: inherit;
+                                        height: inherit;
+                                        border-radius: inherit;
+                                        -webkit-border-radius: inherit;
+                                        -moz-border-radius: inherit;
+                                        -ms-border-radius: inherit;
+                                        -o-border-radius: inherit;
+                                    }
+                                }
+
+                                &>div:nth-child(2) {
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 0.5rem;
+
+                                    &>p:nth-child(1) {
+                                        font-size: 1.6rem;
+                                        color: var(--text-primary);
+                                        font-family: 'AirbnbCereal_Medium';
+                                    }
+
+                                    &>p {
+                                        font-size: 1.4rem;
+                                        color: var(--text-secondary);
+                                        line-height: initial;
+                                    }
+                                }
+                            }
+
+                            &>button {
+                                position: absolute;
+                                top: 1.5rem;
+                                right: 1.5rem;
+                                padding: 0.5rem 1rem;
+                                border-radius: var(--border-radius-primary);
+                                -webkit-border-radius: var(--border-radius-primary);
+                                -moz-border-radius: var(--border-radius-primary);
+                                -ms-border-radius: var(--border-radius-primary);
+                                -o-border-radius: var(--border-radius-primary);
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                color: #fff;
+                                border: none;
+                                outline: none;
+                                cursor: pointer;
+                                font-size: 1.4rem;
+                            }
+                        }
+
+                        &>div:nth-child(2) {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-around;
+                            padding: 2rem;
+
+                            &>div:nth-child(1) {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 1rem;
+
+                                &>p:nth-child(1) {
+                                    font-size: 1.8rem;
+                                    color: var(--text-primary);
+                                    font-family: "AirbnbCereal_Medium";
+                                }
+
+                                &>p {
+                                    font-size: 1.6rem;
+                                    text-align: center;
+                                    color: var(--text-secondary);
+                                }
+                            }
+
+                            &>div:nth-child(2) {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 1rem;
+
+                                &>p:nth-child(1) {
+                                    font-size: 1.8rem;
+                                    color: var(--text-primary);
+                                    font-family: "AirbnbCereal_Medium";
+                                }
+
+                                &>div {
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 1rem;
+                                    margin-inline: auto;
+
+                                    &>input {
+                                        width: 4rem;
+                                        height: 2rem;
+                                        font-size: 1.6rem;
+                                        text-align: center;
+                                        color: var(--text-secondary);
+                                        background: transparent;
+                                        border: none;
+                                        border-bottom: 0.1rem solid var(--border-secondary);
+                                        outline: none;
+
+                                        &:focus {
+                                            border-bottom: 0.1rem solid var(--text-primary);
+                                        }
+                                    }
+
+                                    &>p {
+                                        font-size: 1.6rem;
+                                        text-align: center;
+                                        color: var(--text-secondary);
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+
+                    .barber_service_error {
+                        height: 100%;
+                        width: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                }
+
+
+                &>div:nth-child(2) {
+                    width: 100%;
+                    max-width: 50rem;
+                    padding: 1rem;
+                    height: 50rem;
+                    overflow: auto;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2rem;
+                    background-color: var(--bg-hover-primary);
+                    border-radius: var(--border-radius-primary);
+                    -webkit-border-radius: var(--border-radius-primary);
+                    -moz-border-radius: var(--border-radius-primary);
+                    -ms-border-radius: var(--border-radius-primary);
+                    -o-border-radius: var(--border-radius-primary);
+                    overflow-y: auto;
+
+
+                    .service_item {
+                        display: flex;
+                        flex-direction: column;
+                        background-color: var(--bg-primary);
+                        border: 0.1rem solid var(--border-secondary);
+                        border-radius: var(--border-radius-primary);
+                        -webkit-border-radius: var(--border-radius-primary);
+                        -moz-border-radius: var(--border-radius-primary);
+                        -ms-border-radius: var(--border-radius-primary);
+                        -o-border-radius: var(--border-radius-primary);
+                        min-width: 45.5rem;
+
+                        &>div:nth-child(1) {
+                            flex: 1;
+                            border-bottom: 0.1rem solid var(--border-secondary);
+                            padding: 1.5rem;
+                            position: relative;
+
+
+                            &>div {
+                                display: flex;
+                                gap: 2rem;
+
+                                &>div:nth-child(1) {
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    width: 5rem;
+                                    height: 5rem;
+                                    border-radius: 50%;
+                                    -webkit-border-radius: 50%;
+                                    -moz-border-radius: 50%;
+                                    -ms-border-radius: 50%;
+                                    -o-border-radius: 50%;
+
+                                    &>img {
+                                        width: inherit;
+                                        height: inherit;
+                                        border-radius: inherit;
+                                        -webkit-border-radius: inherit;
+                                        -moz-border-radius: inherit;
+                                        -ms-border-radius: inherit;
+                                        -o-border-radius: inherit;
+                                    }
+                                }
+
+                                &>div:nth-child(2) {
+                                    display: flex;
+                                    flex-direction: column;
+                                    gap: 0.5rem;
+
+                                    &>p:nth-child(1) {
+                                        font-size: 1.6rem;
+                                        color: var(--text-primary);
+                                        font-family: 'AirbnbCereal_Medium';
+                                    }
+
+                                    &>p {
+                                        font-size: 1.4rem;
+                                        color: var(--text-secondary);
+                                        line-height: initial;
+                                    }
+                                }
+                            }
+
+                            &>button {
+                                position: absolute;
+                                top: 1.5rem;
+                                right: 1.5rem;
+                                width: 3rem;
+                                height: 3rem;
+                                border-radius: 50%;
+                                -webkit-border-radius: 50%;
+                                -moz-border-radius: 50%;
+                                -ms-border-radius: 50%;
+                                -o-border-radius: 50%;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                font-size: 1.8rem;
+                                background-color: #450a0a;
+                                color: var(--text-primary);
+                                border: none;
+                                outline: none;
+                                cursor: pointer;
+                            }
+                        }
+
+                        &>div:nth-child(2) {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-around;
+                            padding: 2rem;
+
+                            &>div {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 1rem;
+
+                                &>p:nth-child(1) {
+                                    font-size: 1.8rem;
+                                    color: var(--text-primary);
+                                    font-family: "AirbnbCereal_Medium";
+                                }
+
+                                &>p {
+                                    font-size: 1.6rem;
+                                    text-align: center;
+                                    color: var(--text-secondary);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .empty_barber_services {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    &>p {
+                        color: var(--text-primary);
+                        font-size: 1.6rem;
+                        font-family: "AirbnbCereal_Medium";
+                    }
+                }
+            }
+
+            .button_container {
+                max-width: 50rem;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                &>button {
+                    height: 3.5rem;
+                    padding-inline: 1.5rem;
+                    border-radius: var(--border-radius-primary);
+                    -webkit-border-radius: var(--border-radius-primary);
+                    -moz-border-radius: var(--border-radius-primary);
+                    -ms-border-radius: var(--border-radius-primary);
+                    -o-border-radius: var(--border-radius-primary);
+                    background-color: var(--bg-secondary);
+                    color: var(--btn-text-color);
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+                    transition: var(--common-btn-transition);
+                    -webkit-transition: var(--common-btn-transition);
+                    -moz-transition: var(--common-btn-transition);
+                    -ms-transition: var(--common-btn-transition);
+                    -o-transition: var(--common-btn-transition);
+
+                    &:hover {
+                        background-color: var(--bg-secondary-hover);
+                    }
+                }
+            }
+        }
+    }
+
+    .complete {
+        margin-block: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        max-width: 67rem;
+        width: 100%;
+
+        &>p {
+            color: var(--text-primary);
+            font-size: 1.6rem;
+            font-family: 'AirbnbCereal_Medium';
+        }
+
+        &>div {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            &>button {
+                height: 3.5rem;
+                padding-inline: 1.5rem;
+                border-radius: var(--border-radius-primary);
+                -webkit-border-radius: var(--border-radius-primary);
+                -moz-border-radius: var(--border-radius-primary);
+                -ms-border-radius: var(--border-radius-primary);
+                -o-border-radius: var(--border-radius-primary);
+                background-color: var(--bg-secondary);
+                color: var(--btn-text-color);
+                border: none;
+                outline: none;
+                cursor: pointer;
+                transition: var(--common-btn-transition);
+                -webkit-transition: var(--common-btn-transition);
+                -moz-transition: var(--common-btn-transition);
+                -ms-transition: var(--common-btn-transition);
+                -o-transition: var(--common-btn-transition);
+
+                &:hover {
+                    background-color: var(--bg-secondary-hover);
+                }
+            }
+        }
+    }
+}
+
+.mobile_service_item {
+    display: none;
+}
+
+
+@media screen and (max-width: 768px) {
+    .service_item {
+        display: none !important;
+    }
+
+    .mobile_service_item {
+        display: flex;
+        flex-direction: column;
+        background-color: var(--bg-primary);
+        border: 0.1rem solid var(--border-secondary);
+        border-radius: var(--border-radius-primary);
+        -webkit-border-radius: var(--border-radius-primary);
+        -moz-border-radius: var(--border-radius-primary);
+        -ms-border-radius: var(--border-radius-primary);
+        -o-border-radius: var(--border-radius-primary);
+        /* min-width: 45.5rem; */
+        width: 100%;
+        margin-bottom: 1rem;
+
+
+        &>div:nth-child(1) {
+            flex: 1;
+            border-bottom: 0.1rem solid var(--border-secondary);
+            padding: 1.5rem;
+            position: relative;
+
+
+            &>div {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                min-height: 10rem;
+
+                &>div:nth-child(1) {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 5rem;
+                    height: 5rem;
+                    border-radius: 50%;
+                    -webkit-border-radius: 50%;
+                    -moz-border-radius: 50%;
+                    -ms-border-radius: 50%;
+                    -o-border-radius: 50%;
+                    margin-inline: auto;
+                    position: relative;
+
+                    &>img {
+                        width: inherit;
+                        height: inherit;
+                        border-radius: inherit;
+                        -webkit-border-radius: inherit;
+                        -moz-border-radius: inherit;
+                        -ms-border-radius: inherit;
+                        -o-border-radius: inherit;
+                        border: 0.1rem solid var(--border-secondary);
+                    }
+
+                    &>span {
+                        position: absolute;
+                        top: 0rem;
+                        right: -0.5rem;
+                        height: 2.2rem;
+                        width: 2.2rem;
+                        border-radius: 50%;
+                        background-color: #000;
+                        -webkit-border-radius: 50%;
+                        -moz-border-radius: 50%;
+                        -ms-border-radius: 50%;
+                        -o-border-radius: 50%;
+                        color: #D8AA00;
+                        border: 0.1rem solid #D8AA00;
+                        font-size: 1.2rem;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                }
+
+                &>p:nth-child(2) {
+                    font-size: 1.6rem;
+                    color: var(--text-primary);
+                    font-family: 'AirbnbCereal_Medium';
+                    text-align: center;
+                }
+
+                &>p {
+                    font-size: 1.4rem;
+                    color: var(--text-secondary);
+                    text-align: center;
+                    word-break: break-word;
+                }
+
+            }
+
+            &>button {
+                position: absolute;
+                top: 1.5rem;
+                right: 1.5rem;
+                padding: 0.5rem 0.8rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 1.2rem;
+                background-color: #450a0a;
+                border-radius: var(--border-radius-primary);
+                -webkit-border-radius: var(--border-radius-primary);
+                -moz-border-radius: var(--border-radius-primary);
+                -ms-border-radius: var(--border-radius-primary);
+                -o-border-radius: var(--border-radius-primary);
+                color: #fff;
+                border: none;
+                outline: none;
+                cursor: pointer;
+            }
+        }
+
+        &>div:nth-child(2) {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            /* padding: 2rem; */
+            min-height: 7rem;
+
+
+
+            &>div {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+
+
+                &>p:nth-child(1) {
+                    font-size: 1.5rem;
+                    color: var(--text-primary);
+                    font-family: "AirbnbCereal_Medium";
+                }
+
+
+                &>p {
+                    font-size: 1.4rem;
+                    text-align: center;
+                    color: var(--text-secondary);
+                }
+
+                &>div {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    margin-inline: auto;
+
+                    &>input {
+                        width: 4rem;
+                        height: 2rem;
+                        font-size: 1.4rem;
+                        text-align: center;
+                        color: var(--text-secondary);
+                        background: transparent;
+                        border: none;
+                        border-bottom: 0.1rem solid var(--border-secondary);
+                        outline: none;
+
+                        &:focus {
+                            border-bottom: 0.1rem solid var(--text-primary);
+                        }
+                    }
+
+                    &>p {
+                        text-align: center;
+                        color: var(--text-secondary);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@supports (-webkit-hyphens: none) {
+    .section {
+        .form_main_container {
+            .form_container {
+                .form_group {
+                    &>input {
+                        font-size: 1.6rem;
+                        transform: scale(0.875);
+                        transform-origin: left top;
+                        width: calc(100% / 0.875);
+                        height: calc(3.5rem/ 0.875);
+                        padding-inline: calc(1rem / 0.875);
+                        border-radius: calc(var(--border-radius-primary) / 0.875);
+                        border: calc(0.1rem / 0.875) solid var(--border-secondary);
+                    }
+                }
+            }
+
+
+            .mobile_service_item,
+            .service_item {
+
+                &>div:nth-child(2) {
+                    &>div {
+                        &>div {
+                            &>input {
+                                font-size: 1.6rem;
+                                transform: scale(0.875);
+                                width: calc(4rem / 0.875);
+                                height: calc(2rem / 0.875);
+                                border-bottom: calc(0.1rem / 0.875) solid var(--border-secondary);
+                                -webkit-transform: scale();
+                                -moz-transform: scale();
+                                -ms-transform: scale();
+                                -o-transform: scale();
+
+                                &:focus {
+                                    border-bottom: calc(0.1rem / 0.875) solid var(--text-primary);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+}
