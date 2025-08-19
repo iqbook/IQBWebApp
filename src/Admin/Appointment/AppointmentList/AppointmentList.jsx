@@ -8,6 +8,8 @@ import Skeleton from 'react-loading-skeleton'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material'
 import { DropdownIcon } from '../../../newicons'
+import { ddmmformatDate } from '../../../../utils/ddmmformatDate'
+import { formatMinutesToHrMin } from '../../../../utils/formatMinutesToHrMin'
 
 const AppointmentList = () => {
 
@@ -61,7 +63,7 @@ const AppointmentList = () => {
             <div>
                 <h2>Appointment List</h2>
 
-                <p>{location.state}</p>
+                <p>{ddmmformatDate(location.state)}</p>
 
             </div>
 
@@ -115,11 +117,10 @@ const AppointmentList = () => {
                                                     </p>
                                                     <p>
                                                         Ewt -{' '}
-                                                        {cus.services.reduce(
+                                                        {formatMinutesToHrMin(cus.services.reduce(
                                                             (total, service) => total + service.barberServiceEWT,
                                                             0
-                                                        )}{' '}
-                                                        mins changed
+                                                        ))}
                                                     </p>
                                                 </div>
                                                 {/* <button className={style.edit_app_btn}
