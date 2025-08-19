@@ -14,6 +14,7 @@ import { getCurrentDate } from '../../../utils/Date'
 import { darkmodeSelector } from '../../../Redux/Admin/Reducers/AdminHeaderReducer'
 import Calendar from 'react-calendar'
 import { DropdownIcon } from '../../../newicons'
+import { ddmmformatDate } from '../../../../utils/ddmmformatDate'
 
 const SignupEditProfile = () => {
 
@@ -313,7 +314,7 @@ const SignupEditProfile = () => {
             <input
               type='text'
               placeholder='Date of birth'
-              value={dateOfBirth}
+              value={dateOfBirth ? ddmmformatDate(dateOfBirth) : ""}
               onClick={() => setOpenCalender(true)}
               style={{
                 border: dateOfBirthError && "0.1rem solid red"

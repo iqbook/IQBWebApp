@@ -6,9 +6,7 @@ import { darkmodeSelector } from '../Redux/Admin/Reducers/AdminHeaderReducer'
 
 const Public = () => {
 
-  const darkMode = useSelector(darkmodeSelector)
-
-  const darkmodeOn = darkMode === "On"
+  const Theme = localStorage.getItem('Theme') || 'Light'
 
   return (
     <section className={`${style.section}`}>
@@ -16,8 +14,16 @@ const Public = () => {
       <div></div>
       <div>
         <div>
-          <img src="./apple-touch-icon-180x180.png" alt="" height={100} width={100} />
-          <h2>welcome to iQueueBook</h2>
+          <img
+            src="./iqbook.png"
+            alt=""
+            height={100}
+            width={100}
+            style={{
+              filter: Theme === "Dark" ? 'invert(1)' : 'none',
+            }}
+          />
+          <h2>welcome to iqbook</h2>
 
           <div>
             <Link to="/adminsignin">Admin Signin</Link>

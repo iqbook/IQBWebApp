@@ -1030,7 +1030,7 @@ const EditProfile = () => {
                             <input
                                 type='text'
                                 placeholder='Select Date'
-                                value={ddmmformatDate(dateOfBirth)}
+                                value={dateOfBirth ? ddmmformatDate(dateOfBirth) : ""}
                                 onClick={() => setOpenCalender(true)}
                                 readOnly
                             />
