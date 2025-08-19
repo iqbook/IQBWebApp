@@ -119,7 +119,7 @@ const AppointmentList = () => {
                                                             (total, service) => total + service.barberServiceEWT,
                                                             0
                                                         )}{' '}
-                                                        mins
+                                                        mins changed
                                                     </p>
                                                 </div>
                                                 {/* <button className={style.edit_app_btn}
