@@ -290,7 +290,7 @@ const AppointmentList = () => {
                     </div>
 
                     <div className={`${style.modal_content_container} ${darkmodeOn && style.dark}`}>
-                        <p>Appointment Date: {modalData.appointmentDate}</p>
+                        <p>Appointment Date: {ddmmformatDate(modalData.appointmentDate)}</p>
                         <p>Customer Name: {modalData.customerName}</p>
                         <p>Customer Email: {modalData.customerEmail}</p>
                         <p>Time: {modalData.startTime} - {modalData.endTime}</p>
@@ -347,7 +347,7 @@ const AppointmentList = () => {
                         <p style={{
                             fontWeight: 600,
                             marginBottom: "2rem"
-                        }}>All appointments scheduled for <span style={{ textDecoration: "underline", color: "var(--bg-secondary)" }}>{cancelAllAppoint.appointmentDate}</span> have been selected for cancellation.</p>
+                        }}>All appointments scheduled for <span style={{ textDecoration: "underline", color: "var(--bg-secondary)" }}>{ddmmformatDate(cancelAllAppoint.appointmentDate)}</span> have been selected for cancellation.</p>
 
                         <p>Reason for cancelling appointment</p>
                         <div>
