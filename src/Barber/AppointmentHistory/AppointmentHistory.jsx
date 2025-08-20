@@ -8,6 +8,7 @@ import Skeleton from 'react-loading-skeleton'
 import { useDispatch, useSelector } from 'react-redux'
 import { getBarberAppointmentHistoryAction } from '../../Redux/Barber/Actions/AppointmentAction'
 import toast from 'react-hot-toast'
+import { ddmmformatDate } from '../../../utils/ddmmformatDate'
 
 const AppointmentHistory = () => {
 
@@ -376,7 +377,7 @@ const AppointmentHistory = () => {
                                             {/* <div><p>{item.serviceType}</p></div>
                                                         <div><p>{item.serviceEWT} mins</p></div>
                                                         <div><span>{item?.isAdmin ? (<CheckIcon color={"green"} />) : (<CloseIcon color={"var(--bg-secondary)"} />)}</span></div> */}
-                                            <div><p>{item.appointmentDate?.split("T")[0]}</p></div>
+                                            <div><p>{ddmmformatDate(item.appointmentDate?.split("T")[0])}</p></div>
                                             <div><p style={{
                                                 color: item.status === "served" ? "green" : "red"
                                             }}>{item.status}</p></div>

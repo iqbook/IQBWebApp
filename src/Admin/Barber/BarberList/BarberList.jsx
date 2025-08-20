@@ -455,7 +455,7 @@ const BarberList = () => {
                   <p>From</p>
                   <input
                     type="text"
-                    value={"support@iqueuebarbers.com"}
+                    value={"support@iqbook.com"}
                     readOnly
                     onKeyDown={handleKeyPressMail}
                   />
@@ -529,7 +529,7 @@ const BarberList = () => {
                   <p>From</p>
                   <input
                     type="text"
-                    value={"iqueuebarbers"}
+                    value={"iqbook"}
                     readOnly
                     onKeyDown={handleKeyPressMessage}
                   />

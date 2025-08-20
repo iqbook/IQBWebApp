@@ -11,6 +11,7 @@ import toast from 'react-hot-toast'
 import { DropdownIcon } from '../../newicons';
 import { ClickAwayListener, Modal, Pagination } from '@mui/material'
 import ButtonLoader from '../../components/ButtonLoader/ButtonLoader'
+import { formatMinutesToHrMin } from '../../../utils/formatMinutesToHrMin'
 
 
 const Queue = () => {
@@ -338,7 +339,7 @@ const Queue = () => {
                       <div><p>{item.timeJoinedQ}</p></div>
                       <div><p>{item.qgCode}</p></div>
                       <div><p>{item.serviceType}</p></div>
-                      <div><p>{item?.customerEWT === 0 ? "-" : item?.customerEWT + "mins"}</p></div>
+                      <div><p>{item?.customerEWT === 0 ? "-" : formatMinutesToHrMin(item?.customerEWT)}</p></div>
                       <div><button onClick={() => serveQHandler(item)} disabled={barberServeLoading}>Serve</button></div>
                       <div><button onClick={() => cancelQHandler(item)} disabled={barberCancelLoading}>Cancel</button></div>
 
@@ -444,7 +445,7 @@ const Queue = () => {
 
                     <div>
                       <p>{item.qPosition === 1 ? "Next" : item.qPosition}</p>
-                      <p>{item?.customerEWT === 0 ? "-" : "Ewt : " + item?.customerEWT + "mins"}</p>
+                      <p>{item?.customerEWT === 0 ? "-" : "Ewt : " + formatMinutesToHrMin(item?.customerEWT)}</p>
                     </div>
                   </div>
                 )

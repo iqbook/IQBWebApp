@@ -168,6 +168,7 @@ import { ClickAwayListener, Pagination } from '@mui/material'
 import { Calendar } from 'react-multi-date-picker'
 import toast from 'react-hot-toast'
 import { useLocation } from 'react-router-dom'
+import { formatMinutesToHrMin } from '../../../utils/formatMinutesToHrMin'
 
 const QueHistory = () => {
 
@@ -636,7 +637,7 @@ const QueHistory = () => {
                                                 ? item.services.reduce((sum, service) => sum + (service.servicePrice || 0), 0)
                                                 : 0}</p></div>
                                             <div><p>{item.serviceType}</p></div>
-                                            <div><p>{item.serviceEWT} mins</p></div>
+                                            <div><p>{formatMinutesToHrMin(item.serviceEWT)}</p></div>
                                             <div><span>{item?.isAdmin ? (<CheckIcon color={"green"} />) : (<CloseIcon color={"var(--bg-secondary)"} />)}</span></div>
                                             <div><p style={{
                                                 color: item.status === "served" ? "green" : "red"

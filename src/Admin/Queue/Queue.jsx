@@ -364,6 +364,7 @@ import { getAdminBarberListAction } from '../../Redux/Admin/Actions/BarberAction
 import ButtonLoader from '../../components/ButtonLoader/ButtonLoader'
 import { DropdownIcon } from '../../newicons'
 import { useSocket } from '../../context/SocketContext'
+import { formatMinutesToHrMin } from '../../../utils/formatMinutesToHrMin'
 
 const Queue = () => {
 
@@ -723,7 +724,7 @@ const Queue = () => {
                       <div><p>{item.timeJoinedQ}</p></div>
                       <div><p>{item.qgCode}</p></div>
                       <div><p>{item.serviceType}</p></div>
-                      <div><p>{item?.customerEWT === 0 ? "-" : item?.customerEWT + "mins"}</p></div>
+                      <div><p>{item?.customerEWT === 0 ? "-" : formatMinutesToHrMin(item?.customerEWT)}</p></div>
                       <div><button onClick={() => selectHandler(item)} disabled={adminServeQueueLoading}>Serve</button></div>
                       <div><button onClick={() => cancelQHandler(item)} disabled={adminCancelQueueLoading}>Cancel</button></div>
                     </div>
@@ -832,7 +833,7 @@ const Queue = () => {
 
                     <div>
                       <p>{item.qPosition === 1 ? "Next" : item.qPosition}</p>
-                      <p>{item?.customerEWT === 0 ? "-" : "Ewt : " + item?.customerEWT + "mins"}</p>
+                      <p>{item?.customerEWT === 0 ? "-" : "Ewt : " + formatMinutesToHrMin(item?.customerEWT)}</p>
                     </div>
                   </div>
                 )

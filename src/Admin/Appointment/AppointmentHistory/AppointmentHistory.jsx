@@ -10,6 +10,7 @@ import { Calendar } from 'react-multi-date-picker'
 import toast from 'react-hot-toast'
 import { useLocation } from 'react-router-dom'
 import { getAdminAppointmentHistoryAction } from '../../../Redux/Admin/Actions/AppointmentAction'
+import { ddmmformatDate } from '../../../../utils/ddmmformatDate'
 
 const QueHistory = () => {
 
@@ -478,7 +479,7 @@ const QueHistory = () => {
                                             {/* <div><p>{item.serviceType}</p></div>
                                             <div><p>{item.serviceEWT} mins</p></div>
                                             <div><span>{item?.isAdmin ? (<CheckIcon color={"green"} />) : (<CloseIcon color={"var(--bg-secondary)"} />)}</span></div> */}
-                                            <div><p>{item.appointmentDate?.split("T")[0]}</p></div>
+                                            <div><p>{ddmmformatDate(item.appointmentDate?.split("T")[0])}</p></div>
                                             <div><p style={{
                                                 color: item.status === "served" ? "green" : "red"
                                             }}>{item.status}</p></div>
@@ -590,7 +591,7 @@ const QueHistory = () => {
                                                 <p>{adminGetDefaultSalon?.response?.currency}{" "}{Array.isArray(item?.services)
                                                     ? item.services.reduce((sum, service) => sum + (service.servicePrice || 0), 0)
                                                     : 0}</p>
-                                                <p>{item?.appointmentDate?.split(["T"])[0]}</p>
+                                                <p>{ddmmformatDate(item?.appointmentDate?.split(["T"])[0])}</p>
                                             </div>
                                         </div>
                                         <div>

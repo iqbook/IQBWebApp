@@ -123,6 +123,7 @@ import { getBarberQueueListHistoryAction } from '../../Redux/Barber/Actions/Barb
 
 import { CheckIcon, CloseIcon, CustomerIcon, DropdownIcon, GroupJoinIcon, KioskIcon, MobileIcon } from '../../newicons';
 import { ClickAwayListener, Pagination } from '@mui/material';
+import { formatMinutesToHrMin } from '../../../utils/formatMinutesToHrMin'
 
 const QueHistory = () => {
 
@@ -355,7 +356,7 @@ const QueHistory = () => {
                                             <div><p>{item.qgCode}</p></div>
                                             <div><p>{barberProfile?.currency}{" "}{item?.services.reduce((sum, service) => sum + service.servicePrice, 0)}</p></div>
                                             <div><p>{item.serviceType}</p></div>
-                                            <div><p>{item.serviceEWT} mins</p></div>
+                                            <div><p>{formatMinutesToHrMin(item.serviceEWT)}</p></div>
                                             <div><p style={{
                                                 color: item.status === "served" ? "green" : "red"
                                             }}>{item.status}</p></div>

@@ -399,7 +399,7 @@ const AppointmentList = () => {
                                             }}
                                         >
                                             <Typography component="span" sx={{ alignContent: "center", marginRight: "2rem", fontSize: "1.4rem", fontFamily: "AirbnbCereal_Medium", color: "var(--text-primary)" }}>
-                                                {appoint.appointmentDate}
+                                                {ddmmformatDate(appoint.appointmentDate)}
                                             </Typography>
                                             <button onClick={(e) => {
                                                 e.stopPropagation()
@@ -434,11 +434,10 @@ const AppointmentList = () => {
                                                                     </p>
                                                                     <p>
                                                                         EWT -{' '}
-                                                                        {s.services.reduce(
+                                                                        {formatMinutesToHrMin(s.services.reduce(
                                                                             (total, service) => total + service.barberServiceEWT,
                                                                             0
-                                                                        )}{' '}
-                                                                        mins
+                                                                        ))}
                                                                     </p>
                                                                 </div>
                                                             </div>

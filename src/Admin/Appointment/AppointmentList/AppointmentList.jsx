@@ -210,11 +210,10 @@ const AppointmentList = () => {
                                                                     </p>
                                                                     <p>
                                                                         Ewt -{' '}
-                                                                        {cus.services.reduce(
+                                                                        {formatMinutesToHrMin(cus.services.reduce(
                                                                             (total, service) => total + service.barberServiceEWT,
                                                                             0
-                                                                        )}{' '}
-                                                                        mins
+                                                                        ))}
                                                                     </p>
                                                                 </div>
                                                             </div>
