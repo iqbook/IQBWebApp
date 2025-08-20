@@ -836,7 +836,7 @@ const CustomerList = () => {
                   <p>From</p>
                   <input
                     type="text"
-                    value={"support@iqbook.com"}
+                    value={"support@iqbook.io"}
                     readOnly
                   />
                 </div>
