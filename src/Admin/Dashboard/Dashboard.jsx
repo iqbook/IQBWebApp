@@ -689,6 +689,7 @@ const Dashboard = () => {
     },
   ]
 
+  const [salonInfo, setSalonInfo] = useState("")
 
   return (
     salonId === 0 ? (<>
@@ -705,6 +706,16 @@ const Dashboard = () => {
         {/* <div>
           <h2>Welcome, {adminName ? adminName : "User"}</h2>
         </div> */}
+
+        <div className={style.salonInfo_container}>
+          <h3>Salon Info</h3>
+          <input
+            type="text"
+            value={salonInfo}
+            placeholder='Enter your salon info'
+            onChange={(e) => setSalonInfo(e.target.value)}
+          />
+        </div>
 
         <div>
           <div>
