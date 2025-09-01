@@ -1911,7 +1911,7 @@ const CreateSalon = () => {
                         </div>
 
                         <div>
-                          <img src={salonLogo ? salonLogo : "/maskable-icon-512x512.png"} alt="" />
+                          <img src={salonLogo ? salonLogo : "/iqbook.png"} alt="" />
                         </div>
                       </div>
 
