@@ -539,6 +539,7 @@ const SalonAdv = () => {
                       <input
                         value={item?.link}
                         onChange={(e) => fileLinkChangeHandler(e, item)}
+                        placeholder="https://example.com"
                       />
                     </div>
 
@@ -562,7 +563,7 @@ const SalonAdv = () => {
         </div>
 
       </Modal>
-      
+
     </section >
   )
 }

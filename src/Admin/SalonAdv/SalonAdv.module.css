@@ -360,6 +360,7 @@
                     font-size: 1.4rem;
                     border: none;
                     outline: none;
+                    min-width: 20rem;
                 }
             }
         }

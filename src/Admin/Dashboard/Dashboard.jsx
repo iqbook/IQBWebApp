@@ -479,7 +479,6 @@ const Dashboard = () => {
     response: adminGetDefaultSalonResponse,
   } = adminGetDefaultSalon;
 
-  console.log("adminGetDefaultSalonResponse ", adminGetDefaultSalonResponse);
 
   useEffect(() => {
     if (adminGetDefaultSalonResponse) {
@@ -758,12 +757,18 @@ const Dashboard = () => {
 
         <div className={style.salonInfo_container}>
           <h3>Salon Info</h3>
-          <input
-            type="text"
+          <textarea
             value={salonInfo}
             placeholder="Enter your salon info"
-            onChange={(e) => setSalonInfo(e.target.value)}
+            onChange={(e) => {
+              const lines = e.target.value.split("\n");
+              if (lines.length <= 5) {
+                setSalonInfo(e.target.value);
+              }
+            }}
+            rows={6}
           />
+
         </div>
 
         <div>
@@ -849,15 +854,15 @@ const Dashboard = () => {
                         reportData?.queue?.queueTrend === "Rise"
                           ? "#00A36C"
                           : reportData?.queue?.queueTrend === "Fall"
-                          ? "rgb(244, 67, 54)"
-                          : "",
+                            ? "rgb(244, 67, 54)"
+                            : "",
                     }}
                   >
                     {reportData?.queue?.queueTrend === "Rise"
                       ? "+"
                       : reportData?.queue?.queueTrend === "Fall"
-                      ? "-"
-                      : ""}
+                        ? "-"
+                        : ""}
                     {reportData?.queue?.percentageChangelast30Days}%
                   </span>{" "}
                   from last 30 days
@@ -924,15 +929,15 @@ const Dashboard = () => {
                               ? "#f44336"
                               : reportData?.appointment?.appointmentTrend ===
                                 "Rise"
-                              ? "#00A36C"
-                              : "",
+                                ? "#00A36C"
+                                : "",
                         }}
                       >
                         {reportData?.appointment?.appointmentTrend === "Fall"
                           ? "-"
                           : reportData?.appointment?.appointmentTrend === "Rise"
-                          ? "+"
-                          : ""}
+                            ? "+"
+                            : ""}
                         {reportData?.appointment?.percentageChangeLastWeek}%
                       </span>{" "}
                       from last 7 days

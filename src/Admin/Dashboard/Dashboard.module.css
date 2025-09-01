@@ -77,19 +77,19 @@
         flex-direction: column;
         gap: 0.5rem;
 
-        &>input {
-            height: 3.5rem;
+        &>textarea {
             border-radius: 0.5rem;
             -webkit-border-radius: 0.5rem;
             -moz-border-radius: 0.5rem;
             -ms-border-radius: 0.5rem;
             -o-border-radius: 0.5rem;
-            padding-inline: 1rem;
+            padding: 1rem;
             border: none;
             outline: none;
             background-color: var(--bg-primary);
             box-shadow: var(--cmmn-box-shadow);
             font-size: 1.4rem;
+            resize: none;
         }
     }
 
