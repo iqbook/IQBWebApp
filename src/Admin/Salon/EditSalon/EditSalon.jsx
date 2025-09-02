@@ -554,8 +554,8 @@ const EditSalon = () => {
       return setServiceNameError("Please enter service name")
     }
 
-    if (serviceName.length < 1 || serviceName.length > 25) {
-      toast.error("Service name must be between 1 to 25 charecters", {
+    if (serviceName.length < 1 || serviceName.length > 40) {
+      toast.error("Service name must be between 1 to 40 charecters", {
         duration: 3000,
         style: {
           fontSize: "var(--font-size-2)",
@@ -565,7 +565,7 @@ const EditSalon = () => {
         },
       });
 
-      return setServiceNameError("Service Name must be between 1 to 25 charecters")
+      return setServiceNameError("Service Name must be between 1 to 40 charecters")
     }
 
     if (!serviceDesc) {

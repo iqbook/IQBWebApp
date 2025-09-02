@@ -136,6 +136,22 @@
 }
 
 
+.value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 5px;
+    transition: opacity 0.2s ease;
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+
 @media screen and (min-width:0px) and (max-width:768px) {
 
     .barber_appointment_content_wrapper {
@@ -224,6 +240,7 @@
     .submit {
         width: min(100%, 35rem);
         height: 3.5rem;
+        margin-bottom: 2rem;
         padding-inline: 1rem;
         border-radius: var(--border-radius-primary);
         -webkit-border-radius: var(--border-radius-primary);

@@ -242,8 +242,6 @@ const MobileSidebar = () => {
     response: adminGetDefaultSalonResponse
   } = adminGetDefaultSalon
 
-  console.log("adminGetDefaultSalonResponse  ", adminGetDefaultSalonResponse)
-
   useEffect(() => {
     if (adminGetDefaultSalonResponse) {
       setTogglecheck(adminGetDefaultSalonResponse?.isOnline)

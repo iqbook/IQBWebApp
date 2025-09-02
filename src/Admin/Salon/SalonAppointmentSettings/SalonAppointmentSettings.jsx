@@ -11,7 +11,7 @@ const SalonAppointmentSettings = () => {
     const location = useLocation()
     const currentSalon = location?.state
 
-    console.log(currentSalon)
+    // console.log(currentSalon)
 
     const salonId = useSelector(state => state.AdminLoggedInMiddleware.adminSalonId)
 

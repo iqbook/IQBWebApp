@@ -485,6 +485,7 @@ import ButtonLoader from '../../components/ButtonLoader/ButtonLoader';
 import { CheckAllIcon, CheckIcon, CloseIcon, DropdownIcon, EmailIcon, MessageIcon, SalonThreeDotsIcon, SearchIcon, SortDownIcon, SortUpDownArrowIcon, SortUpIcon } from '../../newicons';
 import { ClickAwayListener, Pagination } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { ddmmformatDate } from '../../../utils/ddmmformatDate';
 
 const CustomerList = () => {
 
@@ -1075,7 +1076,7 @@ const CustomerList = () => {
                       <div><p>{item.email}</p></div>
                       <div><p>{item.gender}</p></div>
                       <div><p>+{item?.mobileCountryCode}{" "}{item?.mobileNumber}</p></div>
-                      <div><p>{item.dateOfBirth.split("T")[0]}</p></div>
+                      <div><p>{ddmmformatDate(item.dateOfBirth.split("T")[0])}</p></div>
                       <div>
                         <div
                           style={{

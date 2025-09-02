@@ -919,8 +919,8 @@ const SalonList = () => {
 
   const generateTimeIntervalInMinutes = () => {
     const options = []
-    for (let i = 1; i <= 60; i++) {
-      options.push(i);
+    for (let i = 1; i <= 4; i++) {
+      options.push(i * 15);
     }
 
     setIntervalTimemin(options)

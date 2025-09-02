@@ -462,6 +462,8 @@ import {
   YAxis,
 } from "recharts";
 import api from "../../Redux/api/Api";
+import toast from "react-hot-toast";
+import { adminGetDefaultSalonAction } from "../../Redux/Admin/Actions/AdminHeaderAction";
 // import { useSocket } from '../../context/SocketContext';
 
 const Dashboard = () => {
@@ -706,6 +708,10 @@ const Dashboard = () => {
         salonId,
         salonInfo: salonInfoText,
       });
+
+      dispatch(adminGetDefaultSalonAction(email))
+      // toast.success(data.message);
+      
     } catch (error) {
       console.log("Error ", error);
     }
@@ -726,7 +732,7 @@ const Dashboard = () => {
     if (timerRef.current) clearTimeout(timerRef.current);
 
     timerRef.current = setTimeout(() => {
-      console.log("Salon Info triggered:", salonInfoRef.current);
+      // console.log("Salon Info triggered:", salonInfoRef.current);
       updateSalonInfo(salonInfoRef.current)
     }, 1000);
 
@@ -762,11 +768,11 @@ const Dashboard = () => {
             placeholder="Enter your salon info"
             onChange={(e) => {
               const lines = e.target.value.split("\n");
-              if (lines.length <= 5) {
-                setSalonInfo(e.target.value);
-              }
+              // if (lines.length <= 5) {
+              //   setSalonInfo(e.target.value);
+              // }
+              setSalonInfo(e.target.value);
             }}
-            rows={6}
           />
 
         </div>

@@ -249,7 +249,7 @@ const AppointmentList = () => {
                                                                     background: "#450a0a"
                                                                 }}
 
-                                                            >Delete</button>
+                                                            >Cancel</button>
                                                         </div>
                                                     </div>
                                                 )
@@ -460,7 +460,7 @@ const AppointmentList = () => {
                                                                         background: "#450a0a"
                                                                     }}
 
-                                                                >Delete</button>
+                                                                >Cancel</button>
                                                             </div>
                                                         </div>
                                                     )

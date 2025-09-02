@@ -11,7 +11,7 @@ import { darkmodeSelector } from '../../Redux/Admin/Reducers/AdminHeaderReducer'
 
 import { barberSendVerifyEmailAction, barberSendVerifyMobileAction, barberUpdatePasswordAction, barberUpdateProfileAction, barberVerifiedEmailStatusAction, barberVerifiedMobileStatusAction } from "../../Redux/Barber/Actions/BarberProfileAction"
 import { BARBER_LOGGED_IN_MIDDLEWARE_SUCCESS } from '../../Redux/Barber/Constants/constants';
-import { ClockIcon, Eyevisible, Notvisibleeye, OtpMessageIcon } from '../../icons'
+import { ClockIcon, CrownIcon, Eyevisible, Notvisibleeye, OtpMessageIcon } from '../../icons'
 
 import { PhoneNumberUtil } from 'google-libphonenumber';
 
@@ -712,11 +712,67 @@ const EditProfile = () => {
                                         </div>
                                     ))}
 
+                                    {
+                                        AllSalonServices?.map((s) => {
+                                            return (
+                                                <div className={style.mobile_service_item} key={s._id} >
+                                                    <div>
+                                                        <div>
+                                                            <div>
+                                                                <img src={s?.serviceIcon?.url} alt={s?.serviceName} />
+
+                                                                {s.vipService ? <span><CrownIcon /></span> : null}
+                                                            </div>
+
+                                                            <p>{s?.serviceName}</p>
+                                                            <p>{s?.serviceDesc}</p>
+
+                                                        </div>
+
+                                                        {
+                                                            currentBarberServices.find((c) => c.serviceId === s.serviceId) ?
+                                                                (<button
+                                                                    style={{
+                                                                        background: "#450a0a",
+                                                                    }}
+                                                                    onClick={() => deleteServiceHandler(s)}>Delete</button>) :
+                                                                (<button
+                                                                    style={{
+                                                                        background: "#052e16",
+                                                                    }}
+                                                                    onClick={() => chooseServiceHandler(s)}>Add</button>)
+                                                        }
+                                                    </div>
+                                                    <div>
+                                                        <div>
+                                                            <p>Price</p>
+                                                            <p>{getAllSalonServicesBarberData?.response?.currency}{s?.servicePrice}</p>
+                                                        </div>
+
+                                                        <div>
+                                                            <p>Estimated Time</p>
+                                                            <div>
+                                                                <input
+                                                                    type="text"
+                                                                    value={currentBarberServices?.find((c) => c.serviceId === s.serviceId) ? currentBarberServices?.find((c) => c.serviceId === s.serviceId).barberServiceEWT : s.serviceEWT}
+                                                                    onChange={(e) => handleonChange(e, s)}
+                                                                    maxLength={3}
+                                                                />
+                                                                <p>mins</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        })
+                                    }
+
                                 </main>) :
                                 (<main className={`${style.edit_modal_content_container_error} ${darkmodeOn && style.dark}`}>
                                     <p>No services available</p>
                                 </main>)
                     }
+
 
                     <button onClick={updateBarberProfile} className={style.edit_service_btn}>
                         {

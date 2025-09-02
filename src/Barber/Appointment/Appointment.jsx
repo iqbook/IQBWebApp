@@ -207,7 +207,7 @@ const Appointment = () => {
                         <p>#</p>
                         <p>Days</p>
                     </div>
-                    {
+                    {/* {
                         days.map((d) => {
                             return (
                                 <div key={d.id} className={style.value}>
@@ -224,7 +224,35 @@ const Appointment = () => {
                                 </div>
                             )
                         })
+                    } */}
+                    {
+                        days.map((d) => {
+                            const isDisabled = getSalonoffDays.includes(d.day);
+                            const isChecked = !isDisabled && selectedDays.includes(d.day);
+
+                            return (
+                                <div
+                                    key={d.id}
+                                    className={`${style.value} ${isDisabled ? style.disabled : ''}`}
+                                    onClick={() => {
+                                        if (!isDisabled) {
+                                            checkdayHandler(d);
+                                        }
+                                    }}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        style={{ accentColor: "blue" }}
+                                        onChange={() => checkdayHandler(d)}
+                                        checked={isChecked}
+                                        disabled={isDisabled}
+                                    />
+                                    <p>{d.day}</p>
+                                </div>
+                            );
+                        })
                     }
+
 
                     <button
                         className={style.submit}

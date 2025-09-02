@@ -475,8 +475,8 @@ const CreateSalon = () => {
       return setServiceNameError("Please enter service name")
     }
 
-    if (serviceName.length < 1 || serviceName.length > 25) {
-      toast.error("Service name must be between 1 to 25 charecters", {
+    if (serviceName.length < 1 || serviceName.length > 40) {
+      toast.error("Service name must be between 1 to 40 charecters", {
         duration: 3000,
         style: {
           fontSize: "var(--font-size-2)",
@@ -486,7 +486,7 @@ const CreateSalon = () => {
         },
       });
 
-      return setServiceNameError("Service Name must be between 1 to 25 charecters")
+      return setServiceNameError("Service Name must be between 1 to 40 charecters")
     }
 
     if (!serviceDesc) {
@@ -1911,7 +1911,8 @@ const CreateSalon = () => {
                         </div>
 
                         <div>
-                          <img src={salonLogo ? salonLogo : "/iqbook.png"} alt="" />
+                          <img 
+                          src={salonLogo ? salonLogo : "/salonDefaultLogo.png"} alt="" />
                         </div>
                       </div>
 

@@ -734,6 +734,7 @@ import Skeleton from 'react-loading-skeleton'
 
 
 import { getCurrentDate } from '../../../utils/Date';
+import { ddmmformatDate } from '../../../../utils/ddmmformatDate';
 
 const CreateBarber = () => {
 
@@ -929,19 +930,19 @@ const CreateBarber = () => {
       return setInvalidNumberError("Invalid Number")
     }
 
-    if (!dateOfBirth) {
-      toast.error("Please select date of birth", {
-        duration: 3000,
-        style: {
-          fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
-        },
-      });
+    // if (!dateOfBirth) {
+    //   toast.error("Please select date of birth", {
+    //     duration: 3000,
+    //     style: {
+    //       fontSize: "var(--font-size-2)",
+    //       borderRadius: '0.3rem',
+    //       background: '#333',
+    //       color: '#fff',
+    //     },
+    //   });
 
-      return setDateOfBirthError("Please select date of birth")
-    }
+    //   return setDateOfBirthError("Please select date of birth")
+    // }
 
     if (chooseServices.length === 0) {
       toast.error("Please provide a service", {
@@ -1231,19 +1232,19 @@ const CreateBarber = () => {
         return setInvalidNumberError("Invalid Number")
       }
 
-      if (!dateOfBirth) {
-        toast.error("Please select date of birth", {
-          duration: 3000,
-          style: {
-            fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
-          },
-        });
+      // if (!dateOfBirth) {
+      //   toast.error("Please select date of birth", {
+      //     duration: 3000,
+      //     style: {
+      //       fontSize: "var(--font-size-2)",
+      //       borderRadius: '0.3rem',
+      //       background: '#333',
+      //       color: '#fff',
+      //     },
+      //   });
 
-        return setDateOfBirthError("Please select date of birth")
-      }
+      //   return setDateOfBirthError("Please select date of birth")
+      // }
 
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
@@ -1372,7 +1373,7 @@ const CreateBarber = () => {
                                 <input
                                   type={field.type}
                                   name={field.name}
-                                  value={dateOfBirth}
+                                  value={ddmmformatDate(dateOfBirth)}
                                   placeholder={field.placeholder}
                                   readOnly
                                 />

@@ -6,7 +6,8 @@ import { darkmodeSelector } from '../Redux/Admin/Reducers/AdminHeaderReducer'
 
 const Public = () => {
 
-  const Theme = localStorage.getItem('Theme') || 'Light'
+  const Theme = localStorage.getItem('Theme') || 'Dark'
+
 
   return (
     <section className={`${style.section}`}>
@@ -20,7 +21,7 @@ const Public = () => {
             height={100}
             width={100}
             style={{
-              filter: Theme === "Dark" ? 'invert(1)' : 'none',
+              filter: Theme === "Light" ? 'none' : 'invert(1)',
             }}
           />
           <h2>welcome to iqbook</h2>

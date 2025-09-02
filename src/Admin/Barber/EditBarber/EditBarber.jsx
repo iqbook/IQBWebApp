@@ -721,6 +721,7 @@ import { ClickAwayListener, Step, StepContent, StepLabel, Stepper } from '@mui/m
 import { getCurrentDate } from '../../../utils/Date';
 import Calendar from 'react-calendar';
 import Skeleton from 'react-loading-skeleton';
+import { ddmmformatDate } from '../../../../utils/ddmmformatDate';
 
 const EditBarber = () => {
 
@@ -871,19 +872,19 @@ const EditBarber = () => {
       return setInvalidNumberError("Invalid Number")
     }
 
-    if (!dateOfBirth) {
-      toast.error("Please select date of birth", {
-        duration: 3000,
-        style: {
-          fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
-        },
-      });
+    // if (!dateOfBirth) {
+    //   toast.error("Please select date of birth", {
+    //     duration: 3000,
+    //     style: {
+    //       fontSize: "var(--font-size-2)",
+    //       borderRadius: '0.3rem',
+    //       background: '#333',
+    //       color: '#fff',
+    //     },
+    //   });
 
-      return setDateOfBirthError("Please select date of birth")
-    }
+    //   return setDateOfBirthError("Please select date of birth")
+    // }
 
     if (currentBarberServices.length === 0) {
       toast.error("Please provide a service", {
@@ -1150,19 +1151,19 @@ const EditBarber = () => {
         return setInvalidNumberError("Invalid Number")
       }
 
-      if (!dateOfBirth) {
-        toast.error("Please select date of birth", {
-          duration: 3000,
-          style: {
-            fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
-          },
-        });
+      // if (!dateOfBirth) {
+      //   toast.error("Please select date of birth", {
+      //     duration: 3000,
+      //     style: {
+      //       fontSize: "var(--font-size-2)",
+      //       borderRadius: '0.3rem',
+      //       background: '#333',
+      //       color: '#fff',
+      //     },
+      //   });
 
-        return setDateOfBirthError("Please select date of birth")
-      }
+      //   return setDateOfBirthError("Please select date of birth")
+      // }
 
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
@@ -1244,7 +1245,7 @@ const EditBarber = () => {
                                 <input
                                   type={field.type}
                                   name={field.name}
-                                  value={dateOfBirth}
+                                  value={ddmmformatDate(dateOfBirth)}
                                   placeholder={field.placeholder}
                                   readOnly
                                 />
