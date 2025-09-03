@@ -1373,7 +1373,7 @@ const CreateBarber = () => {
                                 <input
                                   type={field.type}
                                   name={field.name}
-                                  value={ddmmformatDate(dateOfBirth)}
+                                  value={dateOfBirth ? ddmmformatDate(dateOfBirth) : ""}
                                   placeholder={field.placeholder}
                                   readOnly
                                 />
