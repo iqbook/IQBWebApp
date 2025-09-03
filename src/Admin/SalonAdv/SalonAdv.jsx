@@ -548,6 +548,38 @@ const SalonAdv = () => {
               })
             }
 
+
+            {
+              uploadAdvImages.map((item, index) => {
+                return (
+                  <div
+                    key={item?.lastModified}
+                    className={style.uploadImage_mobile_item}>
+                    <div>
+                      <div>
+                        <div><FileImage color='#0284c7' /></div>
+                        <p className={style.truncateText}>{item?.name}</p>
+                      </div>
+
+                      <p>{`${(item?.size / 1024).toFixed(2)} KB`}</p>
+                    </div>
+
+                    <div>
+                      <p>File URL :</p>
+                      <input
+                        value={item?.link}
+                        onChange={(e) => fileLinkChangeHandler(e, item)}
+                        placeholder="https://example.com"
+                      />
+                    </div>
+
+                  </div>
+                )
+              })
+            }
+
+
+
           </div>
 
           {
