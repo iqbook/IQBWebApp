@@ -13,10 +13,12 @@ import toast from 'react-hot-toast';
 import { PhoneInput } from 'react-international-phone';
 import { darkmodeSelector } from '../../../Redux/Admin/Reducers/AdminHeaderReducer';
 import { ClickAwayListener, Modal, Step, StepContent, StepLabel, Stepper } from '@mui/material';
-import { DeleteIcon, DropdownIcon, FacebookIcon, InstagramIcon, TiktokIcon, WebsiteIcon, XIcon } from '../../../newicons';
+import { DeleteIcon, DropdownIcon, FacebookIcon, InstagramIcon, ScissorIcon, TiktokIcon, WebsiteIcon, XIcon } from '../../../newicons';
 
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import { adminGetDefaultSalonAction } from '../../../Redux/Admin/Actions/AdminHeaderAction';
+
+import { GoogleMap, useJsApiLoader, Marker, OverlayView } from '@react-google-maps/api'
 
 const EditSalon = () => {
 
@@ -1517,6 +1519,7 @@ const EditSalon = () => {
   const [serviceTypeOpen, setServiceTypeOpen] = useState(false)
   const [serviceCategoryOpen, setServiceCategoryOpen] = useState(false)
 
+
   return (
     <section className={`${style.section}`}>
       <div>
@@ -1643,7 +1646,6 @@ const EditSalon = () => {
                           </>
                           )
                         }
-
                       </div>
                     ))}
                     <div className={`${style.button_container}`}>

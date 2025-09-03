@@ -71,3 +71,4 @@ export const CheckAllIcon = TbCopyCheck
 export const KioskIcon = RiComputerLine
 export const MobileIcon = ImMobile2
 export const GroupJoinIcon = IoIosPeople
+export const ScissorIcon = TbScissors

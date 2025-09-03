@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import style from "./CreateSalon.module.css"
 import "react-multi-carousel/lib/styles.css";
-import { CameraIcon, CloseIcon, DeleteIcon, DropdownIcon, FacebookIcon, InstagramIcon, SearchIcon, TiktokIcon, WebsiteIcon, XIcon } from '../../../newicons';
+import { CameraIcon, CloseIcon, DeleteIcon, DropdownIcon, EmailIcon, FacebookIcon, InstagramIcon, ScissorIcon, SearchIcon, TiktokIcon, WebsiteIcon, XIcon } from '../../../newicons';
 import { CrownIcon, EditIcon } from '../../../icons';
 import Skeleton from 'react-loading-skeleton'
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,6 +18,7 @@ import { PhoneNumberUtil } from 'google-libphonenumber';
 import { ClickAwayListener, Modal, Step, StepContent, StepLabel, Stepper } from '@mui/material';
 import { adminGetDefaultSalonAction } from '../../../Redux/Admin/Actions/AdminHeaderAction';
 import Carousel from 'react-multi-carousel';
+import { GoogleMap, useJsApiLoader, Marker, OverlayView } from '@react-google-maps/api'
 
 const CreateSalon = () => {
 
@@ -84,6 +85,7 @@ const CreateSalon = () => {
           const longitude = position.coords.longitude;
           setLatitude(latitude);
           setLongitude(longitude);
+          setCenter({ lat: latitude, lng: longitude })
           const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
 
           localStorage.setItem("salondata", JSON.stringify({
@@ -1321,11 +1323,130 @@ const CreateSalon = () => {
   const [serviceTypeOpen, setServiceTypeOpen] = useState(false)
   const [serviceCategoryOpen, setServiceCategoryOpen] = useState(false)
 
+
+  // React Map logic
+
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+  })
+
+  const [map, setMap] = React.useState(null)
+  const [markerPosition, setMarkerPosition] = React.useState(null);
+
+
+  const [center, setCenter] = useState({
+    lat: 37.7749,
+    lng: -122.4194
+  });
+
+
+  const onLoad = React.useCallback(function callback(map) {
+    // This is just an example of getting and using the map instance!!! don't just blindly copy!
+    const bounds = new window.google.maps.LatLngBounds(center)
+    map.fitBounds(bounds)
+
+    setMap(map)
+  }, [])
+
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null)
+  }, [])
+
+  const handleMapClick = (event) => {
+    const lat = event.latLng.lat();
+    const lng = event.latLng.lng();
+
+    console.log("Clicked Location:", { lat, lng });
+
+    // Set marker position to clicked location
+    setMarkerPosition({ lat, lng });
+    setLatitude(lat);
+    setLongitude(lng);
+
+    const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
+    localStorage.setItem("salondata", JSON.stringify({
+      ...existingData,
+      ["latitude"]: lat,
+      ["longitude"]: lng
+    }));
+  };
+
   return (
     <section className={`${style.section}`}>
       <div>
         <h2>Create Salon</h2>
       </div>
+
+
+      {/* <div style={{ height: "30rem", backgroundColor: "#efefef" }}>
+        {
+          isLoaded ? (
+            <GoogleMap
+              mapContainerStyle={{
+                width: '100%',
+                height: '30rem',
+              }}
+              center={center}
+              zoom={10}
+              onLoad={onLoad}
+              onUnmount={onUnmount}
+              onClick={handleMapClick}
+            >
+              {markerPosition && (
+                <OverlayView
+                  position={markerPosition}
+                  mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      transform: "translate(-50%, -100%)",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "5rem",
+                        height: "5rem",
+                        borderRadius: "0.6rem",
+                        backgroundColor: "#ffffff",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+                        border: "1px solid #000",
+                      }}
+                    >
+                      <ScissorIcon size={"2.4rem"} />
+                    </div>
+
+                    <div
+                      style={{
+                        marginTop: "0.8rem",
+                        backgroundColor: "#fff",
+                        padding: "0.4rem 0.8rem",
+                        borderRadius: "0.4rem",
+                        boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                        fontSize: "1.4rem",
+                        fontWeight: "bold",
+                        color: "#333",
+                        whiteSpace: "nowrap",
+                        border: "0.1rem solid #ccc",
+                      }}
+                    >
+                      {salonName}
+                    </div>
+                  </div>
+                </OverlayView>
+              )}
+            </GoogleMap>
+          ) : (
+            <></>
+          )
+        }
+      </div> */}
 
       <div className={`${style.form_main_container}`}>
         <Stepper
@@ -1599,7 +1720,6 @@ const CreateSalon = () => {
                               </>) : (null)
                             )
 
-
                           ) : (
                             field.name === "address" ? (
                               <>
@@ -1645,9 +1765,87 @@ const CreateSalon = () => {
                         }
 
                         {field.name === "longitude" && (
-                          <button className={`${style.geolocation_btn}`} onClick={geoLocationHandler}>
-                            Get geolocation
-                          </button>
+                          <>
+                            {/* <button className={`${style.geolocation_btn}`} onClick={geoLocationHandler}>
+                              Get geolocation
+                            </button> */}
+                            <p style={{ fontWeight: 700 }}>* Select your salon’s exact location on the map to automatically set its latitude and longitude.</p>
+                            <div style={{ height: "30rem", backgroundColor: "#efefef", borderRadius: "0.6rem", overflow: "hidden" }}>
+                              {
+                                isLoaded ? (
+                                  <GoogleMap
+                                    mapContainerStyle={{
+                                      width: '100%',
+                                      height: '30rem',
+                                    }}
+                                    center={center}
+                                    zoom={10}
+                                    onLoad={onLoad}
+                                    onUnmount={onUnmount}
+                                    onClick={handleMapClick}
+                                    options={{
+                                      disableDefaultUI: false, // Keep basic controls like zoom
+                                      streetViewControl: false, // 🚫 Remove Pegman / Street View
+                                      mapTypeControl: false, // 🚫 Remove Satellite / Terrain switcher
+                                      fullscreenControl: true, // ✅ Keep fullscreen option if needed
+                                      zoomControl: true, // ✅ Keep zoom buttons
+                                    }}
+                                  >
+                                    {markerPosition && (
+                                      <OverlayView
+                                        position={markerPosition}
+                                        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                                      >
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "center",
+                                            transform: "translate(-50%, -100%)",
+                                          }}
+                                        >
+                                          <div
+                                            style={{
+                                              width: "5rem",
+                                              height: "5rem",
+                                              borderRadius: "0.6rem",
+                                              backgroundColor: "#ffffff",
+                                              display: "flex",
+                                              justifyContent: "center",
+                                              alignItems: "center",
+                                              boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+                                              border: "1px solid #000",
+                                            }}
+                                          >
+                                            <ScissorIcon size={"2.4rem"} />
+                                          </div>
+
+                                          <div
+                                            style={{
+                                              marginTop: "0.8rem",
+                                              backgroundColor: "#fff",
+                                              padding: "0.4rem 0.8rem",
+                                              borderRadius: "0.4rem",
+                                              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                                              fontSize: "1.4rem",
+                                              fontWeight: "bold",
+                                              color: "#333",
+                                              whiteSpace: "nowrap",
+                                              border: "0.1rem solid #ccc",
+                                            }}
+                                          >
+                                            {salonName}
+                                          </div>
+                                        </div>
+                                      </OverlayView>
+                                    )}
+                                  </GoogleMap>
+                                ) : (
+                                  <></>
+                                )
+                              }
+                            </div>
+                          </>
                         )}
 
                       </div>
@@ -1911,8 +2109,8 @@ const CreateSalon = () => {
                         </div>
 
                         <div>
-                          <img 
-                          src={salonLogo ? salonLogo : "/salonDefaultLogo.png"} alt="" />
+                          <img
+                            src={salonLogo ? salonLogo : "/salonDefaultLogo.png"} alt="" />
                         </div>
                       </div>
 
