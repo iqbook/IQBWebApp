@@ -520,7 +520,7 @@
         -moz-border-radius: var(--border-radius-primary);
         -ms-border-radius: var(--border-radius-primary);
         -o-border-radius: var(--border-radius-primary);
-        color: var(--text-primary);
+        color: #fff;
         border: none;
         outline: none;
     }
@@ -529,15 +529,15 @@
         background-color: #450a0a;
 
         &:hover {
-            background-color: #4f0b0b;
+            opacity: 0.8;
         }
     }
 
     .add_btn {
-        background-color: #0285c755;
+        background-color: #0285c7;;
 
         &:hover {
-            background-color: #0285c766;
+            opacity: 0.8;
         }
     }
 }

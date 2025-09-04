@@ -978,14 +978,34 @@ const EditProfile = () => {
 
                         <Modal
                             open={openPasswordModal}
-                            onClose={() => setOpenPasswordModal(false)}
+                            onClose={() => {
+                                setOldPasswordError("")
+                                setOldPassword("")
+                                setNotMatchError("")
+                                setPasswordError("")
+                                setPassword("")
+                                setNotMatchError("")
+                                setConfirmPasswordError("")
+                                setConfirmPassword("")
+                                setOpenPasswordModal(false)
+                            }}
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description"
                         >
                             <div className={`${style.modal_container} ${darkmodeOn && style.dark}`}>
                                 <div>
                                     <p>Change your password</p>
-                                    <button onClick={() => setOpenPasswordModal(false)}><CloseIcon /></button>
+                                    <button onClick={() => {
+                                        setOldPasswordError("")
+                                        setOldPassword("")
+                                        setNotMatchError("")
+                                        setPasswordError("")
+                                        setPassword("")
+                                        setNotMatchError("")
+                                        setConfirmPasswordError("")
+                                        setConfirmPassword("")
+                                        setOpenPasswordModal(false)
+                                    }}><CloseIcon /></button>
                                 </div>
                                 <div className={style.modal_content_container}>
 

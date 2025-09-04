@@ -1809,15 +1809,14 @@ const CreateSalon = () => {
                                               width: "5rem",
                                               height: "5rem",
                                               borderRadius: "0.6rem",
-                                              backgroundColor: "#ffffff",
                                               display: "flex",
                                               justifyContent: "center",
                                               alignItems: "center",
-                                              boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
-                                              border: "1px solid #000",
                                             }}
                                           >
-                                            <ScissorIcon size={"2.4rem"} />
+                                            <img src="/mapPointer.png" alt="" style={{
+                                              width: "100%", height: "100%", objectFit: "contain"
+                                            }} />
                                           </div>
 
                                           <div
