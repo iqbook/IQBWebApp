@@ -1240,7 +1240,7 @@ const Dashboard = () => {
                             <div className={`${style.salon_item}`} key={item.salonId}>
                               <img src={item?.salonLogo?.[0]?.url} alt={""} />
                               <div>
-                                <p>{item.salonName} sdvdv sdvwev</p>
+                                <p>{item.salonName}</p>
                                 <p>{item.city}</p>
                               </div>
 
