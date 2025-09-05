@@ -131,7 +131,7 @@ const App = () => {
       <main className={`error_boundary_container ${darkmodeOn && "dark"}`}>
         <div>
           <div><ExclamationIcon /></div>
-          <p>Oops ! Something went wrongs</p>
+          <p>Oops ! Something went wrong</p>
         </div>
       </main>
     );

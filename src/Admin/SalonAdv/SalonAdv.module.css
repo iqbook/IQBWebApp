@@ -276,6 +276,7 @@
     background-color: var(--bg-primary);
     border: 0.1rem solid var(--border-secondary);
     width: min(95vw, 70rem);
+    max-height: 80vh;
     border-radius: var(--border-radius-primary);
     -webkit-border-radius: var(--border-radius-primary);
     -moz-border-radius: var(--border-radius-primary);
@@ -487,7 +488,6 @@
     }
 
     .modal_container {
-        height: 80vh;
         overflow: auto;
 
         &>div:nth-child(2) {
@@ -567,7 +567,6 @@
     }
 
     .modal_container {
-        height: 80vh;
         overflow: auto;
 
         &>div:nth-child(2) {
