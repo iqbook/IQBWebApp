@@ -781,7 +781,7 @@ const SalonAdv = () => {
 
   const [uploadLoader, setUploadLoader] = useState(false)
 
-  console.log("uploadAdvImages ", uploadAdvImages)
+  // console.log("uploadAdvImages ", uploadAdvImages)
 
   const uploadAdvHandler = async () => {
     if (uploadAdvImages.length > 0) {
@@ -876,87 +876,11 @@ const SalonAdv = () => {
   };
 
 
+
+
+
   // const [salonEditLoader, setSalonEditLoader] = useState(null)
 
-  const handleEditFileInputChange = async (e) => {
-    const uploadImage = e.target.files[0];
-    // console.log(uploadImage)
-
-    const allowedTypes = ["image/jpeg", "image/webp", "image/png"];
-
-    if (!allowedTypes.includes(uploadImage.type)) {
-      alert("Please upload a valid image file (JPEG, WebP, PNG).");
-      return;
-    }
-
-    const maxSizeInBytes = 2 * 1024 * 1024;
-    if (uploadImage.size > maxSizeInBytes) {
-      toast.error("File size must be lower than 2mb", {
-        duration: 3000,
-        style: {
-          fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
-        },
-      });
-      return;
-    }
-
-    const formData = new FormData();
-
-    formData.append('id', mongoid)
-    formData.append('advertisements', uploadImage)
-    formData.append('public_imgid', publicId)
-    formData.append('salonId', salonId);
-
-    try {
-      sethandleEditLoader(mongoid)
-      const imageResponse = await api.put('/api/advertisement/updateAdvertisements', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      // console.log('update success:', imageResponse.data);
-      setPublicId("")
-      setMongoid("")
-      sethandleEditLoader(null)
-      dispatch({
-        type: "AFTER_UPDATE_ADVERTISEMENTLIST",
-        payload: imageResponse?.data?.response
-      })
-
-    } catch (error) {
-
-      if (error?.response?.status === 500) {
-        toast.error("Something went wrong !", {
-          duration: 3000,
-          style: {
-            fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
-          },
-        });
-
-        return;
-      }
-
-
-      // console.error('Image upload failed:', error);
-      sethandleEditLoader(null)
-      toast.error(error?.response?.data?.message, {
-        duration: 3000,
-        style: {
-          fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
-        },
-      });
-    }
-  };
 
   const [deleteLoader, setDeleteLoader] = useState(false)
 
@@ -1065,8 +989,99 @@ const SalonAdv = () => {
   const fileInputRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
 
+  console.log("Edit Advertisement Data: ", editAdvData);
 
-  // console.log("editAdvData ", editAdvData?.link)
+  const handleEditFileInputChange = async (e) => {
+    const uploadImage = editAdvData.file;
+
+    const allowedTypes = ["image/jpeg", "image/webp", "image/png"];
+
+    if (uploadImage) {
+      if (!allowedTypes.includes(uploadImage.type)) {
+        alert("Please upload a valid image file (JPEG, WebP, PNG).");
+        return;
+      }
+
+      const maxSizeInBytes = 2 * 1024 * 1024;
+      if (uploadImage.size > maxSizeInBytes) {
+        toast.error("File size must be lower than 2mb", {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: '0.3rem',
+            background: '#333',
+            color: '#fff',
+          },
+        });
+        return;
+      }
+    }
+
+    const formData = new FormData();
+
+    formData.append('id', mongoid)
+    formData.append('salonId', salonId);
+    formData.append('advertisementLink', editAdvData?.link || "")
+
+    if (uploadImage) {
+      formData.append('advertisements', uploadImage)
+      formData.append('public_imgid', publicId)
+    }
+
+    try {
+      sethandleEditLoader(mongoid)
+      const imageResponse = await api.put('/api/advertisement/updateAdvertisements', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      // console.log('update success:', imageResponse.data);
+      setPublicId("")
+      setMongoid("")
+      setEditAdvData(null);
+      setSelectedImage("")
+      sethandleEditLoader(null)
+
+      dispatch({
+        type: "AFTER_UPDATE_ADVERTISEMENTLIST",
+        payload: imageResponse?.data?.response
+      })
+      setSalonEditModal(false)
+
+    } catch (error) {
+      setSalonEditModal(false)
+      setSelectedImage("")
+      if (error?.response?.status === 500) {
+        toast.error("Something went wrong !", {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: '0.3rem',
+            background: '#333',
+            color: '#fff',
+          },
+        });
+
+        return;
+      }
+
+
+      // console.error('Image upload failed:', error);
+      sethandleEditLoader(null)
+
+      toast.error(error?.response?.data?.message, {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: '0.3rem',
+          background: '#333',
+          color: '#fff',
+        },
+      });
+    }
+  };
+
 
   return (
     <section className={`${style.section}`}>
@@ -1389,7 +1404,11 @@ const SalonAdv = () => {
               ? <button className={style.advUploadBtn}><ButtonLoader /></button>
               : <button
                 className={style.advUploadBtn}
-                onClick={() => setSalonEditModal(false)}
+                disabled={handleEditLoader === editAdvData?._id}
+                onClick={() => {
+                  handleEditFileInputChange()
+
+                }}
               >
                 Save Changes
               </button>
