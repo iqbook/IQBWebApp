@@ -1,7 +1,7 @@
 // This icons are used in latest design
 
 import { BsCalendar2X, BsGraphUp, BsInstagram, BsSunFill } from "react-icons/bs";
-import { FaFacebookF, FaRegCalendarAlt, FaUsers, FaUsersSlash, FaWifi } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaFacebookF, FaRegCalendarAlt, FaUsers, FaUsersSlash, FaWifi } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
 import { FiPieChart } from "react-icons/fi";
 import { IoArrowDownSharp, IoArrowUpSharp, IoChevronDownOutline, IoPerson, IoPersonCircleOutline, IoSearch } from "react-icons/io5";
@@ -72,3 +72,5 @@ export const KioskIcon = RiComputerLine
 export const MobileIcon = ImMobile2
 export const GroupJoinIcon = IoIosPeople
 export const ScissorIcon = TbScissors
+export const LeftIcon = FaChevronLeft
+export const RightIcon = FaChevronRight
