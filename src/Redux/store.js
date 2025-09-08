@@ -14,9 +14,9 @@ import { barberForgetPasswordReducer, barberResetPasswordReducer } from "./Barbe
 import { getBarberQueueListHistoryReducer, getBarberQueueListReducer } from "./Barber/Reducers/BarberQueueReducer";
 import { barberSendVerifyEmailReducer, barberSendVerifyMobileReducer, barberSkipProfileReducer, barberUpdatePasswordReducer, barberUpdateProfileReducer, barberVerifiedEmailStatusReducer, barberVerifiedMobileStatusReducer, getAllSalonServicesBarberReducer } from "./Barber/Reducers/BarberProfileReducer";
 import { barberGetAllCustomerListReducer, barberSendCustomerEmailReducer, barberSendCustomerMessageReducer } from "./Barber/Reducers/BarberCustomerReducer";
-import { AppointmentReducer, CancelAppointmentReducer, getBarberAppointmentHistoryReducer, ServeAppointmentReducer } from "./Barber/Reducers/AppointmentReducer"
+import { AppointmentListBarberReducer, AppointmentReducer, CancelAppointmentReducer, getBarberAppointmentHistoryReducer, ServeAppointmentReducer } from "./Barber/Reducers/AppointmentReducer"
 import { ThemeSelectorReducer } from "./Theme";
-import { getAdminAppointmentHistoryReducer } from "./Admin/Reducers/AppointmentReducer";
+import { getAdminAppointmentHistoryReducer, getAdminAppointmentListSalonIdReducer } from "./Admin/Reducers/AppointmentReducer";
 
 const rootReducer = combineReducers({
 
@@ -74,6 +74,7 @@ const rootReducer = combineReducers({
   getAdminQueueListHistory: getAdminQueueListHistoryReducer,
   getAdminAppointmentHistory: getAdminAppointmentHistoryReducer,
   getAllSalonCategories: getAllSalonCategoriesReducer,
+  getAdminAppointmentListSalonId: getAdminAppointmentListSalonIdReducer,
 
   //Barber Reducers
   BarberLoggedInMiddleware: BarberLoggedInMiddlewareReducer,
@@ -108,6 +109,7 @@ const rootReducer = combineReducers({
   CancelAppointment: CancelAppointmentReducer,
   ServeAppointment: ServeAppointmentReducer,
   getBarberAppointmentHistory: getBarberAppointmentHistoryReducer,
+  AppointmentListBarber: AppointmentListBarberReducer,
   ThemeSelector: ThemeSelectorReducer
 })
 

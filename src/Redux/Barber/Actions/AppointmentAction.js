@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import api from "../../api/Api";
-import { CANCEL_APPOINT_FAIL, CANCEL_APPOINT_REQ, CANCEL_APPOINT_SUCCESS, GET_APPOINTMENT_HISTORY_FAIL, GET_APPOINTMENT_HISTORY_REQ, GET_APPOINTMENT_HISTORY_SUCCESS, GET_BARBER_APPOINT_LIST_FAIL, GET_BARBER_APPOINT_LIST_REQ, GET_BARBER_APPOINT_LIST_SUCCESS, SERVE_APPOINT_FAIL, SERVE_APPOINT_REQ, SERVE_APPOINT_SUCCESS } from "../Constants/constants";
+import { CANCEL_APPOINT_FAIL, CANCEL_APPOINT_REQ, CANCEL_APPOINT_SUCCESS, GET_APPOINTMENT_HISTORY_FAIL, GET_APPOINTMENT_HISTORY_REQ, GET_APPOINTMENT_HISTORY_SUCCESS, GET_APPOINTMENT_LIST_BARBERID_APPOINTMENT_FAIL, GET_APPOINTMENT_LIST_BARBERID_APPOINTMENT_REQ, GET_APPOINTMENT_LIST_BARBERID_APPOINTMENT_SUCCESS, GET_BARBER_APPOINT_LIST_FAIL, GET_BARBER_APPOINT_LIST_REQ, GET_BARBER_APPOINT_LIST_SUCCESS, SERVE_APPOINT_FAIL, SERVE_APPOINT_REQ, SERVE_APPOINT_SUCCESS } from "../Constants/constants";
 
 export const AppointmentAction = (appointdata) => async (dispatch) => {
     try {
@@ -42,7 +42,7 @@ export const AppointmentAction = (appointdata) => async (dispatch) => {
 }
 
 
-export const CancelAppointmentAction = (canceldata, setCancelAllModalOpen, setOpenModal) => async (dispatch) => {
+export const CancelAppointmentAction = (canceldata, setCancelAllModalOpen, setOpenModal, appointmentBarberListData, setOpenMobileModal) => async (dispatch) => {
     try {
         dispatch({ type: CANCEL_APPOINT_REQ })
 
@@ -62,6 +62,13 @@ export const CancelAppointmentAction = (canceldata, setCancelAllModalOpen, setOp
         dispatch({
             type: GET_BARBER_APPOINT_LIST_SUCCESS,
             payload: getAppointmentData
+        })
+
+        const { data: appointmentBarberList } = await api.post("/api/appointments/getAppointmentListByBarberIdAppointmentDate", appointmentBarberListData)
+
+        dispatch({
+            type: GET_APPOINTMENT_LIST_BARBERID_APPOINTMENT_SUCCESS,
+            payload: appointmentBarberList
         })
 
 
@@ -118,7 +125,7 @@ export const CancelAppointmentAction = (canceldata, setCancelAllModalOpen, setOp
 }
 
 
-export const ServeAppointmentAction = (servedata) => async (dispatch) => {
+export const ServeAppointmentAction = (servedata, appointmentBarberListData, setOpenMobileModal) => async (dispatch) => {
     try {
         dispatch({ type: SERVE_APPOINT_REQ })
 
@@ -139,6 +146,13 @@ export const ServeAppointmentAction = (servedata) => async (dispatch) => {
             payload: getAppointmentData
         })
 
+        const { data: appointmentBarberList } = await api.post("/api/appointments/getAppointmentListByBarberIdAppointmentDate", appointmentBarberListData)
+
+        dispatch({
+            type: GET_APPOINTMENT_LIST_BARBERID_APPOINTMENT_SUCCESS,
+            payload: appointmentBarberList
+        })
+
         toast.success("Appointment serve successfully", {
             duration: 3000,
             style: {
@@ -148,6 +162,11 @@ export const ServeAppointmentAction = (servedata) => async (dispatch) => {
                 color: '#fff',
             },
         });
+
+        setOpenMobileModal({
+            open: false,
+            data: {}
+        })
 
     } catch (error) {
 
@@ -233,4 +252,45 @@ export const getBarberAppointmentHistoryAction = (salonId, startDate, endDate, b
         }
     }
 
+}
+
+
+
+export const AppointmentListBarberAction = (appointdata) => async (dispatch) => {
+    try {
+        dispatch({ type: GET_APPOINTMENT_LIST_BARBERID_APPOINTMENT_REQ })
+
+        const { data } = await api.post("/api/appointments/getAppointmentListByBarberIdAppointmentDate", appointdata)
+
+        dispatch({
+            type: GET_APPOINTMENT_LIST_BARBERID_APPOINTMENT_SUCCESS,
+            payload: data
+        })
+
+    } catch (error) {
+
+        if (error?.response?.status === 500) {
+            dispatch({
+                type: GET_APPOINTMENT_LIST_BARBERID_APPOINTMENT_FAIL,
+                payload: "Something went wrong !"
+            });
+
+            toast.error("Something went wrong !", {
+                duration: 3000,
+                style: {
+                    fontSize: "var(--font-size-2)",
+                    borderRadius: '0.3rem',
+                    background: '#333',
+                    color: '#fff',
+                },
+            });
+
+            return;
+        }
+
+        dispatch({
+            type: GET_APPOINTMENT_LIST_BARBERID_APPOINTMENT_FAIL,
+            payload: error?.response?.data
+        });
+    }
 }
