@@ -6,12 +6,7 @@ export const getBarberQueueListAction = (salonId, barberId, signal) => async (di
     try {
         dispatch({ type: GET_QUEUELIST_BARBERID_REQ })
 
-        const { data } = await api.post("/api/queue/getQlistByBarberId", {
-            salonId,
-            barberId
-        }, { signal })
-
-        // Here comment this code when doing socket this dispatch
+        const { data } = await api.get(`/api/queue/getQlistByBarberId?salonId=${salonId}&barberId=${barberId}`, { signal })
 
         dispatch({
             type: GET_QUEUELIST_BARBERID_SUCCESS,
@@ -77,10 +72,7 @@ export const barberServeQueueAction = (barberqueuedata, salonId, barberId, setBa
             data: {}
         })
 
-        const { data: queuelistdata } = await api.post("/api/queue/getQlistByBarberId", {
-            salonId,
-            barberId
-        })
+        const { data: queuelistdata } = await api.get(`/api/queue/getQlistByBarberId?salonId=${salonId}&barberId=${barberId}`)
 
         dispatch({
             type: GET_QUEUELIST_BARBERID_SUCCESS,
@@ -156,10 +148,7 @@ export const barberCancelQueueAction = (canceldata, salonId, barberId, setBarber
         })
 
 
-        const { data: queuelistdata } = await api.post("/api/queue/getQlistByBarberId", {
-            salonId,
-            barberId
-        })
+        const { data: queuelistdata } = await api.get(`/api/queue/getQlistByBarberId?salonId=${salonId}&barberId=${barberId}`)
 
         dispatch({
             type: GET_QUEUELIST_BARBERID_SUCCESS,

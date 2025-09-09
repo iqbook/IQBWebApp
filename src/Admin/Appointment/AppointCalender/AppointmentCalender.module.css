@@ -24,6 +24,44 @@
 .appointmentSection {
     height: calc(100svh - 6rem);
 
+    .selectedDay_Container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 6rem;
+        padding-inline: 1.5rem;
+
+        &>div {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+
+            &>div {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+
+                &>b {
+                    color: var(--text-primary);
+                }
+            }
+        }
+
+        &>input {
+            height: 3rem;
+            padding-inline: 1rem;
+            border-radius: 0.5rem;
+            -webkit-border-radius: 0.5rem;
+            -moz-border-radius: 0.5rem;
+            -ms-border-radius: 0.5rem;
+            -o-border-radius: 0.5rem;
+            border: 0.1rem solid var(--border-secondary);
+            outline: none;
+            background-color: var(--bg-primary);
+            font-size: 1.4rem;
+        }
+    }
+
     .calenderDayCalender {
         width: 100%;
         display: flex;
@@ -118,42 +156,6 @@
         overflow: auto;
         max-height: calc(100% - 13.2rem);
 
-        &>div:nth-child(1) {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-
-            &>div {
-                display: flex;
-                align-items: center;
-                gap: 0.6rem;
-
-                &>div {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-
-                    &>b {
-                        color: var(--text-primary);
-                    }
-                }
-            }
-
-            &>input {
-                height: 3rem;
-                padding-inline: 1rem;
-                border-radius: 0.5rem;
-                -webkit-border-radius: 0.5rem;
-                -moz-border-radius: 0.5rem;
-                -ms-border-radius: 0.5rem;
-                -o-border-radius: 0.5rem;
-                border: 0.1rem solid var(--border-secondary);
-                outline: none;
-                background-color: var(--bg-primary);
-                font-size: 1.4rem;
-            }
-        }
 
         .appointmentItem {
             height: 7rem;

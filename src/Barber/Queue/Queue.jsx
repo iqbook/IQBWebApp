@@ -46,9 +46,6 @@ const Queue = () => {
 
   const darkMode = useSelector(darkmodeSelector)
 
-
-  // console.log("BarberQueueList ", BarberQueueList)
-
   const darkmodeOn = darkMode === "On"
 
   const [barberServeLoading, setBarberServeLoading] = useState(false)
@@ -103,19 +100,24 @@ const Queue = () => {
       });
     }
 
-    const confirm = window.confirm("Are you Sure ?")
+    // const confirm = window.confirm("Are you Sure ?")
 
     const queueData = {
       customerName: b?.customerName,
       barber: b
     }
 
-    if (confirm) {
-      setOpenModal({
-        open: true,
-        data: queueData
-      })
-    }
+    setOpenModal({
+      open: true,
+      data: queueData
+    })
+
+    // if (confirm) {
+    //   setOpenModal({
+    //     open: true,
+    //     data: queueData
+    //   })
+    // }
 
   }
 

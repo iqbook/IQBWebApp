@@ -501,6 +501,7 @@ import { darkmodeSelector } from '../../Redux/Admin/Reducers/AdminHeaderReducer'
 import { ddmmformatDate } from '../../../utils/ddmmformatDate'
 import { formatMinutesToHrMin } from '../../../utils/formatMinutesToHrMin'
 import toast from 'react-hot-toast'
+import { GET_APPOINTMENT_LIST_BARBERID_APPOINTMENT_CLEAR } from '../../Redux/Barber/Constants/constants';
 
 const AppointmentList = () => {
 
@@ -593,6 +594,12 @@ const AppointmentList = () => {
                 barberId,
                 appointmentDate: selectedDay?.fullDate
             }));
+        }
+
+        return () => {
+            dispatch({
+                type: GET_APPOINTMENT_LIST_BARBERID_APPOINTMENT_CLEAR
+            })
         }
     }, [selectedDay])
 

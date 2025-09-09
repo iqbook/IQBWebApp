@@ -13,7 +13,7 @@ export const getBarberQueueListReducer = (state = {}, action) => {
                 ...state,
                 loading: false,
                 resolve: true,
-                queueList: action.payload.queueList
+                queueList: action.payload.response
             };
         case GET_QUEUELIST_BARBERID_FAIL:
             return {

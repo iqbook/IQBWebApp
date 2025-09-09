@@ -82,6 +82,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAdminAppointmentListSalonIdAction } from '../../../Redux/Admin/Actions/AppointmentAction';
 import { Skeleton } from '@mui/material';
 import api from '../../../Redux/api/Api';
+import { CLEAR_ALL_APPOINTMENTSLIST, GET_APPOINTMENTSLIST_BY_BARBERNAME } from '../../../Redux/Admin/Constants/constants';
 
 const AppointmentCalender = () => {
 
@@ -174,6 +175,8 @@ const AppointmentCalender = () => {
 
     const [selectedDay, setSelectedDay] = useState("")
 
+    console.log("selectedDay ", selectedDay)
+
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -183,19 +186,33 @@ const AppointmentCalender = () => {
             }, selectedDay?.fullDate));
         }
 
+        return () => {
+            dispatch({
+                type: CLEAR_ALL_APPOINTMENTSLIST,
+            })
+        }
+
     }, [dispatch, selectedDay]);
 
     const getAdminAppointmentListSalonId = useSelector((state) => state.getAdminAppointmentListSalonId)
 
     const {
         loading: getAdminAppointmentListSalonIdLoading,
-        response: getAdminAppointmentListSalonIdResponse
+        response: getAdminAppointmentListSalonIdResponse,
     } = getAdminAppointmentListSalonId;
 
-    // console.log(selectedDay?.fullDate)
-    // console.log("getAdminAppointmentListSalonIdResponse ", getAdminAppointmentListSalonIdResponse)
 
     const [searchBarber, setSearchBarber] = useState("")
+
+    useEffect(() => {
+        // Only dispatch the filter action if a search term is present.
+        // The reducer will handle an empty search term by resetting the list.
+        dispatch({
+            type: GET_APPOINTMENTSLIST_BY_BARBERNAME,
+            payload: searchBarber,
+        })
+    }, [searchBarber, dispatch])
+
 
     return (
         <section className={style.appointmentSection}>
@@ -260,6 +277,27 @@ const AppointmentCalender = () => {
             </div>
 
             {
+                selectedDay && (
+                    <div className={style.selectedDay_Container}>
+                        <div>
+                            <div>
+                                <b>{selectedDay?.month}</b>{" "}
+                                <b>{selectedDay?.date} ,</b>
+                            </div>
+                            <p>{selectedDay?.dayFullName}</p>
+                        </div>
+
+                        <input
+                            type="text"
+                            value={searchBarber}
+                            onChange={(e) => setSearchBarber(e.target.value)}
+                            placeholder='Search Barber'
+                        />
+                    </div>
+                )
+            }
+
+            {
                 getAdminAppointmentListSalonIdLoading ? (
                     <div className={style.appointmentList_loading}>
                         {
@@ -277,35 +315,7 @@ const AppointmentCalender = () => {
                     </div>
                 ) : getAdminAppointmentListSalonIdResponse?.length > 0 ? (
                     <div className={style.appointmentList}>
-                        {
-                            selectedDay && (
-                                <div>
-                                    <div>
-                                        <div>
-                                            <b>{selectedDay?.month}</b>{" "}
-                                            <b>{selectedDay?.date} ,</b>
-                                        </div>
-                                        <p>{selectedDay?.dayFullName}</p>
-                                    </div>
 
-                                    {/* <button
-                                onClick={() => {
-                                    setCancelAllModalOpen(true)
-                                    setSubject("")
-                                    setBody("")
-                                    setCancelAllAppoint(AppointmentListBarberResponse?.[0])
-                                }}
-                            > Cancel All</button> */}
-
-                                    <input
-                                        type="text"
-                                        value={searchBarber}
-                                        onChange={(e) => setSearchBarber(e.target.value)}
-                                        placeholder='Search Barber'
-                                    />
-                                </div>
-                            )
-                        }
 
                         {
                             getAdminAppointmentListSalonIdResponse?.map((item, index) => {
@@ -313,14 +323,6 @@ const AppointmentCalender = () => {
                                     <div
                                         key={item._id}
                                         className={style.appointmentItem}
-                                        onClick={() => {
-                                            // if (isMobile) {
-                                            //     setOpenMobileModal({
-                                            //         open: true,
-                                            //         data: item
-                                            //     })
-                                            // }
-                                        }}
                                     >
                                         <div>
                                             <div className={style.bar}></div>
@@ -358,7 +360,7 @@ const AppointmentCalender = () => {
             }
 
 
-        </section>
+        </section >
     )
 }
 
