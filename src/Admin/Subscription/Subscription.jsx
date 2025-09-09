@@ -752,7 +752,7 @@ const Subscription = () => {
     const [planValidityDate, setPlanValidityDate] = useState("")
 
     const [paymentModalOpen, setPaymentModalOpen] = useState(false)
-    const [paymentType, setPaymentType] = useState("Free")
+    const [paymentType, setPaymentType] = useState("Paid")
 
     useEffect(() => {
         if (paymentType === "Free") {
@@ -1002,12 +1002,12 @@ const Subscription = () => {
                                                                                     justifyContent: "center",
                                                                                     alignItems: "center",
                                                                                     borderRadius: "2rem",
-                                                                                    fontSize: "1.4rem"
+                                                                                    fontSize: "1.4rem",
                                                                                 }}><p>Free</p></div>
                                                                             ) : sub?.trial === "Paid" ? (
                                                                                 <div style={{
                                                                                     height: "2.2rem",
-                                                                                    background: "#00A36C",
+                                                                                    background: "oklch(93.8% 0.127 124.321)",
                                                                                     paddingInline: "1rem",
                                                                                     color: "var(--color-2)",
                                                                                     display: "flex",
@@ -1015,7 +1015,7 @@ const Subscription = () => {
                                                                                     alignItems: "center",
                                                                                     borderRadius: "2rem",
                                                                                     fontSize: "1.4rem"
-                                                                                }}><p>Paid</p></div>
+                                                                                }}><p style={{ color: "#000"}}>Paid</p></div>
                                                                             ) : null
                                                                         }
 
@@ -1161,11 +1161,11 @@ const Subscription = () => {
                         : (<div className={`${style.list_container_mobile_error}`}>
                             <p>No subscription available</p>
                         </div>)
-
             }
 
 
             <p></p>
+
             <Modal
                 open={paymentModalOpen}
                 onClose={() => {
@@ -1188,7 +1188,7 @@ const Subscription = () => {
                                 appointment: false
                             })
                             setPaymentModalOpen(false)
-                            setPaymentType("Free")
+                            setPaymentType("Paid")
                         }}><CloseIcon /></button>
                     </div>
 
@@ -1203,7 +1203,7 @@ const Subscription = () => {
                             <p>{paymentType === "Free" ? 14 : planValidityDate}days</p>
                         </div>
 
-                        <div>
+                        {/* <div>
                             <p>Type</p>
                             <select
                                 value={paymentType}
@@ -1212,7 +1212,7 @@ const Subscription = () => {
                                 <option value="Free">Free</option>
                                 <option value="Paid">Paid</option>
                             </select>
-                        </div>
+                        </div> */}
                         <p>
 
                         </p>

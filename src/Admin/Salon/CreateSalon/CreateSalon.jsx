@@ -966,9 +966,6 @@ const CreateSalon = () => {
 
   };
 
-
-
-
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("salondata")) || {};
     setLocalSalondata(storedData);
@@ -1099,6 +1096,13 @@ const CreateSalon = () => {
 
   const [activeStep, setActiveStep] = useState(0);
 
+  const [AllSteps, setAllSteps] = useState({
+    step1: false,
+    step2: false,
+    step3: false,
+    step4: false,
+    step5: false,
+  })
 
   const handleNext = () => {
 
@@ -1196,6 +1200,10 @@ const CreateSalon = () => {
       }
 
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+      setAllSteps((prev) => {
+        return { ...prev, step1: true }
+      })
     } else if (activeStep === 1) {
 
       if (!salonType) {
@@ -1305,14 +1313,44 @@ const CreateSalon = () => {
 
 
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    } else {
+
+      setAllSteps((prev) => {
+        return { ...prev, step2: true }
+      })
+    } else if (activeStep === 2) {
+
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+      setAllSteps((prev) => {
+        return { ...prev, step3: true }
+      })
+    } else if (activeStep === 3) {
+
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+      setAllSteps((prev) => {
+        return { ...prev, step4: true }
+      })
+    } else if (activeStep === 4) {
+
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+      setAllSteps((prev) => {
+        return { ...prev, step5: true }
+      })
     }
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+
+  const handleStepClicked = (index) => {
+
+    if (AllSteps[`step${index + 1}`]) {
+      setActiveStep(index);
+    }
+  }
 
 
 
@@ -1356,8 +1394,6 @@ const CreateSalon = () => {
   const handleMapClick = (event) => {
     const lat = event.latLng.lat();
     const lng = event.latLng.lng();
-
-    console.log("Clicked Location:", { lat, lng });
 
     // Set marker position to clicked location
     setMarkerPosition({ lat, lng });
@@ -1482,7 +1518,9 @@ const CreateSalon = () => {
         >
           {steps.map((step, index) => (
             <Step key={step.label}>
-              <StepLabel>
+              <StepLabel
+                onClick={() => handleStepClicked(index)}
+              >
                 <span className={`${style.stepper_heading}`}>{step.label}</span>
               </StepLabel>
 

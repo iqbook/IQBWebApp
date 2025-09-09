@@ -824,6 +824,16 @@ const Header = ({ sidebar, setSidebar, mobileSidebar, setMobileSidebar }) => {
     }
   }
 
+  const trialValue = adminGetDefaultSalonResponse?.subscriptions?.some(
+    (item) => item.trial === "Paid"
+  )
+    ? "Paid"
+    : "Free"
+
+  console.log(trialValue)
+
+  // console.log("adminGetDefaultSalonResponse ", adminGetDefaultSalonResponse?.subscriptions)
+
   return (
     <header className={`${style.header}`}>
       <div className={`${style.large_container_left}`}>
@@ -912,6 +922,20 @@ const Header = ({ sidebar, setSidebar, mobileSidebar, setMobileSidebar }) => {
       </div>
 
       <div>
+        <div
+          style={{
+            backgroundColor: trialValue === "Free" ? "rgba(2, 133, 199, 0.333)" : "oklch(93.8% 0.127 124.321)"
+          }}
+        >
+          <p style={{ color: trialValue === "Paid" && "#000"}}>
+            {adminGetDefaultSalonResponse?.subscriptions?.some(
+              (item) => item.trial === "Paid"
+            )
+              ? "Paid"
+              : "Free"}
+          </p>
+        </div>
+
         {
           adminProfile?.salonId == 0 || togglecheck === "" ? <div></div> : (<button
             style={{

@@ -423,7 +423,7 @@ const Queue = () => {
     //   });
     // }
 
-    const confirm = window.confirm("Are you Sure ?")
+    // const confirm = window.confirm("Are you Sure ?")
 
     const queueData = {
       adminEmail,
@@ -435,14 +435,14 @@ const Queue = () => {
 
     setQueueItem(queueData)
 
-    if (confirm) {
+    // if (confirm) {
       setChoosebarber(b?.barberName)
       setChoosebarberemail(b?.barberEmail)
       setChoosebarbermodalopen({
         open: true,
         data: queueData
       })
-    }
+    // }
   }
 
 

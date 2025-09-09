@@ -1315,6 +1315,14 @@ const EditSalon = () => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
+  const [AllSteps, setAllSteps] = useState({
+    step1: false,
+    step2: false,
+    step3: false,
+    step4: false,
+    step5: false,
+  })
+
   const handleNext = () => {
     if (activeStep === 0) {
       if (!salonName) {
@@ -1385,6 +1393,10 @@ const EditSalon = () => {
       }
 
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+      setAllSteps((prev) => {
+        return { ...prev, step1: true }
+      })
     } else if (activeStep === 1) {
 
       if (!salonType) {
@@ -1413,94 +1425,83 @@ const EditSalon = () => {
         return setSalonAddressError("Please enter salon address")
       }
 
-      // if (!postCode) {
-      //   toast.error("Please enter postcode", {
-      //     duration: 3000,
-      //     style: {
-      //       fontSize: "var(--font-size-2)",
-      //       borderRadius: '0.3rem',
-      //       background: '#333',
-      //       color: '#fff',
-      //     },
-      //   });
-      //   return setPostCodeError("Please enter postcode")
-      // }
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
-
-      // if (!longitude && !latitude) {
-      //   toast.error("Coordinates is not present", {
-      //     duration: 3000,
-      //     style: {
-      //       fontSize: "var(--font-size-2)",
-      //       borderRadius: '0.3rem',
-      //       background: '#333',
-      //       color: '#fff',
-      //     },
-      //   });
-      //   return setSalonCoordinateError("Coordinates is not present")
-      // }
-
-      // if (postCode.length === 0 || postCode.length > 10) {
-      //   toast.error("Postcode must be between 0 to 10 charecters", {
-      //     duration: 3000,
-      //     style: {
-      //       fontSize: "var(--font-size-2)",
-      //       borderRadius: '0.3rem',
-      //       background: '#333',
-      //       color: '#fff',
-      //     },
-      //   });
-      //   return setPostCodeError("Postcode must be between 0 to 10 charecters")
-      // }
-
-      // if (!country) {
-      //   toast.error("Please select country", {
-      //     duration: 3000,
-      //     style: {
-      //       fontSize: "var(--font-size-2)",
-      //       borderRadius: '0.3rem',
-      //       background: '#333',
-      //       color: '#fff',
-      //     },
-      //   });
-      //   return setCountryError("Please select country")
-      // }
-
-      // if (!city) {
-      //   toast.error("Please select city", {
-      //     duration: 3000,
-      //     style: {
-      //       fontSize: "var(--font-size-2)",
-      //       borderRadius: '0.3rem',
-      //       background: '#333',
-      //       color: '#fff',
-      //     },
-      //   });
-      //   return setCityError("Please select city")
-      // }
-
-      // if (!timezone) {
-      //   toast.error("Please select timezone", {
-      //     duration: 3000,
-      //     style: {
-      //       fontSize: "var(--font-size-2)",
-      //       borderRadius: '0.3rem',
-      //       background: '#333',
-      //       color: '#fff',
-      //     },
-      //   });
-      //   return setTimezoneError("Please select timezone")
-      // }
-
+      setAllSteps((prev) => {
+        return { ...prev, step2: true }
+      })
+    } else if (activeStep === 2) {
 
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    } else {
+
+      setAllSteps((prev) => {
+        return { ...prev, step3: true }
+      })
+    } else if (activeStep === 3) {
+
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+      setAllSteps((prev) => {
+        return { ...prev, step4: true }
+      })
+    } else if (activeStep === 4) {
+
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+      setAllSteps((prev) => {
+        return { ...prev, step5: true }
+      })
     }
   };
 
+
+  const handleStepClicked = (index) => {
+
+    if (AllSteps[`step${index + 1}`]) {
+      setActiveStep(index);
+    }
+  }
+
   const handleBack = () => {
+    // if (activeStep === 0) {
+    //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
+
+    // } else if (activeStep === 1) {
+    //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
+
+    //   setAllSteps((prev) => {
+    //     return { ...prev, step1: false }
+    //   })
+
+    // } else if (activeStep === 2) {
+    //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
+
+    //   setAllSteps((prev) => {
+    //     return { ...prev, step2: false }
+    //   })
+
+    // } else if (activeStep === 3) {
+    //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
+
+    //   setAllSteps((prev) => {
+    //     return { ...prev, step3: false }
+    //   })
+    // } else if (activeStep === 4) {
+
+    //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
+
+    //   setAllSteps((prev) => {
+    //     return { ...prev, step4: false }
+    //   })
+    // } else {
+    //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    //   setAllSteps((prev) => {
+    //     return { ...prev, step5: false }
+    //   })
+    // }
+
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+
   };
 
   const handleReset = () => {
@@ -1560,7 +1561,11 @@ const EditSalon = () => {
         >
           {steps.map((step, index) => (
             <Step key={step.label}>
-              <StepLabel>
+              <StepLabel
+                onClick={() => {
+                  handleStepClicked((index))
+                }}
+              >
                 <span className={`${style.stepper_heading}`}>{step.label}</span>
               </StepLabel>
 
