@@ -259,7 +259,8 @@ const BarberList = () => {
       subject,
       message,
       role: "Barber",
-      recipientEmails: checkedEmails
+      recipientEmails: checkedEmails,
+      salonId
     }
     dispatch(adminSendBarberEmailAction(maildata, setSubject, setMessage, setOpenBarberEmail))
 

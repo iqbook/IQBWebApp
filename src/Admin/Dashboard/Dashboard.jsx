@@ -448,7 +448,7 @@ import {
   getDashboardAppointmentListAction,
 } from "../../Redux/Admin/Actions/DashboardAction";
 import { darkmodeSelector } from "../../Redux/Admin/Reducers/AdminHeaderReducer";
-import { getAdminBarberListAction } from "../../Redux/Admin/Actions/BarberAction";
+import { getAdminBarberListAction, getBarberDashboardAction } from "../../Redux/Admin/Actions/BarberAction";
 import { AppointmentIcon } from "../../newicons";
 import {
   Bar,
@@ -487,6 +487,10 @@ const Dashboard = () => {
       setSalonInfo(adminGetDefaultSalonResponse?.salonInfo);
     }
   }, [adminGetDefaultSalonResponse]);
+
+
+  console.log("adminGetDefaultSalonResponse ", adminGetDefaultSalonResponse?.salonType)
+
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -604,7 +608,7 @@ const Dashboard = () => {
     const controller = new AbortController();
     BarberListcontrollerRef.current = controller;
 
-    dispatch(getAdminBarberListAction(salonId, controller.signal));
+    dispatch(getBarberDashboardAction(salonId, controller.signal));
 
     return () => {
       if (BarberListcontrollerRef.current) {
@@ -613,7 +617,8 @@ const Dashboard = () => {
     };
   }, [salonId, dispatch]);
 
-  const getAdminBarberList = useSelector((state) => state.getAdminBarberList);
+
+  const getAdminBarberList = useSelector((state) => state.getBarberDashboard);
 
   const {
     loading: getAdminBarberListLoading,
@@ -621,54 +626,7 @@ const Dashboard = () => {
     getAllBarbers: BarberList,
   } = getAdminBarberList;
 
-  const data2 = [
-    {
-      name: "Page A",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Page B",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Page C",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Page D",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Page E",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Page F",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
-  ];
-
   const darkMode = useSelector(darkmodeSelector);
-
-  const darkmodeOn = darkMode === "On";
 
   const [reportData, setReportData] = useState([]);
 
@@ -711,7 +669,7 @@ const Dashboard = () => {
 
       dispatch(adminGetDefaultSalonAction(email))
       // toast.success(data.message);
-      
+
     } catch (error) {
       console.log("Error ", error);
     }
@@ -781,8 +739,8 @@ const Dashboard = () => {
           <div>
             <div>
               <div>
-                <p>Barbers On Duty</p>
-                <p>Total {BarberList?.length} barbers are available</p>
+                <p>{adminGetDefaultSalonResponse?.salonType === "Barber Shop" ? "Barbers" : "Stylists"} On Duty</p>
+                <p>Total {BarberList?.length} {adminGetDefaultSalonResponse?.salonType === "Barber Shop" ? "barbers" : "s tylists"} are available</p>
               </div>
 
               {getAdminBarberListLoading ? (

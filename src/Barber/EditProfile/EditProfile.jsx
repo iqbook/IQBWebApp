@@ -632,6 +632,7 @@ const EditProfile = () => {
         }
     }, [])
 
+
     return (
         <section className={`${style.section}`}>
             <div>
@@ -667,7 +668,11 @@ const EditProfile = () => {
                                         <div key={s.serviceId} className={style.service_item}>
                                             <div>
                                                 <div>
-                                                    <div><img src={s?.serviceIcon?.url} alt={s.serviceName} /></div>
+                                                    <div>
+                                                        <img src={s?.serviceIcon?.url} alt={s?.serviceName} />
+
+                                                        {s.vipService ? <span><CrownIcon /></span> : null}
+                                                    </div>
                                                     <div>
                                                         <p>{s?.serviceName}</p>
                                                         <p>{s?.vipService ? "VIP" : "Regular"}</p>
@@ -814,7 +819,7 @@ const EditProfile = () => {
                         </div>
 
                         <h4>{barberProfile?.name ? barberProfile?.name : "User"}</h4>
-                        <p>Barber</p>
+                        <p>{barberProfile?.salonType === "Barber Shop" ? "Barber" : "Stylist"}</p>
                     </div>
                     {/* <div>
                         <div>

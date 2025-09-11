@@ -34,9 +34,11 @@ const AppointmentHistory = () => {
         response: adminGetDefaultSalonResponse
     } = adminGetDefaultSalon
 
+    const barberProfile = useSelector(state => state.BarberLoggedInMiddleware?.entiredata?.user?.[0])
+
     const headRows = [
         { id: 1, heading: "Name", key: "customerName" },
-        { id: 2, heading: "Barber Name", key: "barberName" },
+        { id: 2, heading: `${barberProfile?.salonType === "Barber Shop" ? "BarberName" : "StylistName"}`, key: "barberName" },
         { id: 3, heading: "Start Time", key: "startTime" },
         { id: 4, heading: "End Time", key: "endTime" },
         { id: 5, heading: "Price", key: "price" },
@@ -201,8 +203,6 @@ const AppointmentHistory = () => {
     const resetHandler = () => {
         dispatch(getBarberAppointmentHistoryAction(salonId, "", "", barberId));
     }
-
-    const barberProfile = useSelector(state => state.BarberLoggedInMiddleware?.entiredata?.user?.[0])
 
     return (
         <section className={`${style.section}`}>

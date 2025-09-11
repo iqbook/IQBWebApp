@@ -602,9 +602,10 @@ const CustomerList = () => {
       subject,
       message,
       role: "Barber",
-      recipientEmails: checkedEmails
+      recipientEmails: checkedEmails,
+      salonId
     }
-    // console.log(maildata)
+
     dispatch(adminSendBarberEmailAction(maildata, setSubject, setMessage, setOpenBarberEmail))
   }
 
@@ -954,7 +955,7 @@ const CustomerList = () => {
           Customer List
           <span className={style.count_badge}>
             {mobileCustomerList?.length ?? 0}
-            </span>
+          </span>
         </h2>
         <div>
           {

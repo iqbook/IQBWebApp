@@ -23,6 +23,17 @@ import { ddmmformatDate } from '../../../utils/ddmmformatDate'
 
 const EditProfile = () => {
 
+    const adminGetDefaultSalon = useSelector(
+        (state) => state.adminGetDefaultSalon
+    );
+
+    const {
+        loading: adminGetDefaultSalonLoading,
+        resolve: adminGetDefaultSalonResolve,
+        response: adminGetDefaultSalonResponse,
+    } = adminGetDefaultSalon;
+
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -674,7 +685,7 @@ const EditProfile = () => {
                             <p>{adminProfile?.salonCount}</p>
                         </div>
                         <div>
-                            <h4>Barbers</h4>
+                            <h4>{adminGetDefaultSalonResponse?.salonType === "Barber Shop" ? "Barbers" : "Stylists"}</h4>
                             <p>{adminProfile?.barbersCount}</p>
                         </div>
                         <div>

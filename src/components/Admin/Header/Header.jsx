@@ -830,8 +830,6 @@ const Header = ({ sidebar, setSidebar, mobileSidebar, setMobileSidebar }) => {
     ? "Paid"
     : "Free"
 
-  console.log(trialValue)
-
   // console.log("adminGetDefaultSalonResponse ", adminGetDefaultSalonResponse?.subscriptions)
 
   return (

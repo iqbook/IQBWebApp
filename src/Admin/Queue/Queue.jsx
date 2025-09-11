@@ -401,6 +401,13 @@ const Queue = () => {
   } = getAllQueueList
 
 
+  const adminGetDefaultSalon = useSelector(state => state.adminGetDefaultSalon)
+
+  const {
+    response: adminGetDefaultSalonResponse
+  } = adminGetDefaultSalon
+
+
   // console.log("queuelist ", queuelist)
 
 
@@ -436,12 +443,12 @@ const Queue = () => {
     setQueueItem(queueData)
 
     // if (confirm) {
-      setChoosebarber(b?.barberName)
-      setChoosebarberemail(b?.barberEmail)
-      setChoosebarbermodalopen({
-        open: true,
-        data: queueData
-      })
+    setChoosebarber(b?.barberName)
+    setChoosebarberemail(b?.barberEmail)
+    setChoosebarbermodalopen({
+      open: true,
+      data: queueData
+    })
     // }
   }
 
@@ -534,7 +541,7 @@ const Queue = () => {
   const headRows = [
     { id: 1, heading: "#", key: "qpos" },
     { id: 2, heading: "Name", key: "customerName" },
-    { id: 3, heading: "Barber Name", key: "barberName" },
+    { id: 3, heading: `${adminGetDefaultSalonResponse?.salonType === "Barber Shop" ? "BarberName" : "StylistName"}`, key: "barberName" },
     { id: 4, heading: "Time Joined", key: "timejoined" },
     { id: 5, heading: "Qg Code", key: "qgcode" },
     { id: 6, heading: "Type", key: "type" },

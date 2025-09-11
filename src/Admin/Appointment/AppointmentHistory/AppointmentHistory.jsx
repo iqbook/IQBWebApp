@@ -163,14 +163,12 @@ const QueHistory = () => {
         response: adminGetDefaultSalonResponse
     } = adminGetDefaultSalon
 
-    // console.log(adminGetDefaultSalonResponse)
-
     // ==========================================================
 
     const headRows = [
         { id: 1, heading: "BarberID", key: "qpos" },
         { id: 2, heading: "Name", key: "customerName" },
-        { id: 3, heading: "Barber Name", key: "barberName" },
+        { id: 3, heading: `${adminGetDefaultSalonResponse?.salonType === "Barber Shop" ? "BarberName" : "StylistName"}`, key: "barberName" },
         { id: 4, heading: "Start Time", key: "startTime" },
         { id: 5, heading: "End Time", key: "endTime" },
         { id: 6, heading: "Price", key: "price" },

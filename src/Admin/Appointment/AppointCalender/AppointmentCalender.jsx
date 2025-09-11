@@ -86,6 +86,12 @@ import { CLEAR_ALL_APPOINTMENTSLIST, GET_APPOINTMENTSLIST_BY_BARBERNAME } from '
 
 const AppointmentCalender = () => {
 
+    const adminGetDefaultSalon = useSelector(state => state.adminGetDefaultSalon)
+
+    const {
+        response: adminGetDefaultSalonResponse
+    } = adminGetDefaultSalon
+
     const salonId = useSelector(state => state.AdminLoggedInMiddleware.adminSalonId)
     const [appointmentData, setAppointmentData] = useState([])
 
@@ -174,8 +180,6 @@ const AppointmentCalender = () => {
     };
 
     const [selectedDay, setSelectedDay] = useState("")
-
-    console.log("selectedDay ", selectedDay)
 
     const dispatch = useDispatch()
 
@@ -291,7 +295,7 @@ const AppointmentCalender = () => {
                             type="text"
                             value={searchBarber}
                             onChange={(e) => setSearchBarber(e.target.value)}
-                            placeholder='Search Barber'
+                            placeholder={`Search ${adminGetDefaultSalonResponse?.salonType === "Barber Shop" ? "Barber" : "Stylist"}`}
                         />
                     </div>
                 )

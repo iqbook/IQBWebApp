@@ -634,7 +634,7 @@
                     display: flex;
                     gap: 2rem;
 
-                    &>div:nth-child(1) {
+                    /* &>div:nth-child(1) {
                         display: flex;
                         justify-content: center;
                         align-items: center;
@@ -654,6 +654,52 @@
                             -moz-border-radius: inherit;
                             -ms-border-radius: inherit;
                             -o-border-radius: inherit;
+                        }
+                    } */
+
+                    &>div:nth-child(1) {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 5rem;
+                        height: 5rem;
+                        border-radius: 50%;
+                        -webkit-border-radius: 50%;
+                        -moz-border-radius: 50%;
+                        -ms-border-radius: 50%;
+                        -o-border-radius: 50%;
+                        /* margin-inline: auto; */
+                        position: relative;
+
+                        &>img {
+                            width: inherit;
+                            height: inherit;
+                            border-radius: inherit;
+                            -webkit-border-radius: inherit;
+                            -moz-border-radius: inherit;
+                            -ms-border-radius: inherit;
+                            -o-border-radius: inherit;
+                            border: 0.1rem solid var(--border-secondary);
+                        }
+
+                        &>span {
+                            position: absolute;
+                            top: 0rem;
+                            right: -0.5rem;
+                            height: 2.2rem;
+                            width: 2.2rem;
+                            border-radius: 50%;
+                            background-color: #000;
+                            -webkit-border-radius: 50%;
+                            -moz-border-radius: 50%;
+                            -ms-border-radius: 50%;
+                            -o-border-radius: 50%;
+                            color: #D8AA00;
+                            border: 0.1rem solid #D8AA00;
+                            font-size: 1.2rem;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
                         }
                     }
 

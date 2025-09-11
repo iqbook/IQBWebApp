@@ -3,7 +3,7 @@ import { AdminLoggedInMiddlewareReducer, AdminGoogleLoginReducer, AdminLogoutRed
 import { BarberGoogleLoginReducer, BarberGoogleSignupReducer, BarberLoggedInMiddlewareReducer, BarberLogoutReducer, BarberSigninReducer, BarberSignupEditReducer, BarberSignupReducer } from "./Barber/Reducers/AuthReducer"
 import { adminDragAdvertisementReducer, adminSalonStatusReducer, adminUpdateSalonInfoReducer, getAllAdvertisementReducer, getAllQueueListReducer, getDashboardAppointmentListReducer } from "./Admin/Reducers/DashboardReducer"
 import { adminCreateSalonReducer, adminDeleteSalonReducer, adminEditSalonReducer, adminUpdateSalonSettingsReducer, getAdminAllCitiesReducer, getAdminAllCountriesReducer, getAdminAllSalonIconReducer, getAdminAllTimezoneReducer, getAdminSalonImagesReducer, getAdminSalonListReducer, getAdminSalonLogoReducer, getAllSalonCategoriesReducer } from "./Admin/Reducers/SalonReducer";
-import { getAdminBarberListReducer, changeAdminBarberOnlineStatusReducer, adminApproveBarberReducer, adminAllSalonServicesReducer, adminCreateBarberReducer, adminUpdateBarberReducer, adminDeleteBarberReducer, changeAdminBarberClockStatusReducer, adminSendBarberEmailReducer, adminSendBarberMessageReducer } from "./Admin/Reducers/BarberReducer"
+import { getAdminBarberListReducer, changeAdminBarberOnlineStatusReducer, adminApproveBarberReducer, adminAllSalonServicesReducer, adminCreateBarberReducer, adminUpdateBarberReducer, adminDeleteBarberReducer, changeAdminBarberClockStatusReducer, adminSendBarberEmailReducer, adminSendBarberMessageReducer, getBarberDashboardReducer } from "./Admin/Reducers/BarberReducer"
 import { adminUpdateProfileReducer, adminSendVerifyEmailReducer, adminVerifiedEmailStatusReducer, adminUploadProfilePicReducer, adminSkipProfileReducer, adminUpdatePasswordReducer, adminVerifiedMobileStatusReducer, adminSendVerifyMobileReducer } from "./Admin/Reducers/AdminProfileReducer"
 import { adminGetAllCustomerListReducer } from "./Admin/Reducers/CustomerReducer";
 import { adminCancelQueueReducer, adminServeQueueReducer, getAdminQueueListHistoryReducer } from "./Admin/Reducers/QueueReducer";
@@ -75,6 +75,7 @@ const rootReducer = combineReducers({
   getAdminAppointmentHistory: getAdminAppointmentHistoryReducer,
   getAllSalonCategories: getAllSalonCategoriesReducer,
   getAdminAppointmentListSalonId: getAdminAppointmentListSalonIdReducer,
+  getBarberDashboard: getBarberDashboardReducer,
 
   //Barber Reducers
   BarberLoggedInMiddleware: BarberLoggedInMiddlewareReducer,

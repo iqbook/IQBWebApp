@@ -15,6 +15,9 @@ import { formatMinutesToHrMin } from '../../../utils/formatMinutesToHrMin'
 
 
 const Queue = () => {
+
+  const barberProfile = useSelector(state => state.BarberLoggedInMiddleware?.entiredata?.user[0])
+
   const salonId = useSelector(state => state.BarberLoggedInMiddleware.barberSalonId)
   const barberId = useSelector(state => state.BarberLoggedInMiddleware.barberId)
   const barberEmail = useSelector(state => state.BarberLoggedInMiddleware.barberEmail)
@@ -155,7 +158,7 @@ const Queue = () => {
   const headRows = [
     { id: 1, heading: "#", key: "qpos" },
     { id: 2, heading: "Name", key: "customerName" },
-    { id: 3, heading: "Barber Name", key: "barberName" },
+    { id: 3, heading: `${barberProfile?.salonType === "Barber Shop" ? "BarberName" : "StylistName"}`, key: "barberName" },
     { id: 4, heading: "Time Joined", key: "timejoined" },
     { id: 5, heading: "Qg Code", key: "qgcode" },
     { id: 6, heading: "Type", key: "type" },

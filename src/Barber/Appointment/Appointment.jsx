@@ -8,6 +8,8 @@ import Calendar from 'react-calendar'
 
 const Appointment = () => {
 
+    const barberProfile = useSelector(state => state.BarberLoggedInMiddleware?.entiredata?.user[0])
+
     const salonId = useSelector(state => state.BarberLoggedInMiddleware?.barberSalonId)
     const barberId = useSelector(state => state.BarberLoggedInMiddleware?.barberId)
 
@@ -208,35 +210,6 @@ const Appointment = () => {
                         <p>Days</p>
                     </div>
 
-                    {/* {
-                        days.map((d) => {
-                            const isDisabled = getSalonoffDays.includes(d.day);
-                            const isChecked = !isDisabled && selectedDays.includes(d.day);
-
-                            return (
-                                <div
-                                    key={d.id}
-                                    className={`${style.value} ${isDisabled ? style.disabled : ''}`}
-                                    onClick={() => {
-                                        if (!isDisabled) {
-                                            checkdayHandler(d);
-                                        }
-                                    }}
-                                >
-                                    <input
-                                        type="checkbox"
-                                        style={{ accentColor: "blue" }}
-                                        onChange={() => checkdayHandler(d)}
-                                        checked={isChecked}
-                                        disabled={isDisabled}
-                                    />
-                                    <p>{d.day}</p>
-                                </div>
-                            );
-                        })
-                    } */}
-
-
                     {
                         days.map((d) => {
                             const isDisabled = getSalonoffDays.includes(d.day);
@@ -275,7 +248,7 @@ const Appointment = () => {
                 </div>
 
                 <div>
-                    <p>Barber Off Days</p>
+                    <p>{`${barberProfile?.salonType === "Barber Shop" ? "Barber" : "Stylist"}`} Off Days</p>
                     <div className={style.leave_value_body}>
                         <div style={{
                             display: "flex",
