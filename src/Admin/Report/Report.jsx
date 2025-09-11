@@ -632,7 +632,7 @@ const Report = () => {
   const [selectedDates, setSelectedDates] = useState([])
 
   const handleDateChange = (dates) => {
-    const formatedDates = dates.map((date) => date.format("YYYY-MM-DD"))
+    const formatedDates = dates.map((date) => date.format("DD/MM/YYYY"))
     setSelectedDates(formatedDates)
     setSelectedFilter("")
     setWeekOption("")
@@ -685,6 +685,11 @@ const Report = () => {
 
   const [isMobile, setIsMobile] = useState(false);
 
+  const toApiFormat = (dateStr) => {
+    const [day, month, year] = dateStr.split("/");
+    return `${year}-${month}-${day}`; // yyyy-mm-dd
+  };
+
 
   const viewReport = async () => {
     try {
@@ -732,8 +737,8 @@ const Report = () => {
         reportOptions = {
           ...reportOptions,
           reportType: "range",
-          from: selectedDates[0],
-          to: selectedDates[1],
+          from: toApiFormat(selectedDates[0]),
+          to: toApiFormat(selectedDates[1]),
         };
       }
 
@@ -751,11 +756,13 @@ const Report = () => {
           return;
         }
 
+
+
         reportOptions = {
           ...reportOptions,
           reportType: "range",
-          from: selectedDates[0],
-          to: selectedDates[1],
+          from: toApiFormat(selectedDates[0]),
+          to: toApiFormat(selectedDates[1]),
           barberEmail: selectedbarberEmail,
           barberId: selectedbarberId,
         };
@@ -867,10 +874,11 @@ const Report = () => {
             value={selectedDates}
             onChange={handleDateChange}
             range
-            placeholder='yyyy-mm-dd - yyyy-mm-dd'
+            placeholder='dd/mm/yyyy - dd/mm/yyyy'
             // onChange={handleDateChange}
             dateSeparator={" - "}
             calendarPosition={"bottom-right"}
+            format="DD/MM/YYYY"
             className={true ? "dark-theme" : "light-theme"}
             style={{
               // background: true ? "#222" : "#fff"
@@ -1106,12 +1114,13 @@ const Report = () => {
           <div className={`${style.report_footer}`}>
             <p>Report Type -
               {queueType === "queueserved"
-                ? `Queue Served (${selectedFilter || selectedDates.length > 0 && "Range"})` :
+                ? `Queue Served (${((selectedFilter || "")) || (selectedDates.length > 0 && "Range" || "")})` :
                 queueType === "queuecancelled" ?
-                  `Queue Cancelled (${selectedFilter || selectedDates.length > 0 && "Range"})` :
+                  `Queue Cancelled (${(selectedFilter || "") || (selectedDates.length > 0 && "Range" || "")})` :
                   appointmentType === "appointmentserved" ?
-                    `Appointment Served (${selectedFilter || selectedDates.length > 0 && "Range"})` :
-                    `Appointment Cancelled (${selectedFilter || selectedDates.length > 0 && "Range"})`}
+                    `Appointment Served (${(selectedFilter || "") || (selectedDates.length > 0 && "Range" || "")})` :
+                    appointmentType === "appointmentcancelled" ?
+                      `Appointment Cancelled (${(selectedFilter || "") || (selectedDates.length > 0 && "Range" || "")})` : ""}
             </p>
             <p>Select - {selectType}</p>
           </div>
@@ -1264,8 +1273,9 @@ const Report = () => {
                 value={selectedDates}
                 onChange={handleDateChange}
                 range
-                placeholder='yyyy-mm-dd - yyyy-mm-dd'
+                placeholder='dd/mm/yyyy - dd/mm/yyyy'
                 // onChange={handleDateChange}
+                format="DD/MM/YYYY"
                 dateSeparator={" - "}
                 calendarPosition={"bottom-right"}
                 className={true ? "dark-theme" : "light-theme"}
