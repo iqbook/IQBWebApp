@@ -178,6 +178,7 @@
                 display: flex;
                 align-items: center;
                 gap: 2rem;
+                position: relative;
 
                 .bar {
                     height: 100%;

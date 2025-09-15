@@ -341,6 +341,11 @@ const AppointmentCalender = () => {
                                                 </div>
                                             </div>
 
+                                            <p style={{
+                                                position: "absolute",
+                                                right: "1rem"
+                                            }}>{item?.barbername}</p>
+
                                         </div>
 
                                     </div>

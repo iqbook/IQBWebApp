@@ -322,20 +322,25 @@ const Appointment = () => {
                         </div>
                         {
                             days.map((d) => {
+                                const isDisabled = getSalonoffDays.includes(d.day);
+                                const isChecked = !isDisabled && selectedDays.includes(d.day);
+
                                 return (
-                                    <div key={d.id} className={style.value}>
+                                    <label
+                                        key={d.id}
+                                        className={`${style.value} ${isDisabled ? style.disabled : ''}`}
+                                        style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
+                                    >
                                         <input
                                             type="checkbox"
-                                            style={{
-                                                accentColor: "blue"
-                                            }}
+                                            style={{ accentColor: "blue" }}
                                             onChange={() => checkdayHandler(d)}
-                                            checked={!getSalonoffDays.includes(d.day) && selectedDays.includes(d.day)}
-                                            disabled={getSalonoffDays.includes(d.day)}
+                                            checked={isChecked}
+                                            disabled={isDisabled}
                                         />
                                         <p>{d.day}</p>
-                                    </div>
-                                )
+                                    </label>
+                                );
                             })
                         }
                     </div>
