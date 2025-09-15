@@ -1073,13 +1073,20 @@ const CustomerList = () => {
                       <div>
                         <div>
                           <div><img src={item?.profile?.[0]?.url} alt="" /></div>
-                          <p>{item.name}</p>
+                          <p>{item?.name}</p>
                         </div>
                       </div>
                       <div><p>{item.email}</p></div>
                       <div><p>{item.gender}</p></div>
                       <div><p>+{item?.mobileCountryCode}{" "}{item?.mobileNumber}</p></div>
-                      <div><p>{ddmmformatDate(item.dateOfBirth.split("T")[0])}</p></div>
+                      <div>
+                        <p>
+                          {item?.dateOfBirth
+                            ? ddmmformatDate(item.dateOfBirth.split("T")[0])
+                            : "-"}
+                        </p>
+                      </div>
+
                       <div>
                         <div
                           style={{
