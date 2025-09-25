@@ -213,9 +213,10 @@
 // export default Signin
 
 
-import React, { useEffect } from 'react'; // 1. Import useEffect
+import React, { useEffect, useState } from 'react'; // 1. Import useEffect
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import axios from 'axios';
 
 // 2. Define the Firebase Config outside the component for clarity
 //    ⚠️ REPLACE THESE PLACEHOLDERS with your actual Firebase project configuration.
@@ -253,7 +254,6 @@ export const requestForToken = async () => {
         });
 
         if (fcmToken) {
-          console.log('FCM Registration Token:', fcmToken);
           // 💡 Action: Send this token to your backend for sending notifications.
           // Example: await yourApiCall.sendTokenToBackend(fcmToken);
           return fcmToken;
@@ -291,7 +291,27 @@ const Signin = () => {
   // 3. Use useEffect to run the FCM logic when the component mounts
   useEffect(() => {
     // 3a. Request the token when the component loads
-    requestForToken();
+    // Request the token when component loads
+    const getToken = async () => {
+      const token = await requestForToken();
+      if (token) {
+        console.log("FCM Token:", token);
+
+        const { data } = await axios.post("https://iqb-final.onrender.com/api/webNotifications/save-device-token",
+          {
+            salonId: 1,
+            name: "bikki",
+            email: "bikki@yopmail.com",
+            deviceToken: "e1lKZB6wNgt80o4kF1NLRk:APA91bEUWk-UzXUj7XHiaT-93Thtzr4954Uua5GGr-qx_eyEnUyMTHH17qiJa842hVCKgskTvNA9IX4S1gxeEx1GK_aDr0qe36T9SoPQiqKDFfmcKy_XblU",
+            deviceType: "web"
+          })
+
+        console.log("Token saved response:", data);
+      }
+    };
+
+    getToken();
+
 
     // 3b. Set up the foreground message listener
     const unsubscribe = onMessageListener().then(payload => {
