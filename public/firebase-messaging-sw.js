@@ -19,7 +19,7 @@ firebase.initializeApp(firebaseConfig);
 
 const messaging = firebase.messaging();
 
-// Handle background messages
+// ✅ 1. This runs when tab is open but not focused
 messaging.onBackgroundMessage((payload) => {
     console.log('[firebase-messaging-sw.js] Received background message ', payload);
 
@@ -31,4 +31,31 @@ messaging.onBackgroundMessage((payload) => {
 
     // Show the notification using the service worker's registration
     return self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+
+// ✅ 2. This runs when tab is fully closed (Push API)
+self.addEventListener('push', (event) => {
+    console.log('[firebase-messaging-sw.js] Push Received.');
+
+    if (event.data) {
+        const payload = event.data.json();
+        console.log('Push payload:', payload);
+
+        const title = payload.notification?.title || payload.data?.title || 'Notification';
+        const options = {
+            body: payload.notification?.body || payload.data?.body,
+            icon: '/firebase-logo.png'
+        };
+
+        event.waitUntil(self.registration.showNotification(title, options));
+    }
+});
+
+// ✅ 3. Handle click on the notification
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    event.waitUntil(
+        clients.openWindow('https://your-app.com') // change to your app URL
+    );
 });
