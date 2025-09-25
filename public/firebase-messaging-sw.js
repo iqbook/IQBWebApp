@@ -56,6 +56,6 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
     event.notification.close();
     event.waitUntil(
-        clients.openWindow('https://your-app.com') // change to your app URL
+        clients.openWindow('https://app.iqbook.io') // change to your app URL
     );
 });
