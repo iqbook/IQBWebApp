@@ -666,14 +666,99 @@ import { getAdminSalonImagesAction } from '../../Redux/Admin/Actions/SalonAction
 import toast from 'react-hot-toast';
 import { AppointmentIcon } from '../../newicons';
 import api from '../../Redux/api/Api';
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import axios from "axios";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBYCyrNZll9oeGKfILz_S5avzOQJ0xlCkw",
+  authDomain: "iqbook-web.firebaseapp.com",
+  projectId: "iqbook-web",
+  storageBucket: "iqbook-web.firebasestorage.app",
+  messagingSenderId: "889322044641",
+  appId: "1:889322044641:web:d902ace026f28a67064ba0",
+  measurementId: "G-2NZVFQJTYS"
+};
+
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
+
+export const requestForToken = async () => {
+  try {
+    // Check if the browser supports notifications
+    if ('Notification' in window) {
+      const permission = await Notification.requestPermission();
+
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+
+        const fcmToken = await getToken(messaging, {
+          vapidKey: "BMb-Y9gWXHSvgsOqipUxEpzriS32OyvkeP3I4N8aVkF0A8XPuI-o7LKA8SvM9Bx1GQGpOIH6C8C5PzBJXxPp1zc" // <-- REQUIRED: Your VAPID Key from Firebase
+        });
+
+        if (fcmToken) {
+          // 💡 Action: Send this token to your backend for sending notifications.
+          // Example: await yourApiCall.sendTokenToBackend(fcmToken);
+          return fcmToken;
+        } else {
+          console.warn('No registration token available. Check if your Firebase setup or VAPID key is correct.');
+        }
+      } else {
+        console.warn('Notification permission denied by the user.');
+      }
+    } else {
+      console.error('Notifications are not supported by this browser.');
+    }
+  } catch (err) {
+    console.error('An error occurred while retrieving token:', err);
+  }
+};
+
+export const onMessageListener = () =>
+  new Promise((resolve) => {
+    onMessage(messaging, (payload) => {
+      // You can implement custom UI logic here (e.g., show a toast/in-app notification)
+      console.log('Message received while foregrounded:', payload);
+      resolve(payload);
+    });
+  });
 
 const Dashboard = () => {
 
-  const dispatch = useDispatch()
 
   const salonId = useSelector(state => state.BarberLoggedInMiddleware?.barberSalonId)
   const email = useSelector(state => state.BarberLoggedInMiddleware?.barberEmail)
   const barberName = useSelector(state => state.BarberLoggedInMiddleware?.barberName)
+
+  // console.log(salonId, email, barberName)
+
+  useEffect(() => {
+
+    if (email && salonId) {
+      const getToken = async () => {
+        const token = await requestForToken();
+        if (token) {
+
+          const { data } = await axios.post("https://iqb-final.onrender.com/api/webNotifications/save-device-token",
+            {
+              salonId: salonId,
+              name: barberName,
+              email: email,
+              deviceToken: token,
+              type: "barber"
+            })
+
+        }
+      };
+
+      getToken();
+    }
+
+  }, []);
+
+  const dispatch = useDispatch()
+
+
   const barberId = useSelector(state => state.BarberLoggedInMiddleware?.barberId)
 
   const barberProfile = useSelector(state => state.BarberLoggedInMiddleware?.entiredata)

@@ -464,12 +464,109 @@ import {
 import api from "../../Redux/api/Api";
 import toast from "react-hot-toast";
 import { adminGetDefaultSalonAction } from "../../Redux/Admin/Actions/AdminHeaderAction";
-// import { useSocket } from '../../context/SocketContext';
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import axios from "axios";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBYCyrNZll9oeGKfILz_S5avzOQJ0xlCkw",
+  authDomain: "iqbook-web.firebaseapp.com",
+  projectId: "iqbook-web",
+  storageBucket: "iqbook-web.firebasestorage.app",
+  messagingSenderId: "889322044641",
+  appId: "1:889322044641:web:d902ace026f28a67064ba0",
+  measurementId: "G-2NZVFQJTYS"
+};
+
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
+
+export const requestForToken = async () => {
+  try {
+    // Check if the browser supports notifications
+    if ('Notification' in window) {
+      const permission = await Notification.requestPermission();
+
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+
+        const fcmToken = await getToken(messaging, {
+          vapidKey: "BMb-Y9gWXHSvgsOqipUxEpzriS32OyvkeP3I4N8aVkF0A8XPuI-o7LKA8SvM9Bx1GQGpOIH6C8C5PzBJXxPp1zc" // <-- REQUIRED: Your VAPID Key from Firebase
+        });
+
+        if (fcmToken) {
+          // 💡 Action: Send this token to your backend for sending notifications.
+          // Example: await yourApiCall.sendTokenToBackend(fcmToken);
+          return fcmToken;
+        } else {
+          console.warn('No registration token available. Check if your Firebase setup or VAPID key is correct.');
+        }
+      } else {
+        console.warn('Notification permission denied by the user.');
+      }
+    } else {
+      console.error('Notifications are not supported by this browser.');
+    }
+  } catch (err) {
+    console.error('An error occurred while retrieving token:', err);
+  }
+};
+
+export const onMessageListener = () =>
+  new Promise((resolve) => {
+    onMessage(messaging, (payload) => {
+      // You can implement custom UI logic here (e.g., show a toast/in-app notification)
+      console.log('Message received while foregrounded:', payload);
+      resolve(payload);
+    });
+  });
 
 const Dashboard = () => {
-  // const { socket } = useSocket()
 
-  // console.log("The socket value is ", socket)
+  const salonId = useSelector(
+    (state) => state.AdminLoggedInMiddleware.adminSalonId
+  );
+  const email = useSelector(
+    (state) => state.AdminLoggedInMiddleware.adminEmail
+  );
+  const adminName = useSelector(
+    (state) => state.AdminLoggedInMiddleware.adminName
+  );
+
+
+  useEffect(() => {
+
+    if (email) {
+      const getToken = async () => {
+        const token = await requestForToken();
+        console.log(token)
+        if (token) {
+
+          const { data } = await axios.post("https://iqb-final.onrender.com/api/webNotifications/save-device-token",
+            {
+              salonId: salonId,
+              name: adminName,
+              email: email,
+              deviceToken: token,
+              type: "admin"
+            })
+        }
+      };
+
+      getToken();
+    }
+
+
+
+
+    // // 3b. Set up the foreground message listener
+    // const unsubscribe = onMessageListener().then(payload => {
+    //   // Handle the incoming message payload
+    //   // e.g., display a notification, update state
+    //   console.log("Foreground message processed:", payload);
+    // }).catch(err => console.error('Foreground message listener error:', err));
+
+  }, []);
 
   const adminGetDefaultSalon = useSelector(
     (state) => state.adminGetDefaultSalon
@@ -489,21 +586,13 @@ const Dashboard = () => {
   }, [adminGetDefaultSalonResponse]);
 
 
-  console.log("adminGetDefaultSalonResponse ", adminGetDefaultSalonResponse?.salonType)
-
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const salonId = useSelector(
-    (state) => state.AdminLoggedInMiddleware.adminSalonId
-  );
-  const email = useSelector(
-    (state) => state.AdminLoggedInMiddleware.adminEmail
-  );
-  const adminName = useSelector(
-    (state) => state.AdminLoggedInMiddleware.adminName
-  );
+
+  // console.log("salonId ", salonId)
+  // console.log("email ", email)
+  // console.log("adminName ", adminName)
 
   const advertisementcontrollerRef = useRef(new AbortController());
 
