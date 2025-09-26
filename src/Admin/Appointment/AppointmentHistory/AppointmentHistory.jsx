@@ -163,12 +163,15 @@ const QueHistory = () => {
         response: adminGetDefaultSalonResponse
     } = adminGetDefaultSalon
 
+
+    const currentSalonType = localStorage.getItem("CurrentSalonType")
+
     // ==========================================================
 
     const headRows = [
         { id: 1, heading: "BarberID", key: "qpos" },
         { id: 2, heading: "Name", key: "customerName" },
-        { id: 3, heading: `${adminGetDefaultSalonResponse?.salonType === "Barber Shop" ? "BarberName" : "StylistName"}`, key: "barberName" },
+        { id: 3, heading: `${currentSalonType === "Barber Shop" ? "Barber Name" : currentSalonType === "Hair Dresser" ? "Stylist Name" : "BarberName"}`, key: "barberName" },
         { id: 4, heading: "Start Time", key: "startTime" },
         { id: 5, heading: "End Time", key: "endTime" },
         { id: 6, heading: "Price", key: "price" },
@@ -303,6 +306,7 @@ const QueHistory = () => {
         })
 
     }
+
 
     return (
         <section className={`${style.section}`}>

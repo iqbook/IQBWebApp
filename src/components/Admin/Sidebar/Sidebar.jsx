@@ -122,7 +122,7 @@
 // export default Sidebar;
 
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from './Sidebar.module.css'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import Header from '../Header/Header.jsx';
@@ -250,6 +250,11 @@ const Sidebar = () => {
     response: adminGetDefaultSalonResponse
   } = adminGetDefaultSalon
 
+  useEffect(() => {
+    if (adminGetDefaultSalonResponse) {
+      localStorage.setItem("CurrentSalonType", adminGetDefaultSalonResponse.salonType)
+    }
+  }, [adminGetDefaultSalonResponse])
 
   return (
     <main className={`${style.main_container}`}>

@@ -672,7 +672,7 @@ const Header = ({ sidebar, setSidebar, mobileSidebar, setMobileSidebar }) => {
       adminEmail
     }
 
-    dispatch(adminApplySalonAction(applySalonData))
+    dispatch(adminApplySalonAction(applySalonData, navigate))
   }
 
   const getDefaultSalonControllerRef = useRef(new AbortController())
@@ -831,6 +831,8 @@ const Header = ({ sidebar, setSidebar, mobileSidebar, setMobileSidebar }) => {
     : "Free"
 
   // console.log("adminGetDefaultSalonResponse ", adminGetDefaultSalonResponse?.subscriptions)
+
+
 
   return (
     <header className={`${style.header}`}>

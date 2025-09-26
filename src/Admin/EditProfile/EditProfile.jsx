@@ -553,7 +553,7 @@ const EditProfile = () => {
         const formattedDate = convertDateToYYYYMMDD(dateInput);
         onChange(formattedDate)
         setDateofBirth(formattedDate)
-        setOpenCalender(false)
+        // setOpenCalender(false)
     }
 
     const [mobileValue, setMobileValue] = useState(false);
@@ -632,6 +632,8 @@ const EditProfile = () => {
         }
     }, [])
 
+    const currentSalonType = localStorage.getItem("CurrentSalonType")
+
     return (
         <section className={`${style.section}`}>
             <div>
@@ -685,7 +687,7 @@ const EditProfile = () => {
                             <p>{adminProfile?.salonCount}</p>
                         </div>
                         <div>
-                            <h4>{adminGetDefaultSalonResponse?.salonType === "Barber Shop" ? "Barbers" : "Stylists"}</h4>
+                            <h4>{currentSalonType === "Barber Shop" ? "Barbers" : currentSalonType === "Hair Dresser" ? "Stylists" : "barbers"}</h4>
                             <p>{adminProfile?.barbersCount}</p>
                         </div>
                         <div>
@@ -1013,47 +1015,6 @@ const EditProfile = () => {
                                 <button onClick={() => setOpenMobileModal(false)}><CloseIcon /></button>
                             </div>
                         </Modal>
-
-                        {/* {
-                            mobileValue ? (
-                                <div className={style.calender_container}>
-                                    <p>Date of Birth</p>
-                                    <input
-                                        type="date"
-                                        value={dateOfBirth}
-                                        onChange={(e) => setDateofBirth(e.target.value)}
-                                        onKeyDown={handleKeyPress}
-                                        max={getCurrentDate()}
-                                        style={{
-                                            colorScheme: darkmodeOn ? "dark" : "light",
-                                            width: "100% !important"
-                                        }}
-                                    />
-                                </div>) : (<div className={style.calender_container}>
-                                    <p>Date of Birth</p>
-
-                                    <input
-                                        type='text'
-                                        placeholder='Select Date'
-                                        value={dateOfBirth}
-                                        onClick={() => setOpenCalender(true)}
-                                        readOnly
-                                    />
-                                    <span onClick={() => setOpenCalender((prev) => !prev)} className={`${style.dropicon} ${darkmodeOn && style.dark}`}><DropdownIcon /></span>
-
-                                    {
-                                        openCalender && <ClickAwayListener onClickAway={handleClickAway}>
-                                            <div className={style.calender_drop_container}>
-                                                <Calendar
-                                                    onChange={onChangeHandler}
-                                                    value={value}
-                                                    maxDate={new Date(2009, 11, 31)}
-                                                />
-                                            </div>
-                                        </ClickAwayListener>
-                                    }
-                                </div>)
-                        } */}
 
                         <div className={style.calender_container}>
                             <p>Date of Birth</p>

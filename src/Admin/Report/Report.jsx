@@ -807,6 +807,7 @@ const Report = () => {
     setAppointmentType("")
   }
 
+  const currentSalonType = localStorage.getItem("CurrentSalonType")
 
   // ============================================
 
@@ -854,8 +855,8 @@ const Report = () => {
       value: "Salon"
     },
     {
-      type: "Barber Report",
-      value: "Barber"
+      type: `${currentSalonType === "Barber Shop" ? "Barber" : currentSalonType === "Hair Dresser" ? "Stylist" : "Barber"} Report`,
+      value: `${currentSalonType === "Barber Shop" ? "Barber" : currentSalonType === "Hair Dresser" ? "Stylist" : "Barber"}`
     },
   ]
 

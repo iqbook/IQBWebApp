@@ -535,13 +535,14 @@ const Queue = () => {
     dispatch(adminServeQueueAction(queuedata, salonId, setChoosebarbermodalopen))
   }
 
+  const currentSalonType = localStorage.getItem("CurrentSalonType")
 
   // ========================================================
 
   const headRows = [
     { id: 1, heading: "#", key: "qpos" },
     { id: 2, heading: "Name", key: "customerName" },
-    { id: 3, heading: `${adminGetDefaultSalonResponse?.salonType === "Barber Shop" ? "BarberName" : "StylistName"}`, key: "barberName" },
+    { id: 3, heading: `${currentSalonType === "Barber Shop" ? "Barber Name" : currentSalonType === "Hair Dresser" ? "Stylist Name" : "Barber"}`, key: "barberName" },
     { id: 4, heading: "Time Joined", key: "timejoined" },
     { id: 5, heading: "Qg Code", key: "qgcode" },
     { id: 6, heading: "Type", key: "type" },
@@ -866,7 +867,7 @@ const Queue = () => {
       >
         <div className={`${style.modal_container} ${darkmodeOn && style.dark}`}>
           <div>
-            <p>Choose Barber</p>
+            <p>Choose {currentSalonType === "Barber Shop" ? "Barber" : currentSalonType === "Hair Dresser" ? "Stylist" : "Barber"}</p>
             <button onClick={() => setChoosebarbermodalopen({
               open: false,
               data: {}

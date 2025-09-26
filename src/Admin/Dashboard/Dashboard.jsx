@@ -789,6 +789,8 @@ const Dashboard = () => {
     };
   }, [salonInfo]);
 
+  const currentSalonType = localStorage.getItem("CurrentSalonType")
+
   return salonId === 0 ? (
     <>
       <section className={`${style.dashboard_initial_ontainer}`}>
@@ -828,8 +830,8 @@ const Dashboard = () => {
           <div>
             <div>
               <div>
-                <p>{adminGetDefaultSalonResponse?.salonType === "Barber Shop" ? "Barbers" : "Stylists"} On Duty</p>
-                <p>Total {BarberList?.length} {adminGetDefaultSalonResponse?.salonType === "Barber Shop" ? "barbers" : "s tylists"} are available</p>
+                <p>{currentSalonType === "Barber Shop" ? "Barbers" : currentSalonType === "Hair Dresser" ? "Stylists" : "barbers"} On Duty</p>
+                <p>Total {BarberList?.length} {currentSalonType === "Barber Shop" ? "barbers" : currentSalonType === "Hair Dresser" ? "stylists" : "barbers"} are available</p>
               </div>
 
               {getAdminBarberListLoading ? (
@@ -861,7 +863,7 @@ const Dashboard = () => {
                 </div>
               ) : (
                 <div className={`${style.barber_error}`}>
-                  <p>No barbers available</p>
+                  <p>No {currentSalonType === "Barber Shop" ? "barbers" : currentSalonType === "Hair Dresser" ? "stylists" : "barbers"} available</p>
                 </div>
               )}
             </div>

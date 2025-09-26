@@ -1036,32 +1036,34 @@ const EditBarber = () => {
   }, []);
 
 
+  const currentSalonType = localStorage.getItem("CurrentSalonType")
+
   // =========================================
 
   const steps = [
     {
-      label: 'Barber Information',
+      label: `${currentSalonType === "Barber Shop" ? "Barber" : currentSalonType === "Hair Dresser" ? "Stylist" : ""} Information`,
       fields: [
         {
-          name: 'name', label: 'Name', type: 'text', placeholder: 'Enter barber name', value: name, onChange: (e) => {
+          name: 'name', label: 'Name', type: 'text', placeholder: `Enter ${currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : ""} name`, value: name, onChange: (e) => {
             setNameError("")
             setName(e.target.value)
           }, error: nameError
         },
-        { name: 'email', label: 'Email', type: 'text', placeholder: 'Enter barber email', value: email, readOnly: true },
+        { name: 'email', label: 'Email', type: 'text', placeholder: `Enter ${currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : ""} email`, value: email, readOnly: true },
         {
-          name: 'nickname', label: 'Nick Name', type: 'text', placeholder: 'Enter barber nickname', value: nickName, onChange: (e) => {
+          name: 'nickname', label: 'Nick Name', type: 'text', placeholder: `Enter ${currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : ""} nickname`, value: nickName, onChange: (e) => {
             setNickNameError("")
             setNickName(e.target.value)
           }, error: nickNameError
         },
-        { name: 'mobileNumber', label: 'Mobile Number', type: 'text', placeholder: 'Enter barber mobile number' },
-        { name: 'dateofbirth', label: 'Date of Birth', type: 'text', placeholder: 'Enter barber date of birth' },
+        { name: 'mobileNumber', label: 'Mobile Number', type: 'text', placeholder: `Enter ${currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : ""} mobile number` },
+        { name: 'dateofbirth', label: 'Date of Birth', type: 'text', placeholder: `Enter ${currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : ""} date of birth` },
       ],
     },
     {
-      label: 'Barber Services',
-      name: 'barberservices',
+      label: `${currentSalonType === "Barber Shop" ? "Barber" : currentSalonType === "Hair Dresser" ? "Stylist" : ""} Services`,
+      name: `${currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : ""}services`,
       fields: [
 
       ],
@@ -1177,12 +1179,10 @@ const EditBarber = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-
-
   return (
     <section className={`${style.section}`}>
       <div>
-        <h2>Edit Barber</h2>
+        <h2>Edit {currentSalonType === "Barber Shop" ? "Barbers" : currentSalonType === "Hair Dresser" ? "Stylists" : ""}</h2>
       </div>
 
       <div className={`${style.form_main_container}`}>
@@ -1224,7 +1224,7 @@ const EditBarber = () => {
               </StepLabel>
 
               {
-                step.label === "Barber Information" && (<StepContent>
+                step.label === `${currentSalonType === "Barber Shop" ? "Barber" : currentSalonType === "Hair Dresser" ? "Stylist" : ""} Information` && (<StepContent>
                   <main className={`${style.form_container}`}>
                     {step.fields.map((field) => (
                       <div key={field.name} className={`${style.form_group}`}>
@@ -1295,7 +1295,7 @@ const EditBarber = () => {
               }
 
               {
-                step.label === "Barber Services" && (<StepContent>
+                step.label === `${currentSalonType === "Barber Shop" ? "Barber" : currentSalonType === "Hair Dresser" ? "Stylist" : ""} Services` && (<StepContent>
                   <main className={`${style.service_container}`}>
 
                     <div>

@@ -1096,24 +1096,24 @@ const CreateBarber = () => {
     };
   }, []);
 
-
+  const currentSalonType = localStorage.getItem("CurrentSalonType")
 
   // =======================================
 
   const steps = [
     {
-      label: 'Barber Information',
+      label: `${currentSalonType === "Barber Shop" ? "Barbers" : currentSalonType === "Hair Dresser" ? "Stylists" : ""} Information`,
       fields: [
-        { name: 'name', label: 'Name', type: 'text', placeholder: 'Enter barber name', value: name, setState: setName, setError: setNameError, error: nameError },
-        { name: 'email', label: 'Email', type: 'text', placeholder: 'Enter barber email', value: email, setState: setEmail, setError: setEmailError, error: emailError },
-        { name: 'nickName', label: 'Nick Name', type: 'text', placeholder: 'Enter barber nickname', value: nickName, setState: setNickName, setError: setNickNameError, error: nickNameError },
-        { name: 'mobileNumber', label: 'Mobile Number', type: 'text', placeholder: 'Enter barber mobile number' },
-        { name: 'dateofbirth', label: 'Date of Birth', type: 'text', placeholder: 'Enter barber date of birth' },
+        { name: 'name', label: 'Name', type: 'text', placeholder: `Enter ${currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : ""} name`, value: name, setState: setName, setError: setNameError, error: nameError },
+        { name: 'email', label: 'Email', type: 'text', placeholder: `Enter ${currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : ""} email`, value: email, setState: setEmail, setError: setEmailError, error: emailError },
+        { name: 'nickName', label: 'Nick Name', type: 'text', placeholder: `Enter ${currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : ""} nickname`, value: nickName, setState: setNickName, setError: setNickNameError, error: nickNameError },
+        { name: 'mobileNumber', label: 'Mobile Number', type: 'text', placeholder: `Enter ${currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : ""} mobile number` },
+        { name: 'dateofbirth', label: 'Date of Birth', type: 'text', placeholder: `Enter ${currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : ""} date of birth` },
       ],
     },
     {
-      label: 'Barber Services',
-      name: 'barberservices',
+      label: `${currentSalonType === "Barber Shop" ? "Barber" : currentSalonType === "Hair Dresser" ? "Stylist" : ""} Services`,
+      name: `${currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : ""}services`,
       fields: [
 
       ],
@@ -1305,12 +1305,10 @@ const CreateBarber = () => {
       add: false,
     }]
 
-
-
   return (
     <section className={`${style.section}`}>
       <div>
-        <h2>Create Barber</h2>
+        <h2>Create {currentSalonType === "Barber Shop" ? "Barbers" : currentSalonType === "Hair Dresser" ? "Stylists" : ""}</h2>
       </div>
 
       <div className={`${style.form_main_container}`}>
@@ -1352,7 +1350,7 @@ const CreateBarber = () => {
               </StepLabel>
 
               {
-                step.label === "Barber Information" && (<StepContent>
+                step.label === `${currentSalonType === "Barber Shop" ? "Barbers" : currentSalonType === "Hair Dresser" ? "Stylists" : ""} Information` && (<StepContent>
                   <main className={`${style.form_container}`}>
                     {step.fields.map((field) => (
                       <div key={field.name} className={`${style.form_group}`}>
@@ -1421,7 +1419,7 @@ const CreateBarber = () => {
 
 
               {
-                step.label === "Barber Services" && (<StepContent>
+                step.label === `${currentSalonType === "Barber Shop" ? "Barber" : currentSalonType === "Hair Dresser" ? "Stylist" : ""} Services` && (<StepContent>
                   <main className={`${style.service_container}`}>
 
                     <div>
@@ -1658,7 +1656,7 @@ const CreateBarber = () => {
 
         {activeStep === steps.length && (
           <div className={`${style.complete}`}>
-            <p>All steps have been successfully completed. Click the <span style={{ color: "var(--bg-secondary)", fontWeight: "bold" }}>Create</span> button to add a new barber.</p>
+            <p>All steps have been successfully completed. Click the <span style={{ color: "var(--bg-secondary)", fontWeight: "bold" }}>Create</span> button to add a new {currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : ""}.</p>
             <div>
               <button onClick={handleBack}>Back</button>
               {

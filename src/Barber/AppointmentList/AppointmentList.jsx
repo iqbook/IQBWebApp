@@ -355,7 +355,7 @@ const AppointmentList = () => {
                                             style={{
                                                 position: "relative",
                                                 color: "var(--text-primary)",
-                                                // backgroundColor: selectedDay.date === item.date ? "var(--input-bg-color)" : undefined
+                                                backgroundColor: selectedDay.date === item.date ? "var(--input-bg-color)" : undefined
                                             }}
                                         >{item.date}
                                             {

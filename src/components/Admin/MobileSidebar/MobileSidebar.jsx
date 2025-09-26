@@ -176,7 +176,7 @@ const MobileSidebar = () => {
       adminEmail
     }
 
-    dispatch(adminApplySalonAction(applySalonData))
+    dispatch(adminApplySalonAction(applySalonData, navigate))
   }
 
   const getDefaultSalonControllerRef = useRef(new AbortController())
@@ -384,20 +384,11 @@ const MobileSidebar = () => {
     },
   ]
 
-  // useEffect(() => {
-  //   if (mobileSidebar) {
-  //     document.body.style.overflow = 'hidden'; // Disable scroll
-  //   } else {
-  //     document.body.style.overflow = ''; // Re-enable scroll
-  //   }
-
-  //   return () => {
-  //     document.body.style.overflow = ''; // Clean up on unmount
-  //   };
-  // }, [mobileSidebar]);
-
-
-  // const [online, setOnline] = useState(false)
+  useEffect(() => {
+    if (adminGetDefaultSalonResponse) {
+      localStorage.setItem("CurrentSalonType", adminGetDefaultSalonResponse.salonType)
+    }
+  }, [adminGetDefaultSalonResponse])
 
   return (
     <section className={`${style.mobile_container}`}>

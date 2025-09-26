@@ -497,6 +497,9 @@ const AppointmentCalender = () => {
     // Disable the "Next" button if the next month is beyond the allowed appointment days
     const isNextDisabled = currentMonth.clone().add(1, 'month').startOf('month').isAfter(moment().add(maxAppointmentDays, 'days'));
 
+
+    const currentSalonType = localStorage.getItem("CurrentSalonType")
+
     return (
         <section className={style.appointmentSection}>
             <div className={style.calenderDayCalender}>
@@ -522,7 +525,7 @@ const AppointmentCalender = () => {
                                     style={{
                                         position: 'relative',
                                         color: 'var(--text-primary)',
-                                        // backgroundColor: selectedDay?.fullDate === item.fullDate ? 'var(--input-bg-color)' : 'transparent',
+                                        backgroundColor: selectedDay?.fullDate === item.fullDate ? 'var(--input-bg-color)' : 'transparent',
                                     }}
                                 >
                                     {item.date}
@@ -560,7 +563,7 @@ const AppointmentCalender = () => {
                         type='text'
                         value={searchBarber}
                         onChange={(e) => setSearchBarber(e.target.value)}
-                        placeholder={`Search ${adminGetDefaultSalonResponse?.salonType === 'Barber Shop' ? 'Barber' : 'Stylist'}`}
+                        placeholder={`Search ${currentSalonType === "Barber Shop" ? "Barber" : currentSalonType === "Hair Dresser" ? "Stylist" : "Barber"}`}
                     />
                 </div>
             )}

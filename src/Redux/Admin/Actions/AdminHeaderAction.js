@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import api from "../../api/Api";
 import { ADMIN_APPLY_SALON_FAIL, ADMIN_APPLY_SALON_REQ, ADMIN_APPLY_SALON_SUCCESS, ADMIN_GET_DEFAULT_SALON_FAIL, ADMIN_GET_DEFAULT_SALON_REQ, ADMIN_GET_DEFAULT_SALON_SUCCESS } from "../Constants/constants";
 
-export const adminApplySalonAction = (applySalondata) => async (dispatch) => {
+export const adminApplySalonAction = (applySalondata, navigate) => async (dispatch) => {
     try {
         dispatch({
             type: ADMIN_APPLY_SALON_REQ
@@ -17,7 +17,9 @@ export const adminApplySalonAction = (applySalondata) => async (dispatch) => {
         localStorage.setItem("barberdata", JSON.stringify({}))
         localStorage.setItem("salondata", JSON.stringify({}))
 
+        navigate("/admin-dashboard")
         window.location.reload()
+
     } catch (error) {
 
         if (error?.response?.status === 500) {

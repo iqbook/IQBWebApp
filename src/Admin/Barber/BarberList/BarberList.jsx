@@ -417,10 +417,16 @@ const BarberList = () => {
     navigate("/admin-appointmenthistory")
   }
 
+
+  const currentSalonType = localStorage.getItem("CurrentSalonType")
+
+  // Hair Dresser
+  // Barber Shop
+
   return (
     <section className={`${style.section}`}>
       <div>
-        <h2>Barber List</h2>
+        <h2>{currentSalonType === "Barber Shop" ? "Barbers" : currentSalonType === "Hair Dresser" ? "Stylists" : "Barber"} List</h2>
         <div>
 
           <button
@@ -702,7 +708,7 @@ const BarberList = () => {
                                     style={{
                                       cursor: approveBarberMap?.get(`${item.salonId}-${item.email}`) === false ? "not-allowed" : "pointer"
                                     }}
-                                  >Edit barber</button>
+                                  >Edit {currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : ""}</button>
 
                                   <button onClick={() => queuehistoryhandler(item)}>Queue History</button>
                                   <button onClick={() => appointmenthistoryhandler(item)}>Appointment History</button>
@@ -722,7 +728,7 @@ const BarberList = () => {
             </div>
           ) : (
             <div className={`${style.list_body_container_error}`}>
-              <p>No barbers available</p>
+              <p>No {currentSalonType === "Barber Shop" ? "barbers" : currentSalonType === "Hair Dresser" ? "stylists" : "barbers"} available</p>
             </div>
           )
         }
@@ -871,7 +877,7 @@ const BarberList = () => {
                                 style={{
                                   cursor: approveBarberMap?.get(`${item.salonId}-${item.email}`) === false ? "not-allowed" : "pointer"
                                 }}
-                              >Edit barber</button>
+                              >Edit {currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : ""}</button>
                             </li>
                             <li>
                               <button onClick={() => queuehistoryhandler(item)}>Queue History</button>
@@ -892,7 +898,7 @@ const BarberList = () => {
           </div>
         ) : (
           <div className={style.list_container_mobile_error}>
-            <p>No barber list available</p>
+            <p>No {currentSalonType === "Barber Shop" ? "barber" : currentSalonType === "Hair Dresser" ? "stylist" : "barbers"} list available</p>
           </div>
         )
       }
