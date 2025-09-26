@@ -1,26 +1,3 @@
-/* .section {
-    height: calc(100svh - 6rem);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    overflow: auto;
-
-    .list_container {
-        min-width: 100rem;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        border-radius: var(--border-radius-primary);
-        -webkit-border-radius: var(--border-radius-primary);
-        -moz-border-radius: var(--border-radius-primary);
-        -ms-border-radius: var(--border-radius-primary);
-        -o-border-radius: var(--border-radius-primary);
-        overflow: auto;
-    }
-} */
-
-
 .appointmentSection {
     height: calc(100svh - 6rem);
 
@@ -268,7 +245,7 @@
     .empty_appointment_list {
         padding: 1.5rem;
         overflow: auto;
-        height: calc(100% - 13.2rem);
+        height: calc(100% - (13.2rem + 6rem));
         display: flex;
         justify-content: center;
         align-items: center;

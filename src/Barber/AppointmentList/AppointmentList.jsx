@@ -55,64 +55,56 @@ const AppointmentList = () => {
         }
     }, [salonId]);
 
-    console.log("maxAppointmentDays ", maxAppointmentDays);
-
-
     const [dates, setDates] = useState([]);
     const [currentMonth, setCurrentMonth] = useState(moment(moment().format("YYYY-MM"), "YYYY-MM")); // Current month start
     const [selectedDay, setSelectedDay] = useState("")
 
-    // const generateDatesForMonth = (monthMoment, maxAppointmentDays) => {
-    //     const today = moment().startOf("day");
-    //     const maxAllowedDate = today.clone().add(maxAppointmentDays, "days");
+
+    // const generateDatesForMonth = (monthMoment, maxDays) => {
+    //     const today = moment().startOf('day');
+    //     const tomorrow = today.clone().add(1, 'day');
+    //     const endOfCurrentMonth = monthMoment.clone().endOf('month');
+    //     const maxAllowedDate = today.clone().add(maxDays, 'days').startOf('day');
 
     //     let tempDates = [];
 
-    //     const startOfMonth = monthMoment.clone().startOf("month");
-    //     const endOfMonth = monthMoment.clone().endOf("month");
+    //     // The loop now starts from tomorrow if the current month is the same as today's month
+    //     const loopStart = monthMoment.isSame(today, 'month') ? tomorrow : monthMoment.clone().startOf('month');
 
-    //     // ✅ If current month, start from today; else, start from startOfMonth
-    //     const loopStart = monthMoment.isSame(today, "month")
-    //         ? today.clone()
-    //         : startOfMonth;
+    //     // Cap the loop at the maximum allowed date or the end of the month
+    //     const loopEnd = moment.min(endOfCurrentMonth, maxAllowedDate);
 
-    //     // ✅ Cap at maxAllowedDate
-    //     const loopEnd = moment.min(endOfMonth, maxAllowedDate);
-
-    //     // ✅ Generate dates only if within range
-    //     for (let day = loopStart.clone(); day.isSameOrBefore(loopEnd); day.add(1, "day")) {
+    //     // Loop from the start date to the end date
+    //     for (let day = loopStart.clone(); day.isSameOrBefore(loopEnd); day.add(1, 'day')) {
     //         tempDates.push({
-    //             dayName: day.format("ddd").slice(0, 1),
-    //             dayFullName: day.format("dddd"),
-    //             date: day.format("DD"),
-    //             month: day.format("MMM"),
-    //             year: day.format("YYYY"),
-    //             fullDate: day.format("YYYY-MM-DD"),
-    //             slots: Math.floor(Math.random() * 10),
+    //             dayName: day.format('ddd').slice(0, 1),
+    //             dayFullName: day.format('dddd'),
+    //             date: day.format('DD'),
+    //             month: day.format('MMM'),
+    //             year: day.format('YYYY'),
+    //             fullDate: day.format('YYYY-MM-DD'),
     //         });
     //     }
-
     //     setDates(tempDates);
-    // };
 
-    // Load current month initially
+    //     // Set the initial selected day to tomorrow's date if it hasn't been set yet
+    //     if (!selectedDay && tempDates.length > 0) {
+    //         setSelectedDay(tempDates[0]);
+    //     }
+    // };
 
     const generateDatesForMonth = (monthMoment, maxDays) => {
         const today = moment().startOf('day');
         const tomorrow = today.clone().add(1, 'day');
-        const endOfCurrentMonth = monthMoment.clone().endOf('month');
         const maxAllowedDate = today.clone().add(maxDays, 'days').startOf('day');
 
         let tempDates = [];
 
-        // The loop now starts from tomorrow if the current month is the same as today's month
+        // start from tomorrow if current month is same as today's
         const loopStart = monthMoment.isSame(today, 'month') ? tomorrow : monthMoment.clone().startOf('month');
 
-        // Cap the loop at the maximum allowed date or the end of the month
-        const loopEnd = moment.min(endOfCurrentMonth, maxAllowedDate);
-
-        // Loop from the start date to the end date
-        for (let day = loopStart.clone(); day.isSameOrBefore(loopEnd); day.add(1, 'day')) {
+        // loop until maxAllowedDate (not end of month)
+        for (let day = loopStart.clone(); day.isSameOrBefore(maxAllowedDate); day.add(1, 'day')) {
             tempDates.push({
                 dayName: day.format('ddd').slice(0, 1),
                 dayFullName: day.format('dddd'),
@@ -122,9 +114,9 @@ const AppointmentList = () => {
                 fullDate: day.format('YYYY-MM-DD'),
             });
         }
+
         setDates(tempDates);
 
-        // Set the initial selected day to tomorrow's date if it hasn't been set yet
         if (!selectedDay && tempDates.length > 0) {
             setSelectedDay(tempDates[0]);
         }
@@ -331,8 +323,6 @@ const AppointmentList = () => {
         };
     }, []);
 
-    // console.log("isMobile ", isMobile)
-
 
     return (
         <section className={style.appointmentSection}>
@@ -397,6 +387,34 @@ const AppointmentList = () => {
             </div>
 
             {
+                selectedDay && (
+                    <div className={style.selectedDay_Container}>
+                        <div>
+                            <div>
+                                <b>{selectedDay?.month}</b>{" "}
+                                <b>{selectedDay?.date} ,</b>
+                            </div>
+                            <p>{selectedDay?.dayFullName}</p>
+                        </div>
+
+                        {
+                            AppointmentListBarberResponse?.length > 0 && (
+                                <button
+                                    onClick={() => {
+                                        setCancelAllModalOpen(true)
+                                        setSubject("")
+                                        setBody("")
+                                        setCancelAllAppoint(AppointmentListBarberResponse?.[0])
+                                    }}
+                                > Cancel All</button>
+                            )
+                        }
+
+                    </div>
+                )
+            }
+
+            {
                 AppointmentListBarberLoading ? (
                     <div className={style.appointmentList_loading}>
                         {
@@ -414,7 +432,7 @@ const AppointmentList = () => {
                     </div>
                 ) : AppointmentListBarberResponse?.[0]?.appointments?.length > 0 ? (
                     <div className={style.appointmentList}>
-                        {
+                        {/* {
                             selectedDay && (
                                 <div>
                                     <div>
@@ -435,7 +453,7 @@ const AppointmentList = () => {
                                     > Cancel All</button>
                                 </div>
                             )
-                        }
+                        } */}
 
                         {
                             AppointmentListBarberResponse?.[0]?.appointments?.map((item) => {
