@@ -123,29 +123,31 @@ const EditSalon = () => {
   const [longitude, setLongitude] = useState(currentSalon?.location.coordinates.longitude);
   const [error, setError] = useState(null);
 
-  const geoLocationHandler = () => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
-          setLatitude(latitude);
-          setLongitude(longitude);
-        },
-        (error) => {
-          if (error.code === error.PERMISSION_DENIED) {
-            setError("You denied access to your geolocation. Please enable it in your browser settings.");
-          } else {
-            setError("Error accessing geolocation: " + error.message);
-          }
-        }
-      );
-    } else {
-      setError("Geolocation is not available in your browser.");
-    }
-  }
+  // const geoLocationHandler = () => {
+  //   if ("geolocation" in navigator) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => {
+  //         const latitude = position.coords.latitude;
+  //         const longitude = position.coords.longitude;
+  //         setLatitude(latitude);
+  //         setLongitude(longitude);
+  //       },
+  //       (error) => {
+  //         if (error.code === error.PERMISSION_DENIED) {
+  //           setError("You denied access to your geolocation. Please enable it in your browser settings.");
+  //         } else {
+  //           setError("Error accessing geolocation: " + error.message);
+  //         }
+  //       }
+  //     );
+  //   } else {
+  //     setError("Geolocation is not available in your browser.");
+  //   }
+  // }
 
   // console.log("Current Salon is ", currentSalon)
+
+
 
   const [salonEmail, setSalonEmail] = useState(currentSalon?.salonEmail)
   const [salonName, setSalonName] = useState(currentSalon?.salonName)
@@ -1521,6 +1523,53 @@ const EditSalon = () => {
   const [serviceCategoryOpen, setServiceCategoryOpen] = useState(false)
 
 
+  // React Map logic
+
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+  })
+
+  const [map, setMap] = React.useState(null)
+  const [markerPosition, setMarkerPosition] = React.useState(null);
+
+
+  const [center, setCenter] = useState({
+    lat: currentSalon?.location.coordinates.latitude,
+    lng: currentSalon?.location.coordinates.longitude
+  });
+
+  const onLoad = React.useCallback(function callback(map) {
+    // This is just an example of getting and using the map instance!!! don't just blindly copy!
+    const bounds = new window.google.maps.LatLngBounds(center)
+    map.fitBounds(bounds)
+
+    setMap(map)
+  }, [center])
+
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null)
+  }, [])
+
+
+  const handleMapClick = (event) => {
+    const lat = event.latLng.lat();
+    const lng = event.latLng.lng();
+
+    // Set marker position to clicked location
+    setMarkerPosition({ lat, lng });
+    setLatitude(lat);
+    setLongitude(lng);
+
+    // const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
+    // localStorage.setItem("salondata", JSON.stringify({
+    //   ...existingData,
+    //   ["latitude"]: lat,
+    //   ["longitude"]: lng
+    // }));
+  };
+
+
   return (
     <section className={`${style.section}`}>
       <div>
@@ -1649,6 +1698,89 @@ const EditSalon = () => {
                             />
                             {field?.error ? <p style={{ color: "red", fontSize: "1.4rem" }}>{field?.error}</p> : null}
                           </>
+                          )
+                        }
+
+                        {
+                          field.name === "longitude" && (
+                            <>
+                              <p style={{ fontWeight: 700 }}>* Update your salon's exact location on the map to automatically set its latitude and longitude.</p>
+                              <div style={{ height: "30rem", backgroundColor: "#efefef", borderRadius: "0.6rem", overflow: "hidden" }}>
+
+                                {
+                                  isLoaded ? (
+                                    <GoogleMap
+                                      mapContainerStyle={{
+                                        width: '100%',
+                                        height: '30rem',
+                                      }}
+                                      center={center}
+                                      zoom={10}
+                                      onLoad={onLoad}
+                                      onUnmount={onUnmount}
+                                      onClick={handleMapClick}
+                                      options={{
+                                        disableDefaultUI: false, // Keep basic controls like zoom
+                                        streetViewControl: false, // 🚫 Remove Pegman / Street View
+                                        mapTypeControl: false, // 🚫 Remove Satellite / Terrain switcher
+                                        fullscreenControl: true, // ✅ Keep fullscreen option if needed
+                                        zoomControl: true, // ✅ Keep zoom buttons
+                                      }}
+                                    >
+                                      {markerPosition && (
+                                        <OverlayView
+                                          position={markerPosition}
+                                          mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                                        >
+                                          <div
+                                            style={{
+                                              display: "flex",
+                                              flexDirection: "column",
+                                              alignItems: "center",
+                                              transform: "translate(-50%, -100%)",
+                                            }}
+                                          >
+                                            <div
+                                              style={{
+                                                width: "5rem",
+                                                height: "5rem",
+                                                borderRadius: "0.6rem",
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                              }}
+                                            >
+                                              <img src="/mapPointer.png" alt="" style={{
+                                                width: "100%", height: "100%", objectFit: "contain"
+                                              }} />
+                                            </div>
+
+                                            <div
+                                              style={{
+                                                marginTop: "0.8rem",
+                                                backgroundColor: "#fff",
+                                                padding: "0.4rem 0.8rem",
+                                                borderRadius: "0.4rem",
+                                                boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                                                fontSize: "1.4rem",
+                                                fontWeight: "bold",
+                                                color: "#333",
+                                                whiteSpace: "nowrap",
+                                                border: "0.1rem solid #ccc",
+                                              }}
+                                            >
+                                              {salonName}
+                                            </div>
+                                          </div>
+                                        </OverlayView>
+                                      )}
+                                    </GoogleMap>
+                                  ) : (
+                                    <></>
+                                  )
+                                }
+                              </div>
+                            </>
                           )
                         }
                       </div>

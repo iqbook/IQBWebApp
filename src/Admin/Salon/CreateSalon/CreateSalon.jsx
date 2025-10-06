@@ -109,6 +109,32 @@ const CreateSalon = () => {
     }
   }
 
+
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+
+          setCenter({
+            lat: latitude,
+            lng: longitude
+          })
+        },
+        (error) => {
+          if (error.code === error.PERMISSION_DENIED) {
+            setError("You denied access to your geolocation. Please enable it in your browser settings.");
+          } else {
+            setError("Error accessing geolocation: " + error.message);
+          }
+        }
+      );
+    } else {
+      setError("Geolocation is not available in your browser.");
+    }
+  }, [])
+
   const [salonEmail, setSalonEmail] = useState("")
   const [salonName, setSalonName] = useState("")
   const [salonDesc, setSalonDesc] = useState("")
@@ -1385,7 +1411,7 @@ const CreateSalon = () => {
     map.fitBounds(bounds)
 
     setMap(map)
-  }, [])
+  }, [center])
 
   const onUnmount = React.useCallback(function callback(map) {
     setMap(null)
@@ -1807,7 +1833,7 @@ const CreateSalon = () => {
                             {/* <button className={`${style.geolocation_btn}`} onClick={geoLocationHandler}>
                               Get geolocation
                             </button> */}
-                            <p style={{ fontWeight: 700 }}>* Select your salon’s exact location on the map to automatically set its latitude and longitude.</p>
+                            <p style={{ fontWeight: 700 }}>* Select your salon's exact location on the map to automatically set its latitude and longitude.</p>
                             <div style={{ height: "30rem", backgroundColor: "#efefef", borderRadius: "0.6rem", overflow: "hidden" }}>
                               {
                                 isLoaded ? (

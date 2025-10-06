@@ -690,6 +690,7 @@ const Report = () => {
     return `${year}-${month}-${day}`; // yyyy-mm-dd
   };
 
+  console.log("selectType ", selectType)
 
   const viewReport = async () => {
     try {
@@ -708,9 +709,9 @@ const Report = () => {
         };
       }
 
-      else if (selectType === "Barber" && selectedFilter && (dayOption || weekOption || monthOption) && (queueType || appointmentType)) {
+      else if ((selectType === "Barber" || selectType === "Stylist") && selectedFilter && (dayOption || weekOption || monthOption) && (queueType || appointmentType)) {
         if (!selectedbarberEmail || !selectedbarberId) {
-          toast.error("Please select barber", {
+          toast.error(`Please select ${selectType.toLowerCase()}`, {
             duration: 3000,
             style: {
               fontSize: "var(--font-size-2)",
@@ -742,9 +743,9 @@ const Report = () => {
         };
       }
 
-      else if (selectType === "Barber" && selectedDates.length > 0 && (queueType || appointmentType)) {
+      else if ((selectType === "Barber" || selectType === "Stylist") && selectedDates.length > 0 && (queueType || appointmentType)) {
         if (!selectedbarberEmail || !selectedbarberId) {
-          toast.error("Please select barber", {
+          toast.error(`Please select ${selectType.toLowerCase()}`, {
             duration: 3000,
             style: {
               fontSize: "var(--font-size-2)",
@@ -1044,7 +1045,7 @@ const Report = () => {
 
 
             {
-              selectType === "Barber" && BarberList?.length > 0 ? BarberList?.map((item) => {
+              (selectType === "Barber" || selectType === "Stylist") && BarberList?.length > 0 ? BarberList?.map((item) => {
                 return (<div
                   className={`${style.barber_item}`}
                   key={item.barberId}

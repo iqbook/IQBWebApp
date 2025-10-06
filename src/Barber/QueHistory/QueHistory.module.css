@@ -79,6 +79,10 @@
                 min-height: 5rem;
                 border-bottom: 0.1rem solid var(--border-secondary);
 
+                &>div:nth-child(1){
+                    display: none;
+                }
+
                 &>div {
 
                     .name_head_btn {
@@ -144,7 +148,7 @@
                 }
 
                 &>div:nth-child(1) {
-                    background-color: var(--bg-primary);
+                    /* background-color: var(--bg-primary);
                     position: sticky;
                     left: 0;
                     min-width: 8rem;
@@ -153,7 +157,8 @@
                     -webkit-transition: background-color 0.2s ease-in;
                     -moz-transition: background-color 0.2s ease-in;
                     -ms-transition: background-color 0.2s ease-in;
-                    -o-transition: background-color 0.2s ease-in;
+                    -o-transition: background-color 0.2s ease-in; */
+                    display: none;
                 }
 
                 &>div {
@@ -167,6 +172,7 @@
                     -moz-transition: background-color 0.2s ease-in;
                     -ms-transition: background-color 0.2s ease-in;
                     -o-transition: background-color 0.2s ease-in;
+                    padding-left: 2rem;
 
                     &>p {
                         color: var(--text-primary);
