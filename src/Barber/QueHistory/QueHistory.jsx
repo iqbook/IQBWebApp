@@ -168,7 +168,7 @@ const QueHistory = () => {
     const headRows = [
         { id: 1, heading: "Barber ID", key: "qpos" },
         { id: 2, heading: "Name", key: "customerName" },
-        { id: 3, heading: `${barberProfile?.salonType === "Barber Shop" ? "BarberName" : "StylistName"}`, key: "barberName" },
+        { id: 3, heading: `${barberProfile?.salonType === "Barber Shop" ? "Barber Name" : "Stylis tName"}`, key: "barberName" },
         { id: 4, heading: "Time Joined", key: "timejoined" },
         { id: 5, heading: "Qg Code", key: "qgcode" },
         { id: 6, heading: "Price", key: "price" },

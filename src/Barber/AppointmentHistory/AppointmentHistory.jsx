@@ -38,7 +38,7 @@ const AppointmentHistory = () => {
 
     const headRows = [
         { id: 1, heading: "Name", key: "customerName" },
-        { id: 2, heading: `${barberProfile?.salonType === "Barber Shop" ? "BarberName" : "StylistName"}`, key: "barberName" },
+        { id: 2, heading: `${barberProfile?.salonType === "Barber Shop" ? "Barber Name" : "Stylist Name"}`, key: "barberName" },
         { id: 3, heading: "Start Time", key: "startTime" },
         { id: 4, heading: "End Time", key: "endTime" },
         { id: 5, heading: "Price", key: "price" },
