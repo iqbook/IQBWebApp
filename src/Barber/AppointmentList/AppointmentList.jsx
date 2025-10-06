@@ -127,6 +127,7 @@ const AppointmentList = () => {
         generateDatesForMonth(currentMonth, maxAppointmentDays);
     }, [currentMonth, maxAppointmentDays]);
 
+
     // Go to next month
     const nextMonthFunc = () => {
         setCurrentMonth((prev) => prev.clone().add(1, "month"));
@@ -349,13 +350,19 @@ const AppointmentList = () => {
                                         <p>{item.dayName}</p>
                                         <button
                                             onClick={() => {
-                                                setSelectedDay(item)
-                                                // setSelectedDayAllAppointments(item.appointments)
+                                                const selectedMonthYear = moment(`${item.year}-${item.month}-${item.date}`, 'YYYY-MMM-DD');
+
+                                                if (!selectedMonthYear.isSame(currentMonth, 'month')) {
+                                                    console.log("Next");
+                                                    setCurrentMonth((prev) => prev.clone().add(1, 'month'));
+                                                }
+
+                                                setSelectedDay(item);
                                             }}
                                             style={{
                                                 position: "relative",
                                                 color: "var(--text-primary)",
-                                                backgroundColor: selectedDay.date === item.date ? "var(--input-bg-color)" : undefined
+                                                backgroundColor: selectedDay?.fullDate === item.fullDate ? "var(--input-bg-color)" : undefined
                                             }}
                                         >{item.date}
                                             {

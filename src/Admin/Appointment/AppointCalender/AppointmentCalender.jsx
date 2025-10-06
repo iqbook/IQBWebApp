@@ -389,40 +389,6 @@ const AppointmentCalender = () => {
     const [currentMonth, setCurrentMonth] = useState(moment().startOf('month'));
     const [selectedDay, setSelectedDay] = useState(null);
 
-    // Generate dates for the calendar based on the current month and max days
-    // const generateDatesForMonth = (monthMoment, maxDays) => {
-    //     const today = moment().startOf('day');
-    //     const tomorrow = today.clone().add(1, 'day');
-    //     const endOfCurrentMonth = monthMoment.clone().endOf('month');
-    //     const maxAllowedDate = today.clone().add(maxDays, 'days').startOf('day');
-
-    //     let tempDates = [];
-
-    //     // The loop now starts from tomorrow if the current month is the same as today's month
-    //     const loopStart = monthMoment.isSame(today, 'month') ? tomorrow : monthMoment.clone().startOf('month');
-
-    //     // Cap the loop at the maximum allowed date or the end of the month
-    //     const loopEnd = moment.min(endOfCurrentMonth, maxAllowedDate);
-
-    //     // Loop from the start date to the end date
-    //     for (let day = loopStart.clone(); day.isSameOrBefore(loopEnd); day.add(1, 'day')) {
-    //         tempDates.push({
-    //             dayName: day.format('ddd').slice(0, 1),
-    //             dayFullName: day.format('dddd'),
-    //             date: day.format('DD'),
-    //             month: day.format('MMM'),
-    //             year: day.format('YYYY'),
-    //             fullDate: day.format('YYYY-MM-DD'),
-    //         });
-    //     }
-    //     setDates(tempDates);
-
-    //     // Set the initial selected day to tomorrow's date if it hasn't been set yet
-    //     if (!selectedDay && tempDates.length > 0) {
-    //         setSelectedDay(tempDates[0]);
-    //     }
-    // };
-
     const generateDatesForMonth = (monthMoment, maxDays) => {
         const today = moment().startOf('day');
         const tomorrow = today.clone().add(1, 'day');
@@ -457,6 +423,7 @@ const AppointmentCalender = () => {
     useEffect(() => {
         generateDatesForMonth(currentMonth, maxAppointmentDays);
     }, [currentMonth, maxAppointmentDays]);
+
 
     // Fetch appointment list for the selected day
     useEffect(() => {
@@ -521,7 +488,15 @@ const AppointmentCalender = () => {
                             <div>
                                 <p>{item.dayName}</p>
                                 <button
-                                    onClick={() => setSelectedDay(item)}
+                                    onClick={() => {
+                                        const selectedMonthYear = moment(`${item.year}-${item.month}-${item.date}`, 'YYYY-MMM-DD');
+
+                                        if (!selectedMonthYear.isSame(currentMonth, 'month')) {
+                                            setCurrentMonth((prev) => prev.clone().add(1, 'month'));
+                                        }
+
+                                        setSelectedDay(item);
+                                    }}
                                     style={{
                                         position: 'relative',
                                         color: 'var(--text-primary)',
@@ -548,7 +523,7 @@ const AppointmentCalender = () => {
                         </div>
                     ))}
                 </div>
-                
+
             </div>
 
             {selectedDay && (
