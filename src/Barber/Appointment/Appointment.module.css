@@ -100,7 +100,7 @@
         }
 
         .leave_dates {
-            background-color: rgba(255, 0, 0, 0.321);
+            background-color: rgba(255, 0, 0, 0.484);
         }
     }
 
@@ -290,16 +290,6 @@
         border: 0.1rem solid var(--border-secondary);
     }
 
-    .highlighted_date {
-        background: #2563eb;
-        color: white;
-    }
-
-    .leave_dates {
-        background: #9ca3af;
-        color: white;
-        cursor: not-allowed;
-    }
 
     .submit {
         width: min(100%, 35rem);
@@ -355,15 +345,12 @@
     }
 
     .highlighted_date {
-        background-color: #0867ff54;
-        /* border-radius: 50%;
-        -webkit-border-radius: 50%;
-        -moz-border-radius: 50%;
-        -ms-border-radius: 50%;
-        -o-border-radius: 50%; */
+        background-color: #0867ffd1;
+        color: #fff;
     }
 
     .leave_dates {
-        background-color: rgba(255, 0, 0, 0.321);
+        background-color: rgba(255, 0, 0, 0.777);
+        color: #fff;
     }
 }

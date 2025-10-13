@@ -154,8 +154,6 @@ const Appointment = () => {
 
         const formattedDate = date.toLocaleDateString("en-CA");
 
-        console.log("formattedDate ", formattedDate)
-
         setSelectedDates((prevDates) =>
             prevDates.includes(formattedDate)
                 ? prevDates.filter((d) => d !== formattedDate)
@@ -251,7 +249,6 @@ const Appointment = () => {
 
     const onMobileClickDay = (day) => {
         const formattedDate = day.format("YYYY-MM-DD");
-        console.log("Mobile formattedDate ", formattedDate)
 
         setSelectedDates((prevDates) =>
             prevDates.includes(formattedDate)
@@ -259,6 +256,26 @@ const Appointment = () => {
                 : [...prevDates, formattedDate]
         );
     }
+
+
+    const isMobileSelected = (day) => {
+        const formattedDate = day.format("YYYY-MM-DD");
+        return selectedDates?.includes(formattedDate);
+    };
+
+
+    const isMobileDisabled = (day) => {
+        const formattedDate = day.format("YYYY-MM-DD");
+        return barberLeaveDaysdata?.includes(formattedDate);
+    };
+
+    const isDayMobileDisabled = (day) => {
+        const weekday = day.format("dddd"); // Gives full name e.g. "Monday"
+        return (
+            getSalonoffDays.includes(weekday) ||
+            getDisableApptdates.includes(weekday)
+        );
+    };
 
     return (
         <div className={`${style.section}`}>
@@ -416,47 +433,6 @@ const Appointment = () => {
                     </div>
                 }
 
-                {/* {
-                    barberOffdates && <div className={style.leave_value_body}>
-                        <div style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center"
-                        }}>
-                            <p>Select Off Days</p>
-                            <button
-                                className={style.reset_days}
-                                onClick={() => offDayHandler([])}
-                                disabled={salonId === 0}
-                                style={{
-                                    cursor: salonId === 0 ? "not-allowed" : "pointer"
-                                }}
-                            >Reset Off Days</button>
-                        </div>
-                        {
-                            <div style={{ marginBottom: "2rem" }}>
-                                <Calendar
-                                    onClickDay={onClickDay}
-                                    // tileClassName={({ date }) =>
-                                    //     isSelected(date) ? style.highlighted_date : ""
-                                    // }
-
-                                    minDate={new Date(new Date().setDate(new Date().getDate() + 1))}
-                                    tileClassName={({ date }) => {
-                                        if (isSelected(date)) {
-                                            return style.highlighted_date;
-                                        } else if (isDisabled(date)) {
-                                            return style.leave_dates;
-                                        }
-                                        return null;
-                                    }}
-
-                                // tileDisabled={({ date }) => isDisabled(date)}
-                                />
-                            </div>
-                        }
-                    </div>
-                } */}
 
                 {
                     barberOffdates && <div className={style.leave_value_body}>
@@ -502,52 +478,27 @@ const Appointment = () => {
                             >Reset Off Days</button>
                         </div>
 
-                        {/* <Calendar
-                            onClickDay={onClickDay}
-                            // tileClassName={({ date }) =>
-                            //     isSelected(date) ? style.highlighted_date : ""
-                            // }
-
-                            minDate={new Date(new Date().setDate(new Date().getDate() + 1))}
-                            tileClassName={({ date }) => {
-                                if (isSelected(date)) {
-                                    return style.highlighted_date;
-                                } else if (isDisabled(date)) {
-                                    return style.leave_dates;
-                                }
-                                return null;
-                            }}
-
-                            tileDisabled={({ date }) => {
-                                const weekday = date.toLocaleDateString("en-US", { weekday: "long" });
-                                return (
-                                    getSalonoffDays.includes(weekday) ||
-                                    getDisableApptdates.includes(weekday)
-                                );
-                            }}
-                        /> */}
 
                         <div className={style.dayList}>
                             {visibleDays.map((day) => {
                                 const formatted = day.format("YYYY-MM-DD");
-                                const isLeaveDay = barberLeaveDaysdata.includes(formatted);
-                                const isSelectedDay = offDays.includes(formatted);
 
                                 return (
                                     <button
                                         key={formatted}
                                         onClick={() => {
-                                            // if (!isLeaveDay) handleToggleOffDay(formatted);
                                             onMobileClickDay(day)
                                         }}
-                                        disabled={isLeaveDay}
+                                        disabled={isDayMobileDisabled(day)}
+
                                         className={`
-                    ${style.dayBtn}
-                    ${isSelectedDay ? style.highlighted_date : ""}
-                    ${isLeaveDay ? style.leave_dates : ""}
-                `}
+    ${style.dayBtn}
+    ${isMobileDisabled(day) && !isMobileSelected(day) ? style.leave_dates : ""}
+    ${isMobileSelected(day) ? style.highlighted_date : ""}
+  `}
                                         style={{
-                                            cursor: isLeaveDay ? "not-allowed" : "pointer",
+                                            opacity: isDayMobileDisabled(day) ? 0.4 : 1,
+                                            cursor: isDayMobileDisabled(day) ? "not-allowed" : "pointer",
                                         }}
                                     >
                                         {day.format("ddd DD MMM YYYY")}
