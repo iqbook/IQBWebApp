@@ -5,6 +5,8 @@ import { darkmodeSelector } from '../../Redux/Admin/Reducers/AdminHeaderReducer'
 import api from '../../Redux/api/Api'
 import toast from 'react-hot-toast'
 import Calendar from 'react-calendar'
+import { LeftArrow, RightArrow } from '../../icons'
+import moment from 'moment'
 
 const Appointment = () => {
 
@@ -108,6 +110,16 @@ const Appointment = () => {
                     color: '#fff',
                 },
             });
+
+
+            const { data: appointmentDaysData } = await api.post("/api/barberAppointmentDays/getBarberAppointmentDays", {
+                salonId,
+                barberId
+            })
+
+            setGetDisableApptdates(appointmentDaysData.response.appointmentDays)
+            setSelectedDays(appointmentDaysData.response.appointmentDays);
+
         } catch (error) {
             toast.error(error?.response?.data?.message, {
                 duration: 3000,
@@ -121,7 +133,7 @@ const Appointment = () => {
         }
     }
 
-    const [getAppdates, setGetAppdates] = useState([])
+    const [getDisableApptdates, setGetDisableApptdates] = useState([])
 
     useEffect(() => {
         const getAppointdays = async () => {
@@ -130,7 +142,7 @@ const Appointment = () => {
                 barberId
             })
 
-            setGetAppdates(data.response.appointmentDays)
+            setGetDisableApptdates(data.response.appointmentDays)
             setSelectedDays(data.response.appointmentDays);
         }
         getAppointdays()
@@ -141,6 +153,8 @@ const Appointment = () => {
     const onClickDay = (date) => {
 
         const formattedDate = date.toLocaleDateString("en-CA");
+
+        console.log("formattedDate ", formattedDate)
 
         setSelectedDates((prevDates) =>
             prevDates.includes(formattedDate)
@@ -195,6 +209,56 @@ const Appointment = () => {
         const formattedDate = date.toLocaleDateString("en-CA").split('T')[0];
         return barberLeaveDaysdata?.includes(formattedDate);
     };
+
+    // console.log("getDisableApptdates ", getDisableApptdates)
+    // console.log("getSalonoffDays ", getSalonoffDays)
+
+    // Barber Day off new calendar logic
+
+    const [currentMonth, setCurrentMonth] = useState(moment());
+    const [offDays, setOffDays] = useState([]); // add if not defined
+
+    const today = moment().startOf("day");
+    const tomorrow = today.clone().add(1, "day");
+
+    const startOfMonth = currentMonth.clone().startOf("month");
+    const endOfMonth = currentMonth.clone().endOf("month");
+    const daysInMonth = currentMonth.daysInMonth();
+
+    // Generate all days for the current month
+    const allDays = Array.from({ length: daysInMonth }, (_, i) =>
+        startOfMonth.clone().add(i, "days")
+    );
+
+    // Filter only future dates (tomorrow onward)
+    const visibleDays = allDays.filter((day) => day.isSameOrAfter(tomorrow, "day"));
+
+    // Prevent navigating to past months
+    const handlePrevMonth = () => {
+        const prevMonth = currentMonth.clone().subtract(1, "month");
+        if (prevMonth.isBefore(today, "month")) return;
+        setCurrentMonth(prevMonth);
+    };
+
+    // Navigate forward
+    const handleNextMonth = () => {
+        setCurrentMonth(currentMonth.clone().add(1, "month"));
+    };
+
+
+    const isPrevDisabled = currentMonth.isSameOrBefore(moment(), "month");
+    const isNextDisabled = false;
+
+    const onMobileClickDay = (day) => {
+        const formattedDate = day.format("YYYY-MM-DD");
+        console.log("Mobile formattedDate ", formattedDate)
+
+        setSelectedDates((prevDates) =>
+            prevDates.includes(formattedDate)
+                ? prevDates.filter((d) => d !== formattedDate)
+                : [...prevDates, formattedDate]
+        );
+    }
 
     return (
         <div className={`${style.section}`}>
@@ -284,7 +348,13 @@ const Appointment = () => {
                                         return null;
                                     }}
 
-                                // tileDisabled={({ date }) => isDisabled(date)}
+                                    tileDisabled={({ date }) => {
+                                        const weekday = date.toLocaleDateString("en-US", { weekday: "long" });
+                                        return (
+                                            getSalonoffDays.includes(weekday) ||
+                                            getDisableApptdates.includes(weekday)
+                                        );
+                                    }}
                                 />
                             </div>
                         }
@@ -346,7 +416,7 @@ const Appointment = () => {
                     </div>
                 }
 
-                {
+                {/* {
                     barberOffdates && <div className={style.leave_value_body}>
                         <div style={{
                             display: "flex",
@@ -386,7 +456,109 @@ const Appointment = () => {
                             </div>
                         }
                     </div>
+                } */}
+
+                {
+                    barberOffdates && <div className={style.leave_value_body}>
+                        <div style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center"
+                        }}>
+                            <div className={style.monthSelector}>
+                                <button
+                                    onClick={handlePrevMonth}
+                                    className={style.iconBtn}
+                                    disabled={isPrevDisabled}
+                                    style={{
+                                        opacity: isPrevDisabled ? 0.4 : 1,
+                                        cursor: isPrevDisabled ? "not-allowed" : "pointer"
+                                    }}
+                                >
+                                    <LeftArrow size={24} />
+                                </button>
+                                <p className={style.monthText}>
+                                    {currentMonth.format("MMMM YYYY")}
+                                </p>
+                                <button
+                                    onClick={handleNextMonth}
+                                    className={style.iconBtn}
+                                    disabled={isNextDisabled}
+                                    style={{
+                                        opacity: isNextDisabled ? 0.4 : 1,
+                                        cursor: isNextDisabled ? "not-allowed" : "pointer"
+                                    }}
+                                >
+                                    <RightArrow size={24} />
+                                </button>
+                            </div>
+                            <button
+                                className={style.reset_days}
+                                onClick={() => offDayHandler([])}
+                                disabled={salonId === 0}
+                                style={{
+                                    cursor: salonId === 0 ? "not-allowed" : "pointer"
+                                }}
+                            >Reset Off Days</button>
+                        </div>
+
+                        {/* <Calendar
+                            onClickDay={onClickDay}
+                            // tileClassName={({ date }) =>
+                            //     isSelected(date) ? style.highlighted_date : ""
+                            // }
+
+                            minDate={new Date(new Date().setDate(new Date().getDate() + 1))}
+                            tileClassName={({ date }) => {
+                                if (isSelected(date)) {
+                                    return style.highlighted_date;
+                                } else if (isDisabled(date)) {
+                                    return style.leave_dates;
+                                }
+                                return null;
+                            }}
+
+                            tileDisabled={({ date }) => {
+                                const weekday = date.toLocaleDateString("en-US", { weekday: "long" });
+                                return (
+                                    getSalonoffDays.includes(weekday) ||
+                                    getDisableApptdates.includes(weekday)
+                                );
+                            }}
+                        /> */}
+
+                        <div className={style.dayList}>
+                            {visibleDays.map((day) => {
+                                const formatted = day.format("YYYY-MM-DD");
+                                const isLeaveDay = barberLeaveDaysdata.includes(formatted);
+                                const isSelectedDay = offDays.includes(formatted);
+
+                                return (
+                                    <button
+                                        key={formatted}
+                                        onClick={() => {
+                                            // if (!isLeaveDay) handleToggleOffDay(formatted);
+                                            onMobileClickDay(day)
+                                        }}
+                                        disabled={isLeaveDay}
+                                        className={`
+                    ${style.dayBtn}
+                    ${isSelectedDay ? style.highlighted_date : ""}
+                    ${isLeaveDay ? style.leave_dates : ""}
+                `}
+                                        style={{
+                                            cursor: isLeaveDay ? "not-allowed" : "pointer",
+                                        }}
+                                    >
+                                        {day.format("ddd DD MMM YYYY")}
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                    </div>
                 }
+
                 <button
                     className={style.submit}
                     onClick={appointmentdates ? submitHandler : () => offDayHandler(selectedDates)}

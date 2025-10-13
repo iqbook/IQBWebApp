@@ -508,3 +508,923 @@ const App = () => {
 // body = email
 
 export default App
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useEffect, useState } from 'react'
+// import style from './Appointment.module.css'
+// import { useSelector } from 'react-redux'
+// import { darkmodeSelector } from '../../Redux/Admin/Reducers/AdminHeaderReducer'
+// import api from '../../Redux/api/Api'
+// import toast from 'react-hot-toast'
+// import Calendar from 'react-calendar'
+// import moment from "moment";
+// import { LeftArrow, RightArrow } from '../../icons'
+
+// const Appointment = () => {
+
+//     const barberProfile = useSelector(state => state.BarberLoggedInMiddleware?.entiredata?.user[0])
+
+//     const salonId = useSelector(state => state.BarberLoggedInMiddleware?.barberSalonId)
+//     const barberId = useSelector(state => state.BarberLoggedInMiddleware?.barberId)
+
+//     const [getSalonoffDays, setGetSalonoffDays] = useState([])
+
+//     useEffect(() => {
+//         if (salonId !== 0) {
+//             const fetchSalonOffDaysHandler = async () => {
+//                 try {
+//                     const { data } = await api.post("/api/salonSettings/getSalonoffDays", { salonId })
+//                     setGetSalonoffDays(data?.response)
+//                 } catch (error) {
+//                     toast.error(error?.response?.data?.message, {
+//                         duration: 3000,
+//                         style: {
+//                             fontSize: "var(--font-size-2)",
+//                             borderRadius: '0.3rem',
+//                             background: '#333',
+//                             color: '#fff',
+//                         },
+//                     });
+//                 }
+//             }
+
+//             fetchSalonOffDaysHandler()
+//         }
+//     }, [salonId])
+
+//     const darkMode = useSelector(darkmodeSelector)
+
+//     const darkmodeOn = darkMode === "On"
+
+//     const days = [
+//         {
+//             id: 1,
+//             day: "Monday"
+//         },
+//         {
+//             id: 2,
+//             day: "Tuesday"
+//         },
+//         {
+//             id: 3,
+//             day: "Wednesday"
+//         },
+//         {
+//             id: 4,
+//             day: "Thursday"
+//         },
+//         {
+//             id: 5,
+//             day: "Friday"
+//         },
+//         {
+//             id: 6,
+//             day: "Saturday"
+//         },
+//         {
+//             id: 7,
+//             day: "Sunday"
+//         }
+//     ]
+
+//     const [appointmentdates, setAppointmentDates] = useState(true)
+//     const [barberOffdates, setBarberOffdates] = useState(false)
+
+//     const [selectedDays, setSelectedDays] = useState([])
+
+//     const checkdayHandler = (day) => {
+
+//         setSelectedDays((prev) => {
+//             if (prev.includes(day.day)) {
+//                 return prev.filter((d) => d !== day.day);
+//             } else {
+//                 return [...prev, day.day];
+//             }
+//         });
+//     }
+
+//     const submitHandler = async () => {
+//         try {
+//             const appdata = {
+//                 salonId,
+//                 barberId,
+//                 appointmentDays: selectedDays
+//             }
+
+//             const { data } = await api.post("/api/barberAppointmentDays/addBarberAppointmentDays", appdata)
+
+//             toast.success(data?.message, {
+//                 duration: 3000,
+//                 style: {
+//                     fontSize: "var(--font-size-2)",
+//                     borderRadius: '0.3rem',
+//                     background: '#333',
+//                     color: '#fff',
+//                 },
+//             });
+//         } catch (error) {
+//             toast.error(error?.response?.data?.message, {
+//                 duration: 3000,
+//                 style: {
+//                     fontSize: "var(--font-size-2)",
+//                     borderRadius: '0.3rem',
+//                     background: '#333',
+//                     color: '#fff',
+//                 },
+//             });
+//         }
+//     }
+
+//     const [getAppdates, setGetAppdates] = useState([])
+
+//     useEffect(() => {
+//         const getAppointdays = async () => {
+//             const { data } = await api.post("/api/barberAppointmentDays/getBarberAppointmentDays", {
+//                 salonId,
+//                 barberId
+//             })
+
+//             setGetAppdates(data.response.appointmentDays)
+//             setSelectedDays(data.response.appointmentDays);
+//         }
+//         getAppointdays()
+//     }, [])
+
+//     const [selectedDates, setSelectedDates] = useState([]);
+
+//     const onClickDay = (date) => {
+
+//         const formattedDate = date.toLocaleDateString("en-CA");
+
+//         setSelectedDates((prevDates) =>
+//             prevDates.includes(formattedDate)
+//                 ? prevDates.filter((d) => d !== formattedDate)
+//                 : [...prevDates, formattedDate]
+//         );
+//     };
+
+//     const isSelected = (date) => {
+//         const formattedDate = date.toLocaleDateString("en-CA");
+//         return selectedDates?.includes(formattedDate);
+//     };
+
+//     const offDayHandler = async (selectedDates) => {
+//         const { data } = await api.post("/api/barberDayOff/addBarberDayOffs", {
+//             salonId,
+//             barberId,
+//             barberDayOffs: selectedDates
+//         })
+
+//         toast.success(data?.message, {
+//             duration: 3000,
+//             style: {
+//                 fontSize: "var(--font-size-2)",
+//                 borderRadius: '0.3rem',
+//                 background: '#333',
+//                 color: '#fff',
+//             },
+//         });
+
+//         setSelectedDates([])
+//         getBarberLeaveDaysFunc()
+//     }
+
+//     const [barberLeaveDaysdata, setBarberLeaveDaysdata] = useState([])
+
+//     const getBarberLeaveDaysFunc = async () => {
+//         const { data } = await api.post("/api/barberDayOff/getBarberDayOffs", {
+//             salonId,
+//             barberId
+//         })
+
+//         setBarberLeaveDaysdata(data.response)
+//     }
+
+//     useEffect(() => {
+//         getBarberLeaveDaysFunc()
+//     }, [])
+
+
+//     const isDisabled = (date) => {
+//         const formattedDate = date.toLocaleDateString("en-CA").split('T')[0];
+//         return barberLeaveDaysdata?.includes(formattedDate);
+//     };
+
+
+//     // Barber Day off new calendar logic
+
+//     const [currentMonth, setCurrentMonth] = useState(moment());
+//     const [offDays, setOffDays] = useState([]); // add if not defined
+
+//     const today = moment().startOf("day");
+//     const tomorrow = today.clone().add(1, "day");
+
+//     const startOfMonth = currentMonth.clone().startOf("month");
+//     const endOfMonth = currentMonth.clone().endOf("month");
+//     const daysInMonth = currentMonth.daysInMonth();
+
+//     // Generate all days for the current month
+//     const allDays = Array.from({ length: daysInMonth }, (_, i) =>
+//         startOfMonth.clone().add(i, "days")
+//     );
+
+//     // Filter only future dates (tomorrow onward)
+//     const visibleDays = allDays.filter((day) => day.isSameOrAfter(tomorrow, "day"));
+
+//     // Prevent navigating to past months
+//     const handlePrevMonth = () => {
+//         const prevMonth = currentMonth.clone().subtract(1, "month");
+//         if (prevMonth.isBefore(today, "month")) return;
+//         setCurrentMonth(prevMonth);
+//     };
+
+//     // Navigate forward
+//     const handleNextMonth = () => {
+//         setCurrentMonth(currentMonth.clone().add(1, "month"));
+//     };
+
+//     // Toggle selection
+//     const handleToggleOffDay = (date) => {
+//         if (offDays.includes(date)) {
+//             setOffDays(offDays.filter((d) => d !== date));
+//         } else {
+//             setOffDays([...offDays, date]);
+//         }
+//     };
+
+//     const isPrevDisabled = currentMonth.isSameOrBefore(moment(), "month");
+//     const isNextDisabled = false;
+
+//     return (
+//         <div className={`${style.section}`}>
+//             <div>
+//                 <h2>Appointment</h2>
+//             </div>
+
+//             <div className={style.barber_appointment_content_wrapper}>
+//                 <div>
+//                     <p>Choose appointment days</p>
+//                     <div className={style.heading}>
+//                         <p>#</p>
+//                         <p>Days</p>
+//                     </div>
+
+//                     {
+//                         days.map((d) => {
+//                             const isDisabled = getSalonoffDays.includes(d.day);
+//                             const isChecked = !isDisabled && selectedDays.includes(d.day);
+
+//                             return (
+//                                 <label
+//                                     key={d.id}
+//                                     className={`${style.value} ${isDisabled ? style.disabled : ''}`}
+//                                     style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
+//                                 >
+//                                     <input
+//                                         type="checkbox"
+//                                         style={{ accentColor: "blue" }}
+//                                         onChange={() => checkdayHandler(d)}
+//                                         checked={isChecked}
+//                                         disabled={isDisabled}
+//                                     />
+//                                     <p>{d.day}</p>
+//                                 </label>
+//                             );
+//                         })
+//                     }
+
+
+
+//                     <button
+//                         className={style.submit}
+//                         onClick={submitHandler}
+//                         disabled={salonId === 0}
+//                         style={{
+//                             cursor: salonId === 0 ? "not-allowed" : "pointer"
+//                         }}
+//                     >Save</button>
+
+//                 </div>
+
+//                 <div>
+//                     <p>{`${barberProfile?.salonType === "Barber Shop" ? "Barber" : "Stylist"}`} Off Days</p>
+//                     <div className={style.leave_value_body}>
+//                         <div style={{
+//                             display: "flex",
+//                             justifyContent: "space-between",
+//                             alignItems: "center",
+//                             marginBottom: "2rem"
+//                         }}>
+//                             <p>Select Off Days</p>
+//                             <button
+//                                 className={style.reset_days}
+//                                 onClick={() => offDayHandler([])}
+//                                 disabled={salonId === 0}
+//                                 style={{
+//                                     cursor: salonId === 0 ? "not-allowed" : "pointer"
+//                                 }}
+//                             >Reset Off Days</button>
+//                         </div>
+//                         {
+//                             <div style={{ marginBottom: "2rem" }}>
+//                                 <Calendar
+//                                     onClickDay={onClickDay}
+//                                     // tileClassName={({ date }) =>
+//                                     //     isSelected(date) ? style.highlighted_date : ""
+//                                     // }
+
+//                                     minDate={new Date(new Date().setDate(new Date().getDate() + 1))}
+//                                     tileClassName={({ date }) => {
+//                                         if (isSelected(date)) {
+//                                             return style.highlighted_date;
+//                                         } else if (isDisabled(date)) {
+//                                             return style.leave_dates;
+//                                         }
+//                                         return null;
+//                                     }}
+
+//                                 // tileDisabled={({ date }) => isDisabled(date)}
+//                                 />
+//                             </div>
+//                         }
+
+//                         <button
+//                             className={style.submit}
+//                             onClick={() => offDayHandler(selectedDates)}
+//                             disabled={salonId === 0}
+//                             style={{
+//                                 cursor: salonId === 0 ? "not-allowed" : "pointer"
+//                             }}
+//                         >Save</button>
+//                     </div>
+//                 </div>
+//             </div>
+
+//             <div className={`${style.barber_appointment_content_mobile_wrapper} ${darkmodeOn && style.dark}`}>
+//                 <div className={style.button_group}>
+//                     <button
+//                         onClick={() => {
+//                             setBarberOffdates(false)
+//                             setAppointmentDates(true)
+//                         }}>Appointment Days</button>
+//                     <button
+//                         onClick={() => {
+//                             setBarberOffdates(true)
+//                             setAppointmentDates(false)
+//                         }}>Barber Off Days</button>
+//                 </div>
+//                 {
+//                     appointmentdates && <div className={style.value_body}>
+//                         <div className={style.heading}>
+//                             <p>#</p>
+//                             <p>Days</p>
+//                         </div>
+//                         {
+//                             days.map((d) => {
+//                                 const isDisabled = getSalonoffDays.includes(d.day);
+//                                 const isChecked = !isDisabled && selectedDays.includes(d.day);
+
+//                                 return (
+//                                     <label
+//                                         key={d.id}
+//                                         className={`${style.value} ${isDisabled ? style.disabled : ''}`}
+//                                         style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
+//                                     >
+//                                         <input
+//                                             type="checkbox"
+//                                             style={{ accentColor: "blue" }}
+//                                             onChange={() => checkdayHandler(d)}
+//                                             checked={isChecked}
+//                                             disabled={isDisabled}
+//                                         />
+//                                         <p>{d.day}</p>
+//                                     </label>
+//                                 );
+//                             })
+//                         }
+//                     </div>
+//                 }
+
+                // {
+                //     barberOffdates && <div className={style.leave_value_body}>
+                //         <div style={{
+                //             display: "flex",
+                //             justifyContent: "space-between",
+                //             alignItems: "center"
+                //         }}>
+                //             <div className={style.monthSelector}>
+                //                 <button
+                //                     onClick={handlePrevMonth}
+                //                     className={style.iconBtn}
+                //                     disabled={isPrevDisabled}
+                //                     style={{
+                //                         opacity: isPrevDisabled ? 0.4 : 1,
+                //                         cursor: isPrevDisabled ? "not-allowed" : "pointer"
+                //                     }}
+                //                 >
+                //                     <LeftArrow size={24} />
+                //                 </button>
+                //                 <p className={style.monthText}>
+                //                     {currentMonth.format("MMMM YYYY")}
+                //                 </p>
+                //                 <button
+                //                     onClick={handleNextMonth}
+                //                     className={style.iconBtn}
+                //                     disabled={isNextDisabled}
+                //                     style={{
+                //                         opacity: isNextDisabled ? 0.4 : 1,
+                //                         cursor: isNextDisabled ? "not-allowed" : "pointer"
+                //                     }}
+                //                 >
+                //                     <RightArrow size={24} />
+                //                 </button>
+                //             </div>
+                //             <button
+                //                 className={style.reset_days}
+                //                 onClick={() => offDayHandler([])}
+                //                 disabled={salonId === 0}
+                //                 style={{
+                //                     cursor: salonId === 0 ? "not-allowed" : "pointer"
+                //                 }}
+                //             >Reset Off Days</button>
+                //         </div>
+
+                //         {/* {
+                //             <div style={{ marginBottom: "2rem" }} className={style.dayList}>
+                //                 {allDays.map((day) => {
+                //                     const formatted = day.format("ddd DD MMM YYYY");
+
+                //                     return (
+                //                         <button
+                //                             key={formatted}
+                //                             onClick={() => handleToggleOffDay(formatted)}
+                //                             className={`${style.dayBtn}`}
+                //                         >
+                //                             {formatted}
+                //                         </button>
+                //                     );
+                //                 })}
+                //             </div>
+                //         } */}
+
+                //         <div className={style.dayList}>
+                //             {visibleDays.map((day) => {
+                //                 const formatted = day.format("YYYY-MM-DD");
+                //                 const isLeaveDay = barberLeaveDaysdata.includes(formatted);
+                //                 const isSelectedDay = offDays.includes(formatted);
+
+                //                 return (
+                //                     <button
+                //                         key={formatted}
+                //                         onClick={() => {
+                //                             if (!isLeaveDay) handleToggleOffDay(formatted);
+                //                         }}
+                //                         disabled={isLeaveDay}
+                //                         className={`
+                //     ${style.dayBtn}
+                //     ${isSelectedDay ? style.highlighted_date : ""}
+                //     ${isLeaveDay ? style.leave_dates : ""}
+                // `}
+                //                         style={{
+                //                             cursor: isLeaveDay ? "not-allowed" : "pointer",
+                //                         }}
+                //                     >
+                //                         {day.format("ddd DD MMM YYYY")}
+                //                     </button>
+                //                 );
+                //             })}
+                //         </div>
+
+
+                //         {/* {
+                //             <div style={{ marginBottom: "2rem" }}>
+                //                 <Calendar
+                //                     onClickDay={onClickDay}
+                //                     minDate={new Date(new Date().setDate(new Date().getDate() + 1))}
+                //                     tileClassName={({ date }) => {
+                //                         if (isSelected(date)) {
+                //                             return style.highlighted_date;
+                //                         } else if (isDisabled(date)) {
+                //                             return style.leave_dates;
+                //                         }
+                //                         return null;
+                //                     }}
+
+                //                 // tileDisabled={({ date }) => isDisabled(date)}
+                //                 />
+                //             </div>
+                //         } */}
+
+
+                //     </div>
+                // }
+//                 <button
+//                     className={style.submit}
+//                     onClick={appointmentdates ? submitHandler : () => offDayHandler(selectedDates)}
+//                     disabled={salonId === 0}
+//                     style={{
+//                         cursor: salonId === 0 ? "not-allowed" : "pointer"
+//                     }}
+//                 >Save</button>
+//             </div>
+//         </div>
+//     )
+// }
+
+// export default Appointment
+
+
+
+
+
+
+
+
+
+// .section {
+//     background-color: transparent;
+//     height: calc(100svh - 6rem);
+//     padding: 1.5rem;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 1.5rem;
+//     overflow: auto;
+
+//     &>div:nth-child(1) {
+//         height: 4rem;
+//         display: flex;
+//         align-items: center;
+//         justify-content: space-between;
+
+//         &>h2 {
+//             color: var(--text-primary);
+//             line-height: inherit;
+//             font-family: "AirbnbCereal_Medium";
+//         }
+//     }
+// }
+
+// .barber_appointment_content_wrapper {
+//     display: flex;
+//     gap: 3rem;
+//     height: 100%;
+
+//     &>div:nth-child(1) {
+//         flex: 0.4 1 min(40vw, 15rem);
+//         height: 100%;
+
+//         &>p {
+//             font-size: 1.6rem;
+//             margin-bottom: 2rem;
+//             font-weight: 600;
+//         }
+
+//         .heading,
+//         .value {
+//             display: flex;
+//             align-items: center;
+//             gap: 2rem;
+//             margin-bottom: 1.5rem;
+//             background-color: var(--bg-primary);
+//             padding: 1.5rem;
+//             max-width: 35rem;
+//             border-radius: var(--border-radius-primary);
+//             -webkit-border-radius: var(--border-radius-primary);
+//             -moz-border-radius: var(--border-radius-primary);
+//             -ms-border-radius: var(--border-radius-primary);
+//             -o-border-radius: var(--border-radius-primary);
+//         }
+//     }
+
+//     &>div:nth-child(2) {
+//         height: 100%;
+
+//         &>p {
+//             font-size: 1.6rem;
+//             margin-bottom: 2rem;
+//             font-weight: 600;
+//         }
+
+//         .reset_days {
+//             width: max-content;
+//             height: 3.5rem;
+//             padding-inline: 1rem;
+//             border-radius: var(--border-radius-primary);
+//             -webkit-border-radius: var(--border-radius-primary);
+//             -moz-border-radius: var(--border-radius-primary);
+//             -ms-border-radius: var(--border-radius-primary);
+//             -o-border-radius: var(--border-radius-primary);
+//             background-color: var(--bg-secondary);
+//             color: var(--btn-text-color);
+//             border: none;
+//             outline: none;
+//             cursor: pointer;
+//             transition: var(--common-btn-transition);
+//             -webkit-transition: var(--common-btn-transition);
+//             -moz-transition: var(--common-btn-transition);
+//             -ms-transition: var(--common-btn-transition);
+//             -o-transition: var(--common-btn-transition);
+//             font-size: 1.4rem;
+//             /* margin-left: auto; */
+//             /* margin-bottom: 2rem; */
+
+//             &:hover {
+//                 background-color: var(--bg-secondary-hover);
+//             }
+//         }
+
+//         .highlighted_date {
+//             background-color: #0867ff54;
+//             /* border-radius: 50%;
+//             -webkit-border-radius: 50%;
+//             -moz-border-radius: 50%;
+//             -ms-border-radius: 50%;
+//             -o-border-radius: 50%; */
+//         }
+
+//         .leave_dates {
+//             background-color: rgba(255, 0, 0, 0.321);
+//         }
+//     }
+
+//     .submit {
+//         width: min(100%, 35rem);
+//         height: 3.5rem;
+//         padding-inline: 1rem;
+//         border-radius: var(--border-radius-primary);
+//         -webkit-border-radius: var(--border-radius-primary);
+//         -moz-border-radius: var(--border-radius-primary);
+//         -ms-border-radius: var(--border-radius-primary);
+//         -o-border-radius: var(--border-radius-primary);
+//         background-color: var(--bg-secondary);
+//         color: var(--btn-text-color);
+//         border: none;
+//         outline: none;
+//         cursor: pointer;
+//         transition: var(--common-btn-transition);
+//         -webkit-transition: var(--common-btn-transition);
+//         -moz-transition: var(--common-btn-transition);
+//         -ms-transition: var(--common-btn-transition);
+//         -o-transition: var(--common-btn-transition);
+//         font-size: 1.4rem;
+
+//         &:hover {
+//             background-color: var(--bg-secondary-hover);
+//         }
+//     }
+// }
+
+// .barber_appointment_content_mobile_wrapper {
+//     display: none;
+// }
+
+
+// .value {
+//     display: flex;
+//     align-items: center;
+//     gap: 8px;
+//     cursor: pointer;
+//     padding: 5px;
+//     transition: opacity 0.2s ease;
+// }
+
+// .disabled {
+//     opacity: 0.5;
+//     pointer-events: none;
+//     cursor: not-allowed;
+// }
+
+
+// @media screen and (min-width:0px) and (max-width:768px) {
+
+//     .barber_appointment_content_wrapper {
+//         display: none;
+//     }
+
+//     .barber_appointment_content_mobile_wrapper {
+//         display: block;
+//         width: 100%;
+//         height: var(--list-wrapper-common-height);
+//         border-radius: var(--list-wrapper-border-radius);
+//         -webkit-border-radius: var(--list-wrapper-border-radius);
+//         -moz-border-radius: var(--list-wrapper-border-radius);
+//         -ms-border-radius: var(--list-wrapper-border-radius);
+//         -o-border-radius: var(--list-wrapper-border-radius);
+//     }
+
+//     .button_group {
+//         margin-bottom: 2rem;
+//         display: flex;
+//         align-items: center;
+//         gap: 2rem;
+//         width: min(100%, 35rem);
+//         padding: 0.5rem;
+//         border-radius: 1rem;
+//         -webkit-border-radius: 1rem;
+//         -moz-border-radius: 1rem;
+//         -ms-border-radius: 1rem;
+//         -o-border-radius: 1rem;
+//         background-color: var(--bg-primary);
+
+//         &>button {
+//             width: 100%;
+//             height: 100%;
+//             border: none;
+//             font-weight: 500;
+//             cursor: pointer;
+//             background: var(--input-bg-color);
+//             border-radius: 0.6rem;
+//             -webkit-border-radius: 0.6rem;
+//             -moz-border-radius: 0.6rem;
+//             -ms-border-radius: 0.6rem;
+//             -o-border-radius: 0.6rem;
+//             color: var(--text-primary);
+//             line-height: inherit;
+//             font-family: "AirbnbCereal_Medium";
+//             font-size: 1.4rem;
+//             padding: 1rem 0.5rem;
+//             border: 0.1rem solid var(--border-secondary);
+
+//             &:hover {
+//                 font-weight: 600;
+//                 /* border-bottom: 2px solid black; */
+//             }
+//         }
+//     }
+
+
+//     .heading,
+//     .value {
+//         display: flex;
+//         align-items: center;
+//         gap: 2rem;
+//         margin-bottom: 1.5rem;
+//         background-color: var(--bg-primary);
+//         padding: 1.5rem;
+//         max-width: 35rem;
+//         border-radius: var(--border-radius-primary);
+//         -webkit-border-radius: var(--border-radius-primary);
+//         -moz-border-radius: var(--border-radius-primary);
+//         -ms-border-radius: var(--border-radius-primary);
+//         -o-border-radius: var(--border-radius-primary);
+//     }
+
+//     .value_body {
+//         margin-left: "auto"
+//     }
+
+//     .leave_value_body {
+//         width: min(100%, 35rem);
+//         display: flex;
+//         flex-direction: column;
+//         gap: 2rem;
+
+//         .header {
+//             display: flex;
+//             justify-content: space-between;
+//             align-items: center;
+//             width: 90%;
+//             max-width: 400px;
+//             margin-bottom: 24px;
+//         }
+
+//         .monthSelector {
+//             display: flex;
+//             align-items: center;
+//             gap: 6px;
+//             background-color: var(--bg-primary);
+//             border-radius: 8px;
+//             padding: 8px 12px;
+//         }
+
+//         .iconBtn {
+//             background: none;
+//             border: none;
+//             color: var(--text-primary);
+//             cursor: pointer;
+//         }
+
+//         .monthText {
+//             font-size: 1.4rem;
+//             font-weight: 500;
+//         }
+//     }
+
+//     .dayList {
+//         display: flex;
+//         flex-direction: column;
+//         gap: 1rem;
+//     }
+
+//     .dayBtn {
+//         background-color: var(--bg-primary);
+//         color: white;
+//         padding: 1.2rem;
+//         border: none;
+//         border-radius: 0.8rem;
+//         font-weight: 500;
+//         text-align: center;
+//         cursor: pointer;
+//         transition: all 0.2s ease;
+//         -webkit-border-radius: 0.8rem;
+//         -moz-border-radius: 0.8rem;
+//         -ms-border-radius: 0.8rem;
+//         -o-border-radius: 0.8rem;
+//         border: 0.1rem solid var(--border-secondary);
+//     }
+
+//     .highlighted_date {
+//         background: #2563eb;
+//         color: white;
+//     }
+
+//     .leave_dates {
+//         background: #9ca3af;
+//         color: white;
+//         cursor: not-allowed;
+//     }
+
+//     .submit {
+//         width: min(100%, 35rem);
+//         height: 3.5rem;
+//         margin-bottom: 2rem;
+//         padding-inline: 1rem;
+//         border-radius: var(--border-radius-primary);
+//         -webkit-border-radius: var(--border-radius-primary);
+//         -moz-border-radius: var(--border-radius-primary);
+//         -ms-border-radius: var(--border-radius-primary);
+//         -o-border-radius: var(--border-radius-primary);
+//         background-color: var(--bg-secondary);
+//         color: var(--btn-text-color);
+//         border: none;
+//         outline: none;
+//         cursor: pointer;
+//         transition: var(--common-btn-transition);
+//         -webkit-transition: var(--common-btn-transition);
+//         -moz-transition: var(--common-btn-transition);
+//         -ms-transition: var(--common-btn-transition);
+//         -o-transition: var(--common-btn-transition);
+//         font-size: 1.4rem;
+
+//         &:hover {
+//             background-color: var(--bg-secondary-hover);
+//         }
+//     }
+
+//     .reset_days {
+//         width: max-content;
+//         height: 3.5rem;
+//         padding-inline: 1rem;
+//         border-radius: var(--border-radius-primary);
+//         -webkit-border-radius: var(--border-radius-primary);
+//         -moz-border-radius: var(--border-radius-primary);
+//         -ms-border-radius: var(--border-radius-primary);
+//         -o-border-radius: var(--border-radius-primary);
+//         background-color: var(--bg-secondary);
+//         color: var(--btn-text-color);
+//         border: none;
+//         outline: none;
+//         cursor: pointer;
+//         transition: var(--common-btn-transition);
+//         -webkit-transition: var(--common-btn-transition);
+//         -moz-transition: var(--common-btn-transition);
+//         -ms-transition: var(--common-btn-transition);
+//         -o-transition: var(--common-btn-transition);
+//         font-size: 1.4rem;
+
+//         &:hover {
+//             background-color: var(--bg-secondary-hover);
+//         }
+//     }
+
+//     .highlighted_date {
+//         background-color: #0867ff54;
+//         /* border-radius: 50%;
+//         -webkit-border-radius: 50%;
+//         -moz-border-radius: 50%;
+//         -ms-border-radius: 50%;
+//         -o-border-radius: 50%; */
+//     }
+
+//     .leave_dates {
+//         background-color: rgba(255, 0, 0, 0.321);
+//     }
+// }
+
+

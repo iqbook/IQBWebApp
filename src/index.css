@@ -585,12 +585,17 @@ body {
 }
 
 .react-calendar__tile--active,
-.react-calendar__tile:hover,
 .react-calendar__tile--now,
 .react-calendar__tile--hasActive,
 .react-calendar__tile:disabled {
   background-color: var(--input-bg-color) !important;
   color: var(--text-secondary) !important;
+}
+
+.react-calendar__tile:hover {
+  background-color: var(--input-bg-color) !important;
+  color: var(--text-secondary) !important;
+  opacity: 0.4;
 }
 
 
