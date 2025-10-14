@@ -47,31 +47,31 @@ const Appointment = () => {
     const days = [
         {
             id: 1,
-            day: "Monday"
+            day: "Sunday"
         },
         {
             id: 2,
-            day: "Tuesday"
+            day: "Monday"
         },
         {
             id: 3,
-            day: "Wednesday"
+            day: "Tuesday"
         },
         {
             id: 4,
-            day: "Thursday"
+            day: "Wednesday"
         },
         {
             id: 5,
-            day: "Friday"
+            day: "Thursday"
         },
         {
             id: 6,
-            day: "Saturday"
+            day: "Friday"
         },
         {
             id: 7,
-            day: "Sunday"
+            day: "Saturday"
         }
     ]
 
@@ -229,6 +229,25 @@ const Appointment = () => {
         startOfMonth.clone().add(i, "days")
     );
 
+
+    // 2. Filter only future dates (tomorrow onward)
+    const futureDays = allDays.filter((day) => day.isSameOrAfter(tomorrow, "day"));
+    const firstDayWeekday = startOfMonth.weekday();
+    const leadingBlanks = Array.from({ length: firstDayWeekday }, (_, i) => ({
+        type: 'blank',
+        key: `blank-${i}`
+    }));
+
+    // Generate the days for the calendar grid
+    const calendarDays = allDays.map((day) => ({
+        type: 'date',
+        day: day,
+        isFuture: day.isSameOrAfter(tomorrow, "day")
+    }));
+
+    // Combine blanks and day objects
+    const daysForDisplay = [...leadingBlanks, ...calendarDays];
+
     // Filter only future dates (tomorrow onward)
     const visibleDays = allDays.filter((day) => day.isSameOrAfter(tomorrow, "day"));
 
@@ -278,123 +297,29 @@ const Appointment = () => {
         );
     };
 
+
+
+    const isBarberApptDayDisabled = (day) => {
+        const weekday = day.format("dddd"); // Gives full name e.g. "Monday"
+        return (
+            getDisableApptdates.includes(weekday)
+        );
+    };
+
+
+
     return (
         <div className={`${style.section}`}>
-            {/* <div>
-                <h2>Appointment</h2>
-            </div>
-
-            <div className={style.barber_appointment_content_wrapper}>
-                <div>
-                    <p>Choose appointment days</p>
-                    <div className={style.heading}>
-                        <p>#</p>
-                        <p>Days</p>
-                    </div>
-
-                    {
-                        days.map((d) => {
-                            const isDisabled = getSalonoffDays.includes(d.day);
-                            const isChecked = !isDisabled && selectedDays.includes(d.day);
-
-                            return (
-                                <label
-                                    key={d.id}
-                                    className={`${style.value} ${isDisabled ? style.disabled : ''}`}
-                                    style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
-                                >
-                                    <input
-                                        type="checkbox"
-                                        style={{ accentColor: "blue" }}
-                                        onChange={() => checkdayHandler(d)}
-                                        checked={isChecked}
-                                        disabled={isDisabled}
-                                    />
-                                    <p>{d.day}</p>
-                                </label>
-                            );
-                        })
-                    }
-
-
-
-                    <button
-                        className={style.submit}
-                        onClick={submitHandler}
-                        disabled={salonId === 0}
-                        style={{
-                            cursor: salonId === 0 ? "not-allowed" : "pointer"
-                        }}
-                    >Save</button>
-
-                </div>
-
-                <div>
-                    <p>{`${barberProfile?.salonType === "Barber Shop" ? "Barber" : "Stylist"}`} Off Days</p>
-                    <div className={style.leave_value_body}>
-                        <div style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            marginBottom: "2rem"
-                        }}>
-                            <p>Select Off Days</p>
-                            <button
-                                className={style.reset_days}
-                                onClick={() => offDayHandler([])}
-                                disabled={salonId === 0}
-                                style={{
-                                    cursor: salonId === 0 ? "not-allowed" : "pointer"
-                                }}
-                            >Reset Off Days</button>
-                        </div>
-                        {
-                            <div style={{ marginBottom: "2rem" }}>
-                                <Calendar
-                                    onClickDay={onClickDay}
-                                    // tileClassName={({ date }) =>
-                                    //     isSelected(date) ? style.highlighted_date : ""
-                                    // }
-
-                                    minDate={new Date(new Date().setDate(new Date().getDate() + 1))}
-                                    tileClassName={({ date }) => {
-                                        if (isSelected(date)) {
-                                            return style.highlighted_date;
-                                        } else if (isDisabled(date)) {
-                                            return style.leave_dates;
-                                        }
-                                        return null;
-                                    }}
-
-                                    tileDisabled={({ date }) => {
-                                        const weekday = date.toLocaleDateString("en-US", { weekday: "long" });
-                                        return (
-                                            getSalonoffDays.includes(weekday) ||
-                                            getDisableApptdates.includes(weekday)
-                                        );
-                                    }}
-                                />
-                            </div>
-                        }
-
-                        <button
-                            className={style.submit}
-                            onClick={() => offDayHandler(selectedDates)}
-                            disabled={salonId === 0}
-                            style={{
-                                cursor: salonId === 0 ? "not-allowed" : "pointer"
-                            }}
-                        >Save</button>
-                    </div>
-                </div>
-            </div> */}
 
             <div className={style.barber_appointment_content_wrapper}>
                 <div className={style.barber_availability_container}>
                     <div>
                         <div>
-                            <h2>Availability for appointment</h2>
-                            <p>Click to toggle your availability for each day of the week for appointment.</p>
+                            <h2>Appointment Off Days</h2>
+                            <p>
+                                Select the days when you’re <strong>not available</strong> to take client appointments.
+                                These days will be marked as unavailable for booking.
+                            </p>
                         </div>
 
                         <button
@@ -475,10 +400,73 @@ const Appointment = () => {
                                 style={{
                                     cursor: salonId === 0 ? "not-allowed" : "pointer"
                                 }}
-                            >Reset Off Days</button>
+                            >Reset Off Days
+                            </button>
+
+                            <button
+                                className={style.reset_days}
+                                onClick={() => offDayHandler(selectedDates)}
+                                disabled={salonId === 0}
+                                style={{
+                                    cursor: salonId === 0 ? "not-allowed" : "pointer"
+                                }}
+                            >Save</button>
                         </div>
                     </div>
-                    <div>
+
+
+
+
+                    <div className={style.calendarGrid}> {/* New: Wrapper for the grid */}
+
+                        {
+                            daysForDisplay.map((item) => {
+
+                                if (item.type === 'blank') {
+                                    return <div key={item.key} className={style.blankDay}></div>;
+                                }
+
+                                // item.type must be 'date'
+                                const day = item.day;
+                                const formatted = day.format("YYYY-MM-DD");
+                                const isDayDisabled = isDayMobileDisabled(day);
+                                const isBarberApptDayDisabledValue = isBarberApptDayDisabled(day)
+
+                                return (
+                                    <button
+                                        key={formatted}
+                                        onClick={() => {
+                                            if (item.isFuture && !isDayDisabled) {
+                                                onMobileClickDay(day)
+                                            }
+                                        }}
+                                        // Disable based on if it's past, or if it's a salon/barber off day
+                                        disabled={!item.isFuture || isDayDisabled}
+
+                                        className={`
+                                            ${style.appointmentWeekDate}
+                                            ${!item.isFuture ? style.pastDate : ''} {/* New: Style for past dates (within the month) */}
+                                            ${isDayDisabled ? style.disabled : ''} 
+                                            ${isMobileDisabled(day) && !isMobileSelected(day) ? style.leave_dates : ''}
+                                            ${isMobileSelected(day) ? style.highlighted_date : ''}
+                                        `}
+                                        style={{
+                                            opacity: !item.isFuture || isDayDisabled ? 0.4 : 1,
+                                            cursor: !item.isFuture || isDayDisabled ? "not-allowed" : "pointer",
+                                        }}
+                                    >
+                                        <div>
+                                            <h2>{day.format("DD")}</h2>
+                                            <p>{day.format("ddd")}</p>
+                                            <p>{isBarberApptDayDisabledValue ? "Unavailable" : isDayDisabled ? "Salon Off Day" : isMobileDisabled(day) && !isMobileSelected(day) ? "Leave" : "Available"}</p>
+                                        </div>
+                                    </button>
+                                )
+                            })
+                        }
+                    </div>
+
+                    {/* <div>
                         {
                             visibleDays.map((day, index) => {
 
@@ -512,7 +500,7 @@ const Appointment = () => {
                             })
                         }
 
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
@@ -522,7 +510,7 @@ const Appointment = () => {
                         onClick={() => {
                             setBarberOffdates(false)
                             setAppointmentDates(true)
-                        }}>Appointment Days</button>
+                        }}>Appointment Off Days</button>
                     <button
                         onClick={() => {
                             setBarberOffdates(true)
@@ -630,6 +618,7 @@ const Appointment = () => {
                                         }}
                                     >
                                         {day.format("ddd DD MMM YYYY")}
+
                                     </button>
                                 );
                             })}

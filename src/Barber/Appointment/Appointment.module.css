@@ -206,6 +206,16 @@
                     gap: 1rem;
                 }
             }
+
+            .highlighted_date {
+                background-color: oklch(0.707 0.165 254.624);
+                color: #fff;
+            }
+
+            .leave_dates {
+                background-color: rgba(255, 0, 0, 0.777);
+                color: #fff;
+            }
         }
     }
 }
@@ -277,7 +287,7 @@
             color: var(--text-primary);
             line-height: inherit;
             font-family: "AirbnbCereal_Medium";
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             padding: 1rem 0.5rem;
             border: 0.1rem solid var(--border-secondary);
 

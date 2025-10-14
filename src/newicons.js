@@ -4,7 +4,7 @@ import { BsCalendar2X, BsGraphUp, BsInstagram, BsSunFill } from "react-icons/bs"
 import { FaChevronLeft, FaChevronRight, FaFacebookF, FaRegCalendarAlt, FaUsers, FaUsersSlash, FaWifi } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
 import { FiPieChart } from "react-icons/fi";
-import { IoArrowDownSharp, IoArrowUpSharp, IoChevronDownOutline, IoPerson, IoPersonCircleOutline, IoSearch } from "react-icons/io5";
+import { IoArrowDownSharp, IoArrowUpSharp, IoChevronDownOutline, IoPerson, IoPersonCircleOutline, IoSearch, IoSettingsSharp } from "react-icons/io5";
 import { LuFilter, LuHistory, LuMailWarning, LuPanelLeftOpen, LuPanelRightOpen } from "react-icons/lu";
 import { MdAdd, MdLogout, MdOutlineCameraAlt, MdOutlineMailOutline, MdOutlineMessage, MdOutlinePhoneInTalk, MdOutlinePhotoCamera, MdOutlineQueue, MdOutlineSubscriptions, MdOutlineWifiOff, MdPayment } from "react-icons/md";
 import { RiAdvertisementLine, RiMoonClearFill, RiDeleteBin6Line, RiTwitterXLine, RiMenuFill, RiComputerLine } from "react-icons/ri";
@@ -34,7 +34,7 @@ export const Sunicon = BsSunFill
 export const MoonIcon = RiMoonClearFill
 export const ProfileIcon = FaUser
 export const LogoutIcon = MdLogout
-export const SalonThreeDotsIcon = PiDotsThreeOutlineFill
+export const SalonThreeDotsIcon = IoSettingsSharp
 export const SortUpDownArrowIcon = BiSortAlt2
 export const DropdownIcon = IoChevronDownOutline
 export const SortDownIcon = IoArrowDownSharp
