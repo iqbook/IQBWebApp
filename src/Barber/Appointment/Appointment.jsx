@@ -75,6 +75,7 @@ const Appointment = () => {
         }
     ]
 
+
     const [appointmentdates, setAppointmentDates] = useState(true)
     const [barberOffdates, setBarberOffdates] = useState(false)
 
@@ -279,7 +280,7 @@ const Appointment = () => {
 
     return (
         <div className={`${style.section}`}>
-            <div>
+            {/* <div>
                 <h2>Appointment</h2>
             </div>
 
@@ -384,6 +385,133 @@ const Appointment = () => {
                                 cursor: salonId === 0 ? "not-allowed" : "pointer"
                             }}
                         >Save</button>
+                    </div>
+                </div>
+            </div> */}
+
+            <div className={style.barber_appointment_content_wrapper}>
+                <div className={style.barber_availability_container}>
+                    <div>
+                        <div>
+                            <h2>Availability for appointment</h2>
+                            <p>Click to toggle your availability for each day of the week for appointment.</p>
+                        </div>
+
+                        <button
+                            onClick={submitHandler}
+                            disabled={salonId === 0}
+                            style={{
+                                cursor: salonId === 0 ? "not-allowed" : "pointer"
+                            }}>save</button>
+                    </div>
+
+                    <div>
+                        {
+                            days.map((d) => {
+                                const isDisabled = getSalonoffDays.includes(d.day);
+                                const isChecked = !isDisabled && selectedDays.includes(d.day);
+
+                                return (
+                                    <button
+                                        key={d.id}
+                                        className={`${style.appointmentWeekDay} ${isDisabled ? style.disabled : ''} ${isChecked ? style.apptAvailSelected : ''}`}
+                                        style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
+                                        onClick={() => {
+                                            if (!isDisabled) checkdayHandler(d);
+                                        }}
+                                    >
+                                        {d.day.slice(0, 3)}
+                                    </button>
+                                );
+                            })
+                        }
+
+                    </div>
+                </div>
+
+                <div className={style.barber_dayoff_container}>
+                    <div>
+                        <div>
+                            <h2>Day off</h2>
+                            <p>Select dates on the calender to mark as unavailable</p>
+                        </div>
+
+                        <div style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center"
+                        }}>
+                            <div className={style.monthSelector}>
+                                <button
+                                    onClick={handlePrevMonth}
+                                    className={style.iconBtn}
+                                    disabled={isPrevDisabled}
+                                    style={{
+                                        opacity: isPrevDisabled ? 0.4 : 1,
+                                        cursor: isPrevDisabled ? "not-allowed" : "pointer"
+                                    }}
+                                >
+                                    <LeftArrow size={24} />
+                                </button>
+                                <p className={style.monthText}>
+                                    {currentMonth.format("MMMM YYYY")}
+                                </p>
+                                <button
+                                    onClick={handleNextMonth}
+                                    className={style.iconBtn}
+                                    disabled={isNextDisabled}
+                                    style={{
+                                        opacity: isNextDisabled ? 0.4 : 1,
+                                        cursor: isNextDisabled ? "not-allowed" : "pointer"
+                                    }}
+                                >
+                                    <RightArrow size={24} />
+                                </button>
+                            </div>
+                            <button
+                                className={style.reset_days}
+                                onClick={() => offDayHandler([])}
+                                disabled={salonId === 0}
+                                style={{
+                                    cursor: salonId === 0 ? "not-allowed" : "pointer"
+                                }}
+                            >Reset Off Days</button>
+                        </div>
+                    </div>
+                    <div>
+                        {
+                            visibleDays.map((day, index) => {
+
+                                const formatted = day.format("YYYY-MM-DD");
+
+                                return (
+                                    <button
+                                        key={formatted}
+                                        onClick={() => {
+                                            onMobileClickDay(day)
+                                        }}
+                                        disabled={isDayMobileDisabled(day)}
+
+
+                                        className={`
+    ${style.appointmentWeekDate}
+    ${isMobileDisabled(day) && !isMobileSelected(day) ? style.leave_dates : ""}
+    ${isMobileSelected(day) ? style.highlighted_date : ""}
+  `}
+                                        style={{
+                                            opacity: isDayMobileDisabled(day) ? 0.4 : 1,
+                                            cursor: isDayMobileDisabled(day) ? "not-allowed" : "pointer",
+                                        }}
+                                    >
+                                        <div>
+                                            <h2>{day.format("DD")}</h2>
+                                            <p>{day.format("ddd")}</p>
+                                        </div>
+                                    </button>
+                                )
+                            })
+                        }
+
                     </div>
                 </div>
             </div>
