@@ -118,7 +118,7 @@ const Appointment = () => {
                 barberId
             })
 
-            setGetDisableApptdates(appointmentDaysData.response.appointmentDays)
+            setGetBarberApptdates(appointmentDaysData.response.appointmentDays)
             setSelectedDays(appointmentDaysData.response.appointmentDays);
 
         } catch (error) {
@@ -134,7 +134,7 @@ const Appointment = () => {
         }
     }
 
-    const [getDisableApptdates, setGetDisableApptdates] = useState([])
+    const [getBarberApptdates, setGetBarberApptdates] = useState([])
 
     useEffect(() => {
         const getAppointdays = async () => {
@@ -143,7 +143,7 @@ const Appointment = () => {
                 barberId
             })
 
-            setGetDisableApptdates(data.response.appointmentDays)
+            setGetBarberApptdates(data.response.appointmentDays)
             setSelectedDays(data.response.appointmentDays);
         }
         getAppointdays()
@@ -209,7 +209,7 @@ const Appointment = () => {
         return barberLeaveDaysdata?.includes(formattedDate);
     };
 
-    // console.log("getDisableApptdates ", getDisableApptdates)
+    // console.log("getBarberApptdates ", getBarberApptdates)
     // console.log("getSalonoffDays ", getSalonoffDays)
 
     // Barber Day off new calendar logic
@@ -277,6 +277,8 @@ const Appointment = () => {
         );
     }
 
+    console.log("getBarberApptdates ", getBarberApptdates)
+
 
     const isMobileSelected = (day) => {
         const formattedDate = day.format("YYYY-MM-DD");
@@ -289,11 +291,21 @@ const Appointment = () => {
         return barberLeaveDaysdata?.includes(formattedDate);
     };
 
+    // const isDayMobileDisabled = (day) => {
+    //     const weekday = day.format("dddd"); // Gives full name e.g. "Monday"
+    //     return (
+    //         getSalonoffDays.includes(weekday) ||
+    //         getBarberApptdates.includes(weekday)
+    //     );
+    // };
+
     const isDayMobileDisabled = (day) => {
-        const weekday = day.format("dddd"); // Gives full name e.g. "Monday"
+        const weekday = day.format("dddd");
+        // Day should be unavailable if it's not in getBarberApptdates, 
+        // OR if it's in salon off days
         return (
-            getSalonoffDays.includes(weekday) ||
-            getDisableApptdates.includes(weekday)
+            !getBarberApptdates.includes(weekday) ||
+            getSalonoffDays.includes(weekday)
         );
     };
 
@@ -302,7 +314,7 @@ const Appointment = () => {
     const isBarberApptDayDisabled = (day) => {
         const weekday = day.format("dddd"); // Gives full name e.g. "Monday"
         return (
-            getDisableApptdates.includes(weekday)
+            getBarberApptdates.includes(weekday)
         );
     };
 
@@ -315,10 +327,9 @@ const Appointment = () => {
                 <div className={style.barber_availability_container}>
                     <div>
                         <div>
-                            <h2>Appointment Off Days</h2>
+                            <h2>Appointment Days</h2>
                             <p>
-                                Select the days when you’re <strong>not available</strong> to take client appointments.
-                                These days will be marked as unavailable for booking.
+                                Select the days you're <strong>available</strong> for client appointments.
                             </p>
                         </div>
 
@@ -421,86 +432,64 @@ const Appointment = () => {
 
                         {
                             daysForDisplay.map((item) => {
-
                                 if (item.type === 'blank') {
                                     return <div key={item.key} className={style.blankDay}></div>;
                                 }
 
-                                // item.type must be 'date'
                                 const day = item.day;
                                 const formatted = day.format("YYYY-MM-DD");
-                                const isDayDisabled = isDayMobileDisabled(day);
-                                const isBarberApptDayDisabledValue = isBarberApptDayDisabled(day)
+
+                                const isLeaveDay = barberLeaveDaysdata?.includes(formatted); // actual leave date
+                                const isSalonOffDay = getSalonoffDays.includes(day.format("dddd")); // salon off day (weekly)
+                                const isAvailableDay = getBarberApptdates.includes(day.format("dddd")); // barber working
+                                const isSelected = isMobileSelected(day);
+
+                                // Only truly disabled days (not selectable)
+                                const isDisabled = !isAvailableDay || isLeaveDay;
 
                                 return (
                                     <button
                                         key={formatted}
                                         onClick={() => {
-                                            if (item.isFuture && !isDayDisabled) {
-                                                onMobileClickDay(day)
+                                            if (item.isFuture && !isDisabled) {
+                                                onMobileClickDay(day);
                                             }
                                         }}
-                                        // Disable based on if it's past, or if it's a salon/barber off day
-                                        disabled={!item.isFuture || isDayDisabled}
-
+                                        disabled={!item.isFuture || isDisabled} // leave & unavailable days disabled, salon off selectable
                                         className={`
-                                            ${style.appointmentWeekDate}
-                                            ${!item.isFuture ? style.pastDate : ''} {/* New: Style for past dates (within the month) */}
-                                            ${isDayDisabled ? style.disabled : ''} 
-                                            ${isMobileDisabled(day) && !isMobileSelected(day) ? style.leave_dates : ''}
-                                            ${isMobileSelected(day) ? style.highlighted_date : ''}
-                                        `}
+          ${style.appointmentWeekDate}
+          ${!item.isFuture ? style.pastDate : ''}
+          ${isLeaveDay && !isSelected ? style.leave_dates : ''}
+          ${isSalonOffDay ? style.salon_off_day : ''}
+          ${isSelected ? style.highlighted_date : ''}
+        `}
+
                                         style={{
-                                            opacity: !item.isFuture || isDayDisabled ? 0.4 : 1,
-                                            cursor: !item.isFuture || isDayDisabled ? "not-allowed" : "pointer",
+                                            opacity: isLeaveDay ? 1 : (!item.isFuture || isDisabled ? 0.4 : 1), // leave fully visible
+                                            cursor: !item.isFuture || isDisabled ? "not-allowed" : "pointer",
                                         }}
+
                                     >
                                         <div>
                                             <h2>{day.format("DD")}</h2>
                                             <p>{day.format("ddd")}</p>
-                                            <p>{isBarberApptDayDisabledValue ? "Unavailable" : isDayDisabled ? "Salon Off Day" : isMobileDisabled(day) && !isMobileSelected(day) ? "Leave" : "Available"}</p>
+                                            <p>
+                                                {isLeaveDay
+                                                    ? "Leave"
+                                                    : isSalonOffDay
+                                                        ? "Salon Off Day"
+                                                        : isAvailableDay
+                                                            ? "Available"
+                                                            : "Unavailable"}
+                                            </p>
                                         </div>
                                     </button>
                                 )
                             })
                         }
+
                     </div>
 
-                    {/* <div>
-                        {
-                            visibleDays.map((day, index) => {
-
-                                const formatted = day.format("YYYY-MM-DD");
-
-                                return (
-                                    <button
-                                        key={formatted}
-                                        onClick={() => {
-                                            onMobileClickDay(day)
-                                        }}
-                                        disabled={isDayMobileDisabled(day)}
-
-
-                                        className={`
-    ${style.appointmentWeekDate}
-    ${isMobileDisabled(day) && !isMobileSelected(day) ? style.leave_dates : ""}
-    ${isMobileSelected(day) ? style.highlighted_date : ""}
-  `}
-                                        style={{
-                                            opacity: isDayMobileDisabled(day) ? 0.4 : 1,
-                                            cursor: isDayMobileDisabled(day) ? "not-allowed" : "pointer",
-                                        }}
-                                    >
-                                        <div>
-                                            <h2>{day.format("DD")}</h2>
-                                            <p>{day.format("ddd")}</p>
-                                        </div>
-                                    </button>
-                                )
-                            })
-                        }
-
-                    </div> */}
                 </div>
             </div>
 
