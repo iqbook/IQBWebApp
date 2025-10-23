@@ -3,12 +3,12 @@ import style from "./BarberList.module.css"
 import { BarberClockIn, BarberClockOut, CheckAllIcon, CheckIcon, CloseIcon, DropdownIcon, EmailIcon, MessageIcon, OfflineIcon, OnlineIcon, SalonThreeDotsIcon, SortDownIcon, SortUpDownArrowIcon, SortUpIcon } from '../../../newicons';
 import { ClickAwayListener, FormControl, MenuItem, Modal, Pagination, Select } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import { adminApproveBarberAction, adminDeleteBarberAction, adminSendBarberEmailAction, adminSendBarberMessageAction, changeAdminBarberClockStatusAction, changeAdminBarberOnlineStatusAction, getAdminBarberListAction } from '../../../Redux/Admin/Actions/BarberAction'
+import { adminApproveBarberAction, adminDeleteBarberAction, adminSendBarberEmailAction, adminSendBarberMessageAction, adminSendNotificationAction, changeAdminBarberClockStatusAction, changeAdminBarberOnlineStatusAction, getAdminBarberListAction } from '../../../Redux/Admin/Actions/BarberAction'
 import { darkmodeSelector } from '../../../Redux/Admin/Reducers/AdminHeaderReducer'
 import { useSelector, useDispatch } from 'react-redux';
 import Skeleton from 'react-loading-skeleton';
 import ButtonLoader from '../../../components/ButtonLoader/ButtonLoader'
-import { ClockIcon } from '../../../icons';
+import { ClockIcon, Notificationicon } from '../../../icons';
 
 const BarberList = () => {
 
@@ -279,6 +279,7 @@ const BarberList = () => {
   } = adminSendBarberEmail
 
   const [openBarberMessage, setOpenBarberMessage] = useState(false)
+  const [barbertitle, setBarberTitle] = useState("")
   const [barberMessage, setBarberMessage] = useState("")
 
   const sendMessageNavigate = () => {
@@ -298,12 +299,26 @@ const BarberList = () => {
 
   }
 
+  // const sendMessageHandler = () => {
+  //   const smsdata = {
+  //     smsBody: barberMessage,
+  //     numbers: checkMobileNumbers
+  //   }
+  //   dispatch(adminSendBarberMessageAction(smsdata, setMessage, setOpenBarberMessage))
+  // }
+
   const sendMessageHandler = () => {
-    const smsdata = {
-      smsBody: barberMessage,
-      numbers: checkMobileNumbers
+
+    const notificationData = {
+      title: barbertitle,
+      body: barberMessage,
+      emails: checkedEmails,
     }
-    dispatch(adminSendBarberMessageAction(smsdata, setMessage, setOpenBarberMessage))
+
+    // console.log("Notification Data:", notificationData);
+    dispatch(adminSendNotificationAction(notificationData, setMessage, setOpenBarberMessage))
+
+    // dispatch(adminSendBarberMessageAction(smsdata, setMessage, setOpenBarberMessage))
   }
 
   const handleKeyPressMessage = (e) => {
@@ -517,7 +532,7 @@ const BarberList = () => {
               cursor: salonId === 0 ? "not-allowed" : "cursor"
             }}
             title='Message'
-          ><MessageIcon /></button>
+          ><Notificationicon /></button>
 
           <Modal
             open={openBarberMessage}
@@ -544,15 +559,29 @@ const BarberList = () => {
 
                 <div>
                   <p>To</p>
-                  <input type="text" value={
-                    checkBarberNames?.map((e) => " " + e)
-                  }
+                  <input
+                    type="text"
+                    value={
+                      checkBarberNames?.map((e) => " " + e)
+                    }
+                    onKeyDown={handleKeyPressMessage}
+                    readOnly
+                  />
+                </div>
+
+                <div>
+                  <p>Title</p>
+                  <input
+                    type="text"
+                    value={barbertitle}
+                    placeholder='Enter Title'
+                    onChange={(e) => setBarberTitle(e.target.value)}
                     onKeyDown={handleKeyPressMessage}
                   />
                 </div>
 
                 <div>
-                  <p>Message</p>
+                  <p>Body</p>
                   <textarea
                     type="text"
                     placeholder='Enter Message'
@@ -643,7 +672,7 @@ const BarberList = () => {
                           checked={checkedBarbers[item._id] || false}
                           onChange={() => barberEmailCheckedHandler(item)}
                         />
-                        {console.log(checkedBarbers[item._id])}
+
                       </div>
                       <div>
                         <div>

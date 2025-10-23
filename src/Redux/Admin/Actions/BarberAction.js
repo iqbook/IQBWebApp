@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import api from "../../api/Api";
-import { ADMIN_ALL_SALON_SERVICES_FAIL, ADMIN_ALL_SALON_SERVICES_REQ, ADMIN_ALL_SALON_SERVICES_SUCCESS, ADMIN_APPROVE_BARBER_FAIL, ADMIN_APPROVE_BARBER_REQ, ADMIN_APPROVE_BARBER_SUCCESS, ADMIN_CREATE_BARBER_FAIL, ADMIN_CREATE_BARBER_REQ, ADMIN_CREATE_BARBER_SUCCESS, ADMIN_DELETE_BARBER_FAIL, ADMIN_DELETE_BARBER_REQ, ADMIN_DELETE_BARBER_SUCCESS, ADMIN_SEND_BARBER_MAIL_FAIL, ADMIN_SEND_BARBER_MAIL_REQ, ADMIN_SEND_BARBER_MAIL_SUCCESS, ADMIN_SEND_BARBER_MESSAGE_FAIL, ADMIN_SEND_BARBER_MESSAGE_REQ, ADMIN_SEND_BARBER_MESSAGE_SUCCESS, ADMIN_UPDATE_BARBER_FAIL, ADMIN_UPDATE_BARBER_REQ, ADMIN_UPDATE_BARBER_SUCCESS, CHANGE_ADMIN_BARBER_CLOCKSTATUS_FAIL, CHANGE_ADMIN_BARBER_CLOCKSTATUS_REQ, CHANGE_ADMIN_BARBER_CLOCKSTATUS_SUCCESS, CHANGE_ADMIN_BARBER_ONLINESTATUS_FAIL, CHANGE_ADMIN_BARBER_ONLINESTATUS_REQ, CHANGE_ADMIN_BARBER_ONLINESTATUS_SUCCESS, GET_ADMIN_BARBERLIST_FAIL, GET_ADMIN_BARBERLIST_REQ, GET_ADMIN_BARBERLIST_SUCCESS, GET_ALL_BARBER_DASHBOARD_FAIL, GET_ALL_BARBER_DASHBOARD_REQ, GET_ALL_BARBER_DASHBOARD_SUCCESS } from "../Constants/constants";
+import { ADMIN_ALL_SALON_SERVICES_FAIL, ADMIN_ALL_SALON_SERVICES_REQ, ADMIN_ALL_SALON_SERVICES_SUCCESS, ADMIN_APPROVE_BARBER_FAIL, ADMIN_APPROVE_BARBER_REQ, ADMIN_APPROVE_BARBER_SUCCESS, ADMIN_CREATE_BARBER_FAIL, ADMIN_CREATE_BARBER_REQ, ADMIN_CREATE_BARBER_SUCCESS, ADMIN_DELETE_BARBER_FAIL, ADMIN_DELETE_BARBER_REQ, ADMIN_DELETE_BARBER_SUCCESS, ADMIN_SEND_BARBER_MAIL_FAIL, ADMIN_SEND_BARBER_MAIL_REQ, ADMIN_SEND_BARBER_MAIL_SUCCESS, ADMIN_SEND_BARBER_MESSAGE_FAIL, ADMIN_SEND_BARBER_MESSAGE_REQ, ADMIN_SEND_BARBER_MESSAGE_SUCCESS, ADMIN_SEND_NOTIFICATION_FAIL, ADMIN_SEND_NOTIFICATION_REQ, ADMIN_SEND_NOTIFICATION_SUCCESS, ADMIN_UPDATE_BARBER_FAIL, ADMIN_UPDATE_BARBER_REQ, ADMIN_UPDATE_BARBER_SUCCESS, CHANGE_ADMIN_BARBER_CLOCKSTATUS_FAIL, CHANGE_ADMIN_BARBER_CLOCKSTATUS_REQ, CHANGE_ADMIN_BARBER_CLOCKSTATUS_SUCCESS, CHANGE_ADMIN_BARBER_ONLINESTATUS_FAIL, CHANGE_ADMIN_BARBER_ONLINESTATUS_REQ, CHANGE_ADMIN_BARBER_ONLINESTATUS_SUCCESS, GET_ADMIN_BARBERLIST_FAIL, GET_ADMIN_BARBERLIST_REQ, GET_ADMIN_BARBERLIST_SUCCESS, GET_ALL_BARBER_DASHBOARD_FAIL, GET_ALL_BARBER_DASHBOARD_REQ, GET_ALL_BARBER_DASHBOARD_SUCCESS } from "../Constants/constants";
 
 export const getAdminBarberListAction = (salonId, signal) => async (dispatch) => {
     try {
@@ -605,6 +605,69 @@ export const adminSendBarberMessageAction = (smsdata, setMessage, setOpenBarberM
 
         dispatch({
             type: ADMIN_SEND_BARBER_MESSAGE_FAIL,
+            payload: error?.response?.data
+        });
+
+        toast.error(error?.response?.data?.message, {
+            duration: 3000,
+            style: {
+                fontSize: "var(--font-size-2)",
+                borderRadius: '0.3rem',
+                background: '#333',
+                color: '#fff',
+            },
+        });
+    }
+
+}
+
+
+export const adminSendNotificationAction = (notificationData, setMessage, setOpenBarberMessage) => async (dispatch) => {
+    try {
+        dispatch({ type: ADMIN_SEND_NOTIFICATION_REQ })
+
+        const { data } = await api.post(`/api/notifications/send-multiple-notification`, notificationData)
+
+        dispatch({
+            type: ADMIN_SEND_NOTIFICATION_SUCCESS,
+            payload: data
+        })
+
+        setMessage("")
+        toast.success(data?.message, {
+            duration: 3000,
+            style: {
+                fontSize: "var(--font-size-2)",
+                borderRadius: '0.3rem',
+                background: '#333',
+                color: '#fff',
+            },
+        });
+
+        setOpenBarberMessage(false)
+    } catch (error) {
+
+        if (error?.response?.status === 500) {
+            dispatch({
+                type: ADMIN_SEND_NOTIFICATION_FAIL,
+                payload: "Something went wrong !"
+            });
+
+            toast.error("Something went wrong !", {
+                duration: 3000,
+                style: {
+                    fontSize: "var(--font-size-2)",
+                    borderRadius: '0.3rem',
+                    background: '#333',
+                    color: '#fff',
+                },
+            });
+
+            return;
+        }
+
+        dispatch({
+            type: ADMIN_SEND_NOTIFICATION_FAIL,
             payload: error?.response?.data
         });
 

@@ -1,6 +1,6 @@
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight, MdOutlineNotificationsNone } from "react-icons/md";
 import { MdDashboard } from "react-icons/md";
 import { RiScissors2Fill } from "react-icons/ri";
 import { FaUser } from "react-icons/fa6";
@@ -66,7 +66,7 @@ export const Adminadvertisementicon = RiAdvertisementFill
 export const Adminappointmenticon = BiSolidLike
 export const Adminreporticon = TbReportSearch
 
-export const Notificationicon = IoMdNotifications
+export const Notificationicon = MdOutlineNotificationsNone
 export const Settingsicon = IoSettingsSharp
 
 export const Sunicon = BsSunFill
