@@ -1321,8 +1321,8 @@ const EditSalon = () => {
   };
 
   const [AllSteps, setAllSteps] = useState({
-    step1: false,
-    step2: false,
+    step1: true,
+    step2: true,
     step3: true,
     step4: false,
     step5: false,
