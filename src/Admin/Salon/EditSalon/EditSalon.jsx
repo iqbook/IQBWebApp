@@ -532,7 +532,6 @@ const EditSalon = () => {
 
   const [selectedServices, setSelectedServices] = useState(currentSalon?.services)
 
-  console.log(selectedServices)
 
   const addServiceHandler = () => {
 
@@ -1941,12 +1940,85 @@ const EditSalon = () => {
                                 <div>
                                   <div>
                                     <p>Price</p>
-                                    <p>{countryCurrency}{" "} {ser.servicePrice}</p>
+                                    {/* <p>{countryCurrency}{" "} {ser.servicePrice}</p> */}
+                                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                                      <p>{countryCurrency}</p>
+                                      <input
+                                        type="text"
+                                        inputMode="decimal"
+                                        value={ser.servicePrice}
+                                        maxLength={6}
+                                        style={{
+                                          width: "6rem",
+                                          outline: "none",
+                                          backgroundColor: "transparent",
+                                          padding: "0.4rem",
+                                          fontSize: "1.4rem",
+                                          border: "none",
+                                          borderBottom: "0.1rem solid var(--text-primary)",
+                                          textAlign: "center"
+                                        }}
+                                        onChange={(e) => {
+                                          let value = e.target.value.trim();
+
+                                          // ✅ Allow only numbers and at most one decimal point
+                                          if (!/^\d*\.?\d*$/.test(value)) return;
+
+                                          // ✅ Prevent multiple leading zeros (e.g., 000 or 012)
+                                          if (value.length > 1 && value[0] === "0" && value[1] !== ".") {
+                                            value = value.replace(/^0+/, "");
+                                          }
+
+                                          // ✅ Prevent negative numbers
+                                          if (value.startsWith("-")) return;
+
+                                          // ✅ Optional: Limit to 2 decimal places
+                                          const decimalIndex = value.indexOf(".");
+                                          if (decimalIndex !== -1 && value.length - decimalIndex > 3) return;
+
+                                          // ✅ Update state
+                                          setSelectedServices((prev) =>
+                                            prev.map((item, idx) =>
+                                              idx === index ? { ...item, servicePrice: value } : item
+                                            )
+                                          );
+                                        }}
+                                        placeholder="0.00"
+                                      />
+                                    </div>
                                   </div>
 
                                   <div>
                                     <p>Estimated Time</p>
-                                    <p>{ser.serviceEWT} mins</p>
+
+                                    <input
+                                      type="text"
+                                      value={ser.serviceEWT}
+                                      maxLength={3}
+                                      style={{
+                                        width: "6rem",
+                                        outline: "none",
+                                        backgroundColor: "transparent",
+                                        padding: "0.4rem",
+                                        fontSize: "1.4rem",
+                                        border: "none",
+                                        borderBottom: "0.1rem solid var(--text-primary)",
+                                        textAlign: "center"
+                                      }}
+                                      onChange={(e) => {
+                                        const newValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only digits
+
+                                        const numericValue = newValue === '' ? '' : Number(newValue);
+
+                                        // ✅ Update state
+                                        setSelectedServices((prev) =>
+                                          prev.map((item, idx) =>
+                                            idx === index ? { ...item, serviceEWT: numericValue } : item
+                                          )
+                                        );
+                                      }}
+                                    />
+                                    {/* <p>{ser.serviceEWT} mins</p> */}
                                   </div>
                                 </div>
                               </div>
@@ -1973,12 +2045,90 @@ const EditSalon = () => {
                                 <div>
                                   <div>
                                     <p>Price</p>
-                                    <p>{countryCurrency}{" "} {ser.servicePrice}</p>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                                      <p>{countryCurrency}</p>
+                                      <input
+                                        type="text"
+                                        inputMode="decimal"
+                                        value={ser.servicePrice}
+                                        maxLength={6}
+                                        style={{
+                                          width: "6rem",
+                                          outline: "none",
+                                          textAlign: "center",
+                                          backgroundColor: "transparent",
+                                          padding: "0.4rem",
+                                          fontSize: "1.4rem",
+                                          border: "none",
+                                          borderBottom: "0.1rem solid var(--text-primary)",
+                                        }}
+                                        onChange={(e) => {
+                                          let value = e.target.value.trim();
+
+                                          // ✅ Allow only numbers and at most one decimal point
+                                          if (!/^\d*\.?\d*$/.test(value)) return;
+
+                                          // ✅ Prevent multiple leading zeros (e.g., 000 or 012)
+                                          if (value.length > 1 && value[0] === "0" && value[1] !== ".") {
+                                            value = value.replace(/^0+/, "");
+                                          }
+
+                                          // ✅ Prevent negative numbers
+                                          if (value.startsWith("-")) return;
+
+                                          // ✅ Optional: Limit to 2 decimal places
+                                          const decimalIndex = value.indexOf(".");
+                                          if (decimalIndex !== -1 && value.length - decimalIndex > 3) return;
+
+                                          // ✅ Update state
+                                          setSelectedServices((prev) =>
+                                            prev.map((item, idx) =>
+                                              idx === index ? { ...item, servicePrice: value } : item
+                                            )
+                                          );
+                                        }}
+                                        placeholder="0.00"
+                                      />
+                                    </div>
+
+                                    {/* <p>{countryCurrency}{" "} {ser.servicePrice}</p> */}
                                   </div>
 
                                   <div>
                                     <p>Estimated Time</p>
-                                    <p>{ser.serviceEWT} mins</p>
+                                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                                      <input
+                                        type="text"
+                                        value={ser.serviceEWT}
+                                        maxLength={3}
+                                        style={{
+                                          width: "6rem",
+                                          outline: "none",
+                                          backgroundColor: "transparent",
+                                          padding: "0.4rem",
+                                          fontSize: "1.4rem",
+                                          border: "none",
+                                          borderBottom: "0.1rem solid var(--text-primary)",
+                                          textAlign: "center"
+                                        }}
+                                        onChange={(e) => {
+                                          const newValue = e.target.value.replace(/[^0-9]/g, ''); // Allow only digits
+
+                                          const numericValue = newValue === '' ? '' : Number(newValue);
+
+                                          // ✅ Update state
+                                          setSelectedServices((prev) =>
+                                            prev.map((item, idx) =>
+                                              idx === index ? { ...item, serviceEWT: numericValue } : item
+                                            )
+                                          );
+                                        }}
+                                      />
+                                      <p>mins</p>
+                                    </div>
+
+
+                                    {/* <p>{ser.serviceEWT} mins</p> */}
                                   </div>
                                 </div>
                               </div>
