@@ -94,6 +94,8 @@ const EditSalon = () => {
     response: SalonIcons
   } = getAdminAllSalonIcon
 
+  // console.log("Salon Icons ", SalonIcons)
+
   const SalonCategoriesRef = useRef(new AbortController());
 
   useEffect(() => {
@@ -529,6 +531,8 @@ const EditSalon = () => {
   }
 
   const [selectedServices, setSelectedServices] = useState(currentSalon?.services)
+
+  console.log(selectedServices)
 
   const addServiceHandler = () => {
 
@@ -1302,7 +1306,7 @@ const EditSalon = () => {
     },
   ];
 
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(2);
   const [formData, setFormData] = useState({
     accountInfo: '',
     projectID: '',
@@ -1320,7 +1324,7 @@ const EditSalon = () => {
   const [AllSteps, setAllSteps] = useState({
     step1: false,
     step2: false,
-    step3: false,
+    step3: true,
     step4: false,
     step5: false,
   })
@@ -1340,7 +1344,7 @@ const EditSalon = () => {
         return setSalonNameError("Please enter salon name")
       }
 
-      if (salonName.length === 0 || salonName.length > 20) {
+      if (salonName?.length === 0 || salonName?.length > 20) {
         toast.error("Salon Name must be between 1 to 20 characters", {
           duration: 3000,
           style: {
@@ -1465,42 +1469,6 @@ const EditSalon = () => {
   }
 
   const handleBack = () => {
-    // if (activeStep === 0) {
-    //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
-
-    // } else if (activeStep === 1) {
-    //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
-
-    //   setAllSteps((prev) => {
-    //     return { ...prev, step1: false }
-    //   })
-
-    // } else if (activeStep === 2) {
-    //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
-
-    //   setAllSteps((prev) => {
-    //     return { ...prev, step2: false }
-    //   })
-
-    // } else if (activeStep === 3) {
-    //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
-
-    //   setAllSteps((prev) => {
-    //     return { ...prev, step3: false }
-    //   })
-    // } else if (activeStep === 4) {
-
-    //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
-
-    //   setAllSteps((prev) => {
-    //     return { ...prev, step4: false }
-    //   })
-    // } else {
-    //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    //   setAllSteps((prev) => {
-    //     return { ...prev, step5: false }
-    //   })
-    // }
 
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
 
@@ -1808,30 +1776,35 @@ const EditSalon = () => {
                       <div>
                         {step.fields.map((field) => (
                           <div key={field.name} className={`${style.form_group}`}>
-                            <label>{field.label}</label>
+                            {getAdminAllSalonIconResolve && <label>{field.label}</label>}
                             {field.name === "serviceicon" ? (
                               <>
-                                <div className={style.service_icon_container}>
-                                  <Carousel
-                                    responsive={responsive}
-                                    draggable={false}
-                                    swipeable={false}
-                                  >
-                                    {
-                                      SalonIcons?.map((s) => (
-                                        <div key={s._id}
-                                          className={`${style.slider_item} ${selectedLogo?.url === s.url && style.icon_selected} ${darkmodeOn && style.dark}`}
-                                          onClick={() => logoselectHandler(s)}
-                                          style={{
-                                            border: field.error && "0.1rem solid red"
-                                          }}
-                                        >
-                                          <img src={s.url} alt="" />
-                                        </div>
-                                      ))
-                                    }
-                                  </Carousel>
-                                </div>
+                                {
+                                  getAdminAllSalonIconResolve && (
+                                    <div className={style.service_icon_container}>
+                                      <Carousel
+                                        responsive={responsive}
+                                        draggable={false}
+                                        swipeable={false}
+                                      >
+                                        {
+                                          SalonIcons?.map((s) => (
+                                            <div key={s?._id}
+                                              className={`${style.slider_item} ${selectedLogo?.url === s?.url && style.icon_selected} ${darkmodeOn && style.dark}`}
+                                              onClick={() => logoselectHandler(s)}
+                                              style={{
+                                                border: field.error && "0.1rem solid red"
+                                              }}
+                                            >
+                                              <img src={s?.url} alt="" />
+                                            </div>
+                                          ))
+                                        }
+                                      </Carousel>
+                                    </div>
+                                  )
+                                }
+
                                 {field.error ? <p style={{ color: "red", fontSize: "1.4rem" }}>{field.error}</p> : null}
                               </>
                             ) : field.name === "servicetype" ? (
@@ -2012,8 +1985,6 @@ const EditSalon = () => {
                             )
                           })
                         }
-
-
 
                       </div>
 

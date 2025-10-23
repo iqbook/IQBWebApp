@@ -277,7 +277,7 @@ const Appointment = () => {
         );
     }
 
-    console.log("getBarberApptdates ", getBarberApptdates)
+    // console.log("getBarberApptdates ", getBarberApptdates)
 
 
     const isMobileSelected = (day) => {
@@ -425,9 +425,6 @@ const Appointment = () => {
                         </div>
                     </div>
 
-
-
-
                     <div className={style.calendarGrid}> {/* New: Wrapper for the grid */}
 
                         {
@@ -499,7 +496,7 @@ const Appointment = () => {
                         onClick={() => {
                             setBarberOffdates(false)
                             setAppointmentDates(true)
-                        }}>Appointment Off Days</button>
+                        }}>Availability</button>
                     <button
                         onClick={() => {
                             setBarberOffdates(true)
