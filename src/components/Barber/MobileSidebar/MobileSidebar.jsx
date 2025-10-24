@@ -206,10 +206,12 @@ const MobileSidebar = () => {
                     onChange={() => { }}
                   />
                 </div>
+                <p>2.0.0</p>
               </nav>
             </div>
           </ClickAwayListener>
         ) : null}
+
       </aside>
 
     </section>

@@ -441,6 +441,7 @@ const DashboardHeader = ({ sidebar, setSidebar, mobileSidebar, setMobileSidebar 
                 <button onClick={() => setMobileSidebar((prev) => !prev)}>{mobileSidebar ? <MobileSiderbarMenuIcon /> : <MobileSiderbarMenuIcon />}</button>
                 <h3>IQB</h3>
             </div>
+            
 
         </header>
     )

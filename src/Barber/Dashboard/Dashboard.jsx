@@ -685,36 +685,82 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
+// export const requestForToken = async () => {
+//   try {
+//     // Check if the browser supports notifications
+//     if ('Notification' in window) {
+//       const permission = await Notification.requestPermission();
+
+//       if (permission === 'granted') {
+//         console.log('Notification permission granted.');
+
+//         const fcmToken = await getToken(messaging, {
+//           vapidKey: "BMb-Y9gWXHSvgsOqipUxEpzriS32OyvkeP3I4N8aVkF0A8XPuI-o7LKA8SvM9Bx1GQGpOIH6C8C5PzBJXxPp1zc" // <-- REQUIRED: Your VAPID Key from Firebase
+//         });
+
+//         if (fcmToken) {
+//           // 💡 Action: Send this token to your backend for sending notifications.
+//           // Example: await yourApiCall.sendTokenToBackend(fcmToken);
+//           return fcmToken;
+//         } else {
+//           console.warn('No registration token available. Check if your Firebase setup or VAPID key is correct.');
+//         }
+//       } else {
+//         console.warn('Notification permission denied by the user.');
+//       }
+//     } else {
+//       console.error('Notifications are not supported by this browser.');
+//     }
+//   } catch (err) {
+//     console.error('An error occurred while retrieving token:', err);
+//   }
+// };
+
 export const requestForToken = async () => {
   try {
-    // Check if the browser supports notifications
-    if ('Notification' in window) {
-      const permission = await Notification.requestPermission();
-
-      if (permission === 'granted') {
-        console.log('Notification permission granted.');
-
-        const fcmToken = await getToken(messaging, {
-          vapidKey: "BMb-Y9gWXHSvgsOqipUxEpzriS32OyvkeP3I4N8aVkF0A8XPuI-o7LKA8SvM9Bx1GQGpOIH6C8C5PzBJXxPp1zc" // <-- REQUIRED: Your VAPID Key from Firebase
-        });
-
-        if (fcmToken) {
-          // 💡 Action: Send this token to your backend for sending notifications.
-          // Example: await yourApiCall.sendTokenToBackend(fcmToken);
-          return fcmToken;
-        } else {
-          console.warn('No registration token available. Check if your Firebase setup or VAPID key is correct.');
-        }
-      } else {
-        console.warn('Notification permission denied by the user.');
-      }
-    } else {
-      console.error('Notifications are not supported by this browser.');
+    if (!('Notification' in window)) {
+      console.error('Notifications not supported');
+      return null;
     }
+
+    // If already granted, skip the prompt
+    if (Notification.permission === 'granted') {
+      return await getFCMToken();
+    }
+
+    // If default, ask for permission
+    if (Notification.permission === 'default') {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        return await getFCMToken();
+      } else {
+        console.warn('Notification permission denied');
+        return null;
+      }
+    }
+
+    // Denied
+    console.warn('Notification permission previously denied');
+    return null;
   } catch (err) {
-    console.error('An error occurred while retrieving token:', err);
+    console.error('Error retrieving token:', err);
+    return null;
   }
 };
+
+const getFCMToken = async () => {
+  try {
+    const fcmToken = await getToken(messaging, {
+      vapidKey:
+        'BMb-Y9gWXHSvgsOqipUxEpzriS32OyvkeP3I4N8aVkF0A8XPuI-o7LKA8SvM9Bx1GQGpOIH6C8C5PzBJXxPp1zc',
+    });
+    return fcmToken;
+  } catch (err) {
+    console.error('FCM token error:', err);
+    return null;
+  }
+};
+
 
 export const onMessageListener = () =>
   new Promise((resolve) => {
@@ -734,30 +780,58 @@ const Dashboard = () => {
 
   // console.log(salonId, email, barberName)
 
+  // useEffect(() => {
+
+  //   if (email && salonId) {
+  //     const getToken = async () => {
+  //       const token = await requestForToken();
+  //       if (token) {
+  //         // console.log("Device Token:", token);
+
+  //         const { data } = await axios.post("https://iqb-final.onrender.com/api/webNotifications/save-device-token",
+  //           {
+  //             salonId: salonId,
+  //             name: barberName,
+  //             email: email,
+  //             deviceToken: token,
+  //             type: "barber"
+  //           })
+
+  //       }
+  //     };
+
+  //     getToken();
+  //   }
+
+  // }, []);
+
   useEffect(() => {
+    if (!email || !salonId) return;
 
-    if (email && salonId) {
-      const getToken = async () => {
-        const token = await requestForToken();
-        if (token) {
-          // console.log("Device Token:", token);
-          
-          const { data } = await axios.post("https://iqb-final.onrender.com/api/webNotifications/save-device-token",
+    const saveToken = async () => {
+      const token = await requestForToken();
+      if (token) {
+        try {
+          await axios.post(
+            'https://iqb-final.onrender.com/api/webNotifications/save-device-token',
             {
-              salonId: salonId,
+              salonId,
               name: barberName,
-              email: email,
+              email,
               deviceToken: token,
-              type: "barber"
-            })
-
+              type: 'barber',
+            }
+          );
+          console.log('Device token saved successfully', token);
+        } catch (err) {
+          console.error('Error saving device token:', err);
         }
-      };
+      }
+    };
 
-      getToken();
-    }
+    saveToken();
+  }, [email, salonId]);
 
-  }, []);
 
   const dispatch = useDispatch()
 
