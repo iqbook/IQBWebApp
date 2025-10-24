@@ -622,7 +622,7 @@ export const adminSendBarberMessageAction = (smsdata, setMessage, setOpenBarberM
 }
 
 
-export const adminSendNotificationAction = (notificationData, setMessage, setOpenBarberMessage) => async (dispatch) => {
+export const adminSendNotificationAction = (notificationData, setBarberTitle, setBarberMessage, setOpenBarberMessage) => async (dispatch) => {
     try {
         dispatch({ type: ADMIN_SEND_NOTIFICATION_REQ })
 
@@ -633,7 +633,9 @@ export const adminSendNotificationAction = (notificationData, setMessage, setOpe
             payload: data
         })
 
-        setMessage("")
+        setBarberTitle("")
+        setBarberMessage("")
+
         toast.success(data?.message, {
             duration: 3000,
             style: {

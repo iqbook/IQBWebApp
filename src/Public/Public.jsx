@@ -8,7 +8,6 @@ const Public = () => {
 
   const Theme = localStorage.getItem('Theme') || 'Dark'
 
-
   return (
     <section className={`${style.section}`}>
       {/* <img src='https://dashboard.shadcnuikit.com/images/cover.png' alt='images' /> */}

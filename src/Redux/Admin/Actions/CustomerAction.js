@@ -44,7 +44,7 @@ export const adminGetAllCustomerListAction = (salonId, signal) => async (dispatc
     }
 }
 
-export const adminSendCustomerNotificationAction = (notificationData, setMessage, setOpenBarberMessage) => async (dispatch) => {
+export const adminSendCustomerNotificationAction = (notificationData, setBarberTitle, setBarberMessage, setOpenBarberMessage) => async (dispatch) => {
     try {
         dispatch({ type: ADMIN_SEND_CUSTOMER_NOTIFICATION_REQ })
 
@@ -55,7 +55,9 @@ export const adminSendCustomerNotificationAction = (notificationData, setMessage
             payload: data
         })
 
-        setMessage("")
+        setBarberTitle("")
+        setBarberMessage("")
+
         toast.success(data?.message, {
             duration: 3000,
             style: {

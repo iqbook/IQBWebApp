@@ -649,7 +649,7 @@ const CustomerList = () => {
 
   const sendMessageHandler = () => {
 
-    if(barbertitle.trim() === "" || barberMessage.trim() === ""){
+    if (barbertitle.trim() === "" || barberMessage.trim() === "") {
       toast.error("Please fill in all fields", {
         duration: 3000,
         style: {
@@ -671,7 +671,7 @@ const CustomerList = () => {
 
     // console.log("Notification Data:", notificationData);
 
-    dispatch(adminSendCustomerNotificationAction(notificationData, setMessage, setOpenBarberMessage))
+    dispatch(adminSendCustomerNotificationAction(notificationData, setBarberTitle, setBarberMessage, setOpenBarberMessage))
   }
 
   const handleKeyPressMessage = (e) => {

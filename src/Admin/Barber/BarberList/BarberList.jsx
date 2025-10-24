@@ -331,7 +331,7 @@ const BarberList = () => {
     }
 
     // console.log("Notification Data:", notificationData);
-    dispatch(adminSendNotificationAction(notificationData, setMessage, setOpenBarberMessage))
+    dispatch(adminSendNotificationAction(notificationData, setBarberTitle, setBarberMessage, setOpenBarberMessage))
 
     // dispatch(adminSendBarberMessageAction(smsdata, setMessage, setOpenBarberMessage))
   }
