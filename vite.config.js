@@ -30,8 +30,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['iqbook.png', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
-        name: 'IQBook',
-        short_name: 'IQBook',
+        name: 'IQBook Admin',
+        short_name: 'IQBook Admin',
         theme_color: '#ffffff',
         icons: [
           {

@@ -34,23 +34,23 @@ messaging.onBackgroundMessage((payload) => {
 });
 
 
-// // ✅ 2. This runs when tab is fully closed (Push API)
-// self.addEventListener('push', (event) => {
-//     console.log('[firebase-messaging-sw.js] Push Received.');
+// ✅ 2. This runs when tab is fully closed (Push API)
+self.addEventListener('push', (event) => {
+    console.log('[firebase-messaging-sw.js] Push Received.');
 
-//     if (event.data) {
-//         const payload = event.data.json();
-//         // console.log('Push payload:', payload);
+    if (event.data) {
+        const payload = event.data.json();
+        // console.log('Push payload:', payload);
 
-//         const title = payload.notification?.title || payload.data?.title || 'Notification';
-//         const options = {
-//             body: payload.notification?.body || payload.data?.body,
-//             icon: payload.notification?.icon || payload.data?.icon
-//         };
+        const title = payload.notification?.title || payload.data?.title || 'Notification';
+        const options = {
+            body: payload.notification?.body || payload.data?.body,
+            icon: payload.notification?.icon || payload.data?.icon
+        };
 
-//         event.waitUntil(self.registration.showNotification(title, options));
-//     }
-// });
+        event.waitUntil(self.registration.showNotification(title, options));
+    }
+});
 
 // ✅ 3. Handle click on the notification
 self.addEventListener('notificationclick', (event) => {
