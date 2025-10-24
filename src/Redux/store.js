@@ -5,7 +5,7 @@ import { adminDragAdvertisementReducer, adminSalonStatusReducer, adminUpdateSalo
 import { adminCreateSalonReducer, adminDeleteSalonReducer, adminEditSalonReducer, adminUpdateSalonSettingsReducer, getAdminAllCitiesReducer, getAdminAllCountriesReducer, getAdminAllSalonIconReducer, getAdminAllTimezoneReducer, getAdminSalonImagesReducer, getAdminSalonListReducer, getAdminSalonLogoReducer, getAllSalonCategoriesReducer } from "./Admin/Reducers/SalonReducer";
 import { getAdminBarberListReducer, changeAdminBarberOnlineStatusReducer, adminApproveBarberReducer, adminAllSalonServicesReducer, adminCreateBarberReducer, adminUpdateBarberReducer, adminDeleteBarberReducer, changeAdminBarberClockStatusReducer, adminSendBarberEmailReducer, adminSendBarberMessageReducer, getBarberDashboardReducer, adminSendNotificationReducer } from "./Admin/Reducers/BarberReducer"
 import { adminUpdateProfileReducer, adminSendVerifyEmailReducer, adminVerifiedEmailStatusReducer, adminUploadProfilePicReducer, adminSkipProfileReducer, adminUpdatePasswordReducer, adminVerifiedMobileStatusReducer, adminSendVerifyMobileReducer } from "./Admin/Reducers/AdminProfileReducer"
-import { adminGetAllCustomerListReducer } from "./Admin/Reducers/CustomerReducer";
+import { adminGetAllCustomerListReducer, adminSendCustomerNotificationReducer } from "./Admin/Reducers/CustomerReducer";
 import { adminCancelQueueReducer, adminServeQueueReducer, getAdminQueueListHistoryReducer } from "./Admin/Reducers/QueueReducer";
 import { adminGetDefaultSalonReducer, adminApplySalonReducer, colorReducer, adminSetSalonReducer } from "./Admin/Reducers/AdminHeaderReducer"
 import { adminForgetPasswordReducer, adminResetPasswordReducer } from "./Admin/Reducers/AdminPasswordReducer";
@@ -77,6 +77,7 @@ const rootReducer = combineReducers({
   getAdminAppointmentListSalonId: getAdminAppointmentListSalonIdReducer,
   getBarberDashboard: getBarberDashboardReducer,
   adminSendNotification: adminSendNotificationReducer,
+  adminSendCustomerNotification: adminSendCustomerNotificationReducer,
 
   //Barber Reducers
   BarberLoggedInMiddleware: BarberLoggedInMiddlewareReducer,

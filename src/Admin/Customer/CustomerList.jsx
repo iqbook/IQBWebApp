@@ -473,7 +473,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import style from './CustomerList.module.css';
 import Skeleton from 'react-loading-skeleton';
-import { adminGetAllCustomerListAction } from '../../Redux/Admin/Actions/CustomerAction';
+import { adminGetAllCustomerListAction, adminSendCustomerNotificationAction } from '../../Redux/Admin/Actions/CustomerAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { darkmodeSelector } from '../../Redux/Admin/Reducers/AdminHeaderReducer';
 import api from '../../Redux/api/Api';
@@ -486,6 +486,7 @@ import { CheckAllIcon, CheckIcon, CloseIcon, DropdownIcon, EmailIcon, MessageIco
 import { ClickAwayListener, Pagination } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { ddmmformatDate } from '../../../utils/ddmmformatDate';
+import { Notificationicon } from '../../icons';
 
 const CustomerList = () => {
 
@@ -617,6 +618,7 @@ const CustomerList = () => {
 
 
   const [openBarberMessage, setOpenBarberMessage] = useState(false)
+  const [barbertitle, setBarberTitle] = useState("")
   const [barberMessage, setBarberMessage] = useState("")
 
   const sendMessageNavigate = () => {
@@ -636,21 +638,53 @@ const CustomerList = () => {
 
   };
 
-  const sendMessageHandler = () => {
-    const smsdata = {
-      smsBody: barberMessage,
-      numbers: checkMobileNumbers
-    }
-    // console.log(smsdata)
-    dispatch(adminSendBarberMessageAction(smsdata, setMessage, setOpenBarberMessage))
+  // const sendMessageHandler = () => {
+  //   const smsdata = {
+  //     smsBody: barberMessage,
+  //     numbers: checkMobileNumbers
+  //   }
+  //   // console.log(smsdata)
+  //   dispatch(adminSendBarberMessageAction(smsdata, setMessage, setOpenBarberMessage))
+  // }
 
+  const sendMessageHandler = () => {
+
+    if(barbertitle.trim() === "" || barberMessage.trim() === ""){
+      toast.error("Please fill in all fields", {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: '0.3rem',
+          background: '#333',
+          color: '#fff',
+        },
+      });
+      return;
+    }
+
+    const notificationData = {
+      salonId,
+      title: barbertitle,
+      body: barberMessage,
+      emails: checkedEmails,
+    }
+
+    // console.log("Notification Data:", notificationData);
+
+    dispatch(adminSendCustomerNotificationAction(notificationData, setMessage, setOpenBarberMessage))
   }
 
-  const adminSendBarberMessage = useSelector(state => state.adminSendBarberMessage)
+  const handleKeyPressMessage = (e) => {
+    if (e.key === "Enter") {
+      sendMessageHandler();
+    }
+  };
+
+  const adminSendCustomerNotification = useSelector(state => state.adminSendCustomerNotification)
 
   const {
-    loading: adminSendBarberMessageLoading
-  } = adminSendBarberMessage
+    loading: adminSendCustomerNotificationLoading
+  } = adminSendCustomerNotification
 
   // ========================================
 
@@ -845,10 +879,12 @@ const CustomerList = () => {
 
                 <div>
                   <p>To</p>
-                  <input type="text"
+                  <input
+                    type="text"
                     value={
                       checkedEmails?.map((e) => " " + e)
                     }
+                    onKeyDown={handleKeyPressMessage}
                   />
                 </div>
 
@@ -889,7 +925,7 @@ const CustomerList = () => {
             style={{
               cursor: salonId === 0 ? "not-allowed" : "cursor"
             }}
-          ><MessageIcon /></button>
+          ><Notificationicon /></button>
 
           <Modal
             open={openBarberMessage}
@@ -899,7 +935,7 @@ const CustomerList = () => {
           >
             <div className={`${style.modal_container} ${darkmodeOn && style.dark}`}>
               <div>
-                <p>Send Message</p>
+                <p>Send Notification</p>
                 <button onClick={() => setOpenBarberMessage(false)}><CloseIcon /></button>
               </div>
 
@@ -915,13 +951,28 @@ const CustomerList = () => {
 
                 <div>
                   <p>To</p>
-                  <input type="text" value={
-                    checkCustomerNames?.map((e) => " " + e)
-                  } />
+                  <input
+                    type="text"
+                    value={
+                      checkCustomerNames?.map((e) => " " + e)
+                    }
+                    readOnly
+                  />
                 </div>
 
                 <div>
-                  <p>Message</p>
+                  <p>Title</p>
+                  <input
+                    type="text"
+                    value={barbertitle}
+                    placeholder='Enter Title'
+                    onChange={(e) => setBarberTitle(e.target.value)}
+                    onKeyDown={handleKeyPressMessage}
+                  />
+                </div>
+
+                <div>
+                  <p>Body</p>
                   <textarea
                     type="text"
                     placeholder='Enter Message'
@@ -931,9 +982,9 @@ const CustomerList = () => {
                 </div>
 
                 {
-                  adminSendBarberMessageLoading ?
+                  adminSendCustomerNotificationLoading ?
                     <button className={style.barber_send_btn}><ButtonLoader /></button> :
-                    <button onClick={sendMessageHandler} disabled={adminSendBarberMessageLoading} className={style.barber_send_btn}>Send</button>
+                    <button onClick={sendMessageHandler} disabled={adminSendCustomerNotificationLoading} className={style.barber_send_btn}>Send</button>
                 }
               </div>
             </div>
@@ -997,7 +1048,7 @@ const CustomerList = () => {
                   style={{
                     cursor: salonId === 0 ? "not-allowed" : "cursor"
                   }}
-                ><MessageIcon /></button>
+                ><Notificationicon /></button>
                 <button onClick={() => setMobileSearchOpen(true)}><SearchIcon /></button>
               </>
             )

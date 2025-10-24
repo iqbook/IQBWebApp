@@ -18,6 +18,7 @@ const AppointmentList = () => {
 
     const salonId = useSelector(state => state.BarberLoggedInMiddleware?.barberSalonId)
     const barberId = useSelector(state => state.BarberLoggedInMiddleware?.barberId)
+    const barberProfile = useSelector(state => state.BarberLoggedInMiddleware?.entiredata?.user?.[0])
 
     const dispatch = useDispatch()
 
@@ -465,8 +466,7 @@ const AppointmentList = () => {
                         {
                             AppointmentListBarberResponse?.[0]?.appointments?.map((item) => {
                                 return (
-                                    <div
-                                        key={item._id}
+                                    <div key={item._id}
                                         className={style.appointmentItem}
                                         onClick={() => {
                                             if (isMobile) {
@@ -475,36 +475,59 @@ const AppointmentList = () => {
                                                     data: item
                                                 })
                                             }
-                                        }}
-                                    >
-                                        <div>
-                                            <div className={style.bar}></div>
+                                        }}>
+                                        <div
+
+                                        >
+                                            <div>
+                                                <div className={style.bar}></div>
+
+                                                <div>
+                                                    <div><img src={item?.customerProfile?.[0]?.url} alt="" /></div>
+                                                    <div>
+                                                        <p>{item?.customerName}</p>
+                                                        <p>{item?.timeSlots}</p>
+                                                    </div>
+                                                </div>
+
+                                            </div>
 
                                             <div>
-                                                <div><img src={item?.customerProfile?.[0]?.url} alt="" /></div>
-                                                <div>
-                                                    <p>{item?.customerName}</p>
-                                                    <p>{item?.timeSlots}</p>
-                                                </div>
+                                                <button onClick={() => ServeHandler(item)}>Serve</button>
+                                                <button
+                                                    onClick={() => {
+                                                        setModalData(item)
+                                                        setOpenModal(true)
+                                                        setSubject("")
+                                                        setBody("")
+                                                    }}
+                                                >Cancel</button>
+
+                                                <button><RightArrow /></button>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            {
+                                                item?.services?.map((service, index) => (
+                                                    <div key={index}>
+                                                        <p>{service.serviceName}</p>
+                                                        <p>{`${barberProfile?.currency} ${service.servicePrice}`}</p>
+                                                    </div>
+                                                ))
+                                            }
+
+                                            <div style={{ borderTop: '1px solid var(--border-secondary)', paddingTop: '1rem' }}>
+                                                <p>Total</p>
+                                                <p>
+                                                    {`${barberProfile?.currency} ${item?.services?.reduce((total, service) => total + Number(service.servicePrice || 0), 0)
+                                                        }`}
+                                                </p>
                                             </div>
 
                                         </div>
 
-                                        <div>
-                                            <button onClick={() => ServeHandler(item)}>Serve</button>
-                                            <button
-                                                onClick={() => {
-                                                    setModalData(item)
-                                                    setOpenModal(true)
-                                                    setSubject("")
-                                                    setBody("")
-                                                }}
-                                            >Cancel</button>
-
-                                            <button><RightArrow /></button>
-                                        </div>
                                     </div>
-
                                 )
                             })
                         }

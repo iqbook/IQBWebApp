@@ -340,6 +340,8 @@ const AppointmentCalender = () => {
     const AppointmentRef = useRef(null);
     const dispatch = useDispatch();
 
+    console.log(adminGetDefaultSalonResponse)
+
     // Fetch all appointments for the salon on component mount
     useEffect(() => {
         const fetchAppointments = async () => {
@@ -561,17 +563,38 @@ const AppointmentCalender = () => {
                     {getAdminAppointmentListSalonIdResponse.map((item) => (
                         <div key={item._id} className={style.appointmentItem}>
                             <div>
-                                <div className={style.bar}></div>
                                 <div>
+                                    <div className={style.bar}></div>
                                     <div>
-                                        <img src={item?.customerProfile?.[0]?.url} alt='' />
+                                        <div>
+                                            <img src={item?.customerProfile?.[0]?.url} alt='' />
+                                        </div>
+                                        <div>
+                                            <p>{item?.customerName}</p>
+                                            <p>{item?.timeSlots}</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p>{item?.customerName}</p>
-                                        <p>{item?.timeSlots}</p>
-                                    </div>
+                                    <p style={{ position: 'absolute', right: '1rem' }}>{item?.barbername}</p>
                                 </div>
-                                <p style={{ position: 'absolute', right: '1rem' }}>{item?.barbername}</p>
+                            </div>
+                            <div>
+                                {
+                                    item?.services?.map((service, index) => (
+                                        <div key={index}>
+                                            <p>{service.serviceName}</p>
+                                            <p>{`${adminGetDefaultSalonResponse?.currency} ${service.servicePrice}`}</p>
+                                        </div>
+                                    ))
+                                }
+
+                                <div style={{ borderTop: '1px solid var(--border-secondary)', paddingTop: '1rem' }}>
+                                    <p>Total</p>
+                                    <p>
+                                        {`${adminGetDefaultSalonResponse?.currency} ${item?.services?.reduce((total, service) => total + Number(service.servicePrice || 0), 0)
+                                            }`}
+                                    </p>
+                                </div>
+
                             </div>
                         </div>
                     ))}

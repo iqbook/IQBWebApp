@@ -307,9 +307,24 @@ const BarberList = () => {
   //   dispatch(adminSendBarberMessageAction(smsdata, setMessage, setOpenBarberMessage))
   // }
 
+
   const sendMessageHandler = () => {
 
+    if (barbertitle.trim() === "" || barberMessage.trim() === "") {
+      toast.error("Please fill in all fields", {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: '0.3rem',
+          background: '#333',
+          color: '#fff',
+        },
+      });
+      return;
+    }
+
     const notificationData = {
+      salonId,
       title: barbertitle,
       body: barberMessage,
       emails: checkedEmails,
@@ -327,11 +342,11 @@ const BarberList = () => {
     }
   };
 
-  const adminSendBarberMessage = useSelector(state => state.adminSendBarberMessage)
+  const adminSendNotification = useSelector(state => state.adminSendNotification)
 
   const {
-    loading: adminSendBarberMessageLoading
-  } = adminSendBarberMessage
+    loading: adminSendNotificationLoading
+  } = adminSendNotification
 
   // console.log(BarberList)
 
@@ -542,7 +557,7 @@ const BarberList = () => {
           >
             <div className={`${style.modal_container} ${darkmodeOn && style.dark}`}>
               <div>
-                <p>Send Message</p>
+                <p>Send Notification</p>
                 <button onClick={() => setOpenBarberMessage(false)}><CloseIcon /></button>
               </div>
 
@@ -592,9 +607,9 @@ const BarberList = () => {
                 </div>
 
                 {
-                  adminSendBarberMessageLoading ?
+                  adminSendNotificationLoading ?
                     <button className={style.barber_send_btn}><ButtonLoader /></button> :
-                    <button onClick={sendMessageHandler} disabled={adminSendBarberMessageLoading} className={style.barber_send_btn}>Send</button>
+                    <button onClick={sendMessageHandler} disabled={adminSendNotificationLoading} className={style.barber_send_btn}>Send</button>
                 }
               </div>
             </div>

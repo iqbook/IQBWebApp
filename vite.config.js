@@ -28,10 +28,10 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['IQB-Logo.png', 'apple-touch-icon.png', 'mask-icon.svg'],
+      includeAssets: ['iqbook.png', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
-        name: 'IQB',
-        short_name: 'IQB',
+        name: 'IQBook',
+        short_name: 'IQBook',
         theme_color: '#ffffff',
         icons: [
           {
