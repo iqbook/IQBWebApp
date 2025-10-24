@@ -19,37 +19,46 @@ firebase.initializeApp(firebaseConfig);
 
 const messaging = firebase.messaging();
 
-// ✅ 1. This runs when tab is open but not focused
-messaging.onBackgroundMessage((payload) => {
-    // console.log('[firebase-messaging-sw.js] Received background message ', payload);
+// ✅ 1. This runs when tab is open but not focused or app is closed
 
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-        body: payload.notification.body,
-        icon: '/iqbook.png' // Use a path relative to the root
-    };
+// messaging.onBackgroundMessage((payload) => {
+//     const data = payload?.data || {};
+//     const hasCustomData = data.title || data.body;
 
-    // Show the notification using the service worker's registration
-    return self.registration.showNotification(notificationTitle, notificationOptions);
-});
+//     if (hasCustomData) {
+//         console.log("From backend node js", data);
 
+//         const notificationTitle = data.title;
+//         const notificationOptions = {
+//             body: data.body,
+//             icon: '/iqbook.png',
+//         };
 
-// ✅ 2. This runs when tab is fully closed (Push API)
+//         return self.registration.showNotification(notificationTitle, notificationOptions);
+//     } else {
+//         console.log('[firebase-messaging-sw.js] Received background message from Firebase Console', payload);
+//     }
+// });
+
+// This code  uses all the methods
+// 1. App is closed
+// 2. Tab is fully closed
+// 3. Foreground
+// 4. Background
+// 5. Unfocused
 self.addEventListener('push', (event) => {
-    console.log('[firebase-messaging-sw.js] Push Received.');
+    if (!event.data) return;
 
-    if (event.data) {
-        const payload = event.data.json();
-        // console.log('Push payload:', payload);
+    const payload = event.data.json();
+    const data = payload?.data || {};
 
-        const title = payload.notification?.title || payload.data?.title || 'Notification';
-        const options = {
-            body: payload.notification?.body || payload.data?.body,
-            icon: payload.notification?.icon || payload.data?.icon
-        };
+    const title = data.title || 'Notification';
+    const body = data.body || 'You have a new message';
+    const icon = data.icon || '/iqbook.png';
 
-        event.waitUntil(self.registration.showNotification(title, options));
-    }
+    event.waitUntil(
+        self.registration.showNotification(title, { body, icon })
+    );
 });
 
 // ✅ 3. Handle click on the notification

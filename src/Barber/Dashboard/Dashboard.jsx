@@ -740,7 +740,8 @@ const Dashboard = () => {
       const getToken = async () => {
         const token = await requestForToken();
         if (token) {
-
+          console.log("Device Token:", token);
+          
           const { data } = await axios.post("https://iqb-final.onrender.com/api/webNotifications/save-device-token",
             {
               salonId: salonId,
