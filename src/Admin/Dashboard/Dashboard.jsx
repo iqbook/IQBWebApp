@@ -483,6 +483,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
+// This code is not in use right for admin ssve token notification
+
 export const requestForToken = async () => {
   try {
     // Check if the browser supports notifications

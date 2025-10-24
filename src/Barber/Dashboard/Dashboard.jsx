@@ -822,7 +822,7 @@ const Dashboard = () => {
               type: 'barber',
             }
           );
-          console.log('Device token saved successfully', token);
+          // console.log('Device token saved successfully', token);
         } catch (err) {
           console.error('Error saving device token:', err);
         }
