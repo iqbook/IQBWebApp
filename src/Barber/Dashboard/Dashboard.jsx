@@ -670,6 +670,8 @@ import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import axios from "axios";
 
+// created in arghyas account
+
 const firebaseConfig = {
   apiKey: "AIzaSyBYCyrNZll9oeGKfILz_S5avzOQJ0xlCkw",
   authDomain: "iqbook-web.firebaseapp.com",
