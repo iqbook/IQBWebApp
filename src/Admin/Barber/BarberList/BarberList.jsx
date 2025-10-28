@@ -34,7 +34,7 @@ const BarberList = () => {
   }
 
   const deleteButtonClicked = (barber) => {
-    const confirm = window.confirm("Are you sure ?")
+    const confirm = window.confirm(`Are you sure you want to delete ${barber.name}?`)
     if (confirm) {
       dispatch(adminDeleteBarberAction(barber.email, barber))
     }
@@ -915,11 +915,48 @@ const BarberList = () => {
                         <p>{checkMapClock?.get(`${item.salonId}-${item.barberId}`) ? "Clock-In" : "Clock-Out"}</p>
                       </div>
                     </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setMobileSettingIndex(index)
-                      }}><SalonThreeDotsIcon /></button>
+
+                    <div style={{
+                      position: "absolute",
+                      top: "1.5rem",
+                      right: "1.5rem",
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: "2rem"
+                    }}>
+
+                      <button
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "transparent",
+                          border: "none"
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          deleteButtonClicked(item)
+                        }}><DeleteIcon />
+                      </button>
+                      <button
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "transparent",
+                          border: "none"
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setMobileSettingIndex(index)
+                        }}><SalonThreeDotsIcon /></button>
+
+                    </div>
+
+
+                    {/* <button
+                      onClick={() => deleteButtonClicked(item)}><DeleteIcon /></button> */}
 
                     {
                       mobileSettingIndex === index ? (

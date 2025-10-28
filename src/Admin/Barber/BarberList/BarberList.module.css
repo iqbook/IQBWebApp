@@ -853,7 +853,7 @@
                 justify-content: space-around;
 
                 &>div {
-
+                    
                     &>button {
                         font-size: 1.8rem;
                         text-align: center;
@@ -892,6 +892,7 @@
                 background-color: var(--bg-primary);
                 border: none;
                 color: var(--text-primary);
+                
             }
 
             &>ul {
