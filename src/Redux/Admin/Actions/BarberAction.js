@@ -440,16 +440,26 @@ export const adminUpdateBarberAction = (barberdata, navigate) => async (dispatch
     }
 }
 
-export const adminDeleteBarberAction = (salonId, email, barber) => async (dispatch) => {
+export const adminDeleteBarberAction = (email, barber) => async (dispatch) => {
     try {
         dispatch({ type: ADMIN_DELETE_BARBER_REQ })
 
-        const { data } = await api.post(`/api/admin/deleteBarberByEmail`, { salonId, email })
+        const { data } = await api.post(`/api/admin/deleteBarberByEmail`, { email })
 
         dispatch({
             type: ADMIN_DELETE_BARBER_SUCCESS,
             payload: data
         })
+
+        toast.success(data?.message, {
+            duration: 3000,
+            style: {
+                fontSize: "var(--font-size-2)",
+                borderRadius: '0.3rem',
+                background: '#333',
+                color: '#fff',
+            },
+        });
 
         dispatch({
             type: "FILTER_BARBERLIST",

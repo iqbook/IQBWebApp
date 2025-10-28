@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import style from "./BarberList.module.css"
-import { BarberClockIn, BarberClockOut, CheckAllIcon, CheckIcon, CloseIcon, DropdownIcon, EmailIcon, MessageIcon, OfflineIcon, OnlineIcon, SalonThreeDotsIcon, SortDownIcon, SortUpDownArrowIcon, SortUpIcon } from '../../../newicons';
+import { BarberClockIn, BarberClockOut, CheckAllIcon, CheckIcon, CloseIcon, DeleteIcon, DropdownIcon, EmailIcon, MessageIcon, OfflineIcon, OnlineIcon, SalonThreeDotsIcon, SortDownIcon, SortUpDownArrowIcon, SortUpIcon } from '../../../newicons';
 import { ClickAwayListener, FormControl, MenuItem, Modal, Pagination, Select } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { adminApproveBarberAction, adminDeleteBarberAction, adminSendBarberEmailAction, adminSendBarberMessageAction, adminSendNotificationAction, changeAdminBarberClockStatusAction, changeAdminBarberOnlineStatusAction, getAdminBarberListAction } from '../../../Redux/Admin/Actions/BarberAction'
@@ -36,7 +36,7 @@ const BarberList = () => {
   const deleteButtonClicked = (barber) => {
     const confirm = window.confirm("Are you sure ?")
     if (confirm) {
-      dispatch(adminDeleteBarberAction(barber.salonId, barber.email, barber))
+      dispatch(adminDeleteBarberAction(barber.email, barber))
     }
   }
 
@@ -360,6 +360,7 @@ const BarberList = () => {
     { id: 5, heading: "isClockin", key: "isClockedIn" },
     { id: 6, heading: "isApprove", key: "isApproved" },
     { id: 7, heading: "", key: "" },
+    { id: 8, heading: "", key: "" },
   ];
 
 
@@ -452,6 +453,10 @@ const BarberList = () => {
 
   // Hair Dresser
   // Barber Shop
+
+  const deleteBarber = async () => {
+
+  }
 
   return (
     <section className={`${style.section}`}>
@@ -680,7 +685,9 @@ const BarberList = () => {
               {
                 barberPaginationData.map((item, index) => {
                   return (
-                    <div key={item._id} style={{ borderBottom: (index === endIndex - 1) || (index === barberPaginationData.length - 1) ? null : "0.1rem solid var(--border-secondary)" }}>
+                    <div
+                      key={item._id}
+                      style={{ borderBottom: (index === endIndex - 1) || (index === barberPaginationData.length - 1) ? null : "0.1rem solid var(--border-secondary)" }}>
                       <div>
                         <input
                           type="checkbox"
@@ -762,7 +769,11 @@ const BarberList = () => {
                           }
 
                         </div>
+                      </div>
 
+                      <div>
+                        <button
+                          onClick={() => deleteButtonClicked(item)}><DeleteIcon /></button>
                       </div>
 
                     </div>

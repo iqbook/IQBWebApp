@@ -314,13 +314,13 @@
                 }
 
                 &>div:nth-child(3) {
-                    min-width: 20rem;
-                    max-width: 20rem
+                    min-width: 25rem;
+                    max-width: 25rem
                 }
 
-                &>div:nth-last-child(2),
                 &>div:nth-last-child(3),
-                &>div:nth-last-child(4) {
+                &>div:nth-last-child(4),
+                &>div:nth-last-child(5) {
                     &>button {
                         color: #fff;
                         border: none;
@@ -336,8 +336,7 @@
                     }
                 }
 
-                &>div:nth-last-child(1) {
-
+                &>div:nth-last-child(2) {
 
                     &>div {
                         display: flex;
@@ -392,6 +391,37 @@
 
                     }
                 }
+
+                &>div:nth-last-child(1) {
+                    &>button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        color: var(--text-primary);
+                        cursor: pointer;
+                        font-size: var(--font-tertiary);
+                        transition: background-color 0.2s ease-in;
+                        -webkit-transition: background-color 0.2s ease-in;
+                        -moz-transition: background-color 0.2s ease-in;
+                        -ms-transition: background-color 0.2s ease-in;
+                        -o-transition: background-color 0.2s ease-in;
+                        padding: 0.6rem;
+                        background: transparent;
+                        border: none;
+                        outline: none;
+
+                        &:hover {
+                            background-color: var(--btn-primary-hover);
+                            border-radius: 0.4rem;
+                            -webkit-border-radius: 0.4rem;
+                            -moz-border-radius: 0.4rem;
+                            -ms-border-radius: 0.4rem;
+                            -o-border-radius: 0.4rem;
+                        }
+                    }
+                }
+
+
             }
         }
 
