@@ -218,7 +218,7 @@ const Appointment = () => {
     const [offDays, setOffDays] = useState([]); // add if not defined
 
     const today = moment().startOf("day");
-    const tomorrow = today.clone().add(1, "day");
+    const tomorrow = today.clone().add("day");
 
     const startOfMonth = currentMonth.clone().startOf("month");
     const endOfMonth = currentMonth.clone().endOf("month");
