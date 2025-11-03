@@ -166,13 +166,6 @@
     }
   }
 
-  .version_text {
-    text-align: center;
-    padding-block: 2rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-  }
-
 
   .chooseSalon_modal {
     position: absolute;

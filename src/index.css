@@ -186,6 +186,15 @@ body {
   font-size: 1.6rem;
 }
 
+
+  .version_text {
+    text-align: center;
+    padding-block: 2rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  
 /* .carousel * {
   border-radius: 0.6rem;
   -webkit-border-radius: 0.6rem;

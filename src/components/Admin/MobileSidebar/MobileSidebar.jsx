@@ -31,60 +31,81 @@
 
 // export default MobileSidebar
 
-
-import React, { useEffect, useRef, useState } from 'react'
-import style from './MobileSidebar.module.css'
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import Header from '../Header/Header.jsx'
-import { useSelector } from 'react-redux'
-import { darkmodeSelector } from '../../../Redux/Admin/Reducers/AdminHeaderReducer.js'
-import { ClickAwayListener, Modal } from '@mui/material'
-import { AdvertisementIcon, AppointmentIcon, BarberIcon, ChangeSalonIcon, CustomerIcon, DashboardIcon, MdPaymentIcon, QueueHistoryIcon, QueueIcon, ReportIcon, SalonIcon } from '../../../newicons.js';
+import React, { useEffect, useRef, useState } from "react";
+import style from "./MobileSidebar.module.css";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import Header from "../Header/Header.jsx";
+import { useSelector } from "react-redux";
+import { darkmodeSelector } from "../../../Redux/Admin/Reducers/AdminHeaderReducer.js";
+import { ClickAwayListener, Modal } from "@mui/material";
+import {
+  AdvertisementIcon,
+  AppointmentIcon,
+  BarberIcon,
+  ChangeSalonIcon,
+  CustomerIcon,
+  DashboardIcon,
+  MdPaymentIcon,
+  QueueHistoryIcon,
+  QueueIcon,
+  ReportIcon,
+  SalonIcon,
+} from "../../../newicons.js";
 import Switch from "react-switch";
-import { useDispatch } from 'react-redux'
-import { AdminLogoutAction } from '../../../Redux/Admin/Actions/AuthAction.js'
-import { getAdminSalonListAction } from '../../../Redux/Admin/Actions/SalonAction.js'
-import { adminApplySalonAction, adminGetDefaultSalonAction } from '../../../Redux/Admin/Actions/AdminHeaderAction.js'
-import { DARK_MODE_OFF, DARK_MODE_ON } from '../../../Redux/Admin/Constants/constants.js'
-import { adminSalonStatusAction } from '../../../Redux/Admin/Actions/DashboardAction.js'
-import { MobileCrossIcon } from '../../../icons.js'
+import { useDispatch } from "react-redux";
+import { AdminLogoutAction } from "../../../Redux/Admin/Actions/AuthAction.js";
+import { getAdminSalonListAction } from "../../../Redux/Admin/Actions/SalonAction.js";
+import {
+  adminApplySalonAction,
+  adminGetDefaultSalonAction,
+} from "../../../Redux/Admin/Actions/AdminHeaderAction.js";
+import {
+  DARK_MODE_OFF,
+  DARK_MODE_ON,
+} from "../../../Redux/Admin/Constants/constants.js";
+import { adminSalonStatusAction } from "../../../Redux/Admin/Actions/DashboardAction.js";
+import { MobileCrossIcon } from "../../../icons.js";
 
 const MobileSidebar = () => {
+  const adminProfile = useSelector(
+    (state) => state.AdminLoggedInMiddleware.entiredata.user[0]
+  );
+  const adminEmail = useSelector(
+    (state) => state.AdminLoggedInMiddleware.adminEmail
+  );
+  const salonId = useSelector(
+    (state) => state.AdminLoggedInMiddleware.adminSalonId
+  );
 
-  const adminProfile = useSelector(state => state.AdminLoggedInMiddleware.entiredata.user[0])
-  const adminEmail = useSelector(state => state.AdminLoggedInMiddleware.adminEmail)
-  const salonId = useSelector(state => state.AdminLoggedInMiddleware.adminSalonId)
+  const [salonlistdrop, setSalonlistdrop] = useState(false);
 
-  const [salonlistdrop, setSalonlistdrop] = useState(false)
+  const [loading, setLoading] = useState(false);
 
-  const [loading, setLoading] = useState(false)
-
-  const salonlistRef = useRef()
+  const salonlistRef = useRef();
 
   useEffect(() => {
     let salondropHandler = (e) => {
       if (salonlistRef.current && !salonlistRef.current.contains(e.target)) {
-        console.log(salonlistRef.current.contains(e.target))
-        setSalonlistdrop(false)
+        console.log(salonlistRef.current.contains(e.target));
+        setSalonlistdrop(false);
       }
-    }
+    };
 
-    document.addEventListener('mousedown', salondropHandler)
+    document.addEventListener("mousedown", salondropHandler);
 
     return () => {
-      document.removeEventListener('mousedown', salondropHandler)
-    }
-  }, [])
+      document.removeEventListener("mousedown", salondropHandler);
+    };
+  }, []);
 
+  const [mobiledrop, setMobileDrop] = useState(false);
+  const [sidebarToggle, setSidebarToggle] = useState(false);
 
-  const [mobiledrop, setMobileDrop] = useState(false)
-  const [sidebarToggle, setSidebarToggle] = useState(false)
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const dispatch = useDispatch()
-  const location = useLocation()
-  const navigate = useNavigate()
-
-  const MobileIconDropRef = useRef()
+  const MobileIconDropRef = useRef();
 
   useEffect(() => {
     const handleClickMobileIconOutside = (event) => {
@@ -92,20 +113,20 @@ const MobileSidebar = () => {
         MobileIconDropRef.current &&
         !MobileIconDropRef.current.contains(event.target)
       ) {
-        setSidebarToggle(false)
+        setSidebarToggle(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickMobileIconOutside);
+    document.addEventListener("mousedown", handleClickMobileIconOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickMobileIconOutside);
+      document.removeEventListener("mousedown", handleClickMobileIconOutside);
     };
   }, []);
 
-  const [adminEditDrop, setAdminEditDrop] = useState(false)
+  const [adminEditDrop, setAdminEditDrop] = useState(false);
 
-  const adminEditIconRef = useRef()
-  const adminEditDropRef = useRef()
+  const adminEditIconRef = useRef();
+  const adminEditDropRef = useRef();
 
   useEffect(() => {
     const handleClickProfileOutside = (event) => {
@@ -119,16 +140,15 @@ const MobileSidebar = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickProfileOutside);
+    document.addEventListener("mousedown", handleClickProfileOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickProfileOutside);
+      document.removeEventListener("mousedown", handleClickProfileOutside);
     };
   }, []);
 
   const logoutHandler = async () => {
-    dispatch(AdminLogoutAction(navigate))
-  }
-
+    dispatch(AdminLogoutAction(navigate));
+  };
 
   const SalonListControllerRef = useRef(new AbortController());
 
@@ -145,48 +165,46 @@ const MobileSidebar = () => {
     };
   }, [adminEmail, dispatch]);
 
-  const getAdminSalonList = useSelector(state => state.getAdminSalonList)
+  const getAdminSalonList = useSelector((state) => state.getAdminSalonList);
 
   const {
     loading: getAdminSalonListLoading,
     resolve: getAdminSalonListResolve,
-    salons: SalonList
-  } = getAdminSalonList
-
+    salons: SalonList,
+  } = getAdminSalonList;
 
   const selectedActiveSalon = (salon) => {
     dispatch({
       type: "ADMIN_SET_SALON",
       payload: {
         currentActiveSalon: salon.salonName,
-        chooseSalonId: salon.salonId
+        chooseSalonId: salon.salonId,
+      },
+    });
+    setSalonlistdrop(false);
+  };
 
-      }
-    })
-    setSalonlistdrop(false)
-  }
-
-  const adminSetSalon = useSelector(state => state.adminSetSalon)
-
+  const adminSetSalon = useSelector((state) => state.adminSetSalon);
 
   const applySelectedSalonHandler = () => {
-
     const applySalonData = {
       salonId: adminSetSalon?.chooseSalonId,
-      adminEmail
-    }
+      adminEmail,
+    };
 
-    dispatch(adminApplySalonAction(applySalonData, navigate))
-  }
+    dispatch(adminApplySalonAction(applySalonData, navigate));
+  };
 
-  const getDefaultSalonControllerRef = useRef(new AbortController())
+  const getDefaultSalonControllerRef = useRef(new AbortController());
 
   useEffect(() => {
     if (adminProfile) {
       const controller = new AbortController();
       getDefaultSalonControllerRef.current = controller;
 
-      dispatch(adminGetDefaultSalonAction(adminEmail, controller.signal, adminSetSalon));
+      dispatch(
+        adminGetDefaultSalonAction(adminEmail, controller.signal, adminSetSalon)
+      );
 
       return () => {
         if (getDefaultSalonControllerRef.current) {
@@ -194,7 +212,6 @@ const MobileSidebar = () => {
         }
       };
     }
-
   }, [adminProfile, dispatch]);
 
   // const [src, setSrc] = useState("");
@@ -207,48 +224,45 @@ const MobileSidebar = () => {
   //     }
   // }, [adminProfile])
 
-  const adminApplySalon = useSelector(state => state.adminApplySalon)
+  const adminApplySalon = useSelector((state) => state.adminApplySalon);
 
-  const {
-    loading: adminApplySalonLoading,
-  } = adminApplySalon
+  const { loading: adminApplySalonLoading } = adminApplySalon;
 
-
-  const darkMode = useSelector(darkmodeSelector)
+  const darkMode = useSelector(darkmodeSelector);
 
   const darkHandler = () => {
     dispatch({ type: DARK_MODE_ON });
     localStorage.setItem("dark", "On");
-  }
+  };
 
   const lightHandler = () => {
     dispatch({ type: DARK_MODE_OFF });
     localStorage.setItem("dark", "Off");
-  }
+  };
 
   const toggleHandler = () => {
     if (darkMode == "Off") {
-      darkHandler()
+      darkHandler();
     } else {
-      lightHandler()
+      lightHandler();
     }
-  }
+  };
 
-  const adminGetDefaultSalon = useSelector(state => state.adminGetDefaultSalon)
+  const adminGetDefaultSalon = useSelector(
+    (state) => state.adminGetDefaultSalon
+  );
 
   const {
     loading: adminGetDefaultSalonLoading,
     resolve: adminGetDefaultSalonResolve,
-    response: adminGetDefaultSalonResponse
-  } = adminGetDefaultSalon
+    response: adminGetDefaultSalonResponse,
+  } = adminGetDefaultSalon;
 
   useEffect(() => {
     if (adminGetDefaultSalonResponse) {
-      setTogglecheck(adminGetDefaultSalonResponse?.isOnline)
+      setTogglecheck(adminGetDefaultSalonResponse?.isOnline);
     }
-
-  }, [adminGetDefaultSalonResponse])
-
+  }, [adminGetDefaultSalonResponse]);
 
   const [togglecheck, setTogglecheck] = useState(false);
 
@@ -261,15 +275,20 @@ const MobileSidebar = () => {
       isOnline: newCheckValue,
     };
 
-    dispatch(adminSalonStatusAction(salonStatusOnlineData, setTogglecheck, newCheckValue));
-  }
+    dispatch(
+      adminSalonStatusAction(
+        salonStatusOnlineData,
+        setTogglecheck,
+        newCheckValue
+      )
+    );
+  };
 
-
-  const darkmodeOn = darkMode === "On"
+  const darkmodeOn = darkMode === "On";
 
   // =========================================
 
-  const [mobileSidebar, setMobileSidebar] = useState(false)
+  const [mobileSidebar, setMobileSidebar] = useState(false);
 
   const sideMenuData = [
     {
@@ -280,37 +299,38 @@ const MobileSidebar = () => {
           name: "Dashboard",
           icon: <DashboardIcon />,
           url: "/admin-dashboard",
-          show: true
+          show: true,
         },
         {
           id: 2,
           name: "Salons",
           icon: <SalonIcon />,
           url: "/admin-salon",
-          show: true
+          show: true,
         },
         {
           id: 3,
           name: "Barbers",
           icon: <BarberIcon />,
           url: "/admin-barber",
-          show: true
+          show: true,
         },
         {
           id: 4,
           name: "Customers",
           icon: <CustomerIcon />,
           url: "/admin-customer",
-          show: true
-        }, ,
+          show: true,
+        },
+        ,
         {
           id: 5,
           name: "Advertisements",
           icon: <AdvertisementIcon />,
           url: "/admin-advertise",
-          show: true
+          show: true,
         },
-      ]
+      ],
     },
     {
       heading: "Apps",
@@ -320,37 +340,37 @@ const MobileSidebar = () => {
           name: "Queue List",
           icon: <QueueIcon />,
           url: "/admin-queue",
-          show: adminProfile?.isQueueing
+          show: adminProfile?.isQueueing,
         },
         {
           id: 2,
           name: "Queue History",
           icon: <QueueHistoryIcon />,
           url: "/admin-quehistory",
-          show: adminProfile?.isQueueing
+          show: adminProfile?.isQueueing,
         },
         {
           id: 3,
           name: "Appointments",
           icon: <AppointmentIcon />,
           url: "/admin-appointments",
-          show: adminProfile?.isAppointments
+          show: adminProfile?.isAppointments,
         },
         {
           id: 4,
           name: "Appointments History",
           icon: <QueueHistoryIcon />,
           url: "/admin-appointmenthistory",
-          show: adminProfile?.isAppointments
+          show: adminProfile?.isAppointments,
         },
         {
           id: 5,
           name: "Reports",
           icon: <ReportIcon />,
           url: "/admin-reports",
-          show: true
+          show: true,
         },
-      ]
+      ],
     },
     {
       heading: "Other Options",
@@ -360,16 +380,16 @@ const MobileSidebar = () => {
           name: "Subscriptions",
           icon: <QueueIcon />,
           url: "/admin-subscription",
-          show: true
+          show: true,
         },
         {
           id: 2,
           name: "Payment history",
           icon: <MdPaymentIcon />,
           url: "/admin-paymentstatus",
-          show: true
+          show: true,
         },
-      ]
+      ],
     },
     {
       heading: "Settings",
@@ -378,21 +398,27 @@ const MobileSidebar = () => {
           id: 1,
           name: "Change Salon", // Click korle select modal open hbe
           icon: <ChangeSalonIcon />,
-          show: true
+          show: true,
         },
-      ]
+      ],
     },
-  ]
+  ];
 
   useEffect(() => {
     if (adminGetDefaultSalonResponse) {
-      localStorage.setItem("CurrentSalonType", adminGetDefaultSalonResponse.salonType)
+      localStorage.setItem(
+        "CurrentSalonType",
+        adminGetDefaultSalonResponse.salonType
+      );
     }
-  }, [adminGetDefaultSalonResponse])
+  }, [adminGetDefaultSalonResponse]);
 
   return (
     <section className={`${style.mobile_container}`}>
-      <Header mobileSidebar={mobileSidebar} setMobileSidebar={setMobileSidebar} />
+      <Header
+        mobileSidebar={mobileSidebar}
+        setMobileSidebar={setMobileSidebar}
+      />
       <Outlet />
 
       <aside
@@ -412,11 +438,15 @@ const MobileSidebar = () => {
                   }}
                 >
                   <div>
-                    <img src={adminGetDefaultSalonResponse?.salonLogo?.[0]?.url} alt="" />
+                    <img
+                      src={adminGetDefaultSalonResponse?.salonLogo?.[0]?.url}
+                      alt=""
+                    />
                   </div>
                 </Link>
-                {mobileSidebar ? <p>{adminGetDefaultSalonResponse?.salonName}</p> : null}
-
+                {mobileSidebar ? (
+                  <p>{adminGetDefaultSalonResponse?.salonName}</p>
+                ) : null}
               </header>
 
               <nav>
@@ -425,15 +455,20 @@ const MobileSidebar = () => {
                     <li key={section.heading}>
                       {mobileSidebar ? <p>{section.heading}</p> : null}
                       <ul>
-                        {section.menuItems.map((item) => (
+                        {section.menuItems.map((item) =>
                           item.show ? (
                             <li
                               key={item.id}
-                              className={`${location.pathname.includes(item?.url)
-                                ? style.activeMenu
-                                : ""
-                                }`}
-                              onClick={section.heading === "Settings" ? () => setMobileDrop((prev) => !prev) : undefined}
+                              className={`${
+                                location.pathname.includes(item?.url)
+                                  ? style.activeMenu
+                                  : ""
+                              }`}
+                              onClick={
+                                section.heading === "Settings"
+                                  ? () => setMobileDrop((prev) => !prev)
+                                  : undefined
+                              }
                             >
                               <Link
                                 to={item?.url}
@@ -443,7 +478,9 @@ const MobileSidebar = () => {
                               >
                                 <span
                                   style={{
-                                    marginInline: mobileSidebar ? "0rem" : "auto",
+                                    marginInline: mobileSidebar
+                                      ? "0rem"
+                                      : "auto",
                                   }}
                                 >
                                   {item.icon}
@@ -452,14 +489,14 @@ const MobileSidebar = () => {
                               </Link>
                             </li>
                           ) : null
-                        ))}
+                        )}
                       </ul>
                     </li>
                   ))}
                 </ul>
 
-                {
-                  adminProfile?.salonId == 0 ? (null) : (<div className={`${style.online_container}`}>
+                {adminProfile?.salonId == 0 ? null : (
+                  <div className={`${style.online_container}`}>
                     <p>{togglecheck ? "Online" : "Offline"}</p>
                     <Switch
                       width={45}
@@ -499,16 +536,15 @@ const MobileSidebar = () => {
                       onChange={salonStatusHandler}
                       checked={togglecheck}
                     />
-                  </div>)
-                }
+                  </div>
+                )}
 
-                <p className={style.version_text}> v 1.0.5</p>
+                {/* <p className={style.version_text}> v 1.0.5</p> */}
               </nav>
             </div>
           </ClickAwayListener>
         ) : null}
       </aside>
-
 
       <Modal
         open={mobiledrop}
@@ -517,47 +553,81 @@ const MobileSidebar = () => {
         aria-describedby="parent-modal-description"
       >
         <section className={style.chooseSalon_modal}>
-          <div className={`${style.chooseSalon_model_content} ${darkmodeOn && style.dark}`}>
-            <button onClick={() => setMobileDrop(false)}><MobileCrossIcon /></button>
+          <div
+            className={`${style.chooseSalon_model_content} ${
+              darkmodeOn && style.dark
+            }`}
+          >
+            <button onClick={() => setMobileDrop(false)}>
+              <MobileCrossIcon />
+            </button>
             <p>Choose Salon</p>
-            <input type="text" placeholder='Select Salon' value={adminSetSalon?.currentActiveSalon} readOnly />
+            <input
+              type="text"
+              placeholder="Select Salon"
+              value={adminSetSalon?.currentActiveSalon}
+              readOnly
+            />
             <div
-              className={`${style.mobile_dashboard_salon_list_dropdown} ${darkmodeOn && style.dark}`}
+              className={`${style.mobile_dashboard_salon_list_dropdown} ${
+                darkmodeOn && style.dark
+              }`}
               style={{
                 opacity: 1,
                 zIndex: 2,
                 transition: "300ms ease",
-                height: SalonList?.length > 0 && SalonList?.length <= 4 ? "auto" : "20rem"
+                height:
+                  SalonList?.length > 0 && SalonList?.length <= 4
+                    ? "auto"
+                    : "20rem",
               }}
             >
-              {
-                getAdminSalonListLoading && !getAdminSalonListResolve ?
-                  <p>No Salon Present</p> :
-                  !getAdminSalonListLoading && getAdminSalonListResolve && SalonList?.length > 0 ?
-                    SalonList.map((s) => (
-                      <p
-                        key={s._id}
-                        onClick={() => selectedActiveSalon(s)}
-                        className={`${s.salonId === adminProfile?.salonId && style.salonName_active} ${darkmodeOn && style.dark}`}
-                      >{s.salonName}</p>
-                    )) :
-                    !getAdminSalonListLoading && getAdminSalonListResolve && SalonList?.length == 0 ?
-                      <p>No Salon Present</p> :
-                      !getAdminSalonListLoading && !getAdminSalonListResolve &&
-                      <p>No Salon Present</p>
-              }
+              {getAdminSalonListLoading && !getAdminSalonListResolve ? (
+                <p>No Salon Present</p>
+              ) : !getAdminSalonListLoading &&
+                getAdminSalonListResolve &&
+                SalonList?.length > 0 ? (
+                SalonList.map((s) => (
+                  <p
+                    key={s._id}
+                    onClick={() => selectedActiveSalon(s)}
+                    className={`${
+                      s.salonId === adminProfile?.salonId &&
+                      style.salonName_active
+                    } ${darkmodeOn && style.dark}`}
+                  >
+                    {s.salonName}
+                  </p>
+                ))
+              ) : !getAdminSalonListLoading &&
+                getAdminSalonListResolve &&
+                SalonList?.length == 0 ? (
+                <p>No Salon Present</p>
+              ) : (
+                !getAdminSalonListLoading &&
+                !getAdminSalonListResolve && <p>No Salon Present</p>
+              )}
             </div>
-            {
-              adminProfile?.salonId !== 0 && (!getAdminSalonListLoading && getAdminSalonListResolve && <button onClick={applySelectedSalonHandler} disabled={adminProfile?.salonId == adminSetSalon?.chooseSalonId || adminApplySalonLoading ? true : false}>Apply</button>)
-            }
-
+            {adminProfile?.salonId !== 0 &&
+              !getAdminSalonListLoading &&
+              getAdminSalonListResolve && (
+                <button
+                  onClick={applySelectedSalonHandler}
+                  disabled={
+                    adminProfile?.salonId == adminSetSalon?.chooseSalonId ||
+                    adminApplySalonLoading
+                      ? true
+                      : false
+                  }
+                >
+                  Apply
+                </button>
+              )}
           </div>
         </section>
       </Modal>
-
-
     </section>
-  )
-}
+  );
+};
 
-export default MobileSidebar
+export default MobileSidebar;
