@@ -393,7 +393,7 @@ const AppointmentCalender = () => {
 
     const generateDatesForMonth = (monthMoment, maxDays) => {
         const today = moment().startOf('day');
-        const tomorrow = today.clone().add(1, 'day');
+        const tomorrow = today.clone().add('day');
         const maxAllowedDate = today.clone().add(maxDays, 'days').startOf('day');
 
         let tempDates = [];
