@@ -637,7 +637,7 @@ const EditProfile = () => {
     return (
         <section className={`${style.section}`}>
             <div>
-                <h2>Profile Test</h2>
+                <h2>Profile</h2>
                 {/* <button onClick={() => navigate("/admin-salon/createsalon")}>Create</button> */}
 
                 {
