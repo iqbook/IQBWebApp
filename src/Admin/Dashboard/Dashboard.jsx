@@ -448,7 +448,10 @@ import {
   getDashboardAppointmentListAction,
 } from "../../Redux/Admin/Actions/DashboardAction";
 import { darkmodeSelector } from "../../Redux/Admin/Reducers/AdminHeaderReducer";
-import { getAdminBarberListAction, getBarberDashboardAction } from "../../Redux/Admin/Actions/BarberAction";
+import {
+  getAdminBarberListAction,
+  getBarberDashboardAction,
+} from "../../Redux/Admin/Actions/BarberAction";
 import { AppointmentIcon } from "../../newicons";
 import {
   Bar,
@@ -477,7 +480,7 @@ const firebaseConfig = {
   storageBucket: "iqbook-web.firebasestorage.app",
   messagingSenderId: "889322044641",
   appId: "1:889322044641:web:d902ace026f28a67064ba0",
-  measurementId: "G-2NZVFQJTYS"
+  measurementId: "G-2NZVFQJTYS",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -488,14 +491,15 @@ const messaging = getMessaging(app);
 export const requestForToken = async () => {
   try {
     // Check if the browser supports notifications
-    if ('Notification' in window) {
+    if ("Notification" in window) {
       const permission = await Notification.requestPermission();
 
-      if (permission === 'granted') {
-        console.log('Notification permission granted.');
+      if (permission === "granted") {
+        console.log("Notification permission granted.");
 
         const fcmToken = await getToken(messaging, {
-          vapidKey: "BMb-Y9gWXHSvgsOqipUxEpzriS32OyvkeP3I4N8aVkF0A8XPuI-o7LKA8SvM9Bx1GQGpOIH6C8C5PzBJXxPp1zc" // <-- REQUIRED: Your VAPID Key from Firebase
+          vapidKey:
+            "BMb-Y9gWXHSvgsOqipUxEpzriS32OyvkeP3I4N8aVkF0A8XPuI-o7LKA8SvM9Bx1GQGpOIH6C8C5PzBJXxPp1zc", // <-- REQUIRED: Your VAPID Key from Firebase
         });
 
         if (fcmToken) {
@@ -503,16 +507,18 @@ export const requestForToken = async () => {
           // Example: await yourApiCall.sendTokenToBackend(fcmToken);
           return fcmToken;
         } else {
-          console.warn('No registration token available. Check if your Firebase setup or VAPID key is correct.');
+          console.warn(
+            "No registration token available. Check if your Firebase setup or VAPID key is correct."
+          );
         }
       } else {
-        console.warn('Notification permission denied by the user.');
+        console.warn("Notification permission denied by the user.");
       }
     } else {
-      console.error('Notifications are not supported by this browser.');
+      console.error("Notifications are not supported by this browser.");
     }
   } catch (err) {
-    console.error('An error occurred while retrieving token:', err);
+    console.error("An error occurred while retrieving token:", err);
   }
 };
 
@@ -520,13 +526,12 @@ export const onMessageListener = () =>
   new Promise((resolve) => {
     onMessage(messaging, (payload) => {
       // You can implement custom UI logic here (e.g., show a toast/in-app notification)
-      console.log('Message received while foregrounded:', payload);
+      console.log("Message received while foregrounded:", payload);
       resolve(payload);
     });
   });
 
 const Dashboard = () => {
-
   const salonId = useSelector(
     (state) => state.AdminLoggedInMiddleware.adminSalonId
   );
@@ -537,31 +542,27 @@ const Dashboard = () => {
     (state) => state.AdminLoggedInMiddleware.adminName
   );
 
-
   useEffect(() => {
-
     if (email) {
       const getToken = async () => {
         const token = await requestForToken();
-        console.log(token)
+        console.log(token);
         if (token) {
-
-          const { data } = await axios.post("https://iqb-final.onrender.com/api/webNotifications/save-device-token",
+          const { data } = await axios.post(
+            "https://iqb-final.onrender.com/api/webNotifications/save-device-token",
             {
               salonId: salonId,
               name: adminName,
               email: email,
               deviceToken: token,
-              type: "admin"
-            })
+              type: "admin",
+            }
+          );
         }
       };
 
       getToken();
     }
-
-
-
 
     // // 3b. Set up the foreground message listener
     // const unsubscribe = onMessageListener().then(payload => {
@@ -569,7 +570,6 @@ const Dashboard = () => {
     //   // e.g., display a notification, update state
     //   console.log("Foreground message processed:", payload);
     // }).catch(err => console.error('Foreground message listener error:', err));
-
   }, []);
 
   const adminGetDefaultSalon = useSelector(
@@ -582,17 +582,14 @@ const Dashboard = () => {
     response: adminGetDefaultSalonResponse,
   } = adminGetDefaultSalon;
 
-
   useEffect(() => {
     if (adminGetDefaultSalonResponse) {
       setSalonInfo(adminGetDefaultSalonResponse?.salonInfo);
     }
   }, [adminGetDefaultSalonResponse]);
 
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
 
   // console.log("salonId ", salonId)
   // console.log("email ", email)
@@ -710,7 +707,6 @@ const Dashboard = () => {
     };
   }, [salonId, dispatch]);
 
-
   const getAdminBarberList = useSelector((state) => state.getBarberDashboard);
 
   const {
@@ -760,9 +756,8 @@ const Dashboard = () => {
         salonInfo: salonInfoText,
       });
 
-      dispatch(adminGetDefaultSalonAction(email))
+      dispatch(adminGetDefaultSalonAction(email));
       // toast.success(data.message);
-
     } catch (error) {
       console.log("Error ", error);
     }
@@ -784,8 +779,8 @@ const Dashboard = () => {
 
     timerRef.current = setTimeout(() => {
       // console.log("Salon Info triggered:", salonInfoRef.current);
-      updateSalonInfo(salonInfoRef.current)
-    }, 1000);
+      updateSalonInfo(salonInfoRef.current);
+    }, 2000);
 
     // cleanup on unmount or before next run
     return () => {
@@ -793,7 +788,7 @@ const Dashboard = () => {
     };
   }, [salonInfo]);
 
-  const currentSalonType = localStorage.getItem("CurrentSalonType")
+  const currentSalonType = localStorage.getItem("CurrentSalonType");
 
   return salonId === 0 ? (
     <>
@@ -810,32 +805,77 @@ const Dashboard = () => {
   ) : (
     <>
       <section className={`${style.dashboard_container}`}>
-        {/* <div>
-          <h2>Welcome, {adminName ? adminName : "User"}</h2>
-        </div> */}
-
         <div className={style.salonInfo_container}>
           <h3>Salon Info</h3>
-          <textarea
-            value={salonInfo}
-            placeholder="Enter your salon info"
-            onChange={(e) => {
-              const lines = e.target.value.split("\n");
-              // if (lines.length <= 5) {
-              //   setSalonInfo(e.target.value);
-              // }
-              setSalonInfo(e.target.value);
-            }}
-          />
+          {adminGetDefaultSalonLoading ? (
+            <div
+              style={{
+                paddingBlock: "1rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+              }}
+            >
+              <Skeleton
+                count={1}
+                width={"100%"}
+                height={"2rem"}
+                baseColor={"var(--loader-bg-color)"}
+                highlightColor={"var(--loader-highlight-color)"}
+              />
 
+              <Skeleton
+                count={1}
+                width={"100%"}
+                height={"2rem"}
+                baseColor={"var(--loader-bg-color)"}
+                highlightColor={"var(--loader-highlight-color)"}
+              />
+              <Skeleton
+                count={1}
+                width={"100%"}
+                height={"2rem"}
+                baseColor={"var(--loader-bg-color)"}
+                highlightColor={"var(--loader-highlight-color)"}
+              />
+            </div>
+          ) : (
+            <textarea
+              value={salonInfo}
+              disabled={adminGetDefaultSalonLoading}
+              placeholder="Enter your salon info"
+              onChange={(e) => {
+                const lines = e.target.value.split("\n");
+                // if (lines.length <= 5) {
+                //   setSalonInfo(e.target.value);
+                // }
+                setSalonInfo(e.target.value);
+              }}
+            />
+          )}
         </div>
 
         <div>
           <div>
             <div>
               <div>
-                <p>{currentSalonType === "Barber Shop" ? "Barbers" : currentSalonType === "Hair Dresser" ? "Stylists" : "barbers"} On Duty</p>
-                <p>Total {BarberList?.length} {currentSalonType === "Barber Shop" ? "barbers" : currentSalonType === "Hair Dresser" ? "stylists" : "barbers"} are available</p>
+                <p>
+                  {currentSalonType === "Barber Shop"
+                    ? "Barbers"
+                    : currentSalonType === "Hair Dresser"
+                    ? "Stylists"
+                    : "barbers"}{" "}
+                  On Duty
+                </p>
+                <p>
+                  Total {BarberList?.length}{" "}
+                  {currentSalonType === "Barber Shop"
+                    ? "barbers"
+                    : currentSalonType === "Hair Dresser"
+                    ? "stylists"
+                    : "barbers"}{" "}
+                  are available
+                </p>
               </div>
 
               {getAdminBarberListLoading ? (
@@ -867,7 +907,15 @@ const Dashboard = () => {
                 </div>
               ) : (
                 <div className={`${style.barber_error}`}>
-                  <p>No {currentSalonType === "Barber Shop" ? "barbers" : currentSalonType === "Hair Dresser" ? "stylists" : "barbers"} available</p>
+                  <p>
+                    No{" "}
+                    {currentSalonType === "Barber Shop"
+                      ? "barbers"
+                      : currentSalonType === "Hair Dresser"
+                      ? "stylists"
+                      : "barbers"}{" "}
+                    available
+                  </p>
                 </div>
               )}
             </div>
@@ -913,15 +961,15 @@ const Dashboard = () => {
                         reportData?.queue?.queueTrend === "Rise"
                           ? "#00A36C"
                           : reportData?.queue?.queueTrend === "Fall"
-                            ? "rgb(244, 67, 54)"
-                            : "",
+                          ? "rgb(244, 67, 54)"
+                          : "",
                     }}
                   >
                     {reportData?.queue?.queueTrend === "Rise"
                       ? "+"
                       : reportData?.queue?.queueTrend === "Fall"
-                        ? "-"
-                        : ""}
+                      ? "-"
+                      : ""}
                     {reportData?.queue?.percentageChangelast30Days}%
                   </span>{" "}
                   from last 30 days
@@ -988,15 +1036,15 @@ const Dashboard = () => {
                               ? "#f44336"
                               : reportData?.appointment?.appointmentTrend ===
                                 "Rise"
-                                ? "#00A36C"
-                                : "",
+                              ? "#00A36C"
+                              : "",
                         }}
                       >
                         {reportData?.appointment?.appointmentTrend === "Fall"
                           ? "-"
                           : reportData?.appointment?.appointmentTrend === "Rise"
-                            ? "+"
-                            : ""}
+                          ? "+"
+                          : ""}
                         {reportData?.appointment?.percentageChangeLastWeek}%
                       </span>{" "}
                       from last 7 days
