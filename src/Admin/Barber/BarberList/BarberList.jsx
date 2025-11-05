@@ -932,7 +932,8 @@ const BarberList = () => {
                           alignItems: "center",
                           justifyContent: "center",
                           backgroundColor: "transparent",
-                          border: "none"
+                          border: "none",
+                          color: "var(--text-primary)"
                         }}
                         onClick={(e) => {
                           e.stopPropagation()
@@ -945,7 +946,8 @@ const BarberList = () => {
                           alignItems: "center",
                           justifyContent: "center",
                           backgroundColor: "transparent",
-                          border: "none"
+                          border: "none",
+                          color: "var(--text-primary)"
                         }}
                         onClick={(e) => {
                           e.stopPropagation();

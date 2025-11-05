@@ -584,7 +584,7 @@
         text-align: center;
         line-height: 2.5rem;
         border-radius: 50%;
-        color: white;
+        color: var(--btn-text-color);
         font-weight: bold;
         margin-left: 1rem;
         font-size: 1.2rem;

@@ -21,8 +21,11 @@ import { getAllSalonServicesBarberAction } from '../../Redux/Barber/Actions/Barb
 import { getCurrentDate } from '../../utils/Date';
 import Calendar from 'react-calendar';
 import { ddmmformatDate } from '../../../utils/ddmmformatDate'
+import { useBarberGlobal } from '../../context/Barber/GlobalContext';
 
 const EditProfile = () => {
+
+    const { editServiceModal, setEditServiceModal } = useBarberGlobal();
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -492,8 +495,6 @@ const EditProfile = () => {
     const [openPasswordModal, setOpenPasswordModal] = useState(false)
     const [openMobileModal, setOpenMobileModal] = useState(false)
     const [openEmailModal, setOpenEmailModal] = useState(false)
-
-    const [editServiceModal, setEditServiceModal] = useState(false)
 
     useEffect(() => {
         if (barberProfile && salonId !== 0) {

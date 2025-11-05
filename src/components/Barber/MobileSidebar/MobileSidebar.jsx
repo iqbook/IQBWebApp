@@ -1,61 +1,34 @@
-// import React from 'react'
-// import style from './MobileSidebar.module.css'
-// import { Outlet, useLocation } from 'react-router-dom'
-// import { useSelector } from 'react-redux'
-// import { darkmodeSelector } from '../../../Redux/Admin/Reducers/AdminHeaderReducer.js'
-// import DashboardHeader from '../DashboardHeader/DashboardHeader.jsx'
-
-// const MobileSidebar = () => {
-
-//   const location = useLocation()
-
-//   const darkMode = useSelector(darkmodeSelector)
-
-//   const darkmodeOn = darkMode === "On"
-
-//   return (
-//     <main className={style.container}>
-//       <div className={`${style.mobile_content} ${darkmodeOn && style.dark}`}
-//         style={{
-//           width: "100%"
-//         }}
-//       >
-//         <div>
-//           {/* {location?.pathname === "/admin-dashboard" ? <DashboardHeader /> : <Header />} */}
-//           {/* <div>BarberHeader or header</div> */}
-//           <DashboardHeader />
-//           <div><Outlet /></div>
-//         </div>
-//       </div>
-//     </main>
-//   )
-// }
-
-// export default MobileSidebar
-
-
-import React, { useState } from 'react'
-import style from './MobileSidebar.module.css'
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import Header from '../DashboardHeader/DashboardHeader.jsx'
-import { useSelector } from 'react-redux'
-import { darkmodeSelector } from '../../../Redux/Admin/Reducers/AdminHeaderReducer.js'
-import { ClickAwayListener, Modal } from '@mui/material'
-import { AppointmentIcon, DashboardIcon, QueueHistoryIcon, QueueIcon } from '../../../newicons.js';
-import { Admincustomericon } from '../../../icons.js'
+import React, { useEffect, useState } from "react";
+import style from "./MobileSidebar.module.css";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import Header from "../DashboardHeader/DashboardHeader.jsx";
+import { useSelector } from "react-redux";
+import { darkmodeSelector } from "../../../Redux/Admin/Reducers/AdminHeaderReducer.js";
+import { ClickAwayListener, Modal } from "@mui/material";
+import {
+  AppointmentIcon,
+  DashboardIcon,
+  QueueHistoryIcon,
+  QueueIcon,
+} from "../../../newicons.js";
+import { Admincustomericon } from "../../../icons.js";
 import Switch from "react-switch";
+import { useBarberGlobal } from "../../../context/Barber/GlobalContext.jsx";
 
 const MobileSidebar = () => {
+  const { editServiceModal, setEditServiceModal } = useBarberGlobal();
 
-  const barberProfile = useSelector(state => state.BarberLoggedInMiddleware?.entiredata?.user[0])
+  const barberProfile = useSelector(
+    (state) => state.BarberLoggedInMiddleware?.entiredata?.user[0]
+  );
 
-  const location = useLocation()
+  const location = useLocation();
 
-  const darkMode = useSelector(darkmodeSelector)
+  const darkMode = useSelector(darkmodeSelector);
 
-  const darkmodeOn = darkMode === "On"
+  const darkmodeOn = darkMode === "On";
 
-  const [mobileSidebar, setMobileSidebar] = useState(false)
+  const [mobileSidebar, setMobileSidebar] = useState(false);
 
   const sideMenuData = [
     {
@@ -67,9 +40,9 @@ const MobileSidebar = () => {
           icon: <DashboardIcon />,
           url: "/barber-dashboard",
           subdomain: "admin",
-          exacturl: true
+          exacturl: true,
         },
-      ]
+      ],
     },
     {
       heading: "Apps",
@@ -78,43 +51,46 @@ const MobileSidebar = () => {
           id: 2,
           name: "Queue List",
           icon: <QueueIcon />,
-          url: "/barber-queue"
+          url: "/barber-queue",
         },
         {
           id: 3,
           name: "Queue History",
           icon: <QueueHistoryIcon />,
-          url: "/barber-quehistory"
+          url: "/barber-quehistory",
         },
         {
           id: 4,
           name: "Barber Off Days",
           icon: <AppointmentIcon />,
-          url: "/barber-appointment"
+          url: "/barber-appointment",
         },
         {
           id: 5,
           name: "Appointment List",
           icon: <Admincustomericon />,
-          url: "/barber-appointlist"
+          url: "/barber-appointlist",
         },
         {
           id: 6,
           name: "Appointment History",
           icon: <QueueHistoryIcon />,
-          url: "/barber-apphistory"
+          url: "/barber-apphistory",
         },
-      ]
+      ],
     },
-  ]
+  ];
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [online, setOnline] = useState(false)
+  const [online, setOnline] = useState(false);
 
   return (
     <section className={`${style.mobile_container}`}>
-      <Header mobileSidebar={mobileSidebar} setMobileSidebar={setMobileSidebar} />
+      <Header
+        mobileSidebar={mobileSidebar}
+        setMobileSidebar={setMobileSidebar}
+      />
       <Outlet />
 
       <aside
@@ -134,10 +110,7 @@ const MobileSidebar = () => {
                   }}
                 >
                   <div>
-                    <img
-                      src={barberProfile?.salonlogo?.[0]?.url}
-                      alt=""
-                    />
+                    <img src={barberProfile?.salonlogo?.[0]?.url} alt="" />
                   </div>
                 </Link>
                 {mobileSidebar ? <p>{barberProfile?.salonName}</p> : null}
@@ -152,10 +125,11 @@ const MobileSidebar = () => {
                         {section.menuItems.map((item) => (
                           <li
                             key={item.id}
-                            className={`${location.pathname.includes(item?.url)
-                              ? style.activeMenu
-                              : ""
-                              }`}
+                            className={`${
+                              location.pathname.includes(item?.url)
+                                ? style.activeMenu
+                                : ""
+                            }`}
                           >
                             <Link
                               to={item?.url}
@@ -179,6 +153,34 @@ const MobileSidebar = () => {
                   ))}
                 </ul>
 
+                <div
+                  style={{
+                    paddingInline: "1rem",
+                    marginBlock: "2rem",
+                  }}
+                >
+                  <button
+                    style={{
+                      width: "100%",
+                      backgroundColor: "var(--bg-secondary)",
+                      borderRadius: "0.5rem",
+                      transition: "0.3s ease-in",
+                      color: "var(--btn-text-color)",
+                      height: "3rem",
+                      fontSize: "1.4rem",
+                      border: "none",
+                      outline: "none"
+                    }}
+                    onClick={() => {
+                      navigate("/barber-dashboard/editprofile");
+                      setMobileSidebar(false);
+                      setEditServiceModal(true);
+                    }}
+                  >
+                    Edit Services
+                  </button>
+                </div>
+
                 <div className={`${style.online_container}`}>
                   <p>{barberProfile?.isOnline ? "Online" : "Offline"}</p>
                   <Switch
@@ -189,7 +191,7 @@ const MobileSidebar = () => {
                     onColor="#00A36C"
                     readOnly
                     checked={barberProfile?.isOnline}
-                    onChange={() => { }}
+                    onChange={() => {}}
                   />
                 </div>
 
@@ -203,18 +205,16 @@ const MobileSidebar = () => {
                     onColor="#00A36C"
                     readOnly
                     checked={barberProfile?.isClockedIn}
-                    onChange={() => { }}
+                    onChange={() => {}}
                   />
                 </div>
               </nav>
             </div>
           </ClickAwayListener>
         ) : null}
-
       </aside>
-
     </section>
-  )
-}
+  );
+};
 
-export default MobileSidebar
+export default MobileSidebar;
