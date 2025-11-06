@@ -243,14 +243,11 @@ const App = () => {
 
   useEffect(() => {
     const body = document.querySelector("body");
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 
     if (currentTheme === "Dark") {
       body.setAttribute("data-theme", "dark");
-      metaThemeColor?.setAttribute("content", "#09090B");
     } else {
       body.setAttribute("data-theme", "light");
-      metaThemeColor?.setAttribute("content", "#fff"); 
     }
   }, [currentTheme]);
 
