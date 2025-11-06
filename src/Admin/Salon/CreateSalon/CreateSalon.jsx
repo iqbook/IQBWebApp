@@ -368,7 +368,6 @@ const CreateSalon = () => {
 
   const [salonLogo, setSalonLogo] = useState("")
 
-
   const fileInputRef = useRef(null);
 
   const handleSalonLogoButtonClick = () => {
@@ -376,8 +375,6 @@ const CreateSalon = () => {
   };
 
   const [uploadSalonLogo, setUploadSalonLogo] = useState("")
-
-
 
   const handleSalonFileInputChange = async (e) => {
     const uploadImage = e.target.files[0];
