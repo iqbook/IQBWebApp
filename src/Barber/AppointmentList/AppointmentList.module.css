@@ -317,6 +317,7 @@
   .appointmentList_loading {
     padding: 1.5rem;
     overflow: auto;
+    max-height: calc(100% - 20rem);
   }
 }
 
