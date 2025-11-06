@@ -418,7 +418,7 @@ const AppointmentCalender = () => {
       day.add(1, "day")
     ) {
       tempDates.push({
-        dayName: day.format("ddd").slice(0, 1),
+        dayName: day.format("ddd").slice(0, 2),
         dayFullName: day.format("dddd"),
         date: day.format("DD"),
         month: day.format("MMM"),

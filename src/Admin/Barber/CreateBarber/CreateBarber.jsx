@@ -229,19 +229,6 @@ const CreateBarber = () => {
                   }
                 );
 
-                // const { data } = await api.post(
-                //   `/api/admin/getAllSalonsByAdmin`,
-                //   {
-                //     adminEmail: email,
-                //   }
-                // );
-
-                // dispatch({
-                //   type: GET_ADMIN_SALONLIST_SUCCESS,
-                //   payload: data,
-                // });
-
-                // dispatch(adminGetDefaultSalonAction(email));
 
                 toast.success("Barber profile pic uploaded successfully", {
                   duration: 3000,
@@ -918,7 +905,7 @@ const CreateBarber = () => {
                                 style={{ borderRadius: "50%" }}
                               />
                             ) : salonLogo ? (
-                              <img src={salonLogo} alt="profile" />
+                              <img src={salonLogo ?? ""} alt="profile" />
                             ) : (
                               <ProfileIcon
                                 style={{

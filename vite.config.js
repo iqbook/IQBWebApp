@@ -19,6 +19,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
+    host: true,
     proxy: {
       // '/api': 'http://localhost:8001',
       // '/api': 'https://iqb-final.onrender.com'

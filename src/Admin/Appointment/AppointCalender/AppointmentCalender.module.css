@@ -131,7 +131,7 @@
   .appointmentList {
     padding: 1.5rem;
     overflow: auto;
-    max-height: calc(100% - 13.2rem);
+    max-height: calc(100% - 20rem);
     display: flex;
     flex-direction: column;
     gap: 1.5rem;

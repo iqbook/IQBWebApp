@@ -440,7 +440,7 @@ export const adminUpdateBarberAction = (barberdata, navigate) => async (dispatch
     }
 }
 
-export const adminDeleteBarberAction = (email, barber) => async (dispatch) => {
+export const adminDeleteBarberAction = (email, barber, setMobileSettingIndex) => async (dispatch) => {
     try {
         dispatch({ type: ADMIN_DELETE_BARBER_REQ })
 
@@ -465,6 +465,7 @@ export const adminDeleteBarberAction = (email, barber) => async (dispatch) => {
             type: "FILTER_BARBERLIST",
             payload: barber.email
         })
+        setMobileSettingIndex("")
 
     } catch (error) {
 
