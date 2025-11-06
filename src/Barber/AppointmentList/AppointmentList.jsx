@@ -550,10 +550,25 @@ const AppointmentList = () => {
                     </p>
                   </div>
 
-                  <p>
-                    Contact the customer at +{item?.countryCode}
-                    {item?.mobileNumber}
-                  </p>
+                  {item?.mobileNumber ? (
+                    <p>
+                      Contact the customer at{" "}
+                      <a
+                        href={`tel:+${item?.countryCode ?? ""}${
+                          item?.mobileNumber ?? ""
+                        }`}
+                        style={{
+                          color: "var(--text-primary)",
+                          textDecoration: "underline",
+                        }}
+                      >
+                        +{item?.countryCode ?? ""}
+                        {item?.mobileNumber ?? ""}
+                      </a>
+                    </p>
+                  ) : (
+                    <p>The customer has not added any contact number</p>
+                  )}
                 </div>
               </div>
             );
