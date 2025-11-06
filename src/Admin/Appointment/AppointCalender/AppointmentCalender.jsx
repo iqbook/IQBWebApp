@@ -582,7 +582,7 @@ const AppointmentCalender = () => {
         </div>
       )}
 
-      {!getAdminAppointmentListSalonIdLoading ? (
+      {getAdminAppointmentListSalonIdLoading ? (
         <div className={style.appointmentList_loading}>
           {[0, 1, 2, 3, 4, 5].map((item) => (
             <Skeleton
