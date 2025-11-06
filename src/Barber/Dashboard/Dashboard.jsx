@@ -1275,7 +1275,7 @@ const Dashboard = () => {
 
                   <div>
                     {
-                      !reportData?.appointment?.last7daysCount.length > 0 ? (
+                      reportData?.appointment?.last7daysCount.length > 0 ? (
                         <ResponsiveContainer width="100%" height="90%">
                           <BarChart width={150} height={40} data={reportData?.appointment?.last7daysCount}>
                             <Bar dataKey="TotalAppoinment" fill="var(--bg-secondary)" radius={[3, 3, 3, 3]} />

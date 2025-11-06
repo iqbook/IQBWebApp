@@ -690,8 +690,6 @@ const Report = () => {
     return `${year}-${month}-${day}`; // yyyy-mm-dd
   };
 
-  console.log("selectType ", selectType)
-
   const viewReport = async () => {
     try {
       let reportOptions = {

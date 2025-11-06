@@ -1053,7 +1053,7 @@ const Dashboard = () => {
                 </div>
 
                 <div>
-                  {!reportData?.appointment?.last7daysCount.length > 0 ? (
+                  {reportData?.appointment?.last7daysCount.length > 0 ? (
                     <ResponsiveContainer width="100%" height="90%">
                       <BarChart
                         width={150}
