@@ -730,7 +730,7 @@ const EditSalon = () => {
     }
   };
 
-  const deleteServiceHandler = (index) => {
+  const editServiceHandler = (index) => {
     const currentService = selectedServices[index];
 
     setSelectedLogo({
@@ -750,6 +750,56 @@ const EditSalon = () => {
     updatedServices.splice(index, 1);
 
     setSelectedServices(updatedServices);
+  };
+
+  const [deleteServiceLoader, setDeleteServiceLoader] = useState({
+    serviceId: "",
+    loading: false,
+  });
+  const deleteServiceHandler = async (service) => {
+    const delete_data = {
+      salonId: currentSalon?.salonId,
+      serviceIds: [service?.serviceId],
+    };
+
+    try {
+      setDeleteServiceLoader({
+        serviceId: service?.serviceId,
+        loading: true,
+      });
+      const { data } = await api.post(
+        "/api/salon/deleteSalonServices",
+        delete_data
+      );
+
+      toast.success(data?.message, {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+
+      navigate("/admin-salon");
+    } catch (error) {
+      toast.error(error?.response?.data?.message, {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+      console.log("Error deleting salon service ", error);
+    } finally {
+      setDeleteServiceLoader({
+        serviceId: "",
+        loading: false,
+      });
+    }
   };
 
   const navigate = useNavigate();
@@ -2294,11 +2344,24 @@ const EditSalon = () => {
                                   <p>{ser.serviceCategoryName}</p>
                                 </div>
 
-                                <button
-                                  onClick={() => deleteServiceHandler(index)}
-                                >
-                                  Delete
-                                </button>
+                                <div>
+                                  <button
+                                    onClick={() => editServiceHandler(index)}
+                                  >
+                                    Edit
+                                  </button>
+
+                                  <button
+                                    onClick={() => deleteServiceHandler(ser)}
+                                    disabled={deleteServiceLoader?.loading}
+                                  >
+                                    {deleteServiceLoader?.loading && deleteServiceLoader.serviceId === ser.serviceId ? (
+                                      <ButtonLoader />
+                                    ) : (
+                                      "Delete"
+                                    )}
+                                  </button>
+                                </div>
                               </div>
                               <div>
                                 <div>
@@ -2433,11 +2496,25 @@ const EditSalon = () => {
                                     <p>{ser.serviceCategoryName}</p>
                                   </div>
                                 </div>
-                                <button
-                                  onClick={() => deleteServiceHandler(index)}
-                                >
-                                  Delete
-                                </button>
+
+                                <div>
+                                  <button
+                                    onClick={() => editServiceHandler(index)}
+                                  >
+                                    Edit
+                                  </button>
+
+                                  <button
+                                    onClick={() => deleteServiceHandler(ser)}
+                                    disabled={deleteServiceLoader?.loading}
+                                  >
+                                    {deleteServiceLoader?.loading && deleteServiceLoader.serviceId === ser.serviceId ? (
+                                      <ButtonLoader />
+                                    ) : (
+                                      "Delete"
+                                    )}
+                                  </button>
+                                </div>
                               </div>
                               <div>
                                 <div>

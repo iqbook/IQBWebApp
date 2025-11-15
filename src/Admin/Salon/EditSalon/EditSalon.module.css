@@ -1,687 +1,445 @@
 .section {
-    background-color: transparent;
-    height: calc(100svh - 6rem);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+  background-color: transparent;
+  height: calc(100svh - 6rem);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 
-    &>div:nth-child(1) {
-        height: 4rem;
+  & > div:nth-child(1) {
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & > h2 {
+      color: var(--text-primary);
+      line-height: inherit;
+      font-family: "AirbnbCereal_Medium";
+    }
+  }
+
+  .stepper_heading {
+    color: var(--text-primary);
+    font-size: 1.6rem;
+    font-family: "AirbnbCereal_Bold";
+  }
+
+  .form_main_container {
+    flex: 1;
+    overflow: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    .form_container {
+      max-width: 67rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      padding-block: 2rem;
+      position: relative;
+
+      & > button {
+        position: absolute;
+        top: -3.5rem;
+        right: 0;
+        height: 3.5rem;
+        padding-inline: 1.5rem;
+        border-radius: var(--border-radius-primary);
+        -webkit-border-radius: var(--border-radius-primary);
+        -moz-border-radius: var(--border-radius-primary);
+        -ms-border-radius: var(--border-radius-primary);
+        -o-border-radius: var(--border-radius-primary);
+        background-color: var(--bg-secondary);
+        color: var(--btn-text-color);
+        border: none;
+        outline: none;
+        cursor: pointer;
+        transition: var(--common-btn-transition);
+        -webkit-transition: var(--common-btn-transition);
+        -moz-transition: var(--common-btn-transition);
+        -ms-transition: var(--common-btn-transition);
+        -o-transition: var(--common-btn-transition);
+
+        &:hover {
+          background-color: var(--bg-secondary-hover);
+        }
+      }
+
+      .form_group {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+
+        & > label {
+          font-size: 1.6rem;
+          color: var(--text-primary);
+          font-family: "AirbnbCereal_Medium";
+        }
+
+        & > input {
+          height: 3.5rem;
+          padding-inline: 1rem;
+          font-size: 1.4rem;
+          border: 0.1rem solid var(--border-secondary);
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+          background-color: var(--bg-primary);
+          color: var(--text-primary);
+          outline: none;
+
+          &::placeholder {
+            color: var(--text-secondary);
+            letter-spacing: 0.01rem;
+          }
+        }
+
+        .select_container {
+          border: 0.1rem solid var(--border-secondary);
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+          background-color: var(--bg-primary);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          position: relative;
+
+          & > input {
+            width: calc(100% - 3rem);
+            height: 3.5rem;
+            padding-inline: 1rem;
+            font-size: 1.4rem;
+            background: transparent;
+            color: var(--text-primary);
+            border: none;
+            outline: none;
+
+            &::placeholder {
+              color: var(--text-secondary);
+              letter-spacing: 0.01rem;
+            }
+          }
+
+          & > div:nth-child(2) {
+            height: 3.5rem;
+            width: 3.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            font-family: "AirbnbCereal_Medium";
+          }
+
+          .select_dropdown_container {
+            position: absolute;
+            width: 100%;
+            top: 4rem;
+            right: 0rem;
+            left: 0rem;
+            max-height: 20rem;
+            overflow: auto;
+            border: 0.1rem solid var(--border-secondary);
+            border-radius: var(--border-radius-primary);
+            -webkit-border-radius: var(--border-radius-primary);
+            -moz-border-radius: var(--border-radius-primary);
+            -ms-border-radius: var(--border-radius-primary);
+            -o-border-radius: var(--border-radius-primary);
+            background-color: var(--bg-primary);
+            padding: 2rem;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+
+            & > button {
+              width: max-content;
+              background-color: transparent;
+              border: none;
+              outline: none;
+              cursor: pointer;
+              color: var(--text-primary);
+              font-size: 1.4rem;
+              opacity: 0.8;
+              transition: all 0.2s ease-in;
+              -webkit-transition: all 0.2s ease-in;
+              -moz-transition: all 0.2s ease-in;
+              -ms-transition: all 0.2s ease-in;
+              -o-transition: all 0.2s ease-in;
+
+              &:hover {
+                opacity: 1;
+                font-weight: 500;
+              }
+            }
+          }
+
+          .select_search_dropdown_container {
+            position: absolute;
+            width: 100%;
+            top: 4rem;
+            right: 0rem;
+            left: 0rem;
+            max-height: 30rem;
+            min-height: 30rem;
+            overflow: auto;
+            border: 0.1rem solid var(--border-secondary);
+            border-radius: var(--border-radius-primary);
+            -webkit-border-radius: var(--border-radius-primary);
+            -moz-border-radius: var(--border-radius-primary);
+            -ms-border-radius: var(--border-radius-primary);
+            -o-border-radius: var(--border-radius-primary);
+            background-color: var(--bg-primary);
+            padding: 2rem;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+
+            .search_box {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              width: 100%;
+              border-bottom: 0.1rem solid var(--border-secondary);
+              cursor: pointer;
+            }
+
+            .search_box > input {
+              height: 4rem;
+              width: calc(100% - 3rem);
+              border: none;
+              background: transparent;
+              color: var(--text-primary);
+              font-size: 1.4rem;
+            }
+
+            .search_box > input:focus {
+              outline: none;
+            }
+
+            .search_box > div {
+              padding: 0.6rem 0.6rem;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              cursor: pointer;
+              cursor: pointer;
+              color: var(--text-primary);
+            }
+
+            & > button {
+              width: max-content;
+              background-color: transparent;
+              border: none;
+              outline: none;
+              cursor: pointer;
+              color: var(--text-primary);
+              font-size: 1.4rem;
+              opacity: 0.8;
+              transition: all 0.2s ease-in;
+              -webkit-transition: all 0.2s ease-in;
+              -moz-transition: all 0.2s ease-in;
+              -ms-transition: all 0.2s ease-in;
+              -o-transition: all 0.2s ease-in;
+
+              &:hover {
+                opacity: 1;
+                font-weight: 500;
+              }
+            }
+          }
+        }
+      }
+
+      .button_container {
         display: flex;
         align-items: center;
         justify-content: space-between;
 
-        &>h2 {
-            color: var(--text-primary);
-            line-height: inherit;
-            font-family: "AirbnbCereal_Medium";
+        & > button {
+          height: 3.5rem;
+          padding-inline: 1.5rem;
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+          background-color: var(--bg-secondary);
+          color: var(--btn-text-color);
+          border: none;
+          outline: none;
+          cursor: pointer;
+          transition: var(--common-btn-transition);
+          -webkit-transition: var(--common-btn-transition);
+          -moz-transition: var(--common-btn-transition);
+          -ms-transition: var(--common-btn-transition);
+          -o-transition: var(--common-btn-transition);
+
+          &:hover {
+            background-color: var(--bg-secondary-hover);
+          }
         }
+      }
+
+      .geolocation_btn {
+        margin-left: auto;
+        margin-block: 1rem -1rem;
+        height: 3.5rem;
+        padding-inline: 1rem;
+        border-radius: var(--border-radius-primary);
+        -webkit-border-radius: var(--border-radius-primary);
+        -moz-border-radius: var(--border-radius-primary);
+        -ms-border-radius: var(--border-radius-primary);
+        -o-border-radius: var(--border-radius-primary);
+        background-color: var(--bg-secondary);
+        color: var(--btn-text-color);
+        border: none;
+        outline: none;
+        cursor: pointer;
+        transition: var(--common-btn-transition);
+        -webkit-transition: var(--common-btn-transition);
+        -moz-transition: var(--common-btn-transition);
+        -ms-transition: var(--common-btn-transition);
+        -o-transition: var(--common-btn-transition);
+
+        &:hover {
+          background-color: var(--bg-secondary-hover);
+        }
+      }
     }
 
-    .stepper_heading {
-        color: var(--text-primary);
-        font-size: 1.6rem;
-        font-family: 'AirbnbCereal_Bold';
-    }
+    .service_container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
 
-    .form_main_container {
-        flex: 1;
-        overflow: auto;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
+      & > div:nth-child(1) {
+        display: flex;
+        gap: 3rem;
+        flex-wrap: wrap;
 
-        .form_container {
-            max-width: 67rem;
-            width: 100%;
+        & > div:nth-child(1) {
+          max-width: 50rem;
+          width: 100%;
+          padding-block: 2rem;
+          display: flex;
+          flex-direction: column;
+          gap: 2rem;
+          position: relative;
+
+          & > button {
+            position: absolute;
+            top: -3.5rem;
+            right: 0;
+            height: 3.5rem;
+            padding-inline: 1.5rem;
+            border-radius: var(--border-radius-primary);
+            -webkit-border-radius: var(--border-radius-primary);
+            -moz-border-radius: var(--border-radius-primary);
+            -ms-border-radius: var(--border-radius-primary);
+            -o-border-radius: var(--border-radius-primary);
+            background-color: var(--bg-secondary);
+            color: var(--btn-text-color);
+            border: none;
+            outline: none;
+            cursor: pointer;
+            transition: var(--common-btn-transition);
+            -webkit-transition: var(--common-btn-transition);
+            -moz-transition: var(--common-btn-transition);
+            -ms-transition: var(--common-btn-transition);
+            -o-transition: var(--common-btn-transition);
+
+            &:hover {
+              background-color: var(--bg-secondary-hover);
+            }
+          }
+
+          .form_group {
             display: flex;
             flex-direction: column;
-            gap: 2rem;
-            padding-block: 2rem;
-            position: relative;
+            gap: 1.5rem;
 
-            &>button {
-                position: absolute;
-                top: -3.5rem;
-                right: 0;
-                height: 3.5rem;
-                padding-inline: 1.5rem;
-                border-radius: var(--border-radius-primary);
-                -webkit-border-radius: var(--border-radius-primary);
-                -moz-border-radius: var(--border-radius-primary);
-                -ms-border-radius: var(--border-radius-primary);
-                -o-border-radius: var(--border-radius-primary);
-                background-color: var(--bg-secondary);
-                color: var(--btn-text-color);
-                border: none;
-                outline: none;
-                cursor: pointer;
-                transition: var(--common-btn-transition);
-                -webkit-transition: var(--common-btn-transition);
-                -moz-transition: var(--common-btn-transition);
-                -ms-transition: var(--common-btn-transition);
-                -o-transition: var(--common-btn-transition);
-
-                &:hover {
-                    background-color: var(--bg-secondary-hover);
-                }
+            & > label {
+              font-size: 1.6rem;
+              color: var(--text-primary);
+              font-family: "AirbnbCereal_Medium";
             }
 
-            .form_group {
-                display: flex;
-                flex-direction: column;
-                gap: 1.5rem;
-
-                &>label {
-                    font-size: 1.6rem;
-                    color: var(--text-primary);
-                    font-family: 'AirbnbCereal_Medium';
-                }
-
-                &>input {
-                    height: 3.5rem;
-                    padding-inline: 1rem;
-                    font-size: 1.4rem;
-                    border: 0.1rem solid var(--border-secondary);
-                    border-radius: var(--border-radius-primary);
-                    -webkit-border-radius: var(--border-radius-primary);
-                    -moz-border-radius: var(--border-radius-primary);
-                    -ms-border-radius: var(--border-radius-primary);
-                    -o-border-radius: var(--border-radius-primary);
-                    background-color: var(--bg-primary);
-                    color: var(--text-primary);
-                    outline: none;
-
-                    &::placeholder {
-                        color: var(--text-secondary);
-                        letter-spacing: 0.01rem;
-                    }
-                }
-
-                .select_container {
-                    border: 0.1rem solid var(--border-secondary);
-                    border-radius: var(--border-radius-primary);
-                    -webkit-border-radius: var(--border-radius-primary);
-                    -moz-border-radius: var(--border-radius-primary);
-                    -ms-border-radius: var(--border-radius-primary);
-                    -o-border-radius: var(--border-radius-primary);
-                    background-color: var(--bg-primary);
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    position: relative;
-
-                    &>input {
-                        width: calc(100% - 3rem);
-                        height: 3.5rem;
-                        padding-inline: 1rem;
-                        font-size: 1.4rem;
-                        background: transparent;
-                        color: var(--text-primary);
-                        border: none;
-                        outline: none;
-
-                        &::placeholder {
-                            color: var(--text-secondary);
-                            letter-spacing: 0.01rem;
-                        }
-                    }
-
-                    &>div:nth-child(2) {
-                        height: 3.5rem;
-                        width: 3.5rem;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        font-size: 1.4rem;
-                        color: var(--text-primary);
-                        font-family: 'AirbnbCereal_Medium';
-
-                    }
-
-                    .select_dropdown_container {
-                        position: absolute;
-                        width: 100%;
-                        top: 4rem;
-                        right: 0rem;
-                        left: 0rem;
-                        max-height: 20rem;
-                        overflow: auto;
-                        border: 0.1rem solid var(--border-secondary);
-                        border-radius: var(--border-radius-primary);
-                        -webkit-border-radius: var(--border-radius-primary);
-                        -moz-border-radius: var(--border-radius-primary);
-                        -ms-border-radius: var(--border-radius-primary);
-                        -o-border-radius: var(--border-radius-primary);
-                        background-color: var(--bg-primary);
-                        padding: 2rem;
-                        z-index: 100;
-                        display: flex;
-                        flex-direction: column;
-                        gap: 2rem;
-
-                        &>button {
-                            width: max-content;
-                            background-color: transparent;
-                            border: none;
-                            outline: none;
-                            cursor: pointer;
-                            color: var(--text-primary);
-                            font-size: 1.4rem;
-                            opacity: 0.8;
-                            transition: all 0.2s ease-in;
-                            -webkit-transition: all 0.2s ease-in;
-                            -moz-transition: all 0.2s ease-in;
-                            -ms-transition: all 0.2s ease-in;
-                            -o-transition: all 0.2s ease-in;
-
-                            &:hover {
-                                opacity: 1;
-                                font-weight: 500;
-                            }
-                        }
-                    }
-
-                    .select_search_dropdown_container {
-                        position: absolute;
-                        width: 100%;
-                        top: 4rem;
-                        right: 0rem;
-                        left: 0rem;
-                        max-height: 30rem;
-                        min-height: 30rem;
-                        overflow: auto;
-                        border: 0.1rem solid var(--border-secondary);
-                        border-radius: var(--border-radius-primary);
-                        -webkit-border-radius: var(--border-radius-primary);
-                        -moz-border-radius: var(--border-radius-primary);
-                        -ms-border-radius: var(--border-radius-primary);
-                        -o-border-radius: var(--border-radius-primary);
-                        background-color: var(--bg-primary);
-                        padding: 2rem;
-                        z-index: 100;
-                        display: flex;
-                        flex-direction: column;
-                        gap: 2rem;
-
-                        .search_box {
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-between;
-                            width: 100%;
-                            border-bottom: 0.1rem solid var(--border-secondary);
-                            cursor: pointer;
-                        }
-
-                        .search_box>input {
-                            height: 4rem;
-                            width: calc(100% - 3rem);
-                            border: none;
-                            background: transparent;
-                            color: var(--text-primary);
-                            font-size: 1.4rem;
-                        }
-
-                        .search_box>input:focus {
-                            outline: none;
-                        }
-
-                        .search_box>div {
-                            padding: 0.6rem 0.6rem;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            cursor: pointer;
-                            cursor: pointer;
-                            color: var(--text-primary);
-                        }
-
-                        &>button {
-                            width: max-content;
-                            background-color: transparent;
-                            border: none;
-                            outline: none;
-                            cursor: pointer;
-                            color: var(--text-primary);
-                            font-size: 1.4rem;
-                            opacity: 0.8;
-                            transition: all 0.2s ease-in;
-                            -webkit-transition: all 0.2s ease-in;
-                            -moz-transition: all 0.2s ease-in;
-                            -ms-transition: all 0.2s ease-in;
-                            -o-transition: all 0.2s ease-in;
-
-                            &:hover {
-                                opacity: 1;
-                                font-weight: 500;
-                            }
-                        }
-                    }
-                }
-            }
-
-            .button_container {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-
-                &>button {
-                    height: 3.5rem;
-                    padding-inline: 1.5rem;
-                    border-radius: var(--border-radius-primary);
-                    -webkit-border-radius: var(--border-radius-primary);
-                    -moz-border-radius: var(--border-radius-primary);
-                    -ms-border-radius: var(--border-radius-primary);
-                    -o-border-radius: var(--border-radius-primary);
-                    background-color: var(--bg-secondary);
-                    color: var(--btn-text-color);
-                    border: none;
-                    outline: none;
-                    cursor: pointer;
-                    transition: var(--common-btn-transition);
-                    -webkit-transition: var(--common-btn-transition);
-                    -moz-transition: var(--common-btn-transition);
-                    -ms-transition: var(--common-btn-transition);
-                    -o-transition: var(--common-btn-transition);
-
-                    &:hover {
-                        background-color: var(--bg-secondary-hover);
-                    }
-                }
-            }
-
-            .geolocation_btn {
-                margin-left: auto;
-                margin-block: 1rem -1rem;
-                height: 3.5rem;
-                padding-inline: 1rem;
-                border-radius: var(--border-radius-primary);
-                -webkit-border-radius: var(--border-radius-primary);
-                -moz-border-radius: var(--border-radius-primary);
-                -ms-border-radius: var(--border-radius-primary);
-                -o-border-radius: var(--border-radius-primary);
-                background-color: var(--bg-secondary);
-                color: var(--btn-text-color);
-                border: none;
-                outline: none;
-                cursor: pointer;
-                transition: var(--common-btn-transition);
-                -webkit-transition: var(--common-btn-transition);
-                -moz-transition: var(--common-btn-transition);
-                -ms-transition: var(--common-btn-transition);
-                -o-transition: var(--common-btn-transition);
-
-                &:hover {
-                    background-color: var(--bg-secondary-hover);
-                }
-            }
-        }
-
-        .service_container {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-
-            &>div:nth-child(1) {
-                display: flex;
-                gap: 3rem;
-                flex-wrap: wrap;
-
-                &>div:nth-child(1) {
-                    max-width: 50rem;
-                    width: 100%;
-                    padding-block: 2rem;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 2rem;
-                    position: relative;
-
-                    &>button {
-                        position: absolute;
-                        top: -3.5rem;
-                        right: 0;
-                        height: 3.5rem;
-                        padding-inline: 1.5rem;
-                        border-radius: var(--border-radius-primary);
-                        -webkit-border-radius: var(--border-radius-primary);
-                        -moz-border-radius: var(--border-radius-primary);
-                        -ms-border-radius: var(--border-radius-primary);
-                        -o-border-radius: var(--border-radius-primary);
-                        background-color: var(--bg-secondary);
-                        color: var(--btn-text-color);
-                        border: none;
-                        outline: none;
-                        cursor: pointer;
-                        transition: var(--common-btn-transition);
-                        -webkit-transition: var(--common-btn-transition);
-                        -moz-transition: var(--common-btn-transition);
-                        -ms-transition: var(--common-btn-transition);
-                        -o-transition: var(--common-btn-transition);
-
-                        &:hover {
-                            background-color: var(--bg-secondary-hover);
-                        }
-                    }
-
-                    .form_group {
-                        display: flex;
-                        flex-direction: column;
-                        gap: 1.5rem;
-
-                        &>label {
-                            font-size: 1.6rem;
-                            color: var(--text-primary);
-                            font-family: 'AirbnbCereal_Medium';
-                        }
-
-                        &>input {
-                            height: 3.5rem;
-                            padding-inline: 1rem;
-                            font-size: 1.4rem;
-                            border: 0.1rem solid var(--border-secondary);
-                            border-radius: var(--border-radius-primary);
-                            -webkit-border-radius: var(--border-radius-primary);
-                            -moz-border-radius: var(--border-radius-primary);
-                            -ms-border-radius: var(--border-radius-primary);
-                            -o-border-radius: var(--border-radius-primary);
-                            background-color: var(--bg-primary);
-                            color: var(--text-primary);
-                            outline: none;
-
-                            &::placeholder {
-                                color: var(--text-secondary);
-                                letter-spacing: 0.01rem;
-                            }
-                        }
-
-                        .select_container {
-                            border: 0.1rem solid var(--border-secondary);
-                            border-radius: var(--border-radius-primary);
-                            -webkit-border-radius: var(--border-radius-primary);
-                            -moz-border-radius: var(--border-radius-primary);
-                            -ms-border-radius: var(--border-radius-primary);
-                            -o-border-radius: var(--border-radius-primary);
-                            background-color: var(--bg-primary);
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-between;
-                            position: relative;
-
-                            &>input {
-                                width: calc(100% - 3rem);
-                                height: 3.5rem;
-                                padding-inline: 1rem;
-                                font-size: 1.4rem;
-                                background: transparent;
-                                color: var(--text-primary);
-                                border: none;
-                                outline: none;
-
-                                &::placeholder {
-                                    color: var(--text-secondary);
-                                    letter-spacing: 0.01rem;
-                                }
-                            }
-
-                            &>div {
-                                height: 3.5rem;
-                                width: 3.5rem;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                font-size: 1.4rem;
-                                color: var(--text-primary);
-                                font-family: 'AirbnbCereal_Medium';
-                            }
-
-                            .select_dropdown_container {
-                                position: absolute;
-                                width: 100%;
-                                top: 4rem;
-                                right: 0rem;
-                                left: 0rem;
-                                height: 15rem;
-                                border: 0.1rem solid var(--border-secondary);
-                                border-radius: var(--border-radius-primary);
-                                -webkit-border-radius: var(--border-radius-primary);
-                                -moz-border-radius: var(--border-radius-primary);
-                                -ms-border-radius: var(--border-radius-primary);
-                                -o-border-radius: var(--border-radius-primary);
-                                background-color: var(--bg-primary);
-                                padding: 1rem;
-                                z-index: 100;
-                            }
-                        }
-                    }
-
-                    .add_service_btn {
-                        height: 3.5rem;
-                        padding-inline: 1.5rem;
-                        border-radius: var(--border-radius-primary);
-                        -webkit-border-radius: var(--border-radius-primary);
-                        -moz-border-radius: var(--border-radius-primary);
-                        -ms-border-radius: var(--border-radius-primary);
-                        -o-border-radius: var(--border-radius-primary);
-                        background-color: var(--bg-secondary);
-                        color: var(--text-primary);
-                        border: none;
-                        outline: none;
-                        cursor: pointer;
-                        transition: var(--common-btn-transition);
-                        -webkit-transition: var(--common-btn-transition);
-                        -moz-transition: var(--common-btn-transition);
-                        -ms-transition: var(--common-btn-transition);
-                        -o-transition: var(--common-btn-transition);
-
-                        &:hover {
-                            background-color: var(--bg-secondary-hover);
-                        }
-                    }
-
-                    .button_container {
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        gap: 1rem;
-                        flex-wrap: wrap;
-
-                        &>button {
-                            height: 3.5rem;
-                            padding-inline: 1.5rem;
-                            border-radius: var(--border-radius-primary);
-                            -webkit-border-radius: var(--border-radius-primary);
-                            -moz-border-radius: var(--border-radius-primary);
-                            -ms-border-radius: var(--border-radius-primary);
-                            -o-border-radius: var(--border-radius-primary);
-                            background-color: var(--bg-secondary);
-                            color: var(--btn-text-color);
-                            border: none;
-                            outline: none;
-                            cursor: pointer;
-                            transition: var(--common-btn-transition);
-                            -webkit-transition: var(--common-btn-transition);
-                            -moz-transition: var(--common-btn-transition);
-                            -ms-transition: var(--common-btn-transition);
-                            -o-transition: var(--common-btn-transition);
-
-                            &:hover {
-                                background-color: var(--bg-secondary-hover);
-                            }
-                        }
-                    }
-
-                }
-
-                &>div:nth-child(2) {
-                    width: 100%;
-                    max-width: 50rem;
-                    max-height: 50rem;
-                    overflow: auto;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 2rem;
-                    background-color: var(--bg-hover-primary);
-                    border-radius: var(--border-radius-primary);
-                    -webkit-border-radius: var(--border-radius-primary);
-                    -moz-border-radius: var(--border-radius-primary);
-                    -ms-border-radius: var(--border-radius-primary);
-                    -o-border-radius: var(--border-radius-primary);
-                    overflow-y: auto;
-
-
-                    .service_item {
-                        display: flex;
-                        flex-direction: column;
-                        background-color: var(--bg-primary);
-                        border: 0.1rem solid var(--border-secondary);
-                        border-radius: var(--border-radius-primary);
-                        -webkit-border-radius: var(--border-radius-primary);
-                        -moz-border-radius: var(--border-radius-primary);
-                        -ms-border-radius: var(--border-radius-primary);
-                        -o-border-radius: var(--border-radius-primary);
-                        min-width: 45.5rem;
-                        margin-bottom: 2rem;
-
-                        &>div:nth-child(1) {
-                            flex: 1;
-                            border-bottom: 0.1rem solid var(--border-secondary);
-                            padding: 1.5rem;
-                            position: relative;
-
-
-                            &>div {
-                                display: flex;
-                                gap: 2rem;
-
-                                &>div:nth-child(1) {
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: center;
-                                    width: 5rem;
-                                    height: 5rem;
-                                    border-radius: 50%;
-                                    -webkit-border-radius: 50%;
-                                    -moz-border-radius: 50%;
-                                    -ms-border-radius: 50%;
-                                    -o-border-radius: 50%;
-
-                                    &>img {
-                                        width: inherit;
-                                        height: inherit;
-                                        border-radius: inherit;
-                                        -webkit-border-radius: inherit;
-                                        -moz-border-radius: inherit;
-                                        -ms-border-radius: inherit;
-                                        -o-border-radius: inherit;
-                                    }
-                                }
-
-                                &>div:nth-child(2) {
-                                    display: flex;
-                                    flex-direction: column;
-                                    gap: 0.5rem;
-
-                                    &>p:nth-child(1) {
-                                        font-size: 1.6rem;
-                                        color: var(--text-primary);
-                                        font-family: 'AirbnbCereal_Medium';
-                                    }
-
-                                    &>p {
-                                        font-size: 1.4rem;
-                                        color: var(--text-secondary);
-                                        line-height: initial;
-                                    }
-                                }
-                            }
-
-                            &>button {
-                                position: absolute;
-                                top: 1.5rem;
-                                right: 1.5rem;
-                                padding: 0.5rem 1rem;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                font-size: 1.4rem;
-                                background-color: #450a0a;
-                                border-radius: var(--border-radius-primary);
-                                -webkit-border-radius: var(--border-radius-primary);
-                                -moz-border-radius: var(--border-radius-primary);
-                                -ms-border-radius: var(--border-radius-primary);
-                                -o-border-radius: var(--border-radius-primary);
-                                color: #fff;
-                                border: none;
-                                outline: none;
-                                cursor: pointer;
-                            }
-                        }
-
-                        &>div:nth-child(2) {
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-around;
-                            padding: 2rem;
-
-                            &>div {
-                                display: flex;
-                                flex-direction: column;
-                                gap: 1rem;
-
-                                &>p:nth-child(1) {
-                                    font-size: 1.8rem;
-                                    color: var(--text-primary);
-                                    font-family: "AirbnbCereal_Medium";
-                                }
-
-                                &>p {
-                                    font-size: 1.6rem;
-                                    text-align: center;
-                                    color: var(--text-secondary);
-                                }
-                            }
-                        }
-                    }
-
-
-                }
-
-            }
-
-            .service_icon_container {
-
-                .slider_item {
-                    width: 80%;
-                    height: 6rem;
-                    cursor: pointer;
-                    position: relative;
-                    border-radius: var(--border-radius-primary);
-                    -webkit-border-radius: var(--border-radius-primary);
-                    -moz-border-radius: var(--border-radius-primary);
-                    -ms-border-radius: var(--border-radius-primary);
-                    -o-border-radius: var(--border-radius-primary);
-                    background-color: var(--bg-primary)
-                }
-
-                .icon_selected {
-                    border: 0.2rem solid var(--bg-secondary);
-                }
-
-                .slider_item>img {
-                    width: 100%;
-                    height: 100%;
-                    background-size: cover;
-                    background-position: center;
-                    border-radius: var(--border-radius-primary);
-                    -webkit-border-radius: var(--border-radius-primary);
-                    -moz-border-radius: var(--border-radius-primary);
-                    -ms-border-radius: var(--border-radius-primary);
-                    -o-border-radius: var(--border-radius-primary);
-                    border: 0.1rem solid var(--border-secondary);
-                }
+            & > input {
+              height: 3.5rem;
+              padding-inline: 1rem;
+              font-size: 1.4rem;
+              border: 0.1rem solid var(--border-secondary);
+              border-radius: var(--border-radius-primary);
+              -webkit-border-radius: var(--border-radius-primary);
+              -moz-border-radius: var(--border-radius-primary);
+              -ms-border-radius: var(--border-radius-primary);
+              -o-border-radius: var(--border-radius-primary);
+              background-color: var(--bg-primary);
+              color: var(--text-primary);
+              outline: none;
+
+              &::placeholder {
+                color: var(--text-secondary);
+                letter-spacing: 0.01rem;
+              }
             }
 
             .select_container {
+              border: 0.1rem solid var(--border-secondary);
+              border-radius: var(--border-radius-primary);
+              -webkit-border-radius: var(--border-radius-primary);
+              -moz-border-radius: var(--border-radius-primary);
+              -ms-border-radius: var(--border-radius-primary);
+              -o-border-radius: var(--border-radius-primary);
+              background-color: var(--bg-primary);
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              position: relative;
+
+              & > input {
+                width: calc(100% - 3rem);
+                height: 3.5rem;
+                padding-inline: 1rem;
+                font-size: 1.4rem;
+                background: transparent;
+                color: var(--text-primary);
+                border: none;
+                outline: none;
+
+                &::placeholder {
+                  color: var(--text-secondary);
+                  letter-spacing: 0.01rem;
+                }
+              }
+
+              & > div {
+                height: 3.5rem;
+                width: 3.5rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 1.4rem;
+                color: var(--text-primary);
+                font-family: "AirbnbCereal_Medium";
+              }
+
+              .select_dropdown_container {
+                position: absolute;
+                width: 100%;
+                top: 4rem;
+                right: 0rem;
+                left: 0rem;
+                height: 15rem;
                 border: 0.1rem solid var(--border-secondary);
                 border-radius: var(--border-radius-primary);
                 -webkit-border-radius: var(--border-radius-primary);
@@ -689,777 +447,1025 @@
                 -ms-border-radius: var(--border-radius-primary);
                 -o-border-radius: var(--border-radius-primary);
                 background-color: var(--bg-primary);
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                position: relative;
-
-                &>input {
-                    width: calc(100% - 3rem);
-                    height: 3.5rem;
-                    padding-inline: 1rem;
-                    font-size: 1.4rem;
-                    background: transparent;
-                    color: var(--text-primary);
-                    border: none;
-                    outline: none;
-
-                    &::placeholder {
-                        color: var(--text-secondary);
-                        letter-spacing: 0.01rem;
-                    }
-                }
-
-                &>div:nth-child(2) {
-                    height: 3.5rem;
-                    width: 3.5rem;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: 1.4rem;
-                    color: var(--text-primary);
-                    font-family: 'AirbnbCereal_Medium';
-
-                }
-
-                .select_dropdown_container {
-                    position: absolute;
-                    width: 100%;
-                    top: 4rem;
-                    right: 0rem;
-                    left: 0rem;
-                    height: auto !important;
-                    overflow: auto;
-                    border: 0.1rem solid var(--border-secondary);
-                    border-radius: var(--border-radius-primary);
-                    -webkit-border-radius: var(--border-radius-primary);
-                    -moz-border-radius: var(--border-radius-primary);
-                    -ms-border-radius: var(--border-radius-primary);
-                    -o-border-radius: var(--border-radius-primary);
-                    background-color: var(--bg-primary);
-                    padding: 2rem;
-                    z-index: 100;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: flex-start !important;
-                    gap: 2rem;
-
-                    &>button {
-                        width: max-content;
-                        background-color: transparent;
-                        border: none;
-                        outline: none;
-                        cursor: pointer;
-                        color: var(--text-primary);
-                        font-size: 1.4rem;
-                        opacity: 0.8;
-                        transition: all 0.2s ease-in;
-                        -webkit-transition: all 0.2s ease-in;
-                        -moz-transition: all 0.2s ease-in;
-                        -ms-transition: all 0.2s ease-in;
-                        -o-transition: all 0.2s ease-in;
-
-                        &:hover {
-                            opacity: 1;
-                            font-weight: 500;
-                        }
-                    }
-                }
+                padding: 1rem;
+                z-index: 100;
+              }
             }
-        }
+          }
 
-        .gallery_container {
-            max-width: 67rem;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 4rem;
-            padding-block: 2rem;
-
-            &>div:nth-child(1) {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-
-                &>div:nth-child(1) {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 2rem;
-
-                    &>p {
-                        font-size: 1.6rem;
-                        color: var(--text-primary);
-                        font-family: 'AirbnbCereal_Medium';
-                    }
-
-                    &>button {
-                        width: min-content;
-                        height: 3.5rem;
-                        padding-inline: 1.5rem;
-                        border-radius: var(--border-radius-primary);
-                        -webkit-border-radius: var(--border-radius-primary);
-                        -moz-border-radius: var(--border-radius-primary);
-                        -ms-border-radius: var(--border-radius-primary);
-                        -o-border-radius: var(--border-radius-primary);
-                        background-color: var(--bg-secondary);
-                        color: var(--btn-text-color);
-                        border: none;
-                        outline: none;
-                        cursor: pointer;
-                        transition: var(--common-btn-transition);
-                        -webkit-transition: var(--common-btn-transition);
-                        -moz-transition: var(--common-btn-transition);
-                        -ms-transition: var(--common-btn-transition);
-                        -o-transition: var(--common-btn-transition);
-
-                        &:hover {
-                            background-color: var(--bg-secondary-hover);
-                        }
-                    }
-                }
-
-                &>div:nth-child(2) {
-                    width: 7.2rem;
-                    height: 7.2rem;
-                    border-radius: var(--border-radius-primary);
-                    -webkit-border-radius: var(--border-radius-primary);
-                    -moz-border-radius: var(--border-radius-primary);
-                    -ms-border-radius: var(--border-radius-primary);
-                    -o-border-radius: var(--border-radius-primary);
-
-                    &>img {
-                        width: inherit;
-                        height: inherit;
-                        border-radius: inherit;
-                        -webkit-border-radius: inherit;
-                        -moz-border-radius: inherit;
-                        -ms-border-radius: inherit;
-                        -o-border-radius: inherit;
-                        border: 0.1rem solid var(--border-secondary)
-                    }
-                }
-            }
-
-            &>div:nth-child(2) {
-                display: flex;
-                flex-direction: column;
-                gap: 2rem;
-
-                &>div:nth-child(1) {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-
-                    &>p {
-                        font-size: 1.6rem;
-                        color: var(--text-primary);
-                        font-family: 'AirbnbCereal_Medium';
-                    }
-
-                    &>button {
-                        height: 3.5rem;
-                        padding-inline: 1.5rem;
-                        border-radius: var(--border-radius-primary);
-                        -webkit-border-radius: var(--border-radius-primary);
-                        -moz-border-radius: var(--border-radius-primary);
-                        -ms-border-radius: var(--border-radius-primary);
-                        -o-border-radius: var(--border-radius-primary);
-                        background-color: var(--bg-secondary);
-                        color: var(--btn-text-color);
-                        border: none;
-                        outline: none;
-                        cursor: pointer;
-                        transition: var(--common-btn-transition);
-                        -webkit-transition: var(--common-btn-transition);
-                        -moz-transition: var(--common-btn-transition);
-                        -ms-transition: var(--common-btn-transition);
-                        -o-transition: var(--common-btn-transition);
-
-                        &:hover {
-                            background-color: var(--bg-secondary-hover);
-                        }
-                    }
-                }
-
-                &>div:nth-child(2) {
-                    /* height: 30rem;
-                    min-height: 30rem;
-                    padding: 1.5rem; */
-                    max-height: 30rem;
-                    padding: 1.5rem;
-                    overflow: auto;
-                    background-color: var(--bg-hover-primary);
-                    border-radius: var(--border-radius-primary);
-                    -webkit-border-radius: var(--border-radius-primary);
-                    -moz-border-radius: var(--border-radius-primary);
-                    -ms-border-radius: var(--border-radius-primary);
-                    -o-border-radius: var(--border-radius-primary);
-                    display: flex;
-                    gap: 1.5rem;
-                    flex-wrap: wrap;
-                    align-content: start;
-
-                    &>div {
-                        width: 100%;
-                        height: 25rem;
-                        border-radius: var(--border-radius-primary);
-                        -webkit-border-radius: var(--border-radius-primary);
-                        -moz-border-radius: var(--border-radius-primary);
-                        -ms-border-radius: var(--border-radius-primary);
-                        -o-border-radius: var(--border-radius-primary);
-                        margin-bottom: 1.5rem;
-
-                        &>img {
-                            width: inherit;
-                            height: inherit;
-                            border-radius: var(--border-radius-primary);
-                            -webkit-border-radius: var(--border-radius-primary);
-                            -moz-border-radius: var(--border-radius-primary);
-                            -ms-border-radius: var(--border-radius-primary);
-                            -o-border-radius: var(--border-radius-primary);
-                            object-fit: cover;
-                            cursor: pointer;
-                        }
-                    }
-                }
-            }
-
-            .button_container {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-
-                &>button {
-                    height: 3.5rem;
-                    padding-inline: 1.5rem;
-                    border-radius: var(--border-radius-primary);
-                    -webkit-border-radius: var(--border-radius-primary);
-                    -moz-border-radius: var(--border-radius-primary);
-                    -ms-border-radius: var(--border-radius-primary);
-                    -o-border-radius: var(--border-radius-primary);
-                    background-color: var(--bg-secondary);
-                    color: var(--btn-text-color);
-                    border: none;
-                    outline: none;
-                    cursor: pointer;
-                    transition: var(--common-btn-transition);
-                    -webkit-transition: var(--common-btn-transition);
-                    -moz-transition: var(--common-btn-transition);
-                    -ms-transition: var(--common-btn-transition);
-                    -o-transition: var(--common-btn-transition);
-
-                    &:hover {
-                        background-color: var(--bg-secondary-hover);
-                    }
-                }
-            }
-        }
-
-        .social_link_container {
-            max-width: 67rem;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            padding-block: 2rem;
-
-            .form_group {
-                display: flex;
-                flex-direction: column;
-
-                &>div {
-                    height: 3.5rem;
-                    border: 0.1rem solid var(--border-secondary);
-                    border-radius: var(--border-radius-primary);
-                    -webkit-border-radius: var(--border-radius-primary);
-                    -moz-border-radius: var(--border-radius-primary);
-                    -ms-border-radius: var(--border-radius-primary);
-                    -o-border-radius: var(--border-radius-primary);
-                    background-color: var(--bg-primary);
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
-
-                    &>div {
-                        width: 3.5rem;
-                        height: 3.5rem;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        color: var(--text-primary);
-                    }
-
-                    &>input {
-                        width: calc(100% - 3.5rem - 1rem);
-                        height: inherit;
-                        padding-inline: 1rem;
-                        font-size: 1.4rem;
-                        border: 0.1rem solid var(--border-secondary);
-                        border-radius: var(--border-radius-primary);
-                        -webkit-border-radius: var(--border-radius-primary);
-                        -moz-border-radius: var(--border-radius-primary);
-                        -ms-border-radius: var(--border-radius-primary);
-                        -o-border-radius: var(--border-radius-primary);
-                        background-color: var(--bg-primary);
-                        color: var(--text-primary);
-                        outline: none;
-
-                        &::placeholder {
-                            color: var(--text-secondary);
-                            letter-spacing: 0.01rem;
-                        }
-                    }
-                }
-
-
-                .select_container {
-                    border: 0.1rem solid var(--border-secondary);
-                    border-radius: var(--border-radius-primary);
-                    -webkit-border-radius: var(--border-radius-primary);
-                    -moz-border-radius: var(--border-radius-primary);
-                    -ms-border-radius: var(--border-radius-primary);
-                    -o-border-radius: var(--border-radius-primary);
-                    background-color: var(--bg-primary);
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    position: relative;
-
-                    &>input {
-                        width: calc(100% - 3rem);
-                        height: 3.5rem;
-                        padding-inline: 1rem;
-                        font-size: 1.4rem;
-                        background: transparent;
-                        color: var(--text-primary);
-                        border: none;
-                        outline: none;
-
-                        &::placeholder {
-                            color: var(--text-secondary);
-                            letter-spacing: 0.01rem;
-                        }
-                    }
-
-                    &>div {
-                        height: 3.5rem;
-                        width: 3.5rem;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        font-size: 1.4rem;
-                        color: var(--text-primary);
-                        font-family: 'AirbnbCereal_Medium';
-                    }
-
-                    .select_dropdown_container {
-                        position: absolute;
-                        width: 100%;
-                        top: 4rem;
-                        right: 0rem;
-                        left: 0rem;
-                        height: 15rem;
-                        border: 0.1rem solid var(--border-secondary);
-                        border-radius: var(--border-radius-primary);
-                        -webkit-border-radius: var(--border-radius-primary);
-                        -moz-border-radius: var(--border-radius-primary);
-                        -ms-border-radius: var(--border-radius-primary);
-                        -o-border-radius: var(--border-radius-primary);
-                        background-color: var(--bg-primary);
-                        padding: 1rem;
-                        z-index: 100;
-                    }
-                }
-            }
-
-            .button_container {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-
-                &>button {
-                    height: 3.5rem;
-                    padding-inline: 1.5rem;
-                    border-radius: var(--border-radius-primary);
-                    -webkit-border-radius: var(--border-radius-primary);
-                    -moz-border-radius: var(--border-radius-primary);
-                    -ms-border-radius: var(--border-radius-primary);
-                    -o-border-radius: var(--border-radius-primary);
-                    background-color: var(--bg-secondary);
-                    color: var(--btn-text-color);
-                    border: none;
-                    outline: none;
-                    cursor: pointer;
-                    transition: var(--common-btn-transition);
-                    -webkit-transition: var(--common-btn-transition);
-                    -moz-transition: var(--common-btn-transition);
-                    -ms-transition: var(--common-btn-transition);
-                    -o-transition: var(--common-btn-transition);
-
-                    &:hover {
-                        background-color: var(--bg-secondary-hover);
-                    }
-                }
-            }
-        }
-    }
-
-    .complete {
-        margin-block: 2rem;
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-        max-width: 67rem;
-        width: 100%;
-
-        &>p {
-            color: var(--text-primary);
-            font-size: 1.6rem;
-            font-family: 'AirbnbCereal_Medium';
-        }
-
-        &>div {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            &>button {
-                height: 3.5rem;
-                padding-inline: 1.5rem;
-                border-radius: var(--border-radius-primary);
-                -webkit-border-radius: var(--border-radius-primary);
-                -moz-border-radius: var(--border-radius-primary);
-                -ms-border-radius: var(--border-radius-primary);
-                -o-border-radius: var(--border-radius-primary);
-                background-color: var(--bg-secondary);
-                color: var(--btn-text-color);
-                border: none;
-                outline: none;
-                cursor: pointer;
-                transition: var(--common-btn-transition);
-                -webkit-transition: var(--common-btn-transition);
-                -moz-transition: var(--common-btn-transition);
-                -ms-transition: var(--common-btn-transition);
-                -o-transition: var(--common-btn-transition);
-
-                &:hover {
-                    background-color: var(--bg-secondary-hover);
-                }
-            }
-        }
-    }
-}
-
-
-
-.modal_container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    padding: 2rem;
-    background-color: var(--bg-primary);
-    border: 0.1rem solid var(--border-secondary);
-    width: min(95vw, 80rem);
-    border-radius: var(--input-border-radius);
-    -webkit-border-radius: var(--input-border-radius);
-    -moz-border-radius: var(--input-border-radius);
-    -ms-border-radius: var(--input-border-radius);
-    -o-border-radius: var(--input-border-radius);
-
-    &>div:nth-child(1) {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 2rem;
-
-        &>p {
-            font-size: var(--font-size-1);
-            font-weight: 600;
-        }
-
-        &>button {
-            margin-left: auto;
-            height: 3.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 3.2rem;
-            background-color: transparent;
-            border: 0.1rem solid var(--border-secondary);
-            cursor: pointer;
-            color: var(--color-6);
+          .add_service_btn {
+            height: 3.5rem;
+            padding-inline: 1.5rem;
             border-radius: var(--border-radius-primary);
             -webkit-border-radius: var(--border-radius-primary);
             -moz-border-radius: var(--border-radius-primary);
             -ms-border-radius: var(--border-radius-primary);
             -o-border-radius: var(--border-radius-primary);
-            transition: var(--btn-transition);
-            -webkit-transition: var(--btn-transition);
-            -moz-transition: var(--btn-transition);
-            -ms-transition: var(--btn-transition);
-            -o-transition: var(--btn-transition);
-            font-size: var(--font-size-2);
-            margin-bottom: 1rem;
-        }
-    }
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border: none;
+            outline: none;
+            cursor: pointer;
+            transition: var(--common-btn-transition);
+            -webkit-transition: var(--common-btn-transition);
+            -moz-transition: var(--common-btn-transition);
+            -ms-transition: var(--common-btn-transition);
+            -o-transition: var(--common-btn-transition);
 
-
-    .modal_content_container {
-
-        &>div:nth-child(1) {
-            height: 50vh;
-            width: 100%;
-
-            &>img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                border: 0.1rem solid var(--border-secondary);
+            &:hover {
+              background-color: var(--bg-secondary-hover);
             }
-        }
+          }
 
-        &>div:nth-child(2) {
-            margin-top: 1rem;
-            height: 4rem;
+          .button_container {
             display: flex;
-            justify-content: flex-end;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
 
-            &>div {
-                height: 100%;
-                display: flex;
-                gap: 1.5rem;
+            & > button {
+              height: 3.5rem;
+              padding-inline: 1.5rem;
+              border-radius: var(--border-radius-primary);
+              -webkit-border-radius: var(--border-radius-primary);
+              -moz-border-radius: var(--border-radius-primary);
+              -ms-border-radius: var(--border-radius-primary);
+              -o-border-radius: var(--border-radius-primary);
+              background-color: var(--bg-secondary);
+              color: var(--btn-text-color);
+              border: none;
+              outline: none;
+              cursor: pointer;
+              transition: var(--common-btn-transition);
+              -webkit-transition: var(--common-btn-transition);
+              -moz-transition: var(--common-btn-transition);
+              -ms-transition: var(--common-btn-transition);
+              -o-transition: var(--common-btn-transition);
 
-                &>button {
-                    margin-block: 1rem -1rem;
-                    height: 3.5rem;
-                    padding-inline: 1rem;
-                    border-radius: var(--border-radius-primary);
-                    -webkit-border-radius: var(--border-radius-primary);
-                    -moz-border-radius: var(--border-radius-primary);
-                    -ms-border-radius: var(--border-radius-primary);
-                    -o-border-radius: var(--border-radius-primary);
-                    /* background-color: var(--bg-secondary); */
-                    /* color: var(--text-primary); */
-                    color: #fff;
-                    border: none;
-                    outline: none;
-                    cursor: pointer;
-                    transition: var(--common-btn-transition);
-                    -webkit-transition: var(--common-btn-transition);
-                    -moz-transition: var(--common-btn-transition);
-                    -ms-transition: var(--common-btn-transition);
-                    -o-transition: var(--common-btn-transition);
-                    font-size: 1.4rem;
-
-                    &:hover {
-                        opacity: 0.8;
-                    }
-
-                }
-
-                &>button:nth-child(1) {
-                    background-color: #0285c7;
-                }
-
-                &>button:nth-child(2) {
-                    background-color: #450a0a;
-                }
+              &:hover {
+                background-color: var(--bg-secondary-hover);
+              }
             }
+          }
         }
-    }
 
-}
+        & > div:nth-child(2) {
+          width: 100%;
+          max-width: 50rem;
+          max-height: 50rem;
+          overflow: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 2rem;
+          background-color: var(--bg-hover-primary);
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+          overflow-y: auto;
 
-.mobile_service_item {
-    display: none;
-}
+          .service_item {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-primary);
+            border: 0.1rem solid var(--border-secondary);
+            border-radius: var(--border-radius-primary);
+            -webkit-border-radius: var(--border-radius-primary);
+            -moz-border-radius: var(--border-radius-primary);
+            -ms-border-radius: var(--border-radius-primary);
+            -o-border-radius: var(--border-radius-primary);
+            min-width: 45.5rem;
+            margin-bottom: 2rem;
 
+            & > div:nth-child(1) {
+              flex: 1;
+              border-bottom: 0.1rem solid var(--border-secondary);
+              padding: 1.5rem;
+              position: relative;
 
-@media screen and (max-width: 768px) {
-    .service_item {
-        display: none !important;
-    }
+              & > div {
+                display: flex;
+                gap: 2rem;
 
-    .mobile_service_item {
-        display: flex;
-        flex-direction: column;
-        background-color: var(--bg-primary);
+                & > div:nth-child(1) {
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  width: 5rem;
+                  height: 5rem;
+                  border-radius: 50%;
+                  -webkit-border-radius: 50%;
+                  -moz-border-radius: 50%;
+                  -ms-border-radius: 50%;
+                  -o-border-radius: 50%;
+
+                  & > img {
+                    width: inherit;
+                    height: inherit;
+                    border-radius: inherit;
+                    -webkit-border-radius: inherit;
+                    -moz-border-radius: inherit;
+                    -ms-border-radius: inherit;
+                    -o-border-radius: inherit;
+                  }
+                }
+
+                & > div:nth-child(2) {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 0.5rem;
+
+                  & > p:nth-child(1) {
+                    font-size: 1.6rem;
+                    color: var(--text-primary);
+                    font-family: "AirbnbCereal_Medium";
+                  }
+
+                  & > p {
+                    font-size: 1.4rem;
+                    color: var(--text-secondary);
+                    line-height: initial;
+                  }
+                }
+              }
+
+              & > div:nth-child(2) {
+                position: absolute;
+                top: 1.5rem;
+                right: 1.5rem;
+                & > button {
+                  padding: 0.5rem 1rem;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  font-size: 1.4rem;
+                  /* background-color: #450a0a; */
+                  border-radius: var(--border-radius-primary);
+                  -webkit-border-radius: var(--border-radius-primary);
+                  -moz-border-radius: var(--border-radius-primary);
+                  -ms-border-radius: var(--border-radius-primary);
+                  -o-border-radius: var(--border-radius-primary);
+                  color: #fff;
+                  border: none;
+                  outline: none;
+                  cursor: pointer;
+                }
+
+                & > button:nth-child(1) {
+                    background-color: #0285c7; 
+                }
+
+                & > button:nth-child(2) {
+                  background-color: #450a0a;
+                }
+              }
+            }
+
+            & > div:nth-child(2) {
+              display: flex;
+              align-items: center;
+              justify-content: space-around;
+              padding: 2rem;
+
+              & > div {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+
+                & > p:nth-child(1) {
+                  font-size: 1.8rem;
+                  color: var(--text-primary);
+                  font-family: "AirbnbCereal_Medium";
+                }
+
+                & > p {
+                  font-size: 1.6rem;
+                  text-align: center;
+                  color: var(--text-secondary);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .service_icon_container {
+        .slider_item {
+          width: 80%;
+          height: 6rem;
+          cursor: pointer;
+          position: relative;
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+          background-color: var(--bg-primary);
+        }
+
+        .icon_selected {
+          border: 0.2rem solid var(--bg-secondary);
+        }
+
+        .slider_item > img {
+          width: 100%;
+          height: 100%;
+          background-size: cover;
+          background-position: center;
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+          border: 0.1rem solid var(--border-secondary);
+        }
+      }
+
+      .select_container {
         border: 0.1rem solid var(--border-secondary);
         border-radius: var(--border-radius-primary);
         -webkit-border-radius: var(--border-radius-primary);
         -moz-border-radius: var(--border-radius-primary);
         -ms-border-radius: var(--border-radius-primary);
         -o-border-radius: var(--border-radius-primary);
-        /* min-width: 45.5rem; */
-        width: 100%;
-        margin-bottom: 1rem;
+        background-color: var(--bg-primary);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
 
-        &>div:nth-child(1) {
-            flex: 1;
-            border-bottom: 0.1rem solid var(--border-secondary);
-            padding: 1.5rem;
-            position: relative;
+        & > input {
+          width: calc(100% - 3rem);
+          height: 3.5rem;
+          padding-inline: 1rem;
+          font-size: 1.4rem;
+          background: transparent;
+          color: var(--text-primary);
+          border: none;
+          outline: none;
 
-
-            &>div {
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-                min-height: 10rem;
-
-                &>div:nth-child(1) {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    width: 5rem;
-                    height: 5rem;
-                    border-radius: 50%;
-                    -webkit-border-radius: 50%;
-                    -moz-border-radius: 50%;
-                    -ms-border-radius: 50%;
-                    -o-border-radius: 50%;
-                    margin-inline: auto;
-                    position: relative;
-
-                    &>img {
-                        width: inherit;
-                        height: inherit;
-                        border-radius: inherit;
-                        -webkit-border-radius: inherit;
-                        -moz-border-radius: inherit;
-                        -ms-border-radius: inherit;
-                        -o-border-radius: inherit;
-                        border: 0.1rem solid var(--border-secondary);
-                    }
-
-                    &>span {
-                        position: absolute;
-                        top: 0rem;
-                        right: -0.5rem;
-                        height: 2.2rem;
-                        width: 2.2rem;
-                        border-radius: 50%;
-                        background-color: #000;
-                        -webkit-border-radius: 50%;
-                        -moz-border-radius: 50%;
-                        -ms-border-radius: 50%;
-                        -o-border-radius: 50%;
-                        color: #D8AA00;
-                        border: 0.1rem solid #D8AA00;
-                        font-size: 1.2rem;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                    }
-                }
-
-                &>p:nth-child(2) {
-                    font-size: 1.6rem;
-                    color: var(--text-primary);
-                    font-family: 'AirbnbCereal_Medium';
-                    text-align: center;
-                }
-
-                &>p {
-                    font-size: 1.4rem;
-                    color: var(--text-secondary);
-                    text-align: center;
-                    word-break: break-word;
-                }
-
-            }
-
-            &>button {
-                position: absolute;
-                top: 1.5rem;
-                right: 1.5rem;
-                padding: 0.5rem 0.8rem;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 1.2rem;
-                background-color: #450a0a;
-                border-radius: var(--border-radius-primary);
-                -webkit-border-radius: var(--border-radius-primary);
-                -moz-border-radius: var(--border-radius-primary);
-                -ms-border-radius: var(--border-radius-primary);
-                -o-border-radius: var(--border-radius-primary);
-                color: #fff;
-                border: none;
-                outline: none;
-                cursor: pointer;
-            }
+          &::placeholder {
+            color: var(--text-secondary);
+            letter-spacing: 0.01rem;
+          }
         }
 
-        &>div:nth-child(2) {
+        & > div:nth-child(2) {
+          height: 3.5rem;
+          width: 3.5rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 1.4rem;
+          color: var(--text-primary);
+          font-family: "AirbnbCereal_Medium";
+        }
+
+        .select_dropdown_container {
+          position: absolute;
+          width: 100%;
+          top: 4rem;
+          right: 0rem;
+          left: 0rem;
+          height: auto !important;
+          overflow: auto;
+          border: 0.1rem solid var(--border-secondary);
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+          background-color: var(--bg-primary);
+          padding: 2rem;
+          z-index: 100;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start !important;
+          gap: 2rem;
+
+          & > button {
+            width: max-content;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 1.4rem;
+            opacity: 0.8;
+            transition: all 0.2s ease-in;
+            -webkit-transition: all 0.2s ease-in;
+            -moz-transition: all 0.2s ease-in;
+            -ms-transition: all 0.2s ease-in;
+            -o-transition: all 0.2s ease-in;
+
+            &:hover {
+              opacity: 1;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+    }
+
+    .gallery_container {
+      max-width: 67rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+      padding-block: 2rem;
+
+      & > div:nth-child(1) {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        & > div:nth-child(1) {
+          display: flex;
+          flex-direction: column;
+          gap: 2rem;
+
+          & > p {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            font-family: "AirbnbCereal_Medium";
+          }
+
+          & > button {
+            width: min-content;
+            height: 3.5rem;
+            padding-inline: 1.5rem;
+            border-radius: var(--border-radius-primary);
+            -webkit-border-radius: var(--border-radius-primary);
+            -moz-border-radius: var(--border-radius-primary);
+            -ms-border-radius: var(--border-radius-primary);
+            -o-border-radius: var(--border-radius-primary);
+            background-color: var(--bg-secondary);
+            color: var(--btn-text-color);
+            border: none;
+            outline: none;
+            cursor: pointer;
+            transition: var(--common-btn-transition);
+            -webkit-transition: var(--common-btn-transition);
+            -moz-transition: var(--common-btn-transition);
+            -ms-transition: var(--common-btn-transition);
+            -o-transition: var(--common-btn-transition);
+
+            &:hover {
+              background-color: var(--bg-secondary-hover);
+            }
+          }
+        }
+
+        & > div:nth-child(2) {
+          width: 7.2rem;
+          height: 7.2rem;
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+
+          & > img {
+            width: inherit;
+            height: inherit;
+            border-radius: inherit;
+            -webkit-border-radius: inherit;
+            -moz-border-radius: inherit;
+            -ms-border-radius: inherit;
+            -o-border-radius: inherit;
+            border: 0.1rem solid var(--border-secondary);
+          }
+        }
+      }
+
+      & > div:nth-child(2) {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+
+        & > div:nth-child(1) {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          & > p {
+            font-size: 1.6rem;
+            color: var(--text-primary);
+            font-family: "AirbnbCereal_Medium";
+          }
+
+          & > button {
+            height: 3.5rem;
+            padding-inline: 1.5rem;
+            border-radius: var(--border-radius-primary);
+            -webkit-border-radius: var(--border-radius-primary);
+            -moz-border-radius: var(--border-radius-primary);
+            -ms-border-radius: var(--border-radius-primary);
+            -o-border-radius: var(--border-radius-primary);
+            background-color: var(--bg-secondary);
+            color: var(--btn-text-color);
+            border: none;
+            outline: none;
+            cursor: pointer;
+            transition: var(--common-btn-transition);
+            -webkit-transition: var(--common-btn-transition);
+            -moz-transition: var(--common-btn-transition);
+            -ms-transition: var(--common-btn-transition);
+            -o-transition: var(--common-btn-transition);
+
+            &:hover {
+              background-color: var(--bg-secondary-hover);
+            }
+          }
+        }
+
+        & > div:nth-child(2) {
+          /* height: 30rem;
+                    min-height: 30rem;
+                    padding: 1.5rem; */
+          max-height: 30rem;
+          padding: 1.5rem;
+          overflow: auto;
+          background-color: var(--bg-hover-primary);
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+          display: flex;
+          gap: 1.5rem;
+          flex-wrap: wrap;
+          align-content: start;
+
+          & > div {
+            width: 100%;
+            height: 25rem;
+            border-radius: var(--border-radius-primary);
+            -webkit-border-radius: var(--border-radius-primary);
+            -moz-border-radius: var(--border-radius-primary);
+            -ms-border-radius: var(--border-radius-primary);
+            -o-border-radius: var(--border-radius-primary);
+            margin-bottom: 1.5rem;
+
+            & > img {
+              width: inherit;
+              height: inherit;
+              border-radius: var(--border-radius-primary);
+              -webkit-border-radius: var(--border-radius-primary);
+              -moz-border-radius: var(--border-radius-primary);
+              -ms-border-radius: var(--border-radius-primary);
+              -o-border-radius: var(--border-radius-primary);
+              object-fit: cover;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+
+      .button_container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        & > button {
+          height: 3.5rem;
+          padding-inline: 1.5rem;
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+          background-color: var(--bg-secondary);
+          color: var(--btn-text-color);
+          border: none;
+          outline: none;
+          cursor: pointer;
+          transition: var(--common-btn-transition);
+          -webkit-transition: var(--common-btn-transition);
+          -moz-transition: var(--common-btn-transition);
+          -ms-transition: var(--common-btn-transition);
+          -o-transition: var(--common-btn-transition);
+
+          &:hover {
+            background-color: var(--bg-secondary-hover);
+          }
+        }
+      }
+    }
+
+    .social_link_container {
+      max-width: 67rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      padding-block: 2rem;
+
+      .form_group {
+        display: flex;
+        flex-direction: column;
+
+        & > div {
+          height: 3.5rem;
+          border: 0.1rem solid var(--border-secondary);
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+          background-color: var(--bg-primary);
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+
+          & > div {
+            width: 3.5rem;
+            height: 3.5rem;
             display: flex;
             align-items: center;
-            justify-content: space-around;
-            /* padding: 2rem; */
-            min-height: 7rem;
+            justify-content: center;
+            color: var(--text-primary);
+          }
 
-            &>div {
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
+          & > input {
+            width: calc(100% - 3.5rem - 1rem);
+            height: inherit;
+            padding-inline: 1rem;
+            font-size: 1.4rem;
+            border: 0.1rem solid var(--border-secondary);
+            border-radius: var(--border-radius-primary);
+            -webkit-border-radius: var(--border-radius-primary);
+            -moz-border-radius: var(--border-radius-primary);
+            -ms-border-radius: var(--border-radius-primary);
+            -o-border-radius: var(--border-radius-primary);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            outline: none;
 
-                &>p:nth-child(1) {
-                    font-size: 1.5rem;
-                    color: var(--text-primary);
-                    font-family: "AirbnbCereal_Medium";
-                }
-
-                &>p {
-                    font-size: 1.4rem;
-                    text-align: center;
-                    color: var(--text-secondary);
-                }
+            &::placeholder {
+              color: var(--text-secondary);
+              letter-spacing: 0.01rem;
             }
+          }
         }
+
+        .select_container {
+          border: 0.1rem solid var(--border-secondary);
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+          background-color: var(--bg-primary);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          position: relative;
+
+          & > input {
+            width: calc(100% - 3rem);
+            height: 3.5rem;
+            padding-inline: 1rem;
+            font-size: 1.4rem;
+            background: transparent;
+            color: var(--text-primary);
+            border: none;
+            outline: none;
+
+            &::placeholder {
+              color: var(--text-secondary);
+              letter-spacing: 0.01rem;
+            }
+          }
+
+          & > div {
+            height: 3.5rem;
+            width: 3.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            font-family: "AirbnbCereal_Medium";
+          }
+
+          .select_dropdown_container {
+            position: absolute;
+            width: 100%;
+            top: 4rem;
+            right: 0rem;
+            left: 0rem;
+            height: 15rem;
+            border: 0.1rem solid var(--border-secondary);
+            border-radius: var(--border-radius-primary);
+            -webkit-border-radius: var(--border-radius-primary);
+            -moz-border-radius: var(--border-radius-primary);
+            -ms-border-radius: var(--border-radius-primary);
+            -o-border-radius: var(--border-radius-primary);
+            background-color: var(--bg-primary);
+            padding: 1rem;
+            z-index: 100;
+          }
+        }
+      }
+
+      .button_container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        & > button {
+          height: 3.5rem;
+          padding-inline: 1.5rem;
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+          background-color: var(--bg-secondary);
+          color: var(--btn-text-color);
+          border: none;
+          outline: none;
+          cursor: pointer;
+          transition: var(--common-btn-transition);
+          -webkit-transition: var(--common-btn-transition);
+          -moz-transition: var(--common-btn-transition);
+          -ms-transition: var(--common-btn-transition);
+          -o-transition: var(--common-btn-transition);
+
+          &:hover {
+            background-color: var(--bg-secondary-hover);
+          }
+        }
+      }
     }
+  }
+
+  .complete {
+    margin-block: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 67rem;
+    width: 100%;
+
+    & > p {
+      color: var(--text-primary);
+      font-size: 1.6rem;
+      font-family: "AirbnbCereal_Medium";
+    }
+
+    & > div {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      & > button {
+        height: 3.5rem;
+        padding-inline: 1.5rem;
+        border-radius: var(--border-radius-primary);
+        -webkit-border-radius: var(--border-radius-primary);
+        -moz-border-radius: var(--border-radius-primary);
+        -ms-border-radius: var(--border-radius-primary);
+        -o-border-radius: var(--border-radius-primary);
+        background-color: var(--bg-secondary);
+        color: var(--btn-text-color);
+        border: none;
+        outline: none;
+        cursor: pointer;
+        transition: var(--common-btn-transition);
+        -webkit-transition: var(--common-btn-transition);
+        -moz-transition: var(--common-btn-transition);
+        -ms-transition: var(--common-btn-transition);
+        -o-transition: var(--common-btn-transition);
+
+        &:hover {
+          background-color: var(--bg-secondary-hover);
+        }
+      }
+    }
+  }
 }
 
+.modal_container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  padding: 2rem;
+  background-color: var(--bg-primary);
+  border: 0.1rem solid var(--border-secondary);
+  width: min(95vw, 80rem);
+  border-radius: var(--input-border-radius);
+  -webkit-border-radius: var(--input-border-radius);
+  -moz-border-radius: var(--input-border-radius);
+  -ms-border-radius: var(--input-border-radius);
+  -o-border-radius: var(--input-border-radius);
 
+  & > div:nth-child(1) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+
+    & > p {
+      font-size: var(--font-size-1);
+      font-weight: 600;
+    }
+
+    & > button {
+      margin-left: auto;
+      height: 3.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3.2rem;
+      background-color: transparent;
+      border: 0.1rem solid var(--border-secondary);
+      cursor: pointer;
+      color: var(--color-6);
+      border-radius: var(--border-radius-primary);
+      -webkit-border-radius: var(--border-radius-primary);
+      -moz-border-radius: var(--border-radius-primary);
+      -ms-border-radius: var(--border-radius-primary);
+      -o-border-radius: var(--border-radius-primary);
+      transition: var(--btn-transition);
+      -webkit-transition: var(--btn-transition);
+      -moz-transition: var(--btn-transition);
+      -ms-transition: var(--btn-transition);
+      -o-transition: var(--btn-transition);
+      font-size: var(--font-size-2);
+      margin-bottom: 1rem;
+    }
+  }
+
+  .modal_content_container {
+    & > div:nth-child(1) {
+      height: 50vh;
+      width: 100%;
+
+      & > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border: 0.1rem solid var(--border-secondary);
+      }
+    }
+
+    & > div:nth-child(2) {
+      margin-top: 1rem;
+      height: 4rem;
+      display: flex;
+      justify-content: flex-end;
+
+      & > div {
+        height: 100%;
+        display: flex;
+        gap: 1.5rem;
+
+        & > button {
+          margin-block: 1rem -1rem;
+          height: 3.5rem;
+          padding-inline: 1rem;
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+          /* background-color: var(--bg-secondary); */
+          /* color: var(--text-primary); */
+          color: #fff;
+          border: none;
+          outline: none;
+          cursor: pointer;
+          transition: var(--common-btn-transition);
+          -webkit-transition: var(--common-btn-transition);
+          -moz-transition: var(--common-btn-transition);
+          -ms-transition: var(--common-btn-transition);
+          -o-transition: var(--common-btn-transition);
+          font-size: 1.4rem;
+
+          &:hover {
+            opacity: 0.8;
+          }
+        }
+
+        & > button:nth-child(1) {
+          background-color: #0285c7;
+        }
+
+        & > button:nth-child(2) {
+          background-color: #450a0a;
+        }
+      }
+    }
+  }
+}
+
+.mobile_service_item {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .service_item {
+    display: none !important;
+  }
+
+  .mobile_service_item {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-primary);
+    border: 0.1rem solid var(--border-secondary);
+    border-radius: var(--border-radius-primary);
+    -webkit-border-radius: var(--border-radius-primary);
+    -moz-border-radius: var(--border-radius-primary);
+    -ms-border-radius: var(--border-radius-primary);
+    -o-border-radius: var(--border-radius-primary);
+    /* min-width: 45.5rem; */
+    width: 100%;
+    margin-bottom: 1rem;
+
+    & > div:nth-child(1) {
+      flex: 1;
+      border-bottom: 0.1rem solid var(--border-secondary);
+      padding: 1.5rem;
+      position: relative;
+
+      & > div:nth-child(1) {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-height: 10rem;
+
+        & > div:nth-child(1) {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 5rem;
+          height: 5rem;
+          border-radius: 50%;
+          -webkit-border-radius: 50%;
+          -moz-border-radius: 50%;
+          -ms-border-radius: 50%;
+          -o-border-radius: 50%;
+          margin-inline: auto;
+          position: relative;
+
+          & > img {
+            width: inherit;
+            height: inherit;
+            border-radius: inherit;
+            -webkit-border-radius: inherit;
+            -moz-border-radius: inherit;
+            -ms-border-radius: inherit;
+            -o-border-radius: inherit;
+            border: 0.1rem solid var(--border-secondary);
+          }
+
+          & > span {
+            position: absolute;
+            top: 0rem;
+            right: -0.5rem;
+            height: 2.2rem;
+            width: 2.2rem;
+            border-radius: 50%;
+            background-color: #000;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            -ms-border-radius: 50%;
+            -o-border-radius: 50%;
+            color: #d8aa00;
+            border: 0.1rem solid #d8aa00;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+        }
+
+        & > p:nth-child(2) {
+          font-size: 1.6rem;
+          color: var(--text-primary);
+          font-family: "AirbnbCereal_Medium";
+          text-align: center;
+        }
+
+        & > p {
+          font-size: 1.4rem;
+          color: var(--text-secondary);
+          text-align: center;
+          word-break: break-word;
+        }
+      }
+
+      & > div {
+        /* position: absolute;
+        top: 1.5rem;
+        right: 1.5rem; */
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+        margin-top: 2rem;
+
+        & > button {
+          flex: 1;
+          height: 3rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 1.4rem;
+          /* background-color: #450a0a; */
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+          color: #fff;
+          border: none;
+          outline: none;
+          cursor: pointer;
+        }
+
+        & > button:nth-child(1) {
+          background-color: #0285c7;
+        }
+
+        & > button:nth-child(2) {
+          background-color: #450a0a;
+        }
+      }
+    }
+
+    & > div:nth-child(2) {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      /* padding: 2rem; */
+      min-height: 7rem;
+
+      & > div {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        & > p:nth-child(1) {
+          font-size: 1.5rem;
+          color: var(--text-primary);
+          font-family: "AirbnbCereal_Medium";
+        }
+
+        & > p {
+          font-size: 1.4rem;
+          text-align: center;
+          color: var(--text-secondary);
+        }
+      }
+    }
+  }
+}
 
 @supports (-webkit-hyphens: none) {
-    .section {
-        .form_main_container {
-            .form_container {
-                .form_group {
-                    &>input {
-                        font-size: 1.6rem;
-                        transform: scale(0.875);
-                        transform-origin: left top;
-                        width: calc(100% / 0.875);
-                        height: calc(3.5rem/ 0.875);
-                        padding-inline: calc(1rem / 0.875);
-                        border-radius: calc(var(--border-radius-primary) / 0.875);
-                        border: calc(0.1rem / 0.875) solid var(--border-secondary);
-                    }
-                }
-            }
+  .section {
+    .form_main_container {
+      .form_container {
+        .form_group {
+          & > input {
+            font-size: 1.6rem;
+            transform: scale(0.875);
+            transform-origin: left top;
+            width: calc(100% / 0.875);
+            height: calc(3.5rem / 0.875);
+            padding-inline: calc(1rem / 0.875);
+            border-radius: calc(var(--border-radius-primary) / 0.875);
+            border: calc(0.1rem / 0.875) solid var(--border-secondary);
+          }
+        }
+      }
 
-            .service_container {
-                &>div:nth-child(1) {
-                    &>div:nth-child(1) {
-                        .form_group {
-                            &>input {
-                                font-size: 1.6rem;
-                                transform: scale(0.875);
-                                transform-origin: left top;
-                                width: calc(100% / 0.875);
-                                height: calc(3.5rem/ 0.875);
-                                padding-inline: calc(1rem / 0.875);
-                                border-radius: calc(var(--border-radius-primary) / 0.875);
-                                border: calc(0.1rem / 0.875) solid var(--border-secondary);
-                            }
+      .service_container {
+        & > div:nth-child(1) {
+          & > div:nth-child(1) {
+            .form_group {
+              & > input {
+                font-size: 1.6rem;
+                transform: scale(0.875);
+                transform-origin: left top;
+                width: calc(100% / 0.875);
+                height: calc(3.5rem / 0.875);
+                padding-inline: calc(1rem / 0.875);
+                border-radius: calc(var(--border-radius-primary) / 0.875);
+                border: calc(0.1rem / 0.875) solid var(--border-secondary);
+              }
 
-                            /* .select_container {
+              /* .select_container {
                                 transform: scale(0.875);
                                 width: calc(100% / 0.875);
                                 height: calc(3.5rem/ 0.875);
@@ -1476,37 +1482,35 @@
                                     width: calc(3.5rem/ 0.875);
                                 }
                             } */
-                        }
-                    }
-                }
             }
-
-            .social_link_container {
-                gap: calc(1rem / 0.875);
-                padding-block: calc(2rem / 0.875);
-
-                .form_group {
-                    &>div {
-                        transform: scale(0.875);
-                        width: calc(100% / 0.875);
-                        height: calc(3.5rem/ 0.875);
-                        transform-origin: left top;
-                        border-radius: calc(var(--border-radius-primary) / 0.875);
-                        border: calc(0.1rem / 0.875) solid var(--border-secondary);
-                        gap: calc(1rem / 0.875);
-
-                        &>input {
-                            font-size: 1.6rem;
-                        }
-
-                        &>div {
-                            font-size: 1.6rem;
-                        }
-                    }
-                }
-            }
+          }
         }
+      }
 
+      .social_link_container {
+        gap: calc(1rem / 0.875);
+        padding-block: calc(2rem / 0.875);
 
+        .form_group {
+          & > div {
+            transform: scale(0.875);
+            width: calc(100% / 0.875);
+            height: calc(3.5rem / 0.875);
+            transform-origin: left top;
+            border-radius: calc(var(--border-radius-primary) / 0.875);
+            border: calc(0.1rem / 0.875) solid var(--border-secondary);
+            gap: calc(1rem / 0.875);
+
+            & > input {
+              font-size: 1.6rem;
+            }
+
+            & > div {
+              font-size: 1.6rem;
+            }
+          }
+        }
+      }
     }
+  }
 }
