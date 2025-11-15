@@ -762,6 +762,12 @@ const EditSalon = () => {
       serviceIds: [service?.serviceId],
     };
 
+    const confirm = window.confirm("Are you sure ?")
+
+    if(!confirm){
+      return
+    }
+
     try {
       setDeleteServiceLoader({
         serviceId: service?.serviceId,
