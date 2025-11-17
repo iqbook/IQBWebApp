@@ -1,445 +1,671 @@
 .section {
-    background-color: transparent;
-    height: calc(100svh - 6rem);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    overflow: auto;
+  background-color: transparent;
+  height: calc(100svh - 6rem);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow: auto;
 }
 
 .barber_appointment_content_wrapper {
-    height: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  overflow: auto;
+
+  .barber_availability_container {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    overflow: auto;
 
-    .barber_availability_container {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
+    & > div:nth-child(1) {
+      display: flex;
+      justify-content: space-between;
 
-        &>div:nth-child(1) {
-            display: flex;
-            justify-content: space-between;
-
-            &>div {
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-
-                &>h2 {
-                    font-family: "AirbnbCereal_Medium";
-                    color: var(--text-primary);
-                }
-            }
-
-            &>button {
-                width: 10rem;
-                height: 3.5rem;
-                padding-inline: 1rem;
-                border-radius: var(--border-radius-primary);
-                -webkit-border-radius: var(--border-radius-primary);
-                -moz-border-radius: var(--border-radius-primary);
-                -ms-border-radius: var(--border-radius-primary);
-                -o-border-radius: var(--border-radius-primary);
-                background-color: var(--bg-secondary);
-                color: var(--btn-text-color);
-                border: none;
-                outline: none;
-                cursor: pointer;
-                transition: var(--common-btn-transition);
-                -webkit-transition: var(--common-btn-transition);
-                -moz-transition: var(--common-btn-transition);
-                -ms-transition: var(--common-btn-transition);
-                -o-transition: var(--common-btn-transition);
-                font-size: 1.6rem;
-
-                &:hover {
-                    background-color: var(--bg-secondary-hover);
-                }
-            }
-        }
-
-        &>div:nth-child(2) {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            /* 7 items per row */
-            gap: 2rem;
-            align-items: center;
-
-            .appointmentWeekDay {
-                width: 100%;
-                min-width: unset;
-                height: 10rem;
-                border-radius: 0.5rem;
-                border: none;
-                outline: none;
-                cursor: pointer;
-                background-color: var(--bg-primary);
-                color: var(--text-primary);
-                font-family: 'AirbnbCereal_Medium';
-                border: 0.1rem solid var(--border-secondary);
-                text-transform: uppercase;
-            }
-
-            .apptAvailSelected {
-                border: 0.15rem solid var(--bg-secondary);
-            }
-        }
-
-    }
-
-    .barber_dayoff_container {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-        /* background-color: blue; */
-
-        &>div:nth-child(1) {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            &>div:nth-child(1) {
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-
-                &>h2 {
-                    font-family: "AirbnbCereal_Medium";
-                    color: var(--text-primary);
-                }
-            }
-
-
-            &>div:nth-child(2) {
-                display: flex;
-                align-items: center;
-                gap: 2rem;
-
-                .monthSelector {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.6rem;
-                    background-color: var(--bg-primary);
-                    border-radius: 0.8rem;
-                    padding: 0.6rem 1.2rem;
-                    -webkit-border-radius: 0.8rem;
-                    -moz-border-radius: 0.8rem;
-                    -ms-border-radius: 0.8rem;
-                    -o-border-radius: 0.8rem;
-                }
-
-                .iconBtn {
-                    background: none;
-                    border: none;
-                    color: var(--text-primary);
-                    cursor: pointer;
-                }
-
-                .monthText {
-                    font-size: 1.4rem;
-                    font-weight: 500;
-                }
-
-                .reset_days {
-                    width: max-content;
-                    height: 3.5rem;
-                    padding-inline: 1rem;
-                    border-radius: var(--border-radius-primary);
-                    -webkit-border-radius: var(--border-radius-primary);
-                    -moz-border-radius: var(--border-radius-primary);
-                    -ms-border-radius: var(--border-radius-primary);
-                    -o-border-radius: var(--border-radius-primary);
-                    background-color: var(--bg-secondary);
-                    color: var(--btn-text-color);
-                    border: none;
-                    outline: none;
-                    cursor: pointer;
-                    transition: var(--common-btn-transition);
-                    -webkit-transition: var(--common-btn-transition);
-                    -moz-transition: var(--common-btn-transition);
-                    -ms-transition: var(--common-btn-transition);
-                    -o-transition: var(--common-btn-transition);
-                    font-size: 1.4rem;
-
-                    &:hover {
-                        background-color: var(--bg-secondary-hover);
-                    }
-                }
-            }
-
-        }
-
-        &>div:nth-child(2) {
-            /* flex: 1; */
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            align-items: start;
-            justify-items: start;
-            gap: 2rem;
-            /* 7 items per row */
-
-
-            .appointmentWeekDate {
-                width: 100%;
-                min-width: unset;
-                height: 10rem;
-                border-radius: 0.5rem;
-                border: none;
-                outline: none;
-                cursor: pointer;
-                background-color: var(--bg-primary);
-                color: var(--text-primary);
-                font-family: 'AirbnbCereal_Medium';
-
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                &>div {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1rem;
-                }
-            }
-
-            .highlighted_date {
-                background-color: oklch(0.707 0.165 254.624);
-                color: #fff;
-            }
-
-            .leave_dates {
-                background-color: rgba(255, 0, 0, 0.777);
-                color: #fff;
-            }
-        }
-    }
-}
-
-.barber_appointment_content_mobile_wrapper {
-    display: none;
-}
-
-
-.value {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    padding: 5px;
-    transition: opacity 0.2s ease;
-}
-
-.disabled {
-    opacity: 0.5;
-    pointer-events: none;
-    cursor: not-allowed;
-}
-
-
-@media screen and (min-width:0px) and (max-width:768px) {
-
-    .barber_appointment_content_wrapper {
-        display: none;
-    }
-
-    .barber_appointment_content_mobile_wrapper {
-        display: block;
-        width: 100%;
-        height: var(--list-wrapper-common-height);
-        border-radius: var(--list-wrapper-border-radius);
-        -webkit-border-radius: var(--list-wrapper-border-radius);
-        -moz-border-radius: var(--list-wrapper-border-radius);
-        -ms-border-radius: var(--list-wrapper-border-radius);
-        -o-border-radius: var(--list-wrapper-border-radius);
-    }
-
-    .button_group {
-        margin-bottom: 2rem;
-        display: flex;
-        align-items: center;
-        gap: 2rem;
-        width: min(100%, 35rem);
-        padding: 0.5rem;
-        border-radius: 1rem;
-        -webkit-border-radius: 1rem;
-        -moz-border-radius: 1rem;
-        -ms-border-radius: 1rem;
-        -o-border-radius: 1rem;
-        background-color: var(--bg-primary);
-
-        &>button {
-            width: 100%;
-            height: 100%;
-            border: none;
-            font-weight: 500;
-            cursor: pointer;
-            background: var(--input-bg-color);
-            border-radius: 0.6rem;
-            -webkit-border-radius: 0.6rem;
-            -moz-border-radius: 0.6rem;
-            -ms-border-radius: 0.6rem;
-            -o-border-radius: 0.6rem;
-            color: var(--text-primary);
-            line-height: inherit;
-            font-family: "AirbnbCereal_Medium";
-            font-size: 1.2rem;
-            padding: 1rem 0.5rem;
-            border: 0.1rem solid var(--border-secondary);
-
-            &:hover {
-                font-weight: 600;
-                /* border-bottom: 2px solid black; */
-            }
-        }
-    }
-
-
-    .heading,
-    .value {
-        display: flex;
-        align-items: center;
-        gap: 2rem;
-        margin-bottom: 1.5rem;
-        background-color: var(--bg-primary);
-        padding: 1.5rem;
-        max-width: 35rem;
-        border-radius: var(--border-radius-primary);
-        -webkit-border-radius: var(--border-radius-primary);
-        -moz-border-radius: var(--border-radius-primary);
-        -ms-border-radius: var(--border-radius-primary);
-        -o-border-radius: var(--border-radius-primary);
-    }
-
-    .value_body {
-        margin-left: "auto"
-    }
-
-    .leave_value_body {
-        width: min(100%, 35rem);
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 90%;
-            max-width: 400px;
-            margin-bottom: 24px;
-        }
-
-        .monthSelector {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background-color: var(--bg-primary);
-            border-radius: 8px;
-            padding: 8px 12px;
-        }
-
-        .iconBtn {
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            cursor: pointer;
-        }
-
-        .monthText {
-            font-size: 1.4rem;
-            font-weight: 500;
-        }
-    }
-
-    .dayList {
+      & > div {
         display: flex;
         flex-direction: column;
         gap: 1rem;
+
+        & > h2 {
+          font-family: "AirbnbCereal_Medium";
+          color: var(--text-primary);
+        }
+      }
+
+      & > button {
+        width: 10rem;
+        height: 3.5rem;
+        padding-inline: 1rem;
+        border-radius: var(--border-radius-primary);
+        -webkit-border-radius: var(--border-radius-primary);
+        -moz-border-radius: var(--border-radius-primary);
+        -ms-border-radius: var(--border-radius-primary);
+        -o-border-radius: var(--border-radius-primary);
+        background-color: var(--bg-secondary);
+        color: var(--btn-text-color);
+        border: none;
+        outline: none;
+        cursor: pointer;
+        transition: var(--common-btn-transition);
+        -webkit-transition: var(--common-btn-transition);
+        -moz-transition: var(--common-btn-transition);
+        -ms-transition: var(--common-btn-transition);
+        -o-transition: var(--common-btn-transition);
+        font-size: 1.6rem;
+
+        &:hover {
+          background-color: var(--bg-secondary-hover);
+        }
+      }
     }
 
-    .dayBtn {
+    & > div:nth-child(2) {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      /* 7 items per row */
+      gap: 2rem;
+      align-items: center;
+
+      .appointmentWeekDay {
+        width: 100%;
+        min-width: unset;
+        height: 10rem;
+        border-radius: 0.5rem;
+        border: none;
+        outline: none;
+        cursor: pointer;
         background-color: var(--bg-primary);
         color: var(--text-primary);
-        padding: 1.2rem;
-        border: none;
-        border-radius: 0.8rem;
-        font-weight: 500;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        -webkit-border-radius: 0.8rem;
-        -moz-border-radius: 0.8rem;
-        -ms-border-radius: 0.8rem;
-        -o-border-radius: 0.8rem;
+        font-family: "AirbnbCereal_Medium";
         border: 0.1rem solid var(--border-secondary);
+        text-transform: uppercase;
+      }
+
+      .apptAvailSelected {
+        border: 0.15rem solid var(--bg-secondary);
+      }
+    }
+  }
+
+  .barber_dayoff_container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    /* background-color: blue; */
+
+    & > div:nth-child(1) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      & > div:nth-child(1) {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        & > h2 {
+          font-family: "AirbnbCereal_Medium";
+          color: var(--text-primary);
+        }
+      }
+
+      & > div:nth-child(2) {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+
+        .monthSelector {
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+          background-color: var(--bg-primary);
+          border-radius: 0.8rem;
+          padding: 0.6rem 1.2rem;
+          -webkit-border-radius: 0.8rem;
+          -moz-border-radius: 0.8rem;
+          -ms-border-radius: 0.8rem;
+          -o-border-radius: 0.8rem;
+        }
+
+        .iconBtn {
+          background: none;
+          border: none;
+          color: var(--text-primary);
+          cursor: pointer;
+        }
+
+        .monthText {
+          font-size: 1.4rem;
+          font-weight: 500;
+        }
+
+        .reset_days {
+          width: max-content;
+          height: 3.5rem;
+          padding-inline: 1rem;
+          border-radius: var(--border-radius-primary);
+          -webkit-border-radius: var(--border-radius-primary);
+          -moz-border-radius: var(--border-radius-primary);
+          -ms-border-radius: var(--border-radius-primary);
+          -o-border-radius: var(--border-radius-primary);
+          background-color: var(--bg-secondary);
+          color: var(--btn-text-color);
+          border: none;
+          outline: none;
+          cursor: pointer;
+          transition: var(--common-btn-transition);
+          -webkit-transition: var(--common-btn-transition);
+          -moz-transition: var(--common-btn-transition);
+          -ms-transition: var(--common-btn-transition);
+          -o-transition: var(--common-btn-transition);
+          font-size: 1.4rem;
+
+          &:hover {
+            background-color: var(--bg-secondary-hover);
+          }
+        }
+      }
     }
 
+    & > div:nth-child(2) {
+      /* flex: 1; */
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      align-items: start;
+      justify-items: start;
+      gap: 2rem;
+      /* 7 items per row */
 
-    .submit {
-        width: min(100%, 35rem);
-        height: 3.5rem;
-        margin-bottom: 2rem;
-        padding-inline: 1rem;
-        border-radius: var(--border-radius-primary);
-        -webkit-border-radius: var(--border-radius-primary);
-        -moz-border-radius: var(--border-radius-primary);
-        -ms-border-radius: var(--border-radius-primary);
-        -o-border-radius: var(--border-radius-primary);
-        background-color: var(--bg-secondary);
-        color: var(--btn-text-color);
+      .appointmentWeekDate {
+        width: 100%;
+        min-width: unset;
+        height: 10rem;
+        border-radius: 0.5rem;
         border: none;
         outline: none;
         cursor: pointer;
-        transition: var(--common-btn-transition);
-        -webkit-transition: var(--common-btn-transition);
-        -moz-transition: var(--common-btn-transition);
-        -ms-transition: var(--common-btn-transition);
-        -o-transition: var(--common-btn-transition);
-        font-size: 1.4rem;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: "AirbnbCereal_Medium";
 
-        &:hover {
-            background-color: var(--bg-secondary-hover);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        & > div {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
         }
-    }
+      }
 
-    .reset_days {
-        width: max-content;
-        height: 3.5rem;
-        padding-inline: 1rem;
-        border-radius: var(--border-radius-primary);
-        -webkit-border-radius: var(--border-radius-primary);
-        -moz-border-radius: var(--border-radius-primary);
-        -ms-border-radius: var(--border-radius-primary);
-        -o-border-radius: var(--border-radius-primary);
-        background-color: var(--bg-secondary);
-        color: var(--btn-text-color);
-        border: none;
-        outline: none;
-        cursor: pointer;
-        transition: var(--common-btn-transition);
-        -webkit-transition: var(--common-btn-transition);
-        -moz-transition: var(--common-btn-transition);
-        -ms-transition: var(--common-btn-transition);
-        -o-transition: var(--common-btn-transition);
-        font-size: 1.4rem;
-
-        &:hover {
-            background-color: var(--bg-secondary-hover);
-        }
-    }
-
-    .highlighted_date {
-        background-color: #0867ffd1;
+      .highlighted_date {
+        background-color: oklch(0.707 0.165 254.624);
         color: #fff;
-    }
+      }
 
-    .leave_dates {
+      .leave_dates {
         background-color: rgba(255, 0, 0, 0.777);
         color: #fff;
+      }
     }
+  }
+}
+
+.barber_appointment_content_mobile_wrapper {
+  display: none;
+}
+
+.value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 5px;
+  transition: opacity 0.2s ease;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+@media screen and (min-width: 0px) and (max-width: 768px) {
+  .barber_appointment_content_wrapper {
+    display: none;
+  }
+
+  .barber_appointment_content_mobile_wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    /* height: var(--list-wrapper-common-height); */
+    border-radius: var(--list-wrapper-border-radius);
+    -webkit-border-radius: var(--list-wrapper-border-radius);
+    -moz-border-radius: var(--list-wrapper-border-radius);
+    -ms-border-radius: var(--list-wrapper-border-radius);
+    -o-border-radius: var(--list-wrapper-border-radius);
+
+    & > div {
+      width: min(100%, 40rem);
+      height: 100%;
+      overflow: auto;
+    }
+  }
+
+  .button_group {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    /* width: min(100%, 35rem); */
+    padding: 0.5rem;
+    border-radius: 1rem;
+    -webkit-border-radius: 1rem;
+    -moz-border-radius: 1rem;
+    -ms-border-radius: 1rem;
+    -o-border-radius: 1rem;
+    background-color: var(--bg-primary);
+
+    & > button {
+      width: 100%;
+      height: 100%;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+      background: var(--input-bg-color);
+      border-radius: 0.6rem;
+      -webkit-border-radius: 0.6rem;
+      -moz-border-radius: 0.6rem;
+      -ms-border-radius: 0.6rem;
+      -o-border-radius: 0.6rem;
+      color: var(--text-primary);
+      line-height: inherit;
+      font-family: "AirbnbCereal_Medium";
+      font-size: 1.2rem;
+      padding: 1rem 0.5rem;
+      border: 0.1rem solid var(--border-secondary);
+
+      &:hover {
+        font-weight: 600;
+        /* border-bottom: 2px solid black; */
+      }
+    }
+  }
+
+  .heading,
+  .value {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    /* margin-bottom: 1.5rem; */
+    background-color: var(--bg-primary);
+    padding: 1.5rem;
+    /* max-width: 35rem; */
+    border-radius: var(--border-radius-primary);
+    -webkit-border-radius: var(--border-radius-primary);
+    -moz-border-radius: var(--border-radius-primary);
+    -ms-border-radius: var(--border-radius-primary);
+    -o-border-radius: var(--border-radius-primary);
+    border: 0.1rem solid var(--border-secondary);
+  }
+
+  .value {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & > div:nth-child(1) {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      & > input {
+        width: 1.85rem;
+        height: 1.85rem;
+        border-radius: 0.5rem;
+      }
+
+      & > p {
+        font-size: 1.6rem;
+        font-weight: 500;
+      }
+    }
+
+    & > div:nth-child(2) {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      & > p {
+        font-size: 1.4rem;
+        color: var(--text-primary);
+      }
+
+      & > button {
+        background-color: transparent;
+        border: none;
+        outline: none;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+
+  .value_body {
+    /* margin-left: "auto"; */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    & > div:nth-child(2) {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+  }
+
+  .day_off_dropdown_container {
+    min-height: 20rem;
+    background-color: var(--bg-primary);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border: 0.1rem solid var(--border-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    .set_time_container {
+      display: flex;
+      /* align-items: center; */
+      flex-direction: column;
+      gap: 2.5rem;
+      /* justify-content: space-between; */
+
+      & > p {
+        text-align: center;
+        font-size: 1.6rem;
+        font-weight: 600;
+      }
+
+      & > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        & > div {
+          position: relative;
+
+          & > div {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            background-color: var(--input-bg-color);
+            padding-inline: 1.2rem;
+            height: 3.5rem;
+            border: 0.1rem solid var(--border-secondary);
+            border-radius: 0.5rem;
+
+            & > p {
+              font-size: 1.6rem;
+            }
+          }
+
+          .timeslot_dropdown_container {
+            position: absolute;
+            top: 4rem;
+            left: 0rem;
+            right: 0rem;
+            height: 20rem;
+            z-index: 50;
+            background-color: var(--input-bg-color);
+            border: 0.1rem solid var(--border-secondary);
+          }
+        }
+
+        & > button {
+          background-color: #450a0a;
+          padding-inline: 0.8rem;
+          height: 3.5rem;
+          border: 0.1rem solid oklch(0.577 0.245 27.325);
+          border-radius: 0.5rem;
+          color: #fff;
+          font-size: 1.4rem;
+        }
+      }
+    }
+
+    .set_time_add_break_container {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      /* height: 3.5rem; */
+      width: max-content;
+      font-weight: 600;
+      padding-right: 1.2rem;
+      & > p {
+        font-size: 1.6rem;
+      }
+    }
+
+    .set_time_add_timer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      & > div {
+        position: relative;
+
+        & > div {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          background-color: var(--input-bg-color);
+          padding-inline: 1.2rem;
+          height: 3.5rem;
+          border: 0.1rem solid var(--border-secondary);
+          border-radius: 0.5rem;
+
+          & > p {
+            font-size: 1.6rem;
+          }
+        }
+
+        .timeslot_dropdown_container {
+          position: absolute;
+          top: 4rem;
+          left: 0rem;
+          right: 0rem;
+          height: 20rem;
+          z-index: 50;
+          background-color: var(--input-bg-color);
+          border: 0.1rem solid var(--border-secondary);
+        }
+      }
+
+      & > button {
+        background-color: #0a0a45;
+        padding-inline: 0.8rem;
+        height: 3.5rem;
+        border: 0.1rem solid oklch(0.546 0.245 262.881);
+        border-radius: 0.5rem;
+        color: #fff;
+        font-size: 1.4rem;
+      }
+    }
+
+    .set_time_separator {
+      border: 0.1rem solid var(--border-secondary);
+    }
+
+    .set_time_apply_container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      & > div:nth-child(2) {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+
+        & > button {
+          height: 3.5rem;
+          padding-inline: 1.2rem;
+          border: none;
+          outline: none;
+          border-radius: 0.3rem;
+          color: #fff;
+        }
+
+        & > button:nth-child(1) {
+          background-color: #450a0a;
+          border: 0.1rem solid oklch(0.577 0.245 27.325);
+        }
+
+        & > button:nth-child(2) {
+          background-color: #0a450a;
+          border: 0.1rem solid oklch(0.627 0.194 149.214);
+        }
+      }
+    }
+  }
+
+  .leave_value_body {
+    /* width: min(100%, 35rem); */
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 90%;
+      max-width: 400px;
+      margin-bottom: 24px;
+    }
+
+    .monthSelector {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background-color: var(--bg-primary);
+      border-radius: 8px;
+      padding: 8px 12px;
+    }
+
+    .iconBtn {
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    .monthText {
+      font-size: 1.4rem;
+      font-weight: 500;
+    }
+  }
+
+  .dayList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .dayBtn {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 1.2rem;
+    border: none;
+    border-radius: 0.8rem;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    -webkit-border-radius: 0.8rem;
+    -moz-border-radius: 0.8rem;
+    -ms-border-radius: 0.8rem;
+    -o-border-radius: 0.8rem;
+    border: 0.1rem solid var(--border-secondary);
+  }
+
+  .submit {
+    width: 100%;
+    height: 3.5rem;
+    margin-top: 1.5rem;
+    /* margin-bottom: 2rem; */
+    padding-inline: 1rem;
+    border-radius: var(--border-radius-primary);
+    -webkit-border-radius: var(--border-radius-primary);
+    -moz-border-radius: var(--border-radius-primary);
+    -ms-border-radius: var(--border-radius-primary);
+    -o-border-radius: var(--border-radius-primary);
+    background-color: var(--bg-secondary);
+    color: var(--btn-text-color);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: var(--common-btn-transition);
+    -webkit-transition: var(--common-btn-transition);
+    -moz-transition: var(--common-btn-transition);
+    -ms-transition: var(--common-btn-transition);
+    -o-transition: var(--common-btn-transition);
+    font-size: 1.4rem;
+
+    &:hover {
+      background-color: var(--bg-secondary-hover);
+    }
+  }
+
+  .reset_days {
+    width: max-content;
+    height: 3.5rem;
+    padding-inline: 1rem;
+    border-radius: var(--border-radius-primary);
+    -webkit-border-radius: var(--border-radius-primary);
+    -moz-border-radius: var(--border-radius-primary);
+    -ms-border-radius: var(--border-radius-primary);
+    -o-border-radius: var(--border-radius-primary);
+    background-color: var(--bg-secondary);
+    color: var(--btn-text-color);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: var(--common-btn-transition);
+    -webkit-transition: var(--common-btn-transition);
+    -moz-transition: var(--common-btn-transition);
+    -ms-transition: var(--common-btn-transition);
+    -o-transition: var(--common-btn-transition);
+    font-size: 1.4rem;
+
+    &:hover {
+      background-color: var(--bg-secondary-hover);
+    }
+  }
+
+  .highlighted_date {
+    background-color: #0867ffd1;
+    color: #fff;
+  }
+
+  .leave_dates {
+    background-color: rgba(255, 0, 0, 0.777);
+    color: #fff;
+  }
 }
