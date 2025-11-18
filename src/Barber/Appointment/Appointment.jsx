@@ -8,6 +8,8 @@ import Calendar from "react-calendar";
 import { AddIcon, LeftArrow, RightArrow } from "../../icons";
 import moment from "moment";
 import { DeleteIcon, DropdownIcon, RightIcon } from "../../newicons";
+import ButtonLoader from "../../components/ButtonLoader/ButtonLoader";
+import Skeleton from "react-loading-skeleton";
 
 const Appointment = () => {
   const barberProfile = useSelector(
@@ -146,22 +148,35 @@ const Appointment = () => {
   };
 
   const [getBarberApptdates, setGetBarberApptdates] = useState([]);
+  const [getBarberAppointmentHours, setGetBarberAppointmentHours] = useState(
+    []
+  );
+  const [
+    getBarberAppointmentIntervalTime,
+    setGetBarberAppointmentIntervalTime,
+  ] = useState("");
+
+  const getAppointdays = async () => {
+    const { data } = await api.post(
+      "/api/barberAppointmentDays/getBarberAppointmentDays",
+      {
+        salonId,
+        barberId,
+      }
+    );
+
+    setGetBarberApptdates(data.response.appointmentDays);
+    setGetBarberAppointmentHours(data.appointmentHours);
+    setGetBarberAppointmentIntervalTime(data.intervalTime);
+    setSelectedDays(data.response.appointmentDays);
+  };
 
   useEffect(() => {
-    const getAppointdays = async () => {
-      const { data } = await api.post(
-        "/api/barberAppointmentDays/getBarberAppointmentDays",
-        {
-          salonId,
-          barberId,
-        }
-      );
-
-      setGetBarberApptdates(data.response.appointmentDays);
-      setSelectedDays(data.response.appointmentDays);
-    };
     getAppointdays();
   }, []);
+
+  //   console.log("Appointment Hours ", getBarberAppointmentHours);
+  //   console.log("Appointment Interval ", getBarberAppointmentIntervalTime);
 
   const [selectedDates, setSelectedDates] = useState([]);
 
@@ -330,6 +345,34 @@ const Appointment = () => {
     item: null,
   });
 
+  const [generatedTimeslots, setGeneratedTimeslots] = useState([]);
+
+  const time_slot_calculation = (intervalTime, setTimeSlot) => {
+    let hour = 24;
+    let mins = 60;
+
+    const generated_timeslot = [];
+
+    for (let i = 1; i <= hour; i++) {
+      for (let j = 0; j <= mins; j = j + intervalTime) {
+        let time_slot;
+        time_slot = `${i < 10 ? `0${i}` : i}:${j < 10 ? `0${j}` : j}`;
+        generated_timeslot.push(time_slot);
+      }
+    }
+
+    setTimeSlot(generated_timeslot);
+  };
+
+  useEffect(() => {
+    if (getBarberAppointmentIntervalTime) {
+      time_slot_calculation(
+        getBarberAppointmentIntervalTime,
+        setGeneratedTimeslots
+      );
+    }
+  }, [getBarberAppointmentIntervalTime]);
+
   const [appointmentStartTimeDrop, setAppointmentStartTimeDrop] = useState({
     open: false,
     value: null,
@@ -350,6 +393,296 @@ const Appointment = () => {
       open: false,
       value: null,
     });
+
+  const [appointmentStartTimeSelected, setAppointmentStartTimeSelected] =
+    useState("");
+  const [appointmentEndTimeSelected, setAppointmentEndTimeSelected] =
+    useState("");
+
+  const [
+    appointmentBreakStartTimeSelected,
+    setAppointmentBreakStartTimeSelected,
+  ] = useState("");
+  const [appointmentBreakEndTimeSelected, setAppointmentBreakEndTimeSelected] =
+    useState("");
+
+  useEffect(() => {
+    const appointment_time = getBarberAppointmentHours?.find(
+      (item) => item.day === selected_drop_day?.item?.day
+    );
+    setAppointmentEndTimeSelected(appointment_time?.endTime);
+    setAppointmentStartTimeSelected(appointment_time?.startTime);
+  }, [selected_drop_day?.item?.day]);
+
+  const [apply_appointment_loading, set_apply_appointment_loading] =
+    useState(false);
+  const apply_timeslot_handler = async () => {
+    // console.log(getBarberAppointmentHours)
+
+    const appointment_time_data = {
+      salonId,
+      barberId,
+      appointmentTimes: [
+        {
+          day: selected_drop_day?.item?.day,
+          startTime: appointmentStartTimeSelected,
+          endTime: appointmentEndTimeSelected,
+        },
+      ],
+    };
+
+    try {
+      set_apply_appointment_loading(true);
+      const { data } = await api.post(
+        `/api/barberAppointmentTimes/addBarberAppointmentTime`,
+        appointment_time_data
+      );
+
+      toast.success(data?.message, {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+
+      getAppointdays();
+    } catch (error) {
+      if (error?.response?.status === 500) {
+        toast.error("Something went wrong !", {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      } else {
+        toast.error(error?.response?.data?.message, {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      }
+    } finally {
+      set_apply_appointment_loading(false);
+    }
+  };
+
+  const [break_time_loading, set_break_time_loading] = useState(false);
+  const [get_break_time, set_get_break_time] = useState([]);
+
+  const fetchBreakTimes = async (break_day) => {
+    try {
+      set_break_time_loading(true);
+      const { data } = await api.post(
+        "/api/barberBreakTimes/getBarberBreakTimes",
+        {
+          salonId,
+          barberId,
+          day: break_day,
+        }
+      );
+
+      set_get_break_time(data?.response);
+    } catch (error) {
+      if (error?.response?.status === 500) {
+        toast.error("Something went wrong !", {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      } else {
+        toast.error(error?.response?.data?.message, {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      }
+    } finally {
+      set_break_time_loading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (selected_drop_day?.item?.day) {
+      fetchBreakTimes(selected_drop_day?.item?.day);
+    }
+  }, [selected_drop_day?.item?.day]);
+
+  const [break_time_delete_loading, set_break_time_delete_loading] = useState({
+    loading: false,
+    item: null,
+  });
+  const delete_break_time_handler = async (deleteItem) => {
+    try {
+      set_break_time_delete_loading({
+        loading: true,
+        item: deleteItem, // <<< IMPORTANT FIX
+      });
+      const { data } = await api.post(
+        "/api/barberBreakTimes/deleteBarberbreakTime",
+        {
+          salonId,
+          barberId,
+          day: selected_drop_day?.item?.day,
+          slotIds: [deleteItem["_id"]],
+        }
+      );
+
+      toast.success(data?.message, {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+
+      fetchBreakTimes(selected_drop_day?.item?.day);
+    } catch (error) {
+      if (error?.response?.status === 500) {
+        toast.error("Something went wrong !", {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      } else {
+        toast.error(error?.response?.data?.message, {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      }
+    } finally {
+      set_break_time_delete_loading((prev) => {
+        return {
+          loading: false,
+          item: null,
+        };
+      });
+    }
+  };
+
+  const [generatedBreakTimeslots, setGeneratedBreakTimeslots] = useState([]);
+
+  useEffect(() => {
+    time_slot_calculation(5, setGeneratedBreakTimeslots);
+  }, []);
+
+  const [break_time_add_loading, set_break_time_add_loading] = useState(false);
+  const add_break_time_handler = async () => {
+    if (!appointmentBreakStartTimeSelected) {
+      toast.error("Start time is not selected", {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+
+      return;
+    }
+
+    if (!appointmentBreakEndTimeSelected) {
+      toast.error("End time is not selected", {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+
+      return;
+    }
+
+    const add_break_data = {
+      salonId,
+      barberId,
+      day: selected_drop_day?.item?.day,
+      breakTimes: [
+        {
+          startTime: appointmentBreakStartTimeSelected,
+          endTime: appointmentBreakEndTimeSelected,
+        },
+      ],
+    };
+
+    try {
+      set_break_time_add_loading(true);
+
+      const { data } = await api.post(
+        "/api/barberBreakTimes/addBarberBreakTimes",
+        add_break_data
+      );
+
+      toast.success(data?.message, {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+
+      setAppointmentBreakStartTimeSelected("");
+      setAppointmentBreakEndTimeSelected("");
+      fetchBreakTimes(selected_drop_day?.item?.day);
+    } catch (error) {
+      if (error?.response?.status === 500) {
+        toast.error("Something went wrong !", {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      } else {
+        toast.error(error?.response?.data?.message, {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      }
+    } finally {
+      set_break_time_add_loading(false);
+    }
+  };
 
   return (
     <div className={`${style.section}`}>
@@ -381,7 +714,7 @@ const Appointment = () => {
               const isChecked = !isDisabled && selectedDays.includes(d.day);
 
               return (
-                <button
+                <div
                   key={d.id}
                   className={`${style.appointmentWeekDay} ${
                     isDisabled ? style.disabled : ""
@@ -392,7 +725,12 @@ const Appointment = () => {
                   }}
                 >
                   {d.day.slice(0, 3)}
-                </button>
+                  <div>
+                    <p>09:10</p>
+                    <p>10:30</p>
+                  </div>
+                  <button>Set Hours & Breaks</button>
+                </div>
               );
             })}
           </div>
@@ -590,17 +928,34 @@ const Appointment = () => {
                           <p>{d.day}</p>
                         </div>
                         <div>
-                          <p>09:00 - 20:00</p>
-                          <button
-                            onClick={() =>
-                              set_selected_drop_day({
-                                open: true,
-                                item: d,
-                              })
+                          <p>
+                            {
+                              getBarberAppointmentHours?.find(
+                                (item) => item.day === d.day
+                              )?.startTime
+                            }{" "}
+                            -{" "}
+                            {
+                              getBarberAppointmentHours?.find(
+                                (item) => item.day === d.day
+                              )?.endTime
                             }
+                          </p>
+                          <button
+                            onClick={() => {
+                              if (isChecked) {
+                                set_selected_drop_day((prev) => ({
+                                  open:
+                                    prev.item?.day === d.day
+                                      ? !prev.open
+                                      : true,
+                                  item: d,
+                                }));
+                              }
+                            }}
                           >
                             {selected_drop_day.open &&
-                            selected_drop_day.item.id === d.id ? (
+                            selected_drop_day?.item?.id === d?.id ? (
                               <DropdownIcon
                                 size={"1.4rem"}
                                 color="var(--text-primary)"
@@ -616,7 +971,7 @@ const Appointment = () => {
                       </div>
 
                       {selected_drop_day.open &&
-                      selected_drop_day.item.id === d.id ? (
+                      selected_drop_day?.item?.id === d.id ? (
                         <div className={style.day_off_dropdown_container}>
                           <p>
                             Set your business hours here.Head to your calenderif
@@ -637,7 +992,7 @@ const Appointment = () => {
                                     });
                                   }}
                                 >
-                                  <p>09:00</p>
+                                  <p>{appointmentStartTimeSelected}</p>
                                   <DropdownIcon
                                     size={"1.4rem"}
                                     color="var(--text-primary)"
@@ -650,7 +1005,28 @@ const Appointment = () => {
                                       style.timeslot_dropdown_container
                                     }
                                   >
-                                    <p>Start Time Drop</p>
+                                    {generatedTimeslots.map((item) => {
+                                      return (
+                                        <button
+                                          key={item}
+                                          onClick={() => {
+                                            setAppointmentStartTimeSelected(
+                                              item
+                                            );
+                                            setAppointmentStartTimeDrop(
+                                              (prev) => {
+                                                return {
+                                                  open: false,
+                                                  value: null,
+                                                };
+                                              }
+                                            );
+                                          }}
+                                        >
+                                          {item}
+                                        </button>
+                                      );
+                                    })}
                                   </div>
                                 ) : null}
                               </div>
@@ -666,7 +1042,7 @@ const Appointment = () => {
                                     });
                                   }}
                                 >
-                                  <p>12:30</p>
+                                  <p>{appointmentEndTimeSelected}</p>
                                   <DropdownIcon
                                     size={"1.4rem"}
                                     color="var(--text-primary)"
@@ -679,7 +1055,26 @@ const Appointment = () => {
                                       style.timeslot_dropdown_container
                                     }
                                   >
-                                    <p>Start Time Drop</p>
+                                    {generatedTimeslots.map((item) => {
+                                      return (
+                                        <button
+                                          key={item}
+                                          onClick={() => {
+                                            setAppointmentEndTimeSelected(item);
+                                            setAppointmentEndTimeDrop(
+                                              (prev) => {
+                                                return {
+                                                  open: false,
+                                                  value: null,
+                                                };
+                                              }
+                                            );
+                                          }}
+                                        >
+                                          {item}
+                                        </button>
+                                      );
+                                    })}
                                   </div>
                                 ) : null}
                               </div>
@@ -687,49 +1082,81 @@ const Appointment = () => {
                           </div>
 
                           <div className={style.set_time_container}>
-                            <p>Break Duration</p>
-                            <div>
-                              <div>
-                                <div>
-                                  <p>09:00</p>
-                                  {/* <DropdownIcon
-                                    size={"1.4rem"}
-                                    color="var(--text-primary)"
-                                  /> */}
-                                  <div
-                                    style={{
-                                      width: "1.4rem",
-                                    }}
-                                  ></div>
-                                </div>
-                              </div>
+                            {break_time_loading ? (
+                              <Skeleton
+                                count={3}
+                                height={"4rem"}
+                                baseColor={"var(--loader-bg-color)"}
+                                highlightColor={"var(--loader-highlight-color)"}
+                                style={{ marginBottom: "1rem" }}
+                              />
+                            ) : get_break_time.length > 0 ? (
+                              <>
+                                <p>Break Duration</p>
+                                {get_break_time?.map((item) => {
+                                  return (
+                                    <div key={item._id}>
+                                      <div>
+                                        <div>
+                                          <p>{item.startTime}</p>
+                                          <div
+                                            style={{
+                                              width: "0rem",
+                                            }}
+                                          ></div>
+                                        </div>
+                                      </div>
 
-                              <div>
-                                <div>
-                                  <p>12:30</p>
-                                  {/* <DropdownIcon
-                                    size={"1.4rem"}
-                                    color="var(--text-primary)"
-                                  /> */}
-                                  <div
-                                    style={{
-                                      width: "1.4rem",
-                                    }}
-                                  ></div>
-                                </div>
-                              </div>
+                                      <div>
+                                        <div>
+                                          <p>{item.endTime}</p>
+                                          <div
+                                            style={{
+                                              width: "0rem",
+                                            }}
+                                          ></div>
+                                        </div>
+                                      </div>
 
-                              <button>Remove</button>
-                            </div>
+                                      <button
+                                        disabled={
+                                          break_time_delete_loading?.item
+                                            ?._id === item?._id
+                                        }
+                                        onClick={() =>
+                                          delete_break_time_handler(item)
+                                        }
+                                      >
+                                        {break_time_delete_loading?.item
+                                          ?._id === item?._id &&
+                                        break_time_delete_loading?.loading ? (
+                                          <ButtonLoader />
+                                        ) : (
+                                          "Remove"
+                                        )}
+                                      </button>
+                                    </div>
+                                  );
+                                })}
+                              </>
+                            ) : (
+                              <p
+                                style={{
+                                  lineHeight: "10rem",
+                                }}
+                              >
+                                No break time available
+                              </p>
+                            )}
                           </div>
 
                           <button
                             className={style.set_time_add_break_container}
                           >
-                            <AddIcon
+                            {/* <AddIcon
                               size={"1.8rem"}
                               color="var(--text-primary)"
-                            />
+                            /> */}
                             <p>Add Break</p>
                           </button>
 
@@ -745,7 +1172,11 @@ const Appointment = () => {
                                   });
                                 }}
                               >
-                                <p>09:00</p>
+                                <p>
+                                  {appointmentBreakStartTimeSelected
+                                    ? appointmentBreakStartTimeSelected
+                                    : "00:00"}
+                                </p>
                                 <DropdownIcon
                                   size={"1.4rem"}
                                   color="var(--text-primary)"
@@ -756,7 +1187,28 @@ const Appointment = () => {
                                 <div
                                   className={style.timeslot_dropdown_container}
                                 >
-                                  <p>Start Time Drop</p>
+                                  {generatedBreakTimeslots.map((item) => {
+                                    return (
+                                      <button
+                                        key={item}
+                                        onClick={() => {
+                                          setAppointmentBreakStartTimeSelected(
+                                            item
+                                          );
+                                          setAppointmentBreakStartTimeDrop(
+                                            (prev) => {
+                                              return {
+                                                open: false,
+                                                value: null,
+                                              };
+                                            }
+                                          );
+                                        }}
+                                      >
+                                        {item}
+                                      </button>
+                                    );
+                                  })}
                                 </div>
                               ) : null}
                             </div>
@@ -772,7 +1224,11 @@ const Appointment = () => {
                                   });
                                 }}
                               >
-                                <p>12:30</p>
+                                <p>
+                                  {appointmentBreakEndTimeSelected
+                                    ? appointmentBreakEndTimeSelected
+                                    : "00:00"}
+                                </p>
                                 <DropdownIcon
                                   size={"1.4rem"}
                                   color="var(--text-primary)"
@@ -783,12 +1239,44 @@ const Appointment = () => {
                                 <div
                                   className={style.timeslot_dropdown_container}
                                 >
-                                  <p>Start Time Drop</p>
+                                  {generatedBreakTimeslots.map((item) => {
+                                    return (
+                                      <button
+                                        key={item}
+                                        onClick={() => {
+                                          setAppointmentBreakEndTimeSelected(
+                                            item
+                                          );
+                                          setAppointmentBreakEndTimeDrop(
+                                            (prev) => {
+                                              return {
+                                                open: false,
+                                                value: null,
+                                              };
+                                            }
+                                          );
+                                        }}
+                                      >
+                                        {item}
+                                      </button>
+                                    );
+                                  })}
                                 </div>
                               ) : null}
                             </div>
 
-                            <button>Add</button>
+                            <button
+                              disabled={break_time_add_loading}
+                              onClick={() => {
+                                add_break_time_handler();
+                              }}
+                            >
+                              {break_time_add_loading ? (
+                                <ButtonLoader />
+                              ) : (
+                                "Add"
+                              )}
+                            </button>
                           </div>
 
                           <div className={style.set_time_separator} />
@@ -796,8 +1284,26 @@ const Appointment = () => {
                           <div className={style.set_time_apply_container}>
                             <div />
                             <div>
-                              <button>Cancel</button>
-                              <button>Apply</button>
+                              <button
+                                onClick={() => {
+                                  set_selected_drop_day((prev) => ({
+                                    open: false,
+                                    item: null,
+                                  }));
+                                }}
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                disabled={apply_appointment_loading}
+                                onClick={apply_timeslot_handler}
+                              >
+                                {apply_appointment_loading ? (
+                                  <ButtonLoader />
+                                ) : (
+                                  "Apply"
+                                )}
+                              </button>
                             </div>
                           </div>
                         </div>
