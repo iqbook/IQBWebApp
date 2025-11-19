@@ -128,7 +128,7 @@ const Appointment = () => {
         },
       });
 
-      getAppointdays()
+      getAppointdays();
 
       // const { data: appointmentDaysData } = await api.post(
       //   "/api/barberAppointmentDays/getBarberAppointmentDays",
@@ -979,7 +979,7 @@ const Appointment = () => {
             <div>
               <LeftIcon color="var(--text-primary)" size={"1.8rem"} />
             </div>
-            <h2>Friday</h2>
+            <h2>{selected_drop_day?.item?.day}</h2>
           </div>
           <p>
             Set your business hours here.Head to your calenderif you need to
@@ -992,6 +992,18 @@ const Appointment = () => {
               <div>
                 <div
                   onClick={() => {
+                    setAppointmentBreakStartTimeDrop((prev) => {
+                      return {
+                        open: false,
+                        value: null,
+                      };
+                    });
+                    setAppointmentBreakEndTimeDrop((prev) => {
+                      return {
+                        open: false,
+                        value: null,
+                      };
+                    });
                     setAppointmentStartTimeDrop((prev) => {
                       return {
                         open: !prev.open,
@@ -1031,6 +1043,18 @@ const Appointment = () => {
               <div>
                 <div
                   onClick={() => {
+                    setAppointmentBreakStartTimeDrop((prev) => {
+                      return {
+                        open: false,
+                        value: null,
+                      };
+                    });
+                    setAppointmentBreakEndTimeDrop((prev) => {
+                      return {
+                        open: false,
+                        value: null,
+                      };
+                    });
                     setAppointmentEndTimeDrop((prev) => {
                       return {
                         open: !prev.open,
@@ -1142,6 +1166,18 @@ const Appointment = () => {
             <div>
               <div
                 onClick={() => {
+                  setAppointmentStartTimeDrop((prev) => {
+                    return {
+                      open: false,
+                      value: null,
+                    };
+                  });
+                  setAppointmentEndTimeDrop((prev) => {
+                    return {
+                      open: false,
+                      value: null,
+                    };
+                  });
                   setAppointmentBreakStartTimeDrop((prev) => {
                     return {
                       open: !prev.open,
@@ -1185,6 +1221,18 @@ const Appointment = () => {
             <div>
               <div
                 onClick={() => {
+                  setAppointmentStartTimeDrop((prev) => {
+                    return {
+                      open: false,
+                      value: null,
+                    };
+                  });
+                  setAppointmentEndTimeDrop((prev) => {
+                    return {
+                      open: false,
+                      value: null,
+                    };
+                  });
                   setAppointmentBreakEndTimeDrop((prev) => {
                     return {
                       open: !prev.open,
@@ -1380,6 +1428,18 @@ const Appointment = () => {
                               <div>
                                 <div
                                   onClick={() => {
+                                    setAppointmentBreakStartTimeDrop((prev) => {
+                                      return {
+                                        open: false,
+                                        value: null,
+                                      };
+                                    });
+                                    setAppointmentBreakEndTimeDrop((prev) => {
+                                      return {
+                                        open: false,
+                                        value: null,
+                                      };
+                                    });
                                     setAppointmentStartTimeDrop((prev) => {
                                       return {
                                         open: !prev.open,
@@ -1430,6 +1490,18 @@ const Appointment = () => {
                               <div>
                                 <div
                                   onClick={() => {
+                                    setAppointmentBreakStartTimeDrop((prev) => {
+                                      return {
+                                        open: false,
+                                        value: null,
+                                      };
+                                    });
+                                    setAppointmentBreakEndTimeDrop((prev) => {
+                                      return {
+                                        open: false,
+                                        value: null,
+                                      };
+                                    });
                                     setAppointmentEndTimeDrop((prev) => {
                                       return {
                                         open: !prev.open,
@@ -1560,6 +1632,18 @@ const Appointment = () => {
                             <div>
                               <div
                                 onClick={() => {
+                                  setAppointmentStartTimeDrop((prev) => {
+                                    return {
+                                      open: false,
+                                      value: null,
+                                    };
+                                  });
+                                  setAppointmentEndTimeDrop((prev) => {
+                                    return {
+                                      open: false,
+                                      value: null,
+                                    };
+                                  });
                                   setAppointmentBreakStartTimeDrop((prev) => {
                                     return {
                                       open: !prev.open,
@@ -1612,6 +1696,18 @@ const Appointment = () => {
                             <div>
                               <div
                                 onClick={() => {
+                                  setAppointmentStartTimeDrop((prev) => {
+                                    return {
+                                      open: false,
+                                      value: null,
+                                    };
+                                  });
+                                  setAppointmentEndTimeDrop((prev) => {
+                                    return {
+                                      open: false,
+                                      value: null,
+                                    };
+                                  });
                                   setAppointmentBreakEndTimeDrop((prev) => {
                                     return {
                                       open: !prev.open,
