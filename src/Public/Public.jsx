@@ -23,10 +23,10 @@ const Public = () => {
               filter: Theme === "Light" ? 'none' : 'invert(1)',
             }}
           />
-          <h2>welcome to iqbook</h2>
+          <h2>welcome to iqbook "Dev Mode"</h2>
 
           <div>
-            <Link to="/adminsignin">Admin Signin "Dev Mode"</Link>
+            <Link to="/adminsignin">Admin Signin</Link>
             <Link to="/barbersignin">Barber Signin</Link>
           </div>
           <p className={"version_text"}>v 1.0.26</p>
