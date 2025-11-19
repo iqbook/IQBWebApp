@@ -359,8 +359,8 @@ const Appointment = () => {
 
     const generated_timeslot = [];
 
-    for (let i = 1; i <= hour; i++) {
-      for (let j = 0; j <= mins; j = j + intervalTime) {
+    for (let i = 0; i < hour; i++) {
+      for (let j = 0; j < mins; j = j + intervalTime) {
         let time_slot;
         time_slot = `${i < 10 ? `0${i}` : i}:${j < 10 ? `0${j}` : j}`;
         generated_timeslot.push(time_slot);
