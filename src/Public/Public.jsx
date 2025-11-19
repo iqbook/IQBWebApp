@@ -23,7 +23,7 @@ const Public = () => {
               filter: Theme === "Light" ? 'none' : 'invert(1)',
             }}
           />
-          <h2>welcome to iqbook "Dev Mode"</h2>
+          <h2>welcome to iqbook "Dev Mode Updated"</h2>
 
           <div>
             <Link to="/adminsignin">Admin Signin</Link>
