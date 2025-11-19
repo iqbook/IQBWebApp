@@ -3,8 +3,8 @@ import toast from 'react-hot-toast';
 
 // const BASE_URL = 'http://localhost:8001';
 
-// const BASE_URL = "https://iqb-final.onrender.com"
-const BASE_URL = "https://iqb-final-dev.onrender.com"
+const BASE_URL = "https://iqb-final.onrender.com"
+// const BASE_URL = "https://iqb-final-dev.onrender.com"
 
 export const api = axios.create({
     baseURL: BASE_URL,
