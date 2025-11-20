@@ -1,12 +1,11 @@
-import React from 'react'
-import style from './Public.module.css'
-import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { darkmodeSelector } from '../Redux/Admin/Reducers/AdminHeaderReducer'
+import React from "react";
+import style from "./Public.module.css";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { darkmodeSelector } from "../Redux/Admin/Reducers/AdminHeaderReducer";
 
 const Public = () => {
-
-  const Theme = localStorage.getItem('Theme') || 'Dark'
+  const Theme = localStorage.getItem("Theme") || "Dark";
 
   return (
     <section className={`${style.section}`}>
@@ -20,20 +19,20 @@ const Public = () => {
             height={100}
             width={100}
             style={{
-              filter: Theme === "Light" ? 'none' : 'invert(1)',
+              filter: Theme === "Light" ? "none" : "invert(1)",
             }}
           />
           <h2>welcome to iqbook</h2>
-
+          <h2 style={{ textAlign: "center"}}>Dev Mode</h2>
           <div>
             <Link to="/adminsignin">Admin Signin</Link>
             <Link to="/barbersignin">Barber Signin</Link>
           </div>
-          <p className={"version_text"}>v 1.0.26</p>
+          <p className={"version_text"}>v 1.0.1</p>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Public
+export default Public;

@@ -583,9 +583,48 @@ const EditSalon = () => {
     });
   };
 
-  const [selectedServices, setSelectedServices] = useState(
-    currentSalon?.services
-  );
+  const [selectedServices, setSelectedServices] = useState([]);
+  const [get_services_loading, set_get_services_loading] = useState(false);
+
+  console.log("selectedServices ", selectedServices);
+
+  const fetch_salon_services = async () => {
+    try {
+      set_get_services_loading(true);
+      const { data } = await api.get(
+        `/api/salon/getAllSalonServices?salonId=${currentSalon?.salonId}`
+      );
+      setSelectedServices(data?.response);
+    } catch (error) {
+      if (error?.response?.status === 500) {
+        toast.error("Something went wrong !", {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      } else {
+        toast.error(error?.response?.data?.message, {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      }
+    } finally {
+      set_get_services_loading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetch_salon_services();
+  }, []);
 
   const addServiceHandler = () => {
     if (!selectedLogo.url) {
@@ -762,10 +801,10 @@ const EditSalon = () => {
       serviceIds: [service?.serviceId],
     };
 
-    const confirm = window.confirm("Are you sure ?")
+    const confirm = window.confirm("Are you sure ?");
 
-    if(!confirm){
-      return
+    if (!confirm) {
+      return;
     }
 
     try {
@@ -788,7 +827,7 @@ const EditSalon = () => {
         },
       });
 
-      navigate("/admin-salon");
+      fetch_salon_services();
     } catch (error) {
       toast.error(error?.response?.data?.message, {
         duration: 3000,
@@ -2318,288 +2357,144 @@ const EditSalon = () => {
                         </button>
                       </div>
 
-                      <div
-                        style={{
-                          display: selectedServices?.length ? "block" : "none",
-                          padding: selectedServices?.length ? "1rem" : "0rem",
-                        }}
-                      >
-                        {selectedServices?.map((ser, index) => {
-                          return (
-                            <div
-                              className={style.mobile_service_item}
-                              key={index}
-                            >
-                              <div>
+                      {get_services_loading ? (
+                        <Skeleton
+                          count={3}
+                          height={"15rem"}
+                          baseColor={"var(--loader-bg-color)"}
+                          highlightColor={"var(--loader-highlight-color)"}
+                          style={{
+                            marginBottom: "1rem",
+                            minWidth: "50rem",
+                            width: "100%",
+                          }}
+                        />
+                      ) : selectedServices?.length > 0 ? (
+                        <div
+                          style={{
+                            display: selectedServices?.length
+                              ? "block"
+                              : "none",
+                            padding: selectedServices?.length ? "1rem" : "0rem",
+                          }}
+                        >
+                          {selectedServices?.map((ser, index) => {
+                            return (
+                              <div
+                                className={style.mobile_service_item}
+                                key={index}
+                              >
                                 <div>
                                   <div>
-                                    <img
-                                      src={ser?.serviceIcon.url || ""}
-                                      alt=""
-                                    />
+                                    <div>
+                                      <img
+                                        src={ser?.serviceIcon.url || ""}
+                                        alt=""
+                                      />
 
-                                    {ser.vipService ? (
-                                      <span>
-                                        <CrownIcon />
-                                      </span>
-                                    ) : null}
-                                  </div>
+                                      {ser.vipService ? (
+                                        <span>
+                                          <CrownIcon />
+                                        </span>
+                                      ) : null}
+                                    </div>
 
-                                  <p>{ser.serviceName}</p>
-                                  <p>{ser.serviceDesc}</p>
-                                  <p>{ser.serviceCategoryName}</p>
-                                </div>
-
-                                <div>
-                                  <button
-                                    onClick={() => editServiceHandler(index)}
-                                  >
-                                    Edit
-                                  </button>
-
-                                  <button
-                                    onClick={() => deleteServiceHandler(ser)}
-                                    disabled={deleteServiceLoader?.loading}
-                                  >
-                                    {deleteServiceLoader?.loading && deleteServiceLoader.serviceId === ser.serviceId ? (
-                                      <ButtonLoader />
-                                    ) : (
-                                      "Delete"
-                                    )}
-                                  </button>
-                                </div>
-                              </div>
-                              <div>
-                                <div>
-                                  <p>Price</p>
-                                  {/* <p>{countryCurrency}{" "} {ser.servicePrice}</p> */}
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      gap: "0.5rem",
-                                    }}
-                                  >
-                                    <p>{countryCurrency}</p>
-                                    <input
-                                      type="text"
-                                      inputMode="decimal"
-                                      value={ser.servicePrice}
-                                      maxLength={6}
-                                      style={{
-                                        width: "6rem",
-                                        outline: "none",
-                                        backgroundColor: "transparent",
-                                        padding: "0.4rem",
-                                        fontSize: "1.4rem",
-                                        border: "none",
-                                        borderBottom:
-                                          "0.1rem solid var(--text-primary)",
-                                        textAlign: "center",
-                                      }}
-                                      onChange={(e) => {
-                                        let value = e.target.value.trim();
-
-                                        // ✅ Allow only numbers and at most one decimal point
-                                        if (!/^\d*\.?\d*$/.test(value)) return;
-
-                                        // ✅ Prevent multiple leading zeros (e.g., 000 or 012)
-                                        if (
-                                          value.length > 1 &&
-                                          value[0] === "0" &&
-                                          value[1] !== "."
-                                        ) {
-                                          value = value.replace(/^0+/, "");
-                                        }
-
-                                        // ✅ Prevent negative numbers
-                                        if (value.startsWith("-")) return;
-
-                                        // ✅ Optional: Limit to 2 decimal places
-                                        const decimalIndex = value.indexOf(".");
-                                        if (
-                                          decimalIndex !== -1 &&
-                                          value.length - decimalIndex > 3
-                                        )
-                                          return;
-
-                                        // ✅ Update state
-                                        setSelectedServices((prev) =>
-                                          prev.map((item, idx) =>
-                                            idx === index
-                                              ? { ...item, servicePrice: value }
-                                              : item
-                                          )
-                                        );
-                                      }}
-                                      placeholder="0.00"
-                                    />
-                                  </div>
-                                </div>
-
-                                <div>
-                                  <p>Estimated Time</p>
-
-                                  <input
-                                    type="text"
-                                    value={ser.serviceEWT}
-                                    maxLength={3}
-                                    style={{
-                                      width: "6rem",
-                                      outline: "none",
-                                      backgroundColor: "transparent",
-                                      padding: "0.4rem",
-                                      fontSize: "1.4rem",
-                                      border: "none",
-                                      borderBottom:
-                                        "0.1rem solid var(--text-primary)",
-                                      textAlign: "center",
-                                    }}
-                                    onChange={(e) => {
-                                      const newValue = e.target.value.replace(
-                                        /[^0-9]/g,
-                                        ""
-                                      ); // Allow only digits
-
-                                      const numericValue =
-                                        newValue === "" ? "" : Number(newValue);
-
-                                      // ✅ Update state
-                                      setSelectedServices((prev) =>
-                                        prev.map((item, idx) =>
-                                          idx === index
-                                            ? {
-                                                ...item,
-                                                serviceEWT: numericValue,
-                                              }
-                                            : item
-                                        )
-                                      );
-                                    }}
-                                  />
-                                  {/* <p>{ser.serviceEWT} mins</p> */}
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-
-                        {selectedServices?.map((ser, index) => {
-                          return (
-                            <div className={style.service_item} key={index}>
-                              <div>
-                                <div>
-                                  <div>
-                                    <img
-                                      src={ser?.serviceIcon.url || ""}
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div>
                                     <p>{ser.serviceName}</p>
-                                    <p>{ser.vipService ? "VIP" : "Regular"}</p>
                                     <p>{ser.serviceDesc}</p>
                                     <p>{ser.serviceCategoryName}</p>
                                   </div>
-                                </div>
 
-                                <div>
-                                  <button
-                                    onClick={() => editServiceHandler(index)}
-                                  >
-                                    Edit
-                                  </button>
+                                  <div>
+                                    <button
+                                      onClick={() => editServiceHandler(index)}
+                                    >
+                                      Edit
+                                    </button>
 
-                                  <button
-                                    onClick={() => deleteServiceHandler(ser)}
-                                    disabled={deleteServiceLoader?.loading}
-                                  >
-                                    {deleteServiceLoader?.loading && deleteServiceLoader.serviceId === ser.serviceId ? (
-                                      <ButtonLoader />
-                                    ) : (
-                                      "Delete"
-                                    )}
-                                  </button>
+                                    <button
+                                      onClick={() => deleteServiceHandler(ser)}
+                                      disabled={deleteServiceLoader?.loading}
+                                    >
+                                      {deleteServiceLoader?.loading &&
+                                      deleteServiceLoader.serviceId ===
+                                        ser.serviceId ? (
+                                        <ButtonLoader />
+                                      ) : (
+                                        "Delete"
+                                      )}
+                                    </button>
+                                  </div>
                                 </div>
-                              </div>
-                              <div>
                                 <div>
-                                  <p>Price</p>
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      gap: "0.5rem",
-                                    }}
-                                  >
-                                    <p>{countryCurrency}</p>
-                                    <input
-                                      type="text"
-                                      inputMode="decimal"
-                                      value={ser.servicePrice}
-                                      maxLength={6}
+                                  <div>
+                                    <p>Price</p>
+                                    <div
                                       style={{
-                                        width: "6rem",
-                                        outline: "none",
-                                        textAlign: "center",
-                                        backgroundColor: "transparent",
-                                        padding: "0.4rem",
-                                        fontSize: "1.4rem",
-                                        border: "none",
-                                        borderBottom:
-                                          "0.1rem solid var(--text-primary)",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "0.5rem",
                                       }}
-                                      onChange={(e) => {
-                                        let value = e.target.value.trim();
+                                    >
+                                      <p>{countryCurrency}</p>
+                                      <input
+                                        type="text"
+                                        inputMode="decimal"
+                                        value={ser.servicePrice}
+                                        maxLength={6}
+                                        style={{
+                                          width: "6rem",
+                                          outline: "none",
+                                          backgroundColor: "transparent",
+                                          padding: "0.4rem",
+                                          fontSize: "1.4rem",
+                                          border: "none",
+                                          borderBottom:
+                                            "0.1rem solid var(--text-primary)",
+                                          textAlign: "center",
+                                        }}
+                                        onChange={(e) => {
+                                          let value = e.target.value.trim();
 
-                                        // ✅ Allow only numbers and at most one decimal point
-                                        if (!/^\d*\.?\d*$/.test(value)) return;
+                                          if (!/^\d*\.?\d*$/.test(value))
+                                            return;
 
-                                        // ✅ Prevent multiple leading zeros (e.g., 000 or 012)
-                                        if (
-                                          value.length > 1 &&
-                                          value[0] === "0" &&
-                                          value[1] !== "."
-                                        ) {
-                                          value = value.replace(/^0+/, "");
-                                        }
+                                          if (
+                                            value.length > 1 &&
+                                            value[0] === "0" &&
+                                            value[1] !== "."
+                                          ) {
+                                            value = value.replace(/^0+/, "");
+                                          }
 
-                                        // ✅ Prevent negative numbers
-                                        if (value.startsWith("-")) return;
+                                          if (value.startsWith("-")) return;
 
-                                        // ✅ Optional: Limit to 2 decimal places
-                                        const decimalIndex = value.indexOf(".");
-                                        if (
-                                          decimalIndex !== -1 &&
-                                          value.length - decimalIndex > 3
-                                        )
-                                          return;
-
-                                        // ✅ Update state
-                                        setSelectedServices((prev) =>
-                                          prev.map((item, idx) =>
-                                            idx === index
-                                              ? { ...item, servicePrice: value }
-                                              : item
+                                          const decimalIndex =
+                                            value.indexOf(".");
+                                          if (
+                                            decimalIndex !== -1 &&
+                                            value.length - decimalIndex > 3
                                           )
-                                        );
-                                      }}
-                                      placeholder="0.00"
-                                    />
+                                            return;
+
+                                          setSelectedServices((prev) =>
+                                            prev.map((item, idx) =>
+                                              idx === index
+                                                ? {
+                                                    ...item,
+                                                    servicePrice: value,
+                                                  }
+                                                : item
+                                            )
+                                          );
+                                        }}
+                                        placeholder="0.00"
+                                      />
+                                    </div>
                                   </div>
 
-                                  {/* <p>{countryCurrency}{" "} {ser.servicePrice}</p> */}
-                                </div>
+                                  <div>
+                                    <p>Estimated Time</p>
 
-                                <div>
-                                  <p>Estimated Time</p>
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      gap: "0.5rem",
-                                    }}
-                                  >
                                     <input
                                       type="text"
                                       value={ser.serviceEWT}
@@ -2619,14 +2514,13 @@ const EditSalon = () => {
                                         const newValue = e.target.value.replace(
                                           /[^0-9]/g,
                                           ""
-                                        ); // Allow only digits
+                                        );
 
                                         const numericValue =
                                           newValue === ""
                                             ? ""
                                             : Number(newValue);
 
-                                        // ✅ Update state
                                         setSelectedServices((prev) =>
                                           prev.map((item, idx) =>
                                             idx === index
@@ -2639,16 +2533,194 @@ const EditSalon = () => {
                                         );
                                       }}
                                     />
-                                    <p>mins</p>
                                   </div>
-
-                                  {/* <p>{ser.serviceEWT} mins</p> */}
                                 </div>
                               </div>
-                            </div>
-                          );
-                        })}
-                      </div>
+                            );
+                          })}
+
+                          {selectedServices?.map((ser, index) => {
+                            return (
+                              <div className={style.service_item} key={index}>
+                                <div>
+                                  <div>
+                                    <div>
+                                      <img
+                                        src={ser?.serviceIcon.url || ""}
+                                        alt=""
+                                      />
+                                    </div>
+                                    <div>
+                                      <p>{ser.serviceName}</p>
+                                      <p>
+                                        {ser.vipService ? "VIP" : "Regular"}
+                                      </p>
+                                      <p>{ser.serviceDesc}</p>
+                                      <p>{ser.serviceCategoryName}</p>
+                                    </div>
+                                  </div>
+
+                                  <div>
+                                    <button
+                                      onClick={() => editServiceHandler(index)}
+                                    >
+                                      Edit
+                                    </button>
+
+                                    <button
+                                      onClick={() => deleteServiceHandler(ser)}
+                                      disabled={deleteServiceLoader?.loading}
+                                    >
+                                      {deleteServiceLoader?.loading &&
+                                      deleteServiceLoader.serviceId ===
+                                        ser.serviceId ? (
+                                        <ButtonLoader />
+                                      ) : (
+                                        "Delete"
+                                      )}
+                                    </button>
+                                  </div>
+                                </div>
+                                <div>
+                                  <div>
+                                    <p>Price</p>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "0.5rem",
+                                      }}
+                                    >
+                                      <p>{countryCurrency}</p>
+                                      <input
+                                        type="text"
+                                        inputMode="decimal"
+                                        value={ser.servicePrice}
+                                        maxLength={6}
+                                        style={{
+                                          width: "6rem",
+                                          outline: "none",
+                                          textAlign: "center",
+                                          backgroundColor: "transparent",
+                                          padding: "0.4rem",
+                                          fontSize: "1.4rem",
+                                          border: "none",
+                                          borderBottom:
+                                            "0.1rem solid var(--text-primary)",
+                                        }}
+                                        onChange={(e) => {
+                                          let value = e.target.value.trim();
+
+                                          if (!/^\d*\.?\d*$/.test(value))
+                                            return;
+
+                                          if (
+                                            value.length > 1 &&
+                                            value[0] === "0" &&
+                                            value[1] !== "."
+                                          ) {
+                                            value = value.replace(/^0+/, "");
+                                          }
+
+                                          if (value.startsWith("-")) return;
+
+                                          const decimalIndex =
+                                            value.indexOf(".");
+                                          if (
+                                            decimalIndex !== -1 &&
+                                            value.length - decimalIndex > 3
+                                          )
+                                            return;
+
+                                          setSelectedServices((prev) =>
+                                            prev.map((item, idx) =>
+                                              idx === index
+                                                ? {
+                                                    ...item,
+                                                    servicePrice: value,
+                                                  }
+                                                : item
+                                            )
+                                          );
+                                        }}
+                                        placeholder="0.00"
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <div>
+                                    <p>Estimated Time</p>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "0.5rem",
+                                      }}
+                                    >
+                                      <input
+                                        type="text"
+                                        value={ser.serviceEWT}
+                                        maxLength={3}
+                                        style={{
+                                          width: "6rem",
+                                          outline: "none",
+                                          backgroundColor: "transparent",
+                                          padding: "0.4rem",
+                                          fontSize: "1.4rem",
+                                          border: "none",
+                                          borderBottom:
+                                            "0.1rem solid var(--text-primary)",
+                                          textAlign: "center",
+                                        }}
+                                        onChange={(e) => {
+                                          const newValue =
+                                            e.target.value.replace(
+                                              /[^0-9]/g,
+                                              ""
+                                            );
+
+                                          const numericValue =
+                                            newValue === ""
+                                              ? ""
+                                              : Number(newValue);
+
+                                          setSelectedServices((prev) =>
+                                            prev.map((item, idx) =>
+                                              idx === index
+                                                ? {
+                                                    ...item,
+                                                    serviceEWT: numericValue,
+                                                  }
+                                                : item
+                                            )
+                                          );
+                                        }}
+                                      />
+                                      <p>mins</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div
+                          style={{
+                            minHeight: "30rem",
+                            height: "100%",
+                            maxWidth: "50rem",
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <p style={{ fontWeight: "600" }}>
+                            No service available
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </main>
                 </StepContent>

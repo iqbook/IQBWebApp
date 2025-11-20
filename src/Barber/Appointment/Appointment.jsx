@@ -7,9 +7,13 @@ import toast from "react-hot-toast";
 import Calendar from "react-calendar";
 import { AddIcon, LeftArrow, RightArrow } from "../../icons";
 import moment from "moment";
-import { DeleteIcon, DropdownIcon, RightIcon } from "../../newicons";
+import { DeleteIcon, DropdownIcon, LeftIcon, RightIcon } from "../../newicons";
 import ButtonLoader from "../../components/ButtonLoader/ButtonLoader";
 import Skeleton from "react-loading-skeleton";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 const Appointment = () => {
   const barberProfile = useSelector(
@@ -124,16 +128,18 @@ const Appointment = () => {
         },
       });
 
-      const { data: appointmentDaysData } = await api.post(
-        "/api/barberAppointmentDays/getBarberAppointmentDays",
-        {
-          salonId,
-          barberId,
-        }
-      );
+      getAppointdays();
 
-      setGetBarberApptdates(appointmentDaysData.response.appointmentDays);
-      setSelectedDays(appointmentDaysData.response.appointmentDays);
+      // const { data: appointmentDaysData } = await api.post(
+      //   "/api/barberAppointmentDays/getBarberAppointmentDays",
+      //   {
+      //     salonId,
+      //     barberId,
+      //   }
+      // );
+
+      // setGetBarberApptdates(appointmentDaysData.response.appointmentDays);
+      // setSelectedDays(appointmentDaysData.response.appointmentDays);
     } catch (error) {
       toast.error(error?.response?.data?.message, {
         duration: 3000,
@@ -353,8 +359,8 @@ const Appointment = () => {
 
     const generated_timeslot = [];
 
-    for (let i = 1; i <= hour; i++) {
-      for (let j = 0; j <= mins; j = j + intervalTime) {
+    for (let i = 0; i < hour; i++) {
+      for (let j = 0; j < mins; j = j + intervalTime) {
         let time_slot;
         time_slot = `${i < 10 ? `0${i}` : i}:${j < 10 ? `0${j}` : j}`;
         generated_timeslot.push(time_slot);
@@ -416,8 +422,35 @@ const Appointment = () => {
 
   const [apply_appointment_loading, set_apply_appointment_loading] =
     useState(false);
+
   const apply_timeslot_handler = async () => {
-    // console.log(getBarberAppointmentHours)
+    if (!appointmentStartTimeSelected) {
+      toast.error("Appointment start time not selected", {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+
+      return;
+    }
+
+    if (!appointmentEndTimeSelected) {
+      toast.error("Appointment end time not selected", {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+
+      return;
+    }
 
     const appointment_time_data = {
       salonId,
@@ -448,6 +481,10 @@ const Appointment = () => {
         },
       });
 
+      fetchBreakTimes(selected_drop_day?.item?.day);
+      set_open_break_time(false);
+      setAppointmentBreakStartTimeSelected("");
+      setAppointmentBreakEndTimeSelected("");
       getAppointdays();
     } catch (error) {
       if (error?.response?.status === 500) {
@@ -589,10 +626,59 @@ const Appointment = () => {
   };
 
   const [generatedBreakTimeslots, setGeneratedBreakTimeslots] = useState([]);
+  const [break_time_range_loading, set_break_time_range_loading] = useState([]);
+  const [open_break_time, set_open_break_time] = useState(false);
+
+  const fetch_break_time_range = async () => {
+    try {
+      set_break_time_range_loading(true);
+      const { data } = await api.post(
+        `/api/barberBreakTimes/getBarberBreakTimeRange`,
+        {
+          salonId,
+          barberId,
+          day: selected_drop_day?.item?.day,
+        }
+      );
+
+      console.log(data);
+      setGeneratedBreakTimeslots(data?.response);
+    } catch (error) {
+      if (error?.response?.status === 500) {
+        toast.error("Something went wrong !", {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+
+        return;
+      }
+
+      toast.error(error?.response?.data?.message, {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    } finally {
+      set_break_time_range_loading(false);
+    }
+  };
 
   useEffect(() => {
-    time_slot_calculation(5, setGeneratedBreakTimeslots);
-  }, []);
+    // time_slot_calculation(5, setGeneratedBreakTimeslots);
+    //
+    if (open_break_time) {
+      fetch_break_time_range();
+    }
+  }, [open_break_time]);
 
   const [break_time_add_loading, set_break_time_add_loading] = useState(false);
   const add_break_time_handler = async () => {
@@ -684,6 +770,75 @@ const Appointment = () => {
     }
   };
 
+  const modal_style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "45rem",
+    maxHeight: "85vh", // ⬅️ required for scroll
+    overflow: "scroll", // ⬅️ enable internal scroll
+    bgcolor: "var(--bg-primary)",
+    border: "0.1rem solid var(--border-primary)",
+    boxShadow: 24,
+    p: 4,
+  };
+
+  const [modalSelectedItem, setModalSelectedItem] = useState({
+    isChecked: false,
+    item: null,
+  });
+
+  useEffect(() => {
+    if (modalSelectedItem?.item?.day) {
+      if (modalSelectedItem?.isChecked) {
+        set_selected_drop_day((prev) => ({
+          open:
+            prev.item?.day === modalSelectedItem?.item?.day ? !prev.open : true,
+          item: modalSelectedItem?.item,
+        }));
+      }
+    }
+  }, [modalSelectedItem?.item?.day]);
+
+  const close_modal = () => {
+    set_selected_drop_day((prev) => ({
+      open: false,
+      item: null,
+    }));
+    setAppointmentBreakStartTimeDrop((prev) => {
+      return {
+        open: false,
+        value: null,
+      };
+    });
+    setAppointmentBreakEndTimeDrop((prev) => {
+      return {
+        open: false,
+        value: null,
+      };
+    });
+    setAppointmentStartTimeDrop((prev) => {
+      return {
+        open: false,
+        value: null,
+      };
+    });
+    setAppointmentEndTimeDrop((prev) => {
+      return {
+        open: false,
+        value: null,
+      };
+    });
+    set_open_break_time(false);
+    setAppointmentBreakStartTimeSelected("");
+    setAppointmentBreakEndTimeSelected("");
+    setModalSelectedItem({
+      isChecked: false,
+      item: null,
+    });
+  };
+
   return (
     <div className={`${style.section}`}>
       <div className={style.barber_appointment_content_wrapper}>
@@ -714,7 +869,44 @@ const Appointment = () => {
               const isChecked = !isDisabled && selectedDays.includes(d.day);
 
               return (
-                <div
+                // <div
+                //   key={d.id}
+                // className={`${style.appointmentWeekDay} ${
+                //   isDisabled ? style.disabled : ""
+                // } ${isChecked ? style.apptAvailSelected : ""}`}
+                // style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
+                //   onClick={() => {
+                //     if (!isDisabled) checkdayHandler(d);
+                //   }}
+                // >
+                //   {d.day.slice(0, 3)}
+                // <p>
+                //   {
+                //     getBarberAppointmentHours?.find(
+                //       (item) => item.day === d.day
+                //     )?.startTime
+                //   }{" "}
+                //   -{" "}
+                //   {
+                //     getBarberAppointmentHours?.find(
+                //       (item) => item.day === d.day
+                //     )?.endTime
+                //   }
+                // </p>
+                //   <button
+                //     onClick={(e) => {
+                //       e.stopPropagation();
+                // setModalSelectedItem({
+                //   isChecked: isChecked,
+                //   item: d,
+                // });
+                //     }}
+                //   >
+                //     Set Hours & Breaks
+                //   </button>
+                // </div>
+
+                <button
                   key={d.id}
                   className={`${style.appointmentWeekDay} ${
                     isDisabled ? style.disabled : ""
@@ -725,12 +917,71 @@ const Appointment = () => {
                   }}
                 >
                   {d.day.slice(0, 3)}
-                  <div>
-                    <p>09:10</p>
-                    <p>10:30</p>
+
+                  <p>
+                    {
+                      getBarberAppointmentHours?.find(
+                        (item) => item.day === d.day
+                      )?.startTime
+                    }{" "}
+                    -{" "}
+                    {
+                      getBarberAppointmentHours?.find(
+                        (item) => item.day === d.day
+                      )?.endTime
+                    }
+                  </p>
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+
+                        const getBarberAppointmentHoursDay =
+                          getBarberAppointmentHours.map((item) => item.day);
+
+                        if (!getBarberAppointmentHoursDay.includes(d.day)) {
+                          toast.error(
+                            "You can't set hours and breaks because this day isn't saved.",
+                            {
+                              duration: 3000,
+                              style: {
+                                fontSize: "var(--font-size-2)",
+                                borderRadius: "0.3rem",
+                                background: "#333",
+                                color: "#fff",
+                              },
+                            }
+                          );
+                          return;
+                        } else if (!isChecked) {
+                          toast.error(
+                            "Please select this day before setting its hours and breaks.",
+                            {
+                              duration: 3000,
+                              style: {
+                                fontSize: "var(--font-size-2)",
+                                borderRadius: "0.3rem",
+                                background: "#333",
+                                color: "#fff",
+                              },
+                            }
+                          );
+                        } else if (isChecked) {
+                          setModalSelectedItem({
+                            isChecked: isChecked,
+                            item: d,
+                          });
+                        }
+                      }}
+                    >
+                      Set Hours & Breaks
+                    </button>
                   </div>
-                  <button>Set Hours & Breaks</button>
-                </div>
+                </button>
               );
             })}
           </div>
@@ -870,6 +1121,392 @@ const Appointment = () => {
         </div>
       </div>
 
+      <Modal
+        open={
+          selected_drop_day.open &&
+          selected_drop_day?.item?.id === modalSelectedItem?.item?.id
+        }
+        onClose={() => close_modal()}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modal_style} className={style.modal_container}>
+          <div>
+            <div>
+              <LeftIcon color="var(--text-primary)" size={"1.8rem"} />
+            </div>
+            <h2>{selected_drop_day?.item?.day}</h2>
+          </div>
+          <p>
+            Set your business hours here. Head to your calender if you need to
+            adjust hours for a single day.
+          </p>
+
+          <div className={style.set_time_modal_container}>
+            <p>Appointment hours</p>
+            <div>
+              <div>
+                <div
+                  onClick={() => {
+                    setAppointmentBreakStartTimeDrop((prev) => {
+                      return {
+                        open: false,
+                        value: null,
+                      };
+                    });
+                    setAppointmentBreakEndTimeDrop((prev) => {
+                      return {
+                        open: false,
+                        value: null,
+                      };
+                    });
+                    setAppointmentStartTimeDrop((prev) => {
+                      return {
+                        open: !prev.open,
+                        value: null,
+                      };
+                    });
+                  }}
+                >
+                  <p>{appointmentStartTimeSelected}</p>
+                  <DropdownIcon size={"1.4rem"} color="var(--text-primary)" />
+                </div>
+
+                {appointmentStartTimeDrop.open ? (
+                  <div className={style.timeslot_dropdown_container}>
+                    {generatedTimeslots.map((item) => {
+                      return (
+                        <button
+                          key={item}
+                          onClick={() => {
+                            setAppointmentStartTimeSelected(item);
+                            setAppointmentStartTimeDrop((prev) => {
+                              return {
+                                open: false,
+                                value: null,
+                              };
+                            });
+                          }}
+                        >
+                          {item}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : null}
+              </div>
+
+              <div>
+                <div
+                  onClick={() => {
+                    setAppointmentBreakStartTimeDrop((prev) => {
+                      return {
+                        open: false,
+                        value: null,
+                      };
+                    });
+                    setAppointmentBreakEndTimeDrop((prev) => {
+                      return {
+                        open: false,
+                        value: null,
+                      };
+                    });
+                    setAppointmentEndTimeDrop((prev) => {
+                      return {
+                        open: !prev.open,
+                        value: null,
+                      };
+                    });
+                  }}
+                >
+                  <p>{appointmentEndTimeSelected}</p>
+                  <DropdownIcon size={"1.4rem"} color="var(--text-primary)" />
+                </div>
+
+                {appointmentEndTimeDrop.open ? (
+                  <div className={style.timeslot_dropdown_container}>
+                    {generatedTimeslots.map((item) => {
+                      return (
+                        <button
+                          key={item}
+                          onClick={() => {
+                            setAppointmentEndTimeSelected(item);
+                            setAppointmentEndTimeDrop((prev) => {
+                              return {
+                                open: false,
+                                value: null,
+                              };
+                            });
+                          }}
+                        >
+                          {item}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          </div>
+
+          <div className={style.set_time_break_modal_container}>
+            {break_time_loading ? (
+              <Skeleton
+                count={3}
+                height={"4rem"}
+                baseColor={"var(--loader-bg-color)"}
+                highlightColor={"var(--loader-highlight-color)"}
+                style={{ marginBottom: "1rem" }}
+              />
+            ) : get_break_time.length > 0 ? (
+              <>
+                <p>Break Duration</p>
+                {get_break_time?.map((item) => {
+                  return (
+                    <div key={item._id}>
+                      <div>
+                        <div>
+                          <p>{item.startTime}</p>
+                          <div
+                            style={{
+                              width: "0rem",
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div>
+                          <p>{item.endTime}</p>
+                          <div
+                            style={{
+                              width: "0rem",
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+
+                      <button
+                        disabled={
+                          break_time_delete_loading?.item?._id === item?._id
+                        }
+                        onClick={() => delete_break_time_handler(item)}
+                      >
+                        {break_time_delete_loading?.item?._id === item?._id &&
+                        break_time_delete_loading?.loading ? (
+                          <ButtonLoader />
+                        ) : (
+                          "Remove"
+                        )}
+                      </button>
+                    </div>
+                  );
+                })}
+              </>
+            ) : (
+              <p
+                style={{
+                  lineHeight: "10rem",
+                }}
+              >
+                No break time available
+              </p>
+            )}
+          </div>
+
+          <button className={style.set_time_add_break_container}>
+            <p>Add Break</p>
+          </button>
+
+          <div className={style.set_time_add_timer}>
+            <div>
+              <div
+                onClick={() => {
+                  setAppointmentStartTimeDrop((prev) => {
+                    return {
+                      open: false,
+                      value: null,
+                    };
+                  });
+                  setAppointmentEndTimeDrop((prev) => {
+                    return {
+                      open: false,
+                      value: null,
+                    };
+                  });
+                  set_open_break_time(true);
+                  setAppointmentBreakStartTimeDrop((prev) => {
+                    return {
+                      open: !prev.open,
+                      value: null,
+                    };
+                  });
+                }}
+              >
+                <p
+                  style={{
+                    color: appointmentBreakStartTimeSelected
+                      ? "var(--text-primary)"
+                      : "gray",
+                    fontWeight: 600,
+                  }}
+                >
+                  {appointmentBreakStartTimeSelected
+                    ? appointmentBreakStartTimeSelected
+                    : "00:00"}
+                </p>
+                <DropdownIcon size={"1.4rem"} color="var(--text-primary)" />
+              </div>
+
+              {appointmentBreakStartTimeDrop.open ? (
+                break_time_range_loading ? (
+                  <div className={style.timeslot_dropdown_container_loading}>
+                    <Skeleton
+                      count={6}
+                      height={"3.5rem"}
+                      width={"7.8rem"}
+                      baseColor={"var(--loader-bg-color)"}
+                      highlightColor={"var(--loader-highlight-color)"}
+                      style={{ marginBottom: "1rem" }}
+                    />
+                  </div>
+                ) : generatedBreakTimeslots?.length > 0 ? (
+                  <div className={style.timeslot_dropdown_container}>
+                    {generatedBreakTimeslots.map((item) => {
+                      return (
+                        <button
+                          key={item}
+                          onClick={() => {
+                            setAppointmentBreakStartTimeSelected(item);
+                            setAppointmentBreakStartTimeDrop((prev) => {
+                              return {
+                                open: false,
+                                value: null,
+                              };
+                            });
+                          }}
+                        >
+                          {item}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className={style.timeslot_dropdown_container_error}>
+                    <p>No time present</p>
+                  </div>
+                )
+              ) : null}
+            </div>
+
+            <div>
+              <div
+                onClick={() => {
+                  setAppointmentStartTimeDrop((prev) => {
+                    return {
+                      open: false,
+                      value: null,
+                    };
+                  });
+                  setAppointmentEndTimeDrop((prev) => {
+                    return {
+                      open: false,
+                      value: null,
+                    };
+                  });
+                  set_open_break_time(true);
+                  setAppointmentBreakEndTimeDrop((prev) => {
+                    return {
+                      open: !prev.open,
+                      value: null,
+                    };
+                  });
+                }}
+              >
+                <p
+                  style={{
+                    color: appointmentBreakEndTimeSelected
+                      ? "var(--text-primary)"
+                      : "gray",
+                    fontWeight: 600,
+                  }}
+                >
+                  {appointmentBreakEndTimeSelected
+                    ? appointmentBreakEndTimeSelected
+                    : "00:00"}
+                </p>
+                <DropdownIcon size={"1.4rem"} color="var(--text-primary)" />
+              </div>
+
+              {appointmentBreakEndTimeDrop.open ? (
+                break_time_range_loading ? (
+                  <div className={style.timeslot_dropdown_container_loading}>
+                    <Skeleton
+                      count={6}
+                      height={"3.5rem"}
+                      width={"7.8rem"}
+                      baseColor={"var(--loader-bg-color)"}
+                      highlightColor={"var(--loader-highlight-color)"}
+                      style={{ marginBottom: "1rem" }}
+                    />
+                  </div>
+                ) : generatedBreakTimeslots?.length > 0 ? (
+                  <div className={style.timeslot_dropdown_container}>
+                    {generatedBreakTimeslots.map((item) => {
+                      return (
+                        <button
+                          key={item}
+                          onClick={() => {
+                            setAppointmentBreakEndTimeSelected(item);
+                            setAppointmentBreakEndTimeDrop((prev) => {
+                              return {
+                                open: false,
+                                value: null,
+                              };
+                            });
+                          }}
+                        >
+                          {item}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className={style.timeslot_dropdown_container_error}>
+                    <p>No time present</p>
+                  </div>
+                )
+              ) : null}
+            </div>
+
+            <button
+              disabled={break_time_add_loading}
+              onClick={() => {
+                add_break_time_handler();
+              }}
+            >
+              {break_time_add_loading ? <ButtonLoader /> : "Add"}
+            </button>
+          </div>
+
+          <div className={style.set_time_separator} />
+
+          <div className={style.set_time_apply_container}>
+            <div />
+            <div>
+              <button onClick={() => close_modal()}>Cancel</button>
+              <button
+                disabled={apply_appointment_loading}
+                onClick={apply_timeslot_handler}
+              >
+                {apply_appointment_loading ? <ButtonLoader /> : "Apply"}
+              </button>
+            </div>
+          </div>
+        </Box>
+      </Modal>
+
+      {/* Mobile design started */}
       <div
         className={`${style.barber_appointment_content_mobile_wrapper} ${
           darkmodeOn && style.dark
@@ -943,14 +1580,77 @@ const Appointment = () => {
                           </p>
                           <button
                             onClick={() => {
-                              if (isChecked) {
-                                set_selected_drop_day((prev) => ({
-                                  open:
-                                    prev.item?.day === d.day
-                                      ? !prev.open
-                                      : true,
-                                  item: d,
-                                }));
+                              const getBarberAppointmentHoursDay =
+                                getBarberAppointmentHours.map(
+                                  (item) => item.day
+                                );
+
+                              if (
+                                !getBarberAppointmentHoursDay.includes(d.day)
+                              ) {
+                                toast.error(
+                                  "You can't set hours for this day because its schedule hasn't been saved yet.",
+                                  {
+                                    duration: 3000,
+                                    style: {
+                                      fontSize: "var(--font-size-2)",
+                                      borderRadius: "0.3rem",
+                                      background: "#333",
+                                      color: "#fff",
+                                    },
+                                  }
+                                );
+                                return;
+                              } else if (!isChecked) {
+                                toast.error(
+                                  "Please select this day before setting its hours and breaks.",
+                                  {
+                                    duration: 3000,
+                                    style: {
+                                      fontSize: "var(--font-size-2)",
+                                      borderRadius: "0.3rem",
+                                      background: "#333",
+                                      color: "#fff",
+                                    },
+                                  }
+                                );
+                              } else if (isChecked) {
+                                set_selected_drop_day((prev) => {
+                                  return {
+                                    open:
+                                      prev.item?.day === d.day
+                                        ? !prev.open
+                                        : true,
+                                    item: d,
+                                  };
+                                });
+                                setAppointmentBreakStartTimeDrop((prev) => {
+                                  return {
+                                    open: false,
+                                    value: null,
+                                  };
+                                });
+                                setAppointmentBreakEndTimeDrop((prev) => {
+                                  return {
+                                    open: false,
+                                    value: null,
+                                  };
+                                });
+                                setAppointmentStartTimeDrop((prev) => {
+                                  return {
+                                    open: false,
+                                    value: null,
+                                  };
+                                });
+                                setAppointmentEndTimeDrop((prev) => {
+                                  return {
+                                    open: false,
+                                    value: null,
+                                  };
+                                });
+                                set_open_break_time(false);
+                                setAppointmentBreakStartTimeSelected("");
+                                setAppointmentBreakEndTimeSelected("");
                               }
                             }}
                           >
@@ -974,7 +1674,7 @@ const Appointment = () => {
                       selected_drop_day?.item?.id === d.id ? (
                         <div className={style.day_off_dropdown_container}>
                           <p>
-                            Set your business hours here.Head to your calenderif
+                            Set your business hours here. Head to your calender if
                             you need to adjust hours for a single day.
                           </p>
 
@@ -984,6 +1684,18 @@ const Appointment = () => {
                               <div>
                                 <div
                                   onClick={() => {
+                                    setAppointmentBreakStartTimeDrop((prev) => {
+                                      return {
+                                        open: false,
+                                        value: null,
+                                      };
+                                    });
+                                    setAppointmentBreakEndTimeDrop((prev) => {
+                                      return {
+                                        open: false,
+                                        value: null,
+                                      };
+                                    });
                                     setAppointmentStartTimeDrop((prev) => {
                                       return {
                                         open: !prev.open,
@@ -1034,6 +1746,18 @@ const Appointment = () => {
                               <div>
                                 <div
                                   onClick={() => {
+                                    setAppointmentBreakStartTimeDrop((prev) => {
+                                      return {
+                                        open: false,
+                                        value: null,
+                                      };
+                                    });
+                                    setAppointmentBreakEndTimeDrop((prev) => {
+                                      return {
+                                        open: false,
+                                        value: null,
+                                      };
+                                    });
                                     setAppointmentEndTimeDrop((prev) => {
                                       return {
                                         open: !prev.open,
@@ -1164,6 +1888,19 @@ const Appointment = () => {
                             <div>
                               <div
                                 onClick={() => {
+                                  setAppointmentStartTimeDrop((prev) => {
+                                    return {
+                                      open: false,
+                                      value: null,
+                                    };
+                                  });
+                                  setAppointmentEndTimeDrop((prev) => {
+                                    return {
+                                      open: false,
+                                      value: null,
+                                    };
+                                  });
+                                  set_open_break_time(true);
                                   setAppointmentBreakStartTimeDrop((prev) => {
                                     return {
                                       open: !prev.open,
@@ -1172,7 +1909,14 @@ const Appointment = () => {
                                   });
                                 }}
                               >
-                                <p>
+                                <p
+                                  style={{
+                                    color: appointmentBreakStartTimeSelected
+                                      ? "var(--text-primary)"
+                                      : "gray",
+                                    fontWeight: 600,
+                                  }}
+                                >
                                   {appointmentBreakStartTimeSelected
                                     ? appointmentBreakStartTimeSelected
                                     : "00:00"}
@@ -1184,38 +1928,80 @@ const Appointment = () => {
                               </div>
 
                               {appointmentBreakStartTimeDrop.open ? (
-                                <div
-                                  className={style.timeslot_dropdown_container}
-                                >
-                                  {generatedBreakTimeslots.map((item) => {
-                                    return (
-                                      <button
-                                        key={item}
-                                        onClick={() => {
-                                          setAppointmentBreakStartTimeSelected(
-                                            item
-                                          );
-                                          setAppointmentBreakStartTimeDrop(
-                                            (prev) => {
-                                              return {
-                                                open: false,
-                                                value: null,
-                                              };
-                                            }
-                                          );
-                                        }}
-                                      >
-                                        {item}
-                                      </button>
-                                    );
-                                  })}
-                                </div>
+                                break_time_range_loading ? (
+                                  <div
+                                    className={
+                                      style.timeslot_dropdown_container_loading
+                                    }
+                                  >
+                                    <Skeleton
+                                      count={6}
+                                      height={"3.5rem"}
+                                      width={"7.8rem"}
+                                      baseColor={"var(--loader-bg-color)"}
+                                      highlightColor={
+                                        "var(--loader-highlight-color)"
+                                      }
+                                      style={{ marginBottom: "1rem" }}
+                                    />
+                                  </div>
+                                ) : generatedBreakTimeslots?.length > 0 ? (
+                                  <div
+                                    className={
+                                      style.timeslot_dropdown_container
+                                    }
+                                  >
+                                    {generatedBreakTimeslots.map((item) => {
+                                      return (
+                                        <button
+                                          key={item}
+                                          onClick={() => {
+                                            setAppointmentBreakStartTimeSelected(
+                                              item
+                                            );
+                                            setAppointmentBreakStartTimeDrop(
+                                              (prev) => {
+                                                return {
+                                                  open: false,
+                                                  value: null,
+                                                };
+                                              }
+                                            );
+                                          }}
+                                        >
+                                          {item}
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
+                                ) : (
+                                  <div
+                                    className={
+                                      style.timeslot_dropdown_container_error
+                                    }
+                                  >
+                                    <p>No time present</p>
+                                  </div>
+                                )
                               ) : null}
                             </div>
 
                             <div>
                               <div
                                 onClick={() => {
+                                  setAppointmentStartTimeDrop((prev) => {
+                                    return {
+                                      open: false,
+                                      value: null,
+                                    };
+                                  });
+                                  setAppointmentEndTimeDrop((prev) => {
+                                    return {
+                                      open: false,
+                                      value: null,
+                                    };
+                                  });
+                                  set_open_break_time(true);
                                   setAppointmentBreakEndTimeDrop((prev) => {
                                     return {
                                       open: !prev.open,
@@ -1224,7 +2010,14 @@ const Appointment = () => {
                                   });
                                 }}
                               >
-                                <p>
+                                <p
+                                  style={{
+                                    color: appointmentBreakEndTimeSelected
+                                      ? "var(--text-primary)"
+                                      : "gray",
+                                    fontWeight: 600,
+                                  }}
+                                >
                                   {appointmentBreakEndTimeSelected
                                     ? appointmentBreakEndTimeSelected
                                     : "00:00"}
@@ -1236,32 +2029,61 @@ const Appointment = () => {
                               </div>
 
                               {appointmentBreakEndTimeDrop.open ? (
-                                <div
-                                  className={style.timeslot_dropdown_container}
-                                >
-                                  {generatedBreakTimeslots.map((item) => {
-                                    return (
-                                      <button
-                                        key={item}
-                                        onClick={() => {
-                                          setAppointmentBreakEndTimeSelected(
-                                            item
-                                          );
-                                          setAppointmentBreakEndTimeDrop(
-                                            (prev) => {
-                                              return {
-                                                open: false,
-                                                value: null,
-                                              };
-                                            }
-                                          );
-                                        }}
-                                      >
-                                        {item}
-                                      </button>
-                                    );
-                                  })}
-                                </div>
+                                break_time_range_loading ? (
+                                  <div
+                                    className={
+                                      style.timeslot_dropdown_container_loading
+                                    }
+                                  >
+                                    <Skeleton
+                                      count={6}
+                                      height={"3.5rem"}
+                                      width={"7.8rem"}
+                                      baseColor={"var(--loader-bg-color)"}
+                                      highlightColor={
+                                        "var(--loader-highlight-color)"
+                                      }
+                                      style={{ marginBottom: "1rem" }}
+                                    />
+                                  </div>
+                                ) : generatedBreakTimeslots?.length > 0 ? (
+                                  <div
+                                    className={
+                                      style.timeslot_dropdown_container
+                                    }
+                                  >
+                                    {generatedBreakTimeslots.map((item) => {
+                                      return (
+                                        <button
+                                          key={item}
+                                          onClick={() => {
+                                            setAppointmentBreakEndTimeSelected(
+                                              item
+                                            );
+                                            setAppointmentBreakEndTimeDrop(
+                                              (prev) => {
+                                                return {
+                                                  open: false,
+                                                  value: null,
+                                                };
+                                              }
+                                            );
+                                          }}
+                                        >
+                                          {item}
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
+                                ) : (
+                                  <div
+                                    className={
+                                      style.timeslot_dropdown_container_error
+                                    }
+                                  >
+                                    <p>No time present</p>
+                                  </div>
+                                )
                               ) : null}
                             </div>
 
@@ -1284,14 +2106,7 @@ const Appointment = () => {
                           <div className={style.set_time_apply_container}>
                             <div />
                             <div>
-                              <button
-                                onClick={() => {
-                                  set_selected_drop_day((prev) => ({
-                                    open: false,
-                                    item: null,
-                                  }));
-                                }}
-                              >
+                              <button onClick={() => close_modal()}>
                                 Cancel
                               </button>
                               <button

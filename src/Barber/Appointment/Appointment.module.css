@@ -71,7 +71,7 @@
 
       .appointmentWeekDay {
         width: 100%;
-        min-width: unset;
+        min-width: calc(100% / 7);
         height: 12rem;
         border-radius: 0.5rem;
         border: none;
@@ -87,17 +87,24 @@
         align-items: center;
         flex-direction: column;
         gap: 1rem;
-        padding: 1rem;
+        padding: 0.5rem;
 
-        &>div{
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 1rem;
+        & > p {
+          font-size: 1.2rem;
         }
 
-        &>button{
-          font-size: 1.2rem;
+        & > div {
+          & > button {
+            font-size: 1.2rem;
+            background-color: var(--input-bg-color);
+            border: none;
+            outline: none;
+            border-radius: 0.5rem;
+            width: 90%;
+            color: var(--text-primary);
+            padding: 0.8rem 0.5rem;
+            cursor: pointer;
+          }
         }
       }
 
@@ -252,7 +259,350 @@
   cursor: not-allowed;
 }
 
+.modal_container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  & > div:nth-child(1) {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    & > div {
+      display: grid;
+      place-items: center;
+    }
+  }
+
+  .set_time_modal_container {
+    display: flex;
+    justify-content: space-between;
+    /* flex-direction: column; */
+    gap: 2.5rem;
+    margin-top: 1rem;
+    align-items: center;
+
+    & > p {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 600;
+    }
+
+    & > div {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+
+      & > div {
+        position: relative;
+
+        & > div {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          background-color: var(--input-bg-color);
+          padding-inline: 1.2rem;
+          height: 3.5rem;
+          border: 0.1rem solid var(--border-secondary);
+          border-radius: 0.5rem;
+
+          & > p {
+            font-size: 1.6rem;
+          }
+        }
+
+        .timeslot_dropdown_container {
+          position: absolute;
+          top: 4rem;
+          left: 0rem;
+          right: 0rem;
+          height: 20rem;
+          z-index: 50;
+          background-color: var(--input-bg-color);
+          border: 0.1rem solid var(--border-secondary);
+          padding: 0.5rem;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          gap: 1rem;
+          overflow: auto;
+
+          & > button {
+            min-height: 3rem;
+            background-color: var(--bg-primary);
+            width: 100%;
+            align-content: center;
+            text-align: center;
+            border-radius: 0.5rem;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
+          }
+        }
+      }
+
+      & > button {
+        background-color: #450a0a;
+        padding-inline: 0.8rem;
+        height: 3.5rem;
+        border: none;
+        outline: none;
+        /* border: 0.1rem solid oklch(0.577 0.245 27.325); */
+        border-radius: 0.5rem;
+        color: #fff;
+        font-size: 1.4rem;
+      }
+    }
+  }
+
+  .set_time_break_modal_container {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 2.5rem;
+    margin-top: 1rem;
+
+    & > p {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 600;
+    }
+
+    & > div {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      justify-content: space-between;
+
+      & > div {
+        position: relative;
+
+        & > div {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          background-color: var(--input-bg-color);
+          padding-inline: 1.2rem;
+          height: 3.5rem;
+          border: 0.1rem solid var(--border-secondary);
+          border-radius: 0.5rem;
+
+          & > p {
+            font-size: 1.6rem;
+          }
+        }
+
+        .timeslot_dropdown_container {
+          position: absolute;
+          top: 4rem;
+          left: 0rem;
+          right: 0rem;
+          height: 20rem;
+          z-index: 50;
+          background-color: var(--input-bg-color);
+          border: 0.1rem solid var(--border-secondary);
+          padding: 0.5rem;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          gap: 1rem;
+          overflow: auto;
+
+          & > button {
+            min-height: 3rem;
+            background-color: var(--bg-primary);
+            width: 100%;
+            align-content: center;
+            text-align: center;
+            border-radius: 0.5rem;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
+          }
+        }
+      }
+
+      & > button {
+        background-color: #450a0a;
+        padding-inline: 0.8rem;
+        height: 3.5rem;
+        border: none;
+        outline: none;
+
+        border-radius: 0.5rem;
+        color: #fff;
+        font-size: 1.4rem;
+      }
+    }
+  }
+
+  .set_time_add_break_container {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    /* height: 3.5rem; */
+    width: max-content;
+    font-weight: 600;
+    padding-right: 1.2rem;
+    & > p {
+      font-size: 1.6rem;
+    }
+  }
+
+  .set_time_add_timer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & > div {
+      position: relative;
+
+      & > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        background-color: var(--input-bg-color);
+        padding-inline: 1.2rem;
+        height: 3.5rem;
+        border: 0.1rem solid var(--border-secondary);
+        border-radius: 0.5rem;
+
+        & > p {
+          font-size: 1.6rem;
+        }
+      }
+
+      .timeslot_dropdown_container_loading {
+        position: absolute;
+        top: 4rem;
+        left: 0rem;
+        right: 0rem;
+        height: 20rem;
+        z-index: 50;
+        background-color: var(--input-bg-color);
+        border: 0.1rem solid var(--border-secondary);
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        overflow: auto;
+      }
+
+      .timeslot_dropdown_container {
+        position: absolute;
+        top: 4rem;
+        left: 0rem;
+        right: 0rem;
+        height: 20rem;
+        z-index: 50;
+        background-color: var(--input-bg-color);
+        border: 0.1rem solid var(--border-secondary);
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 1rem;
+        overflow: auto;
+
+        & > button {
+          min-height: 3rem;
+          background-color: var(--bg-primary);
+          width: 100%;
+          align-content: center;
+          text-align: center;
+          border-radius: 0.5rem;
+          border: none;
+          outline: none;
+          color: var(--text-primary);
+        }
+      }
+
+      .timeslot_dropdown_container_error {
+        position: absolute;
+        top: 4rem;
+        left: 0rem;
+        right: 0rem;
+        height: 10rem;
+        z-index: 50;
+        background-color: var(--input-bg-color);
+        border: 0.1rem solid var(--border-secondary);
+        /* padding: 0.5rem; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        & > p {
+          font-size: 1.4rem;
+          color: var(--text-secondary);
+        }
+      }
+    }
+
+    & > button {
+      background-color: #0285c7;
+      padding-inline: 0.8rem;
+      height: 3.5rem;
+      border: none;
+      outline: none;
+      /* border: 0.1rem solid oklch(0.546 0.245 262.881); */
+      border-radius: 0.5rem;
+      color: #fff;
+      font-size: 1.4rem;
+    }
+  }
+
+  .set_time_separator {
+    border: 0.1rem solid var(--border-secondary);
+  }
+
+  .set_time_apply_container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & > div:nth-child(2) {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+
+      & > button {
+        height: 3.5rem;
+        padding-inline: 1.2rem;
+        border: none;
+        outline: none;
+        border-radius: 0.3rem;
+        color: #fff;
+      }
+
+      & > button:nth-child(1) {
+        background-color: #450a0a;
+      }
+
+      & > button:nth-child(2) {
+        background-color: var(--bg-secondary);
+        color: var(--btn-text-color);
+      }
+    }
+  }
+}
+
 @media screen and (min-width: 0px) and (max-width: 768px) {
+  .modal_container {
+    display: none;
+  }
+
   .barber_appointment_content_wrapper {
     display: none;
   }
@@ -403,10 +753,8 @@
 
     .set_time_container {
       display: flex;
-      /* align-items: center; */
       flex-direction: column;
       gap: 2.5rem;
-      /* justify-content: space-between; */
 
       & > p {
         text-align: center;
@@ -455,16 +803,16 @@
             gap: 1rem;
             overflow: auto;
 
-            &>button{
-                min-height: 3rem;
-                background-color: var(--bg-primary);
-                width: 100%;
-                align-content: center;
-                text-align: center;
-                border-radius: 0.5rem;
-                border: none;
-                outline: none;
-                color: var(--text-primary);
+            & > button {
+              min-height: 3rem;
+              background-color: var(--bg-primary);
+              width: 100%;
+              align-content: center;
+              text-align: center;
+              border-radius: 0.5rem;
+              border: none;
+              outline: none;
+              color: var(--text-primary);
             }
           }
         }
@@ -524,35 +872,72 @@
           }
         }
 
-        .timeslot_dropdown_container {
-            position: absolute;
-            top: 4rem;
-            left: 0rem;
-            right: 0rem;
-            height: 20rem;
-            z-index: 50;
-            background-color: var(--input-bg-color);
-            border: 0.1rem solid var(--border-secondary);
-            padding: 0.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: flex-start;
-            gap: 1rem;
-            overflow: auto;
+        .timeslot_dropdown_container_loading {
+          position: absolute;
+          top: 4rem;
+          left: 0rem;
+          right: 0rem;
+          height: 20rem;
+          z-index: 50;
+          background-color: var(--input-bg-color);
+          border: 0.1rem solid var(--border-secondary);
+          padding: 0.5rem;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          overflow: auto;
+        }
 
-            &>button{
-                min-height: 3rem;
-                background-color: var(--bg-primary);
-                width: 100%;
-                align-content: center;
-                text-align: center;
-                border-radius: 0.5rem;
-                border: none;
-                outline: none;
-                color: var(--text-primary);
-            }
+        .timeslot_dropdown_container {
+          position: absolute;
+          top: 4rem;
+          left: 0rem;
+          right: 0rem;
+          height: 20rem;
+          z-index: 50;
+          background-color: var(--input-bg-color);
+          border: 0.1rem solid var(--border-secondary);
+          padding: 0.5rem;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          gap: 1rem;
+          overflow: auto;
+
+          & > button {
+            min-height: 3rem;
+            background-color: var(--bg-primary);
+            width: 100%;
+            align-content: center;
+            text-align: center;
+            border-radius: 0.5rem;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
           }
+        }
+
+        .timeslot_dropdown_container_error {
+          position: absolute;
+          top: 4rem;
+          left: 0rem;
+          right: 0rem;
+          height: 10rem;
+          z-index: 50;
+          background-color: var(--input-bg-color);
+          border: 0.1rem solid var(--border-secondary);
+          /* padding: 0.5rem; */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          & > p {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+          }
+        }
       }
 
       & > button {
