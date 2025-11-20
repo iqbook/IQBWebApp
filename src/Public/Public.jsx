@@ -28,7 +28,7 @@ const Public = () => {
             <Link to="/adminsignin">Admin Signin</Link>
             <Link to="/barbersignin">Barber Signin</Link>
           </div>
-          <p className={"version_text"}>v 1.0.26</p>
+          <p className={"version_text"}>v 1.0.1</p>
         </div>
       </div>
     </section>
