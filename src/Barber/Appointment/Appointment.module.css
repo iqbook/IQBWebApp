@@ -431,7 +431,7 @@
         height: 3.5rem;
         border: none;
         outline: none;
-        /* border: 0.1rem solid oklch(0.577 0.245 27.325); */
+
         border-radius: 0.5rem;
         color: #fff;
         font-size: 1.4rem;
@@ -480,6 +480,23 @@
         }
       }
 
+      .timeslot_dropdown_container_loading {
+        position: absolute;
+        top: 4rem;
+        left: 0rem;
+        right: 0rem;
+        height: 20rem;
+        z-index: 50;
+        background-color: var(--input-bg-color);
+        border: 0.1rem solid var(--border-secondary);
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        overflow: auto;
+      }
+
       .timeslot_dropdown_container {
         position: absolute;
         top: 4rem;
@@ -507,6 +524,26 @@
           border: none;
           outline: none;
           color: var(--text-primary);
+        }
+      }
+
+      .timeslot_dropdown_container_error {
+        position: absolute;
+        top: 4rem;
+        left: 0rem;
+        right: 0rem;
+        height: 10rem;
+        z-index: 50;
+        background-color: var(--input-bg-color);
+        border: 0.1rem solid var(--border-secondary);
+        /* padding: 0.5rem; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        & > p {
+          font-size: 1.4rem;
+          color: var(--text-secondary);
         }
       }
     }
@@ -833,6 +870,23 @@
           }
         }
 
+        .timeslot_dropdown_container_loading {
+          position: absolute;
+          top: 4rem;
+          left: 0rem;
+          right: 0rem;
+          height: 20rem;
+          z-index: 50;
+          background-color: var(--input-bg-color);
+          border: 0.1rem solid var(--border-secondary);
+          padding: 0.5rem;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          overflow: auto;
+        }
+
         .timeslot_dropdown_container {
           position: absolute;
           top: 4rem;
@@ -860,6 +914,26 @@
             border: none;
             outline: none;
             color: var(--text-primary);
+          }
+        }
+
+        .timeslot_dropdown_container_error {
+          position: absolute;
+          top: 4rem;
+          left: 0rem;
+          right: 0rem;
+          height: 10rem;
+          z-index: 50;
+          background-color: var(--input-bg-color);
+          border: 0.1rem solid var(--border-secondary);
+          /* padding: 0.5rem; */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          & > p {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
           }
         }
       }
