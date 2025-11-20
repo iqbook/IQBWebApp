@@ -30,8 +30,6 @@
 //     }
 //   }, [barberProfile])
 
-
-
 //   const truncateText = (text, charecterLimit) => {
 //     if (text?.length <= charecterLimit) {
 //       return text;
@@ -65,7 +63,6 @@
 //     }
 
 //   }, [selectedSalonId])
-
 
 //   const [selectedServiceList, setSelectedServiceList] = useState([])
 //   const [oldSalonServicelist, setOldSalonServiceList] = useState([])
@@ -118,7 +115,6 @@
 //     );
 //   };
 
-
 //   const handleBarberEwt = (serId, value) => {
 //     const newValue = value.replace(/[^0-9]/g, '');
 
@@ -167,7 +163,6 @@
 //     message: barberConnectSalonMessage
 //   } = barberConnectSalon
 
-
 //   const queuelistcontrollerRef = useRef(new AbortController());
 
 //   useEffect(() => {
@@ -193,9 +188,7 @@
 //     queueList: BarberQueueList
 //   } = getBarberQueueList
 
-
 //   const [currentDate, setCurrentDate] = useState(new Date())
-
 
 //   const barberDashboardSalonInfoRef = useRef(new AbortController())
 
@@ -223,7 +216,6 @@
 //     response: barberDashboardSalonInfoResponse
 //   } = barberDashboardSalonInfo
 
-
 //   //Salon Images
 
 //   useEffect(() => {
@@ -243,8 +235,6 @@
 //   const [openModal, setOpenModal] = useState(false)
 
 //   // console.log(barberConnectSalonMessage)
-
-
 
 //   const data2 = [
 //     {
@@ -339,7 +329,7 @@
 //                 {
 //                   getAdminSalonImagesLoading ?
 //                     <div className={style.salonadv_container_loader}>
-//                       <Skeleton count={1} className={style.dashboard_advertise_loader} style={{ borderRadius: "0.6vw" }} 
+//                       <Skeleton count={1} className={style.dashboard_advertise_loader} style={{ borderRadius: "0.6vw" }}
 //                       baseColor={darkmodeOn ? "var(--dark-loader-bg-color)" : "var(--light-loader-bg-color)"}
 //                       highlightColor={darkmodeOn ? "var(--dark-loader-highlight-color)" : "var(--light-loader-highlight-color)"} />
 //                     </div> :
@@ -370,7 +360,6 @@
 //                         <img src="./no-image.jpg" alt="no_image" />
 //                       </div>
 //                 }
-
 
 //                 <div className={style.barber_report_container}>
 
@@ -466,12 +455,10 @@
 //                         </div>
 //                       </div>
 
-
 //                     </Carousel>
 //                   </div>
 //                 </div>
 //               </div>
-
 
 //               <div className={style.dashboard_container_two}>
 //                 <div className={`${style.queuelists_container} ${darkmodeOn && style.dark}`}>
@@ -485,7 +472,7 @@
 //                   {
 //                     getBarberQueueListLoading ?
 //                       <div className={style.queue_body_loading}>
-//                         <Skeleton count={7} height={"6rem"} style={{ marginBottom: "1rem" }} 
+//                         <Skeleton count={7} height={"6rem"} style={{ marginBottom: "1rem" }}
 //                         baseColor={darkmodeOn ? "var(--dark-loader-bg-color)" : "var(--light-loader-bg-color)"}
 //                         highlightColor={darkmodeOn ? "var(--dark-loader-highlight-color)" : "var(--light-loader-highlight-color)"} />
 //                       </div> :
@@ -568,7 +555,6 @@
 //                           </div>
 //                     }
 
-
 //                   </div>
 //                 </div>
 
@@ -620,7 +606,6 @@
 //                                 (<button className={`${style.service_add_icon}`} onClick={() => selectServiceHandler(s)}><AddIcon /></button>)
 //                             }
 
-
 //                           </div>
 //                         )
 //                       })
@@ -648,24 +633,36 @@
 
 // export default Dashboard
 
+import React, { useEffect, useRef, useState } from "react";
+import Skeleton from "react-loading-skeleton";
+import style from "./Dashboard.module.css";
+import { Carousel } from "react-responsive-carousel";
+import {
+  AddIcon,
+  ChartIcon1,
+  ChartIcon2,
+  ChartIcon3,
+  CheckIcon,
+  ClockIcon,
+  CrownIcon,
+  DeleteIcon,
+} from "../../icons";
+import { ResponsiveContainer, LineChart, Line, BarChart, Bar } from "recharts";
 
-
-import React, { useEffect, useRef, useState } from 'react'
-import Skeleton from 'react-loading-skeleton'
-import style from './Dashboard.module.css'
-import { Carousel } from 'react-responsive-carousel';
-import { AddIcon, ChartIcon1, ChartIcon2, ChartIcon3, CheckIcon, ClockIcon, CrownIcon, DeleteIcon } from '../../icons';
-import { ResponsiveContainer, LineChart, Line, BarChart, Bar } from 'recharts'
-
-import ButtonLoader from '../../components/ButtonLoader/ButtonLoader';
-import { useDispatch, useSelector } from 'react-redux';
-import { darkmodeSelector } from '../../Redux/Admin/Reducers/AdminHeaderReducer';
-import { barberConnectSalonAction, barberDashboardSalonInfoAction, barberSalonStatusAction, connectSalonListAction } from '../../Redux/Barber/Actions/DashboardAction';
-import { getBarberQueueListAction } from '../../Redux/Barber/Actions/BarberQueueAction';
-import { getAdminSalonImagesAction } from '../../Redux/Admin/Actions/SalonAction';
-import toast from 'react-hot-toast';
-import { AppointmentIcon } from '../../newicons';
-import api from '../../Redux/api/Api';
+import ButtonLoader from "../../components/ButtonLoader/ButtonLoader";
+import { useDispatch, useSelector } from "react-redux";
+import { darkmodeSelector } from "../../Redux/Admin/Reducers/AdminHeaderReducer";
+import {
+  barberConnectSalonAction,
+  barberDashboardSalonInfoAction,
+  barberSalonStatusAction,
+  connectSalonListAction,
+} from "../../Redux/Barber/Actions/DashboardAction";
+import { getBarberQueueListAction } from "../../Redux/Barber/Actions/BarberQueueAction";
+import { getAdminSalonImagesAction } from "../../Redux/Admin/Actions/SalonAction";
+import toast from "react-hot-toast";
+import { AppointmentIcon } from "../../newicons";
+import api from "../../Redux/api/Api";
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import axios from "axios";
@@ -679,7 +676,7 @@ const firebaseConfig = {
   storageBucket: "iqbook-web.firebasestorage.app",
   messagingSenderId: "889322044641",
   appId: "1:889322044641:web:d902ace026f28a67064ba0",
-  measurementId: "G-2NZVFQJTYS"
+  measurementId: "G-2NZVFQJTYS",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -718,32 +715,32 @@ const messaging = getMessaging(app);
 
 export const requestForToken = async () => {
   try {
-    if (!('Notification' in window)) {
-      console.error('Notifications not supported');
+    if (!("Notification" in window)) {
+      console.error("Notifications not supported");
       return null;
     }
 
     // If already granted, skip the prompt
-    if (Notification.permission === 'granted') {
+    if (Notification.permission === "granted") {
       return await getFCMToken();
     }
 
     // If default, ask for permission
-    if (Notification.permission === 'default') {
+    if (Notification.permission === "default") {
       const permission = await Notification.requestPermission();
-      if (permission === 'granted') {
+      if (permission === "granted") {
         return await getFCMToken();
       } else {
-        console.warn('Notification permission denied');
+        console.warn("Notification permission denied");
         return null;
       }
     }
 
     // Denied
-    console.warn('Notification permission previously denied');
+    console.warn("Notification permission previously denied");
     return null;
   } catch (err) {
-    console.error('Error retrieving token:', err);
+    console.error("Error retrieving token:", err);
     return null;
   }
 };
@@ -752,31 +749,34 @@ const getFCMToken = async () => {
   try {
     const fcmToken = await getToken(messaging, {
       vapidKey:
-        'BMb-Y9gWXHSvgsOqipUxEpzriS32OyvkeP3I4N8aVkF0A8XPuI-o7LKA8SvM9Bx1GQGpOIH6C8C5PzBJXxPp1zc',
+        "BMb-Y9gWXHSvgsOqipUxEpzriS32OyvkeP3I4N8aVkF0A8XPuI-o7LKA8SvM9Bx1GQGpOIH6C8C5PzBJXxPp1zc",
     });
     return fcmToken;
   } catch (err) {
-    console.error('FCM token error:', err);
+    console.error("FCM token error:", err);
     return null;
   }
 };
-
 
 export const onMessageListener = () =>
   new Promise((resolve) => {
     onMessage(messaging, (payload) => {
       // You can implement custom UI logic here (e.g., show a toast/in-app notification)
-      console.log('Message received while foregrounded:', payload);
+      console.log("Message received while foregrounded:", payload);
       resolve(payload);
     });
   });
 
 const Dashboard = () => {
-
-
-  const salonId = useSelector(state => state.BarberLoggedInMiddleware?.barberSalonId)
-  const email = useSelector(state => state.BarberLoggedInMiddleware?.barberEmail)
-  const barberName = useSelector(state => state.BarberLoggedInMiddleware?.barberName)
+  const salonId = useSelector(
+    (state) => state.BarberLoggedInMiddleware?.barberSalonId
+  );
+  const email = useSelector(
+    (state) => state.BarberLoggedInMiddleware?.barberEmail
+  );
+  const barberName = useSelector(
+    (state) => state.BarberLoggedInMiddleware?.barberName
+  );
 
   // console.log(salonId, email, barberName)
 
@@ -813,18 +813,18 @@ const Dashboard = () => {
       if (token) {
         try {
           await axios.post(
-            'https://iqb-final.onrender.com/api/webNotifications/save-device-token',
+            "https://iqb-final.onrender.com/api/webNotifications/save-device-token",
             {
               salonId,
               name: barberName,
               email,
               deviceToken: token,
-              type: 'barber',
+              type: "barber",
             }
           );
           // console.log('Device token saved successfully', token);
         } catch (err) {
-          console.error('Error saving device token:', err);
+          console.error("Error saving device token:", err);
         }
       }
     };
@@ -832,21 +832,21 @@ const Dashboard = () => {
     saveToken();
   }, [email, salonId]);
 
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
+  const barberId = useSelector(
+    (state) => state.BarberLoggedInMiddleware?.barberId
+  );
 
-
-  const barberId = useSelector(state => state.BarberLoggedInMiddleware?.barberId)
-
-  const barberProfile = useSelector(state => state.BarberLoggedInMiddleware?.entiredata)
+  const barberProfile = useSelector(
+    (state) => state.BarberLoggedInMiddleware?.entiredata
+  );
 
   useEffect(() => {
     if (barberProfile?.user[0]?.isApproved == false) {
-      dispatch(connectSalonListAction())
+      dispatch(connectSalonListAction());
     }
-  }, [barberProfile])
-
-
+  }, [barberProfile]);
 
   const truncateText = (text, charecterLimit) => {
     if (text?.length <= charecterLimit) {
@@ -855,53 +855,61 @@ const Dashboard = () => {
 
     let truncatedText = text?.slice(0, charecterLimit);
 
-    return truncatedText + '...'
-  }
+    return truncatedText + "...";
+  };
 
-  const darkMode = useSelector(darkmodeSelector)
+  const darkMode = useSelector(darkmodeSelector);
 
-  const darkmodeOn = darkMode === "On"
+  const darkmodeOn = darkMode === "On";
 
-  const connectSalonList = useSelector(state => state.connectSalonList)
+  const connectSalonList = useSelector((state) => state.connectSalonList);
 
   const {
     loading: connectSalonListLoading,
     resolve: connectSalonListResolve,
-    response: connectSalonListResponse
-  } = connectSalonList
+    response: connectSalonListResponse,
+  } = connectSalonList;
 
-  const [selectedSalonId, setSelectedSalonId] = useState("")
+  const [selectedSalonId, setSelectedSalonId] = useState("");
 
-  const [currentSelectedSalon, setCurrentSelectedSalon] = useState({})
-
-  useEffect(() => {
-    if (selectedSalonId) {
-      const currentSalon = connectSalonListResponse?.find((s) => s.salonId === selectedSalonId)
-      setCurrentSelectedSalon(currentSalon)
-    }
-
-  }, [selectedSalonId])
-
-
-  const [selectedServiceList, setSelectedServiceList] = useState([])
-  const [oldSalonServicelist, setOldSalonServiceList] = useState([])
+  const [currentSelectedSalon, setCurrentSelectedSalon] = useState({});
 
   useEffect(() => {
     if (selectedSalonId) {
-      const selectedSalonServices = connectSalonListResponse.find((s) => s.salonId === selectedSalonId)?.services
-
-      setSelectedServiceList(selectedSalonServices)
-      setOldSalonServiceList(selectedSalonServices)
-      setBarberSelectedServices([])
+      const currentSalon = connectSalonListResponse?.find(
+        (s) => s.salonId === selectedSalonId
+      );
+      setCurrentSelectedSalon(currentSalon);
     }
+  }, [selectedSalonId]);
 
-  }, [selectedSalonId])
+  const [selectedServiceList, setSelectedServiceList] = useState([]);
+  const [oldSalonServicelist, setOldSalonServiceList] = useState([]);
 
-  const [barberSelectedServices, setBarberSelectedServices] = useState([])
+  useEffect(() => {
+    if (selectedSalonId) {
+      const selectedSalonServices = connectSalonListResponse.find(
+        (s) => s.salonId === selectedSalonId
+      )?.services;
+
+      setSelectedServiceList(selectedSalonServices);
+      setOldSalonServiceList(selectedSalonServices);
+      setBarberSelectedServices([]);
+    }
+  }, [selectedSalonId]);
+
+  const [barberSelectedServices, setBarberSelectedServices] = useState([]);
 
   const selectServiceHandler = (ser) => {
-    setBarberSelectedServices([...barberSelectedServices, { ...ser, barberServiceEWT: Number(ser.serviceEWT), serviceEWT: Number(ser.serviceEWT) }])
-  }
+    setBarberSelectedServices([
+      ...barberSelectedServices,
+      {
+        ...ser,
+        barberServiceEWT: Number(ser.serviceEWT),
+        serviceEWT: Number(ser.serviceEWT),
+      },
+    ]);
+  };
 
   // const deleteServiceHandler = (ser) => {
 
@@ -922,7 +930,10 @@ const Dashboard = () => {
           const originalService = oldSalonServicelist.find(
             (oldService) => oldService.serviceId === service.serviceId
           );
-          return { ...service, serviceEWT: originalService?.serviceEWT || service.serviceEWT };
+          return {
+            ...service,
+            serviceEWT: originalService?.serviceEWT || service.serviceEWT,
+          };
         }
         return service;
       });
@@ -934,55 +945,61 @@ const Dashboard = () => {
     );
   };
 
-
   const handleBarberEwt = (serId, value) => {
-    const newValue = value.replace(/[^0-9]/g, '');
+    const newValue = value.replace(/[^0-9]/g, "");
 
     setSelectedServiceList((prev) => {
       const updatedArray = prev.map((service) => {
-        return service.serviceId === serId ? { ...service, serviceEWT: Number(newValue) } : service
-      })
-      return updatedArray
-    })
+        return service.serviceId === serId
+          ? { ...service, serviceEWT: Number(newValue) }
+          : service;
+      });
+      return updatedArray;
+    });
 
     setBarberSelectedServices((prev) => {
       const updatedArray = prev.map((service) => {
-        return service.serviceId === serId ? { ...service, barberServiceEWT: Number(newValue), serviceEWT: Number(newValue) } : service
-      })
-      return updatedArray
-    })
-  }
+        return service.serviceId === serId
+          ? {
+              ...service,
+              barberServiceEWT: Number(newValue),
+              serviceEWT: Number(newValue),
+            }
+          : service;
+      });
+      return updatedArray;
+    });
+  };
 
   const connectSalonClicked = () => {
-    if (barberSelectedServices.length === 0) {
-      return toast.error("Please provide a service", {
-        duration: 3000,
-        style: {
-          fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
-        },
-      });
-    }
+    // if (barberSelectedServices.length === 0) {
+    //   return toast.error("Please provide a service", {
+    //     duration: 3000,
+    //     style: {
+    //       fontSize: "var(--font-size-2)",
+    //       borderRadius: '0.3rem',
+    //       background: '#333',
+    //       color: '#fff',
+    //     },
+    //   });
+    // }
 
     const connectSalondata = {
       barberServices: barberSelectedServices,
       email,
-      salonId: selectedSalonId
-    }
+      salonId: selectedSalonId,
+    };
 
-    dispatch(barberConnectSalonAction(connectSalondata))
-  }
+    dispatch(barberConnectSalonAction(connectSalondata));
+  };
 
-  const barberConnectSalon = useSelector(state => state.barberConnectSalon)
+  const barberConnectSalon = useSelector((state) => state.barberConnectSalon);
 
   const {
     loading: barberConnectSalonLoading,
     resolve: barberConnectSalonResolve,
-    message: barberConnectSalonMessage
-  } = barberConnectSalon
-
+    message: barberConnectSalonMessage,
+  } = barberConnectSalon;
 
   const queuelistcontrollerRef = useRef(new AbortController());
 
@@ -1001,19 +1018,17 @@ const Dashboard = () => {
     }
   }, [salonId, dispatch]);
 
-  const getBarberQueueList = useSelector(state => state.getBarberQueueList)
+  const getBarberQueueList = useSelector((state) => state.getBarberQueueList);
 
   const {
     loading: getBarberQueueListLoading,
     resolve: getBarberQueueListResolve,
-    queueList: BarberQueueList
-  } = getBarberQueueList
+    queueList: BarberQueueList,
+  } = getBarberQueueList;
 
+  const [currentDate, setCurrentDate] = useState(new Date());
 
-  const [currentDate, setCurrentDate] = useState(new Date())
-
-
-  const barberDashboardSalonInfoRef = useRef(new AbortController())
+  const barberDashboardSalonInfoRef = useRef(new AbortController());
 
   useEffect(() => {
     if (barberProfile?.user[0]?.isApproved && salonId != 0) {
@@ -1028,51 +1043,54 @@ const Dashboard = () => {
         }
       };
     }
-
   }, [salonId, dispatch, barberProfile]);
 
-  const barberDashboardSalonInfo = useSelector(state => state.barberDashboardSalonInfo)
+  const barberDashboardSalonInfo = useSelector(
+    (state) => state.barberDashboardSalonInfo
+  );
 
   const {
     loading: barberDashboardSalonInfoLoading,
     resolve: barberDashboardSalonInfoResolve,
-    response: barberDashboardSalonInfoResponse
-  } = barberDashboardSalonInfo
-
+    response: barberDashboardSalonInfoResponse,
+  } = barberDashboardSalonInfo;
 
   //Salon Images
 
   useEffect(() => {
     if (barberProfile?.user[0]?.isApproved && salonId != 0) {
-      dispatch(getAdminSalonImagesAction(salonId))
+      dispatch(getAdminSalonImagesAction(salonId));
     }
-  }, [salonId, barberProfile])
+  }, [salonId, barberProfile]);
 
-  const getAdminSalonImages = useSelector(state => state.getAdminSalonImages)
+  const getAdminSalonImages = useSelector((state) => state.getAdminSalonImages);
 
   const {
     loading: getAdminSalonImagesLoading,
     resolve: getAdminSalonImagesResolve,
-    response: AdminSalonImages
-  } = getAdminSalonImages
+    response: AdminSalonImages,
+  } = getAdminSalonImages;
 
-  const [openModal, setOpenModal] = useState(false)
+  const [openModal, setOpenModal] = useState(false);
 
   // console.log(barberConnectSalonMessage)
 
-  const [reportData, setReportData] = useState([])
-  const [todaysAppLoading, setTodaysAppLoading] = useState(false)
-  const [todaysApp, setTodaysApp] = useState([])
+  const [reportData, setReportData] = useState([]);
+  const [todaysAppLoading, setTodaysAppLoading] = useState(false);
+  const [todaysApp, setTodaysApp] = useState([]);
 
   useEffect(() => {
     if (!salonId || !barberId) return; // Ensure salonId and barberId exist before fetching data
 
     const getAllReports = async () => {
       try {
-        const { data } = await api.post("/api/reports/getnewbarberdashboardReports", {
-          salonId,
-          barberId
-        });
+        const { data } = await api.post(
+          "/api/reports/getnewbarberdashboardReports",
+          {
+            salonId,
+            barberId,
+          }
+        );
         setReportData(data.response);
       } catch (error) {
         console.error("Error fetching reports:", error);
@@ -1081,15 +1099,18 @@ const Dashboard = () => {
 
     const getTodaysAppointment = async () => {
       try {
-        setTodaysAppLoading(true)
-        const { data } = await api.post("/api/appointments/getAllAppointmentsByBarberForToday", {
-          salonId,
-          barberId
-        });
-        setTodaysAppLoading(false)
+        setTodaysAppLoading(true);
+        const { data } = await api.post(
+          "/api/appointments/getAllAppointmentsByBarberForToday",
+          {
+            salonId,
+            barberId,
+          }
+        );
+        setTodaysAppLoading(false);
         setTodaysApp(data.response);
       } catch (error) {
-        setTodaysAppLoading(false)
+        setTodaysAppLoading(false);
         console.error("Error fetching today's appointments:", error);
       }
     };
@@ -1098,452 +1119,564 @@ const Dashboard = () => {
     getTodaysAppointment();
   }, [salonId, barberId]);
 
-
-
-  const adminGetDefaultSalon = useSelector(state => state.adminGetDefaultSalon)
+  const adminGetDefaultSalon = useSelector(
+    (state) => state.adminGetDefaultSalon
+  );
 
   const {
     loading: adminGetDefaultSalonLoading,
     resolve: adminGetDefaultSalonResolve,
-    response: adminGetDefaultSalonResponse
-  } = adminGetDefaultSalon
+    response: adminGetDefaultSalonResponse,
+  } = adminGetDefaultSalon;
 
   const appointmentReportList = [
     {
       heading: "Total Appointments",
       value: reportData?.appointment?.totalAppointmentHistoryCount,
-      percent: reportData?.appointment?.totalAppointmentHistoryPercentage
+      percent: reportData?.appointment?.totalAppointmentHistoryPercentage,
     },
     {
       heading: "Served Appointments",
       value: reportData?.appointment?.servedAppointmenthistoryCount,
-      percent: reportData?.appointment?.servedAppointmentHistoryPercentage
+      percent: reportData?.appointment?.servedAppointmentHistoryPercentage,
     },
     {
       heading: "Canceled Appointments",
       value: reportData?.appointment?.cancelledAppointmentHistoryCount,
-      percent: reportData?.appointment?.cancelledAppointmentHistoryPercentage
+      percent: reportData?.appointment?.cancelledAppointmentHistoryPercentage,
     },
-  ]
+  ];
 
-  return (
-    barberProfile?.user[0]?.isApproved ?
-      <>
-        <section className={`${style.dashboard_container}`}>
-          {/* <div>
+  return barberProfile?.user[0]?.isApproved ? (
+    <>
+      <section className={`${style.dashboard_container}`}>
+        {/* <div>
             <h2>Welcome, {barberName ? barberName : "User"}</h2>
           </div> */}
-          {/* <div style={{ display: "none" }}></div> */}
+        {/* <div style={{ display: "none" }}></div> */}
 
+        <div>
           <div>
             <div>
-
               <div>
-                <div>
-                  <p>Today's Appointments</p>
-                  <p>Total {todaysApp?.totalCount} appointments are available</p>
-                </div>
-
-                {
-                  todaysAppLoading ? (
-                    <div className={`${style.barber_loading}`}>
-                      <Skeleton
-                        count={3}
-                        width={"100%"}
-                        height={"4rem"}
-                        baseColor={"var(--loader-bg-color)"}
-                        highlightColor={"var(--loader-highlight-color)"}
-                        style={{ marginBottom: "1rem" }} />
-
-                    </div>
-                  ) : todaysApp?.appointments?.length > 0 ? (
-                    <div>
-                      {
-                        todaysApp?.appointments?.map((item, index) => {
-                          return (
-                            <div className={`${style.barber_list_item}`} key={item._id}>
-                              <div>
-                                <img src={item?.customerProfile?.[0]?.url} alt="" />
-                                <div>
-                                  <p>{item?.customerName ?? ""}</p>
-                                  <p>{item?.barberName ?? ""}</p>
-                                </div>
-                              </div>
-                              <div>
-                                <h4>{item.appointmentDate}</h4>
-                                <p>{item.timeSlots}</p>
-                              </div>
-                            </div>
-                          )
-                        })
-                      }
-
-                    </div>
-                  ) : (
-                    <div className={`${style.barber_error}`}>
-                      <p>No appointments available</p>
-                    </div>
-                  )
-                }
-
-
+                <p>Today's Appointments</p>
+                <p>Total {todaysApp?.totalCount} appointments are available</p>
               </div>
 
-              <div>
+              {todaysAppLoading ? (
+                <div className={`${style.barber_loading}`}>
+                  <Skeleton
+                    count={3}
+                    width={"100%"}
+                    height={"4rem"}
+                    baseColor={"var(--loader-bg-color)"}
+                    highlightColor={"var(--loader-highlight-color)"}
+                    style={{ marginBottom: "1rem" }}
+                  />
+                </div>
+              ) : todaysApp?.appointments?.length > 0 ? (
                 <div>
-                  <p>Queue Reports</p>
-                  <p>Queue count of last 7 days</p>
-                  <h2>{reportData?.queue?.last7daysTotalQueueCount}</h2>
-                </div>
-
-                <div className={`${style.queue_report_container}`}>
-                  <ResponsiveContainer width="100%" height="90%">
-                    <LineChart
-                      width={500}
-                      height={300}
-                      data={reportData?.queue?.last7daysCount}
-                    >
-                      <Line type="monotone" dataKey="TotalQueue" stroke="var(--bg-secondary)" strokeWidth={2} dot={{ fill: "#fff", stroke: "var(--bg-secondary)", strokeWidth: 2, r: 4 }} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-
-              <div>
-                <div>
-                  <p>Queue History</p>
-                  <p><span
-                    style={{
-                      color: reportData?.queue?.queueTrend === "Rise" ? "#00A36C" :
-                        reportData?.queue?.queueTrend === "Fall" ? "rgb(244, 67, 54)" : ""
-                    }}
-                  >{reportData?.queue?.queueTrend === "Rise" ? "+" : reportData?.queue?.queueTrend === "Fall" ? "-" : ""}{reportData?.queue?.percentageChangelast30Days}%</span> from last 30 days</p>
-                  <h2>{reportData?.queue?.totalQueueHistoryCount}</h2>
-                </div>
-
-                <div className={`${style.queue_history_container}`}>
-                  <div>
-                    <div>
-                      <span style={{ background: "#00A36C" }}>{reportData?.queue?.servedHistoryPercentage && `${reportData?.queue?.servedHistoryPercentage}%`}</span>
-                      <p>Served</p>
-                    </div>
-
-                    <div>
-                      <span style={{ background: "rgb(244, 67, 54)" }}>{reportData?.queue?.cancelledHistoryPercentage && `${reportData?.queue?.cancelledHistoryPercentage}%`}</span>
-                      <p>Canceled</p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div
-                      style={{
-                        width: `${reportData?.queue?.servedHistoryPercentage}%`,
-                        borderRadius: reportData?.queue?.servedHistoryPercentage === 100 && "2rem"
-                      }}
-                    ></div>
-                    <div
-                      style={{
-                        width: `${reportData?.queue?.cancelledHistoryPercentage}%`,
-                        borderRadius: reportData?.queue?.cancelledHistoryPercentage === 100 && "2rem"
-                      }}
-                    ></div>
-                  </div>
-
-                </div>
-
-              </div>
-            </div>
-            <div>
-              <div>
-                <div>
-                  <div>
-                    <div>
-                      <p>Appointments Weekly Reports</p>
-                      <p>Last 7 days overview</p>
-                    </div>
-
-                    <div>
-                      <h1>{reportData?.appointment?.dateFormat}</h1>
-                      <p><span
-                        style={{
-                          color: reportData?.appointment?.appointmentTrend === "Fall" ? "#f44336" :
-                            reportData?.appointment?.appointmentTrend === "Rise" ? "#00A36C" : ""
-                        }}
-                      >{reportData?.appointment?.appointmentTrend === "Fall" ? "-" : reportData?.appointment?.appointmentTrend === "Rise" ? "+" : ""}{reportData?.appointment?.percentageChangeLastWeek}%</span> from last 7 days</p>
-                    </div>
-                  </div>
-
-                  <div>
-                    {
-                      reportData?.appointment?.last7daysCount.length > 0 ? (
-                        <ResponsiveContainer width="100%" height="90%">
-                          <BarChart width={150} height={40} data={reportData?.appointment?.last7daysCount}>
-                            <Bar dataKey="TotalAppoinment" fill="var(--bg-secondary)" radius={[3, 3, 3, 3]} />
-                          </BarChart>
-                        </ResponsiveContainer>
-                      ) : (
-                        <p
-                          style={{
-                            color: "var(--text-primary)",
-                            fontSize: "1.6rem",
-                            fontFamily: 'AirbnbCereal_Medium'
-                          }}
-                        >No report data available</p>
-                      )
-                    }
-
-                  </div>
-                </div>
-
-                <div>
-                  {
-                    appointmentReportList.map((item) => {
-                      return (
-                        <div
-                          key={item.heading}
-                          className={`${style.appoint_report_item}`}>
-                          <div>
-                            <div><AppointmentIcon /></div>
-                            <p>{item.heading}</p>
-                          </div>
-
-                          <h2>{item.value}</h2>
-
-                          <div><div style={{ width: `${item.percent}%` }}></div></div>
-                        </div>
-                      )
-                    })
-                  }
-
-
-                </div>
-              </div>
-
-              <div>
-                <div>
-                  <p>Queue List</p>
-                  <p>The current total queue count is {BarberQueueList?.length}</p>
-                </div>
-
-                {
-                  getBarberQueueListLoading ? (
-                    <div className={`${style.queuelist_loading}`}>
-                      <Skeleton
-                        count={6}
-                        width={"100%"}
-                        height={"6rem"}
-                        baseColor={"var(--loader-bg-color)"}
-                        highlightColor={"var(--loader-highlight-color)"}
-                        style={{ marginBottom: "1rem" }} />
-                    </div>
-                  ) : getBarberQueueListResolve && BarberQueueList?.length > 0 ? (
-                    <div>
-                      {
-                        BarberQueueList?.map((item, index) => {
-                          return (
-                            <div className={`${style.queue_list_item}`} key={item._id}>
-                              <div>
-                                <div><img src={item.customerProfile?.[0]?.url} alt="" /></div>
-                                <div>
-                                  <p>{item.customerName}</p>
-                                  <p>{item.barberName}</p>
-                                </div>
-                              </div>
-
-                              <div>
-                                <h2>{item?.qPosition === 1 ? "Next" : item?.qPosition}</h2>
-                                <p>Est. Time - {item.customerEWT === 0 ? "" : item.customerEWT} mins</p>
-                              </div>
-                            </div>
-                          )
-                        })
-                      }
-                    </div>
-                  ) : (
-                    <div className={`${style.queuelist_error}`}>
-                      <p>No queue available</p>
-                    </div>
-                  )
-                }
-
-              </div>
-            </div>
-          </div>
-        </section>
-
-      </> :
-      <>
-        <div className={`${style.section}`}>
-          <div>
-            <h2>Connect to your salon</h2>
-          </div>
-
-          {
-            barberProfile?.user[0]?.approvePendingMessage ?
-              <div className={`${style.approve_container}`}>
-                <div>
-                  <p>{barberProfile?.user[0]?.approvePendingMessage}</p>
-                  <button onClick={() => window.location.reload()}>Reload</button>
-                </div>
-              </div> :
-              <div className={`${style.connect_container}`}>
-                <div>
-
-                  {
-                    connectSalonListLoading ? (
-                      <div>
-                        <Skeleton count={4} height={"7rem"} style={{ marginBottom: "1rem" }}
-                          baseColor={"var(--loader-bg-color)"}
-                          highlightColor={"var(--loader-highlight-color)"} />
-                      </div>)
-                      : connectSalonListResolve && connectSalonListResponse?.length > 0 ? (
+                  {todaysApp?.appointments?.map((item, index) => {
+                    return (
+                      <div
+                        className={`${style.barber_list_item}`}
+                        key={item._id}
+                      >
                         <div>
-                          {connectSalonListResponse.map((item) => (
-                            <div className={`${style.salon_item}`} key={item.salonId}>
-                              <img src={item?.salonLogo?.[0]?.url} alt={""} />
-                              <div>
-                                <p>{item.salonName}</p>
-                                <p>{item.city}</p>
-                              </div>
-
-                              {selectedSalonId == item.salonId ? <button style={{ background: "green" }}><CheckIcon /></button> : <button onClick={() => setSelectedSalonId(item.salonId)} >+</button>}
-                            </div>
-                          ))}
-
+                          <img src={item?.customerProfile?.[0]?.url} alt="" />
+                          <div>
+                            <p>{item?.customerName ?? ""}</p>
+                            <p>{item?.barberName ?? ""}</p>
+                          </div>
                         </div>
-                      ) : (<div className={`${style.salon_content_body_error} ${darkmodeOn && style.dark}`}>
-                        <p>No salons available</p>
+                        <div>
+                          <h4>{item.appointmentDate}</h4>
+                          <p>{item.timeSlots}</p>
+                        </div>
                       </div>
-                      )
-                  }
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className={`${style.barber_error}`}>
+                  <p>No appointments available</p>
+                </div>
+              )}
+            </div>
 
-                  <div
+            <div>
+              <div>
+                <p>Queue Reports</p>
+                <p>Queue count of last 7 days</p>
+                <h2>{reportData?.queue?.last7daysTotalQueueCount}</h2>
+              </div>
+
+              <div className={`${style.queue_report_container}`}>
+                <ResponsiveContainer width="100%" height="90%">
+                  <LineChart
+                    width={500}
+                    height={300}
+                    data={reportData?.queue?.last7daysCount}
+                  >
+                    <Line
+                      type="monotone"
+                      dataKey="TotalQueue"
+                      stroke="var(--bg-secondary)"
+                      strokeWidth={2}
+                      dot={{
+                        fill: "#fff",
+                        stroke: "var(--bg-secondary)",
+                        strokeWidth: 2,
+                        r: 4,
+                      }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div>
+              <div>
+                <p>Queue History</p>
+                <p>
+                  <span
                     style={{
-                      display: selectedServiceList?.length === 0 ? "none" : "block",
-                      padding: selectedServiceList?.length === 0 ? "0rem" : "1rem"
+                      color:
+                        reportData?.queue?.queueTrend === "Rise"
+                          ? "#00A36C"
+                          : reportData?.queue?.queueTrend === "Fall"
+                          ? "rgb(244, 67, 54)"
+                          : "",
                     }}
                   >
-                    {selectedServiceList.map((service) => (
-                      <div key={service.serviceId} className={style.service_item}>
-                        <div>
-                          <div>
-                            <div><img src={service?.serviceIcon?.url} alt={""} /></div>
-                            <div>
-                              <p>{service.serviceName}</p>
-                              <p>{service.vipService ? "VIP" : "Regular"}</p>
-                              <p>{service.serviceDesc}</p>
-                            </div>
-                          </div>
-                          {barberSelectedServices.some((b) => b._id === service?._id) ? (
-                            <button
-                              style={{
-                                background: "#450a0a",
-                              }}
-                              onClick={() => deleteServiceHandler(service)}
-                            >Delete</button>
-                          ) : (
-                            <button
-                              style={{
-                                background: "#052e16",
-                              }}
-                              onClick={() => selectServiceHandler(service)}
-                            >Add</button>
-                          )}
+                    {reportData?.queue?.queueTrend === "Rise"
+                      ? "+"
+                      : reportData?.queue?.queueTrend === "Fall"
+                      ? "-"
+                      : ""}
+                    {reportData?.queue?.percentageChangelast30Days}%
+                  </span>{" "}
+                  from last 30 days
+                </p>
+                <h2>{reportData?.queue?.totalQueueHistoryCount}</h2>
+              </div>
 
-                        </div>
-                        <div>
-                          <div>
-                            <p>Price</p>
-                            <p>{currentSelectedSalon?.currency}{service?.servicePrice}</p>
-                          </div>
-                          <div>
-                            <p>Estimated Time</p>
-                            <div>
-                              <input
-                                type="text"
-                                value={service?.serviceEWT}
-                                onChange={(e) => handleBarberEwt(service?.serviceId, e.target.value)}
-                                maxLength={3}
-                              />
-                              <p>mins</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+              <div className={`${style.queue_history_container}`}>
+                <div>
+                  <div>
+                    <span style={{ background: "#00A36C" }}>
+                      {reportData?.queue?.servedHistoryPercentage &&
+                        `${reportData?.queue?.servedHistoryPercentage}%`}
+                    </span>
+                    <p>Served</p>
+                  </div>
 
-                    {
-                      selectedServiceList?.map((service, index) => {
-                        return (
-                          <div className={style.mobile_service_item} key={service.serviceId}>
-                            <div>
-                              <div>
-                                <div>
-                                  <img src={service?.serviceIcon?.url} alt="" />
-
-                                  {service.vipService ? <span><CrownIcon /></span> : null}
-                                </div>
-
-                                <p>{service.serviceName}</p>
-                                <p>{service.serviceDesc}</p>
-
-                              </div>
-
-                              {barberSelectedServices.some((b) => b._id === service?._id) ? (
-                                <button
-                                  style={{
-                                    background: "#450a0a",
-                                  }}
-                                  onClick={() => deleteServiceHandler(service)}
-                                >Delete</button>
-                              ) : (
-                                <button
-                                  style={{
-                                    background: "#052e16",
-                                  }}
-                                  onClick={() => selectServiceHandler(service)}
-                                >Add</button>
-                              )}
-                            </div>
-                            <div>
-                              <div>
-                                <p>Price</p>
-                                <p>{currentSelectedSalon?.currency}{service?.servicePrice}</p>
-                              </div>
-
-                              <div>
-                                <p>Estimated Time</p>
-                                <div>
-                                  <input
-                                    type="text"
-                                    value={service?.serviceEWT}
-                                    onChange={(e) => handleBarberEwt(service?.serviceId, e.target.value)}
-                                    maxLength={3}
-                                  />
-                                  <p>mins</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )
-                      })
-                    }
-
+                  <div>
+                    <span style={{ background: "rgb(244, 67, 54)" }}>
+                      {reportData?.queue?.cancelledHistoryPercentage &&
+                        `${reportData?.queue?.cancelledHistoryPercentage}%`}
+                    </span>
+                    <p>Canceled</p>
                   </div>
                 </div>
 
-                {
-                  barberConnectSalonLoading ? <button style={{
-                    display: "grid",
-                    placeItems: "center",
-                  }}><ButtonLoader /></button> : <button onClick={connectSalonClicked}>Connect Salon</button>
-                }
+                <div>
+                  <div
+                    style={{
+                      width: `${reportData?.queue?.servedHistoryPercentage}%`,
+                      borderRadius:
+                        reportData?.queue?.servedHistoryPercentage === 100 &&
+                        "2rem",
+                    }}
+                  ></div>
+                  <div
+                    style={{
+                      width: `${reportData?.queue?.cancelledHistoryPercentage}%`,
+                      borderRadius:
+                        reportData?.queue?.cancelledHistoryPercentage === 100 &&
+                        "2rem",
+                    }}
+                  ></div>
+                </div>
               </div>
-          }
+            </div>
+          </div>
+          <div>
+            <div>
+              <div>
+                <div>
+                  <div>
+                    <p>Appointments Weekly Reports</p>
+                    <p>Last 7 days overview</p>
+                  </div>
 
+                  <div>
+                    <h1>{reportData?.appointment?.dateFormat}</h1>
+                    <p>
+                      <span
+                        style={{
+                          color:
+                            reportData?.appointment?.appointmentTrend === "Fall"
+                              ? "#f44336"
+                              : reportData?.appointment?.appointmentTrend ===
+                                "Rise"
+                              ? "#00A36C"
+                              : "",
+                        }}
+                      >
+                        {reportData?.appointment?.appointmentTrend === "Fall"
+                          ? "-"
+                          : reportData?.appointment?.appointmentTrend === "Rise"
+                          ? "+"
+                          : ""}
+                        {reportData?.appointment?.percentageChangeLastWeek}%
+                      </span>{" "}
+                      from last 7 days
+                    </p>
+                  </div>
+                </div>
+
+                <div>
+                  {reportData?.appointment?.last7daysCount.length > 0 ? (
+                    <ResponsiveContainer width="100%" height="90%">
+                      <BarChart
+                        width={150}
+                        height={40}
+                        data={reportData?.appointment?.last7daysCount}
+                      >
+                        <Bar
+                          dataKey="TotalAppoinment"
+                          fill="var(--bg-secondary)"
+                          radius={[3, 3, 3, 3]}
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <p
+                      style={{
+                        color: "var(--text-primary)",
+                        fontSize: "1.6rem",
+                        fontFamily: "AirbnbCereal_Medium",
+                      }}
+                    >
+                      No report data available
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                {appointmentReportList.map((item) => {
+                  return (
+                    <div
+                      key={item.heading}
+                      className={`${style.appoint_report_item}`}
+                    >
+                      <div>
+                        <div>
+                          <AppointmentIcon />
+                        </div>
+                        <p>{item.heading}</p>
+                      </div>
+
+                      <h2>{item.value}</h2>
+
+                      <div>
+                        <div style={{ width: `${item.percent}%` }}></div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div>
+              <div>
+                <p>Queue List</p>
+                <p>
+                  The current total queue count is {BarberQueueList?.length}
+                </p>
+              </div>
+
+              {getBarberQueueListLoading ? (
+                <div className={`${style.queuelist_loading}`}>
+                  <Skeleton
+                    count={6}
+                    width={"100%"}
+                    height={"6rem"}
+                    baseColor={"var(--loader-bg-color)"}
+                    highlightColor={"var(--loader-highlight-color)"}
+                    style={{ marginBottom: "1rem" }}
+                  />
+                </div>
+              ) : getBarberQueueListResolve && BarberQueueList?.length > 0 ? (
+                <div>
+                  {BarberQueueList?.map((item, index) => {
+                    return (
+                      <div
+                        className={`${style.queue_list_item}`}
+                        key={item._id}
+                      >
+                        <div>
+                          <div>
+                            <img src={item.customerProfile?.[0]?.url} alt="" />
+                          </div>
+                          <div>
+                            <p>{item.customerName}</p>
+                            <p>{item.barberName}</p>
+                          </div>
+                        </div>
+
+                        <div>
+                          <h2>
+                            {item?.qPosition === 1 ? "Next" : item?.qPosition}
+                          </h2>
+                          <p>
+                            Est. Time -{" "}
+                            {item.customerEWT === 0 ? "" : item.customerEWT}{" "}
+                            mins
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className={`${style.queuelist_error}`}>
+                  <p>No queue available</p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-      </>
-  )
-}
+      </section>
+    </>
+  ) : (
+    <>
+      <div className={`${style.section}`}>
+        <div>
+          <h2>Connect to your salon</h2>
+        </div>
 
-export default Dashboard
+        {barberProfile?.user[0]?.approvePendingMessage ? (
+          <div className={`${style.approve_container}`}>
+            <div>
+              <p>{barberProfile?.user[0]?.approvePendingMessage}</p>
+              <button onClick={() => window.location.reload()}>Reload</button>
+            </div>
+          </div>
+        ) : (
+          <div className={`${style.connect_container}`}>
+            <div>
+              {connectSalonListLoading ? (
+                <div>
+                  <Skeleton
+                    count={4}
+                    height={"7rem"}
+                    style={{ marginBottom: "1rem" }}
+                    baseColor={"var(--loader-bg-color)"}
+                    highlightColor={"var(--loader-highlight-color)"}
+                  />
+                </div>
+              ) : connectSalonListResolve &&
+                connectSalonListResponse?.length > 0 ? (
+                <div>
+                  {connectSalonListResponse.map((item) => (
+                    <div className={`${style.salon_item}`} key={item.salonId}>
+                      <img src={item?.salonLogo?.[0]?.url} alt={""} />
+                      <div>
+                        <p>{item.salonName}</p>
+                        <p>{item.city}</p>
+                      </div>
+
+                      {selectedSalonId == item.salonId ? (
+                        <button style={{ background: "green" }}>
+                          <CheckIcon />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => setSelectedSalonId(item.salonId)}
+                        >
+                          +
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div
+                  className={`${style.salon_content_body_error} ${
+                    darkmodeOn && style.dark
+                  }`}
+                >
+                  <p>No salons available</p>
+                </div>
+              )}
+
+              <div
+                style={{
+                  display: selectedServiceList?.length === 0 ? "none" : "block",
+                  padding: selectedServiceList?.length === 0 ? "0rem" : "1rem",
+                }}
+              >
+                {selectedServiceList.map((service) => (
+                  <div key={service.serviceId} className={style.service_item}>
+                    <div>
+                      <div>
+                        <div>
+                          <img src={service?.serviceIcon?.url} alt={""} />
+                        </div>
+                        <div>
+                          <p>{service.serviceName}</p>
+                          <p>{service.vipService ? "VIP" : "Regular"}</p>
+                          <p>{service.serviceDesc}</p>
+                        </div>
+                      </div>
+                      {barberSelectedServices.some(
+                        (b) => b._id === service?._id
+                      ) ? (
+                        <button
+                          style={{
+                            background: "#450a0a",
+                          }}
+                          onClick={() => deleteServiceHandler(service)}
+                        >
+                          Delete
+                        </button>
+                      ) : (
+                        <button
+                          style={{
+                            background: "#052e16",
+                          }}
+                          onClick={() => selectServiceHandler(service)}
+                        >
+                          Add
+                        </button>
+                      )}
+                    </div>
+                    <div>
+                      <div>
+                        <p>Price</p>
+                        <p>
+                          {currentSelectedSalon?.currency}
+                          {service?.servicePrice}
+                        </p>
+                      </div>
+                      <div>
+                        <p>Estimated Time</p>
+                        <div>
+                          <input
+                            type="text"
+                            value={service?.serviceEWT}
+                            onChange={(e) =>
+                              handleBarberEwt(
+                                service?.serviceId,
+                                e.target.value
+                              )
+                            }
+                            maxLength={3}
+                          />
+                          <p>mins</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {selectedServiceList?.map((service, index) => {
+                  return (
+                    <div
+                      className={style.mobile_service_item}
+                      key={service.serviceId}
+                    >
+                      <div>
+                        <div>
+                          <div>
+                            <img src={service?.serviceIcon?.url} alt="" />
+
+                            {service.vipService ? (
+                              <span>
+                                <CrownIcon />
+                              </span>
+                            ) : null}
+                          </div>
+
+                          <p>{service.serviceName}</p>
+                          <p>{service.serviceDesc}</p>
+                        </div>
+
+                        {barberSelectedServices.some(
+                          (b) => b._id === service?._id
+                        ) ? (
+                          <button
+                            style={{
+                              background: "#450a0a",
+                            }}
+                            onClick={() => deleteServiceHandler(service)}
+                          >
+                            Delete
+                          </button>
+                        ) : (
+                          <button
+                            style={{
+                              background: "#052e16",
+                            }}
+                            onClick={() => selectServiceHandler(service)}
+                          >
+                            Add
+                          </button>
+                        )}
+                      </div>
+                      <div>
+                        <div>
+                          <p>Price</p>
+                          <p>
+                            {currentSelectedSalon?.currency}
+                            {service?.servicePrice}
+                          </p>
+                        </div>
+
+                        <div>
+                          <p>Estimated Time</p>
+                          <div>
+                            <input
+                              type="text"
+                              value={service?.serviceEWT}
+                              onChange={(e) =>
+                                handleBarberEwt(
+                                  service?.serviceId,
+                                  e.target.value
+                                )
+                              }
+                              maxLength={3}
+                            />
+                            <p>mins</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {barberConnectSalonLoading ? (
+              <button
+                style={{
+                  display: "grid",
+                  placeItems: "center",
+                }}
+              >
+                <ButtonLoader />
+              </button>
+            ) : (
+              <button onClick={connectSalonClicked}>Connect Salon</button>
+            )}
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
+
+export default Dashboard;
