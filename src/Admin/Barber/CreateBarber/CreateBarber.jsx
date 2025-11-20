@@ -229,7 +229,6 @@ const CreateBarber = () => {
                   }
                 );
 
-
                 toast.success("Barber profile pic uploaded successfully", {
                   duration: 3000,
                   style: {
@@ -977,10 +976,12 @@ const CreateBarber = () => {
                 <StepContent>
                   <main className={`${style.service_container}`}>
                     <div>
-                      <div>
-                        {adminAllSalonServicesResolve &&
-                        allSalonServices?.length > 0
-                          ? allSalonServices.map((s) => (
+                      
+                      {adminAllSalonServicesResolve &&
+                      allSalonServices?.length > 0 ? (
+                        <>
+                          <div>
+                            {allSalonServices.map((s) => (
                               <div key={s._id} className={style.service_item}>
                                 <div>
                                   <div>
@@ -1047,12 +1048,9 @@ const CreateBarber = () => {
                                   </div>
                                 </div>
                               </div>
-                            ))
-                          : null}
+                            ))}
 
-                        {adminAllSalonServicesResolve &&
-                        allSalonServices?.length > 0
-                          ? allSalonServices?.map((s) => {
+                            {allSalonServices?.map((s) => {
                               return (
                                 <div
                                   className={style.mobile_service_item}
@@ -1130,94 +1128,23 @@ const CreateBarber = () => {
                                   </div>
                                 </div>
                               );
-                            })
-                          : null}
-                      </div>
-
-                      {/* {
-                        adminAllSalonServicesLoading ?
-                          (<div>
-                            <Skeleton count={1}
-                              height={"15rem"}
-                              width={"100%"}
-                              baseColor={"var(--loader-bg-color)"}
-                              highlightColor={"var(--loader-highlight-color)"}
-                              style={{
-                                borderRadius: "0.3rem",
-                                marginBottom: "1rem"
-                              }}
-                            />
-
-                            <Skeleton count={1}
-                              height={"15rem"}
-                              width={"100%"}
-                              baseColor={"var(--loader-bg-color)"}
-                              highlightColor={"var(--loader-highlight-color)"}
-                              style={{
-                                borderRadius: "0.3rem",
-                                marginBottom: "1rem"
-                              }}
-                            />
-                          </div>) :
-                          adminAllSalonServicesResolve && allSalonServices?.length > 0 ?
-                            (
-                              <div>
-                                {allSalonServices.map((s) => (
-                                  <div key={s._id} className={style.service_item}>
-                                    <div>
-                                      <div>
-                                        <div><img src={s?.serviceIcon?.url} alt={s?.serviceName} /></div>
-                                        <div>
-                                          <p>{s?.serviceName}</p>
-                                          <p>{s?.vipService ? "VIP" : "Regular"}</p>
-                                          <p>{s?.serviceDesc}</p>
-                                        </div>
-                                      </div>
-
-                                      {
-                                        chooseServices.find((c) => c._id === s._id) ?
-                                          (<button
-                                            style={{
-                                              background: "#450a0a",
-                                            }}
-                                            onClick={() => deleteServiceHandler(s)}>Delete</button>) :
-                                          (<button
-                                            style={{
-                                              background: "#052e16",
-                                            }}
-                                            onClick={() => chooseServiceHandler(s)}>Add</button>)
-                                      }
-
-                                    </div>
-                                    <div>
-                                      <div>
-                                        <p>Price</p>
-                                        <p>{adminGetDefaultSalonResponse?.currency}{s?.servicePrice}</p>
-                                      </div>
-                                      <div>
-                                        <p>Estimated Time</p>
-                                        <div>
-                                          <input
-                                            type="text"
-                                            value={serviceEWTValues[s._id]}
-                                            onChange={(e) => {
-                                              const value = e.target.value.replace(/[^0-9]/g, ''); // Only keep digits
-                                              handleEWTChange(s._id, value);
-                                            }}
-                                            maxLength={3}
-                                          />
-                                          <p>mins</p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            ) :
-                            (<div style={{ display: "grid", placeItems: "center" }}>
-                              <p style={{ fontSize: "1.4rem" }}>No services available</p>
-                            </div>)
-                      } */}
+                            })}
+                          </div>
+                        </>
+                      ) : (
+                        <div
+                          style={{
+                            height: "30rem",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <p style={{ fontWeight: "600" }}>
+                            This salon has no services
+                          </p>
+                        </div>
+                      )}
 
                       <button onClick={handleBack} disabled={index === 0}>
                         Back

@@ -60,8 +60,6 @@ const EditBarber = () => {
     }
   }, [allSalonServices]);
 
-  // console.log("AllSalonServices ", AllSalonServices)
-
   const salonId = useSelector(
     (state) => state.AdminLoggedInMiddleware.adminSalonId
   );
@@ -106,7 +104,7 @@ const EditBarber = () => {
           }
         );
 
-        setSalonLogo(data?.response?.profile?.[0]?.url)
+        setSalonLogo(data?.response?.profile?.[0]?.url);
       };
 
       fetch_barber_profile();
@@ -205,15 +203,19 @@ const EditBarber = () => {
 
     try {
       setUploadSalonLogoLoader(true);
-      const {data} = await api.post("/api/admin/uploadBarberProfilePictureByAdmin", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const { data } = await api.post(
+        "/api/admin/uploadBarberProfilePictureByAdmin",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       // console.log(data)
 
-      setSalonLogo(data?.response?.profile?.[0]?.url)
+      setSalonLogo(data?.response?.profile?.[0]?.url);
 
       toast.success("Barber profile pic uploaded successfully", {
         duration: 3000,
@@ -899,96 +901,15 @@ const EditBarber = () => {
                 <StepContent>
                   <main className={`${style.service_container}`}>
                     <div>
-                      <div>
-                        {adminAllSalonServicesResolve &&
-                        allSalonServices?.length
-                          ? AllSalonServices?.map((s) => {
-                              return (
-                                <div
-                                  className={style.mobile_service_item}
-                                  key={s._id}
-                                >
-                                  <div>
-                                    <div>
-                                      <div>
-                                        <img
-                                          src={s?.serviceIcon?.url}
-                                          alt={s?.serviceName}
-                                        />
-
-                                        {s.vipService ? (
-                                          <span>
-                                            <CrownIcon />
-                                          </span>
-                                        ) : null}
-                                      </div>
-
-                                      <p>{s?.serviceName}</p>
-                                      <p>{s?.serviceDesc}</p>
-                                    </div>
-
-                                    {currentBarberServices.find(
-                                      (c) => c.serviceId === s.serviceId
-                                    ) ? (
-                                      <button
-                                        style={{
-                                          background: "#450a0a",
-                                        }}
-                                        onClick={() => deleteServiceHandler(s)}
-                                      >
-                                        Delete
-                                      </button>
-                                    ) : (
-                                      <button
-                                        style={{
-                                          background: "#052e16",
-                                        }}
-                                        onClick={() => chooseServiceHandler(s)}
-                                      >
-                                        Add
-                                      </button>
-                                    )}
-                                  </div>
-                                  <div>
-                                    <div>
-                                      <p>Price</p>
-                                      <p>
-                                        {adminGetDefaultSalonResponse?.currency}
-                                        {s?.servicePrice}
-                                      </p>
-                                    </div>
-
-                                    <div>
-                                      <p>Estimated Time</p>
-                                      <div>
-                                        <input
-                                          type="text"
-                                          value={
-                                            currentBarberServices?.find(
-                                              (c) => c.serviceId === s.serviceId
-                                            )
-                                              ? currentBarberServices?.find(
-                                                  (c) =>
-                                                    c.serviceId === s.serviceId
-                                                ).barberServiceEWT
-                                              : s.serviceEWT
-                                          }
-                                          onChange={(e) => handleonChange(e, s)}
-                                          maxLength={3}
-                                        />
-                                        <p>mins</p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              );
-                            })
-                          : null}
-
-                        {adminAllSalonServicesResolve &&
-                        allSalonServices?.length > 0
-                          ? AllSalonServices.map((s) => (
-                              <div key={s._id} className={style.service_item}>
+                      {adminAllSalonServicesResolve &&
+                      allSalonServices?.length > 0 ? (
+                        <div>
+                          {AllSalonServices?.map((s) => {
+                            return (
+                              <div
+                                className={style.mobile_service_item}
+                                key={s._id}
+                              >
                                 <div>
                                   <div>
                                     <div>
@@ -996,12 +917,16 @@ const EditBarber = () => {
                                         src={s?.serviceIcon?.url}
                                         alt={s?.serviceName}
                                       />
+
+                                      {s.vipService ? (
+                                        <span>
+                                          <CrownIcon />
+                                        </span>
+                                      ) : null}
                                     </div>
-                                    <div>
-                                      <p>{s?.serviceName}</p>
-                                      <p>{s?.vipService ? "VIP" : "Regular"}</p>
-                                      <p>{s?.serviceDesc}</p>
-                                    </div>
+
+                                    <p>{s?.serviceName}</p>
+                                    <p>{s?.serviceDesc}</p>
                                   </div>
 
                                   {currentBarberServices.find(
@@ -1034,6 +959,7 @@ const EditBarber = () => {
                                       {s?.servicePrice}
                                     </p>
                                   </div>
+
                                   <div>
                                     <p>Estimated Time</p>
                                     <div>
@@ -1057,9 +983,92 @@ const EditBarber = () => {
                                   </div>
                                 </div>
                               </div>
-                            ))
-                          : null}
-                      </div>
+                            );
+                          })}
+
+                          {AllSalonServices.map((s) => (
+                            <div key={s._id} className={style.service_item}>
+                              <div>
+                                <div>
+                                  <div>
+                                    <img
+                                      src={s?.serviceIcon?.url}
+                                      alt={s?.serviceName}
+                                    />
+                                  </div>
+                                  <div>
+                                    <p>{s?.serviceName}</p>
+                                    <p>{s?.vipService ? "VIP" : "Regular"}</p>
+                                    <p>{s?.serviceDesc}</p>
+                                  </div>
+                                </div>
+
+                                {currentBarberServices.find(
+                                  (c) => c.serviceId === s.serviceId
+                                ) ? (
+                                  <button
+                                    style={{
+                                      background: "#450a0a",
+                                    }}
+                                    onClick={() => deleteServiceHandler(s)}
+                                  >
+                                    Delete
+                                  </button>
+                                ) : (
+                                  <button
+                                    style={{
+                                      background: "#052e16",
+                                    }}
+                                    onClick={() => chooseServiceHandler(s)}
+                                  >
+                                    Add
+                                  </button>
+                                )}
+                              </div>
+                              <div>
+                                <div>
+                                  <p>Price</p>
+                                  <p>
+                                    {adminGetDefaultSalonResponse?.currency}
+                                    {s?.servicePrice}
+                                  </p>
+                                </div>
+                                <div>
+                                  <p>Estimated Time</p>
+                                  <div>
+                                    <input
+                                      type="text"
+                                      value={
+                                        currentBarberServices?.find(
+                                          (c) => c.serviceId === s.serviceId
+                                        )
+                                          ? currentBarberServices?.find(
+                                              (c) => c.serviceId === s.serviceId
+                                            ).barberServiceEWT
+                                          : s.serviceEWT
+                                      }
+                                      onChange={(e) => handleonChange(e, s)}
+                                      maxLength={3}
+                                    />
+                                    <p>mins</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div
+                          style={{
+                            height: "30rem",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <p style={{ fontWeight: "600"}}>This salon has no services</p>
+                        </div>
+                      )}
 
                       <button onClick={handleBack} disabled={index === 0}>
                         Back
