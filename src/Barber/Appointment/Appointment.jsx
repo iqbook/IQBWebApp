@@ -1343,7 +1343,14 @@ const Appointment = () => {
                   });
                 }}
               >
-                <p>
+                <p
+                  style={{
+                    color: appointmentBreakStartTimeSelected
+                      ? "var(--text-primary)"
+                      : "gray",
+                    fontWeight: 600,
+                  }}
+                >
                   {appointmentBreakStartTimeSelected
                     ? appointmentBreakStartTimeSelected
                     : "00:00"}
@@ -1416,7 +1423,14 @@ const Appointment = () => {
                   });
                 }}
               >
-                <p>
+                <p
+                  style={{
+                    color: appointmentBreakEndTimeSelected
+                      ? "var(--text-primary)"
+                      : "gray",
+                    fontWeight: 600,
+                  }}
+                >
                   {appointmentBreakEndTimeSelected
                     ? appointmentBreakEndTimeSelected
                     : "00:00"}
@@ -1895,7 +1909,14 @@ const Appointment = () => {
                                   });
                                 }}
                               >
-                                <p>
+                                <p
+                                  style={{
+                                    color: appointmentBreakStartTimeSelected
+                                      ? "var(--text-primary)"
+                                      : "gray",
+                                    fontWeight: 600,
+                                  }}
+                                >
                                   {appointmentBreakStartTimeSelected
                                     ? appointmentBreakStartTimeSelected
                                     : "00:00"}
@@ -1989,7 +2010,14 @@ const Appointment = () => {
                                   });
                                 }}
                               >
-                                <p>
+                                <p
+                                  style={{
+                                    color: appointmentBreakEndTimeSelected
+                                      ? "var(--text-primary)"
+                                      : "gray",
+                                    fontWeight: 600,
+                                  }}
+                                >
                                   {appointmentBreakEndTimeSelected
                                     ? appointmentBreakEndTimeSelected
                                     : "00:00"}
