@@ -945,7 +945,7 @@ const Appointment = () => {
 
                         if (!getBarberAppointmentHoursDay.includes(d.day)) {
                           toast.error(
-                            "You can't set hours for this day because its schedule hasn't been saved yet.",
+                            "You can't set hours and breaks because this day isn't saved.",
                             {
                               duration: 3000,
                               style: {
@@ -1138,7 +1138,7 @@ const Appointment = () => {
             <h2>{selected_drop_day?.item?.day}</h2>
           </div>
           <p>
-            Set your business hours here.Head to your calenderif you need to
+            Set your business hours here. Head to your calender if you need to
             adjust hours for a single day.
           </p>
 
@@ -1674,7 +1674,7 @@ const Appointment = () => {
                       selected_drop_day?.item?.id === d.id ? (
                         <div className={style.day_off_dropdown_container}>
                           <p>
-                            Set your business hours here.Head to your calenderif
+                            Set your business hours here. Head to your calender if
                             you need to adjust hours for a single day.
                           </p>
 
