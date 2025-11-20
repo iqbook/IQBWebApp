@@ -23,12 +23,11 @@ const Public = () => {
             }}
           />
           <h2>welcome to iqbook</h2>
-          <h2 style={{ textAlign: "center"}}>Dev Mode</h2>
           <div>
             <Link to="/adminsignin">Admin Signin</Link>
             <Link to="/barbersignin">Barber Signin</Link>
           </div>
-          <p className={"version_text"}>v 1.0.1</p>
+          <p className={"version_text"}>v 1.0.27</p>
         </div>
       </div>
     </section>
