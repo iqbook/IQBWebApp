@@ -93,16 +93,18 @@
           font-size: 1.2rem;
         }
 
-        & > button {
-          font-size: 1.2rem;
-          background-color: var(--input-bg-color);
-          border: none;
-          outline: none;
-          border-radius: 0.5rem;
-          width: 90%;
-          color: var(--text-primary);
-          padding: 0.8rem 0.5rem;
-          cursor: pointer;
+        & > div {
+          & > button {
+            font-size: 1.2rem;
+            background-color: var(--input-bg-color);
+            border: none;
+            outline: none;
+            border-radius: 0.5rem;
+            width: 90%;
+            color: var(--text-primary);
+            padding: 0.8rem 0.5rem;
+            cursor: pointer;
+          }
         }
       }
 

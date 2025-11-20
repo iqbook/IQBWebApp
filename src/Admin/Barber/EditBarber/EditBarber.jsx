@@ -333,19 +333,19 @@ const EditBarber = () => {
     //   return setDateOfBirthError("Please select date of birth")
     // }
 
-    if (currentBarberServices.length === 0) {
-      toast.error("Please provide a service", {
-        duration: 3000,
-        style: {
-          fontSize: "var(--font-size-2)",
-          borderRadius: "0.3rem",
-          background: "#333",
-          color: "#fff",
-        },
-      });
+    // if (currentBarberServices.length === 0) {
+    //   toast.error("Please provide a service", {
+    //     duration: 3000,
+    //     style: {
+    //       fontSize: "var(--font-size-2)",
+    //       borderRadius: "0.3rem",
+    //       background: "#333",
+    //       color: "#fff",
+    //     },
+    //   });
 
-      return setServicesError("Please provide a service");
-    }
+    //   return setServicesError("Please provide a service");
+    // }
 
     const barberdata = {
       name,
@@ -1079,12 +1079,12 @@ const EditBarber = () => {
                       <div></div>
                       <button
                         onClick={handleNext}
-                        disabled={currentBarberServices.length === 0}
+                        // disabled={currentBarberServices.length === 0}
                         style={{
-                          cursor:
-                            currentBarberServices.length === 0
-                              ? "not-allowed"
-                              : "pointer",
+                          cursor: "pointer"
+                            // currentBarberServices.length === 0
+                            //   ? "not-allowed"
+                            //   : "pointer",
                         }}
                       >
                         {index === steps.length - 1 ? "Finish" : "Continue"}

@@ -355,19 +355,19 @@ const CreateBarber = () => {
       return setInvalidNumberError("Invalid Number");
     }
 
-    if (chooseServices.length === 0) {
-      toast.error("Please provide a service", {
-        duration: 3000,
-        style: {
-          fontSize: "var(--font-size-2)",
-          borderRadius: "0.3rem",
-          background: "#333",
-          color: "#fff",
-        },
-      });
+    // if (chooseServices.length === 0) {
+    //   toast.error("Please provide a service", {
+    //     duration: 3000,
+    //     style: {
+    //       fontSize: "var(--font-size-2)",
+    //       borderRadius: "0.3rem",
+    //       background: "#333",
+    //       color: "#fff",
+    //     },
+    //   });
 
-      return setServicesError("Please provide a service");
-    }
+    //   return setServicesError("Please provide a service");
+    // }
 
     const barberdata = {
       name: name,
@@ -1155,12 +1155,12 @@ const CreateBarber = () => {
                       <div></div>
                       <button
                         onClick={handleNext}
-                        disabled={chooseServices.length === 0}
+                        // disabled={chooseServices.length === 0}
                         style={{
-                          cursor:
-                            chooseServices.length === 0
-                              ? "not-allowed"
-                              : "pointer",
+                          cursor: "pointer"
+                            // chooseServices.length === 0
+                            //   ? "not-allowed"
+                            //   : "pointer",
                         }}
                       >
                         {index === steps.length - 1 ? "Finish" : "Continue"}

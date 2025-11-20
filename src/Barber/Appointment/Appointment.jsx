@@ -680,8 +680,6 @@ const Appointment = () => {
     }
   }, [open_break_time]);
 
-  console.log(generatedBreakTimeslots);
-
   const [break_time_add_loading, set_break_time_add_loading] = useState(false);
   const add_break_time_handler = async () => {
     if (!appointmentBreakStartTimeSelected) {
@@ -871,7 +869,44 @@ const Appointment = () => {
               const isChecked = !isDisabled && selectedDays.includes(d.day);
 
               return (
-                <div
+                // <div
+                //   key={d.id}
+                // className={`${style.appointmentWeekDay} ${
+                //   isDisabled ? style.disabled : ""
+                // } ${isChecked ? style.apptAvailSelected : ""}`}
+                // style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
+                //   onClick={() => {
+                //     if (!isDisabled) checkdayHandler(d);
+                //   }}
+                // >
+                //   {d.day.slice(0, 3)}
+                // <p>
+                //   {
+                //     getBarberAppointmentHours?.find(
+                //       (item) => item.day === d.day
+                //     )?.startTime
+                //   }{" "}
+                //   -{" "}
+                //   {
+                //     getBarberAppointmentHours?.find(
+                //       (item) => item.day === d.day
+                //     )?.endTime
+                //   }
+                // </p>
+                //   <button
+                //     onClick={(e) => {
+                //       e.stopPropagation();
+                // setModalSelectedItem({
+                //   isChecked: isChecked,
+                //   item: d,
+                // });
+                //     }}
+                //   >
+                //     Set Hours & Breaks
+                //   </button>
+                // </div>
+
+                <button
                   key={d.id}
                   className={`${style.appointmentWeekDay} ${
                     isDisabled ? style.disabled : ""
@@ -882,6 +917,7 @@ const Appointment = () => {
                   }}
                 >
                   {d.day.slice(0, 3)}
+
                   <p>
                     {
                       getBarberAppointmentHours?.find(
@@ -895,18 +931,57 @@ const Appointment = () => {
                       )?.endTime
                     }
                   </p>
-                  <button
+                  <div
                     onClick={(e) => {
                       e.stopPropagation();
-                      setModalSelectedItem({
-                        isChecked: isChecked,
-                        item: d,
-                      });
                     }}
                   >
-                    Set Hours & Breaks
-                  </button>
-                </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+
+                        const getBarberAppointmentHoursDay =
+                          getBarberAppointmentHours.map((item) => item.day);
+
+                        if (!getBarberAppointmentHoursDay.includes(d.day)) {
+                          toast.error(
+                            "You can't set hours for this day because its schedule hasn't been saved yet.",
+                            {
+                              duration: 3000,
+                              style: {
+                                fontSize: "var(--font-size-2)",
+                                borderRadius: "0.3rem",
+                                background: "#333",
+                                color: "#fff",
+                              },
+                            }
+                          );
+                          return;
+                        } else if (!isChecked) {
+                          toast.error(
+                            "Please select this day before setting its hours and breaks.",
+                            {
+                              duration: 3000,
+                              style: {
+                                fontSize: "var(--font-size-2)",
+                                borderRadius: "0.3rem",
+                                background: "#333",
+                                color: "#fff",
+                              },
+                            }
+                          );
+                        } else if (isChecked) {
+                          setModalSelectedItem({
+                            isChecked: isChecked,
+                            item: d,
+                          });
+                        }
+                      }}
+                    >
+                      Set Hours & Breaks
+                    </button>
+                  </div>
+                </button>
               );
             })}
           </div>
@@ -1491,7 +1566,41 @@ const Appointment = () => {
                           </p>
                           <button
                             onClick={() => {
-                              if (isChecked) {
+                              const getBarberAppointmentHoursDay =
+                                getBarberAppointmentHours.map(
+                                  (item) => item.day
+                                );
+
+                              if (
+                                !getBarberAppointmentHoursDay.includes(d.day)
+                              ) {
+                                toast.error(
+                                  "You can't set hours for this day because its schedule hasn't been saved yet.",
+                                  {
+                                    duration: 3000,
+                                    style: {
+                                      fontSize: "var(--font-size-2)",
+                                      borderRadius: "0.3rem",
+                                      background: "#333",
+                                      color: "#fff",
+                                    },
+                                  }
+                                );
+                                return;
+                              } else if (!isChecked) {
+                                toast.error(
+                                  "Please select this day before setting its hours and breaks.",
+                                  {
+                                    duration: 3000,
+                                    style: {
+                                      fontSize: "var(--font-size-2)",
+                                      borderRadius: "0.3rem",
+                                      background: "#333",
+                                      color: "#fff",
+                                    },
+                                  }
+                                );
+                              } else if (isChecked) {
                                 set_selected_drop_day((prev) => {
                                   return {
                                     open:
