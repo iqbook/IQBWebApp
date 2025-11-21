@@ -29,28 +29,27 @@ const Appointment = () => {
 
   const [getSalonoffDays, setGetSalonoffDays] = useState([]);
 
+  const fetchSalonOffDaysHandler = async () => {
+    try {
+      const { data } = await api.post("/api/salonSettings/getSalonoffDays", {
+        salonId,
+      });
+      setGetSalonoffDays(data?.response);
+    } catch (error) {
+      toast.error(error?.response?.data?.message, {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    }
+  };
+
   useEffect(() => {
     if (salonId !== 0) {
-      const fetchSalonOffDaysHandler = async () => {
-        try {
-          const { data } = await api.post(
-            "/api/salonSettings/getSalonoffDays",
-            { salonId }
-          );
-          setGetSalonoffDays(data?.response);
-        } catch (error) {
-          toast.error(error?.response?.data?.message, {
-            duration: 3000,
-            style: {
-              fontSize: "var(--font-size-2)",
-              borderRadius: "0.3rem",
-              background: "#333",
-              color: "#fff",
-            },
-          });
-        }
-      };
-
       fetchSalonOffDaysHandler();
     }
   }, [salonId]);
@@ -201,6 +200,15 @@ const Appointment = () => {
     return selectedDates?.includes(formattedDate);
   };
 
+  const getBarberLeaveDaysFunc = async () => {
+    const { data } = await api.post("/api/barberDayOff/getBarberDayOffs", {
+      salonId,
+      barberId,
+    });
+
+    setBarberLeaveDaysdata(data.response);
+  };
+
   const offDayHandler = async (selectedDates) => {
     const { data } = await api.post("/api/barberDayOff/addBarberDayOffs", {
       salonId,
@@ -223,15 +231,6 @@ const Appointment = () => {
   };
 
   const [barberLeaveDaysdata, setBarberLeaveDaysdata] = useState([]);
-
-  const getBarberLeaveDaysFunc = async () => {
-    const { data } = await api.post("/api/barberDayOff/getBarberDayOffs", {
-      salonId,
-      barberId,
-    });
-
-    setBarberLeaveDaysdata(data.response);
-  };
 
   useEffect(() => {
     getBarberLeaveDaysFunc();
@@ -310,6 +309,55 @@ const Appointment = () => {
         ? prevDates.filter((d) => d !== formattedDate)
         : [...prevDates, formattedDate]
     );
+  };
+
+  const handle_delete_barber_offdays = async (day) => {
+    try {
+      const formattedDate = day.format("YYYY-MM-DD");
+      const confirm = window.confirm(
+        `Are you sure you want to delete ${formattedDate}`
+      );
+
+      if (confirm) {
+        const delete_offday_data = {
+          salonId,
+          barberId,
+          dates: [formattedDate],
+        };
+
+        const { data } = await api.post(
+          `/api/barberDayOff/deleteBarberDayOffs`,
+          delete_offday_data
+        );
+
+        fetchSalonOffDaysHandler();
+        getBarberLeaveDaysFunc();
+      }
+    } catch (error) {
+      if (error?.response?.status === 500) {
+        toast.error("Something went wrong !", {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+
+        return;
+      }
+
+      toast.error(error?.response?.data?.message, {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    }
   };
 
   // console.log("getBarberApptdates ", getBarberApptdates)
@@ -1070,6 +1118,7 @@ const Appointment = () => {
               const isAvailableDay = getBarberApptdates.includes(
                 day.format("dddd")
               ); // barber working
+
               const isSelected = isMobileSelected(day);
 
               // Only truly disabled days (not selectable)
@@ -1079,11 +1128,15 @@ const Appointment = () => {
                 <button
                   key={formatted}
                   onClick={() => {
-                    if (item.isFuture && !isDisabled) {
+                    if (isSalonOffDay) {
+                      return;
+                    } else if (isDisabled) {
+                      handle_delete_barber_offdays(day);
+                    } else if (item.isFuture) {
                       onMobileClickDay(day);
                     }
                   }}
-                  disabled={!item.isFuture || isDisabled} // leave & unavailable days disabled, salon off selectable
+                  disabled={!item.isFuture}
                   className={`
           ${style.appointmentWeekDate}
           ${!item.isFuture ? style.pastDate : ""}
@@ -1094,11 +1147,13 @@ const Appointment = () => {
                   style={{
                     opacity: isLeaveDay
                       ? 1
-                      : !item.isFuture || isDisabled
+                      : !item.isFuture || isDisabled || isSalonOffDay
                       ? 0.4
                       : 1, // leave fully visible
                     cursor:
-                      !item.isFuture || isDisabled ? "not-allowed" : "pointer",
+                      !item.isFuture || isSalonOffDay
+                        ? "not-allowed"
+                        : "pointer",
                   }}
                 >
                   <div>
@@ -1674,8 +1729,8 @@ const Appointment = () => {
                       selected_drop_day?.item?.id === d.id ? (
                         <div className={style.day_off_dropdown_container}>
                           <p>
-                            Set your business hours here. Head to your calender if
-                            you need to adjust hours for a single day.
+                            Set your business hours here. Head to your calender
+                            if you need to adjust hours for a single day.
                           </p>
 
                           <div className={style.set_time_container}>
@@ -2186,7 +2241,11 @@ const Appointment = () => {
                     <button
                       key={formatted}
                       onClick={() => {
-                        onMobileClickDay(day);
+                        if (isMobileDisabled(day)) {
+                          handle_delete_barber_offdays(day);
+                        } else {
+                          onMobileClickDay(day);
+                        }
                       }}
                       disabled={isDayMobileDisabled(day)}
                       className={`
