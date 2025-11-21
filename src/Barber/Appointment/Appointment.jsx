@@ -1076,7 +1076,7 @@ const Appointment = () => {
                   <RightArrow size={24} />
                 </button>
               </div>
-              <button
+              {/* <button
                 className={style.reset_days}
                 onClick={() => offDayHandler([])}
                 disabled={salonId === 0}
@@ -1085,7 +1085,7 @@ const Appointment = () => {
                 }}
               >
                 Reset Off Days
-              </button>
+              </button> */}
 
               <button
                 className={style.reset_days}
@@ -2221,7 +2221,7 @@ const Appointment = () => {
                     <RightArrow size={24} />
                   </button>
                 </div>
-                <button
+                {/* <button
                   className={style.reset_days}
                   onClick={() => offDayHandler([])}
                   disabled={salonId === 0}
@@ -2230,7 +2230,7 @@ const Appointment = () => {
                   }}
                 >
                   Reset Off Days
-                </button>
+                </button> */}
               </div>
 
               <div className={style.dayList}>
