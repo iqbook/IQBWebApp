@@ -317,7 +317,13 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import style from "./AppointmentCalender.module.css";
-import { AppointmentIcon, LeftIcon, RightIcon } from "../../../newicons";
+import {
+  AppointmentIcon,
+  DropdownIcon,
+  DropUpIcon,
+  LeftIcon,
+  RightIcon,
+} from "../../../newicons";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { getAdminAppointmentListSalonIdAction } from "../../../Redux/Admin/Actions/AppointmentAction";
@@ -339,8 +345,6 @@ const AppointmentCalender = () => {
   const [appointmentData, setAppointmentData] = useState([]);
   const AppointmentRef = useRef(null);
   const dispatch = useDispatch();
-
-  console.log(adminGetDefaultSalonResponse);
 
   // Fetch all appointments for the salon on component mount
   useEffect(() => {
@@ -490,6 +494,8 @@ const AppointmentCalender = () => {
     .isAfter(moment().add(maxAppointmentDays, "days"));
 
   const currentSalonType = localStorage.getItem("CurrentSalonType");
+
+  const [openApppointment, setOpenAppointment] = useState(false);
 
   return (
     <section className={style.appointmentSection}>
@@ -644,6 +650,30 @@ const AppointmentCalender = () => {
                   </p>
                 </div>
 
+                {item?.appointmentNotes && (
+                  <div className={style.appointment_container}>
+                    <div>
+                      <p>View Note</p>
+                      <button
+                        onClick={() => {
+                          setOpenAppointment((prev) => !prev);
+                        }}
+                      >
+                        {openApppointment ? (
+                          <DropUpIcon color="var(--text-primary)" />
+                        ) : (
+                          <DropdownIcon color="var(--text-primary)" />
+                        )}
+                      </button>
+                    </div>
+                    {openApppointment && (
+                      <div className={style.appointment_drop_container}>
+                        <p>{item?.appointmentNotes}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {item?.mobileNumber ? (
                   <p>
                     Contact the customer at{" "}
@@ -656,7 +686,8 @@ const AppointmentCalender = () => {
                         textDecoration: "underline",
                       }}
                     >
-                      +{item?.countryCode ?? ""}{item?.mobileNumber ?? ""}
+                      +{item?.countryCode ?? ""}
+                      {item?.mobileNumber ?? ""}
                     </a>
                   </p>
                 ) : (

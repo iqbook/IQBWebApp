@@ -2,7 +2,7 @@
 
 import { BsCalendar2X, BsGraphUp, BsInstagram, BsSunFill } from "react-icons/bs";
 import { FaChevronLeft, FaChevronRight, FaFacebookF, FaRegCalendarAlt, FaUsers, FaUsersSlash, FaWifi } from "react-icons/fa";
-import { FaChevronDown, FaUser } from "react-icons/fa6";
+import { FaChevronDown, FaChevronUp, FaUser } from "react-icons/fa6";
 import { FiPieChart } from "react-icons/fi";
 import { IoArrowDownSharp, IoArrowUpSharp, IoChevronDownOutline, IoPerson, IoPersonCircleOutline, IoSearch, IoSettingsSharp } from "react-icons/io5";
 import { LuFilter, LuHistory, LuMailWarning, LuPanelLeftOpen, LuPanelRightOpen } from "react-icons/lu";
@@ -37,6 +37,7 @@ export const LogoutIcon = MdLogout
 export const SalonThreeDotsIcon = IoSettingsSharp
 export const SortUpDownArrowIcon = BiSortAlt2
 export const DropdownIcon = FaChevronDown
+export const DropUpIcon = FaChevronUp
 export const SortDownIcon = IoArrowDownSharp
 export const SortUpIcon = IoArrowUpSharp
 export const DeleteIcon = RiDeleteBin6Line

@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import style from "./AppointmentList.module.css";
-import { AppointmentIcon, LeftIcon, RightIcon } from "../../newicons";
+import {
+  AppointmentIcon,
+  DropdownIcon,
+  DropUpIcon,
+  LeftIcon,
+  RightIcon,
+} from "../../newicons";
 import moment from "moment";
 import { RightArrow, CloseIcon } from "../../icons";
 import { Modal, Skeleton } from "@mui/material";
@@ -366,6 +372,8 @@ const AppointmentList = () => {
     };
   }, []);
 
+  const [openApppointment, setOpenAppointment] = useState(false);
+
   return (
     <section className={style.appointmentSection}>
       <div className={style.calenderDayCalender}>
@@ -549,6 +557,31 @@ const AppointmentList = () => {
                       )}`}
                     </p>
                   </div>
+
+                  {item?.appointmentNotes && (
+                    <div className={style.appointment_container}>
+                      <div>
+                        <p>View Note</p>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setOpenAppointment((prev) => !prev);
+                          }}
+                        >
+                          {openApppointment ? (
+                            <DropUpIcon color="var(--text-primary)" />
+                          ) : (
+                            <DropdownIcon color="var(--text-primary)" />
+                          )}
+                        </button>
+                      </div>
+                      {openApppointment && (
+                        <div className={style.appointment_drop_container}>
+                          <p>{item?.appointmentNotes}</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {item?.mobileNumber ? (
                     <p>
