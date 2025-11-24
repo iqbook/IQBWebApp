@@ -495,7 +495,11 @@ const AppointmentCalender = () => {
 
   const currentSalonType = localStorage.getItem("CurrentSalonType");
 
-  const [openApppointment, setOpenAppointment] = useState(false);
+  const [openApppointment, setOpenAppointment] = useState({
+    open: false,
+    value: "",
+    appt_id: "",
+  });
 
   return (
     <section className={style.appointmentSection}>
@@ -655,22 +659,47 @@ const AppointmentCalender = () => {
                     <div>
                       <p>View Note</p>
                       <button
-                        onClick={() => {
-                          setOpenAppointment((prev) => !prev);
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // setOpenAppointment((prev) => {
+                          //   return {
+                          //     open: !prev.open,
+                          //     value: item?.appointmentNotes,
+                          //     appt_id: item?._id
+                          //   };
+                          // });
+
+                          setOpenAppointment((prev) => {
+                            // If clicking the same item → toggle open/close
+                            if (prev.appt_id === item?._id) {
+                              return {
+                                open: !prev.open,
+                                appt_id: item?._id,
+                              };
+                            }
+
+                            // If different item → open this and close others
+                            return {
+                              open: true,
+                              appt_id: item?._id,
+                            };
+                          });
                         }}
                       >
-                        {openApppointment ? (
+                        {openApppointment?.open &&
+                        openApppointment?.appt_id === item?._id ? (
                           <DropUpIcon color="var(--text-primary)" />
                         ) : (
                           <DropdownIcon color="var(--text-primary)" />
                         )}
                       </button>
                     </div>
-                    {openApppointment && (
-                      <div className={style.appointment_drop_container}>
-                        <p>{item?.appointmentNotes}</p>
-                      </div>
-                    )}
+                    {openApppointment?.open &&
+                      openApppointment?.appt_id === item?._id && (
+                        <div className={style.appointment_drop_container}>
+                          <p>{item?.appointmentNotes}</p>
+                        </div>
+                      )}
                   </div>
                 )}
 
