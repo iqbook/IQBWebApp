@@ -14,6 +14,7 @@ import {
 import { Admincustomericon } from "../../../icons.js";
 import Switch from "react-switch";
 import { useBarberGlobal } from "../../../context/Barber/GlobalContext.jsx";
+import version_number from "../../../version/version.js";
 
 const MobileSidebar = () => {
   const { editServiceModal, setEditServiceModal } = useBarberGlobal();
@@ -169,7 +170,7 @@ const MobileSidebar = () => {
                       height: "3rem",
                       fontSize: "1.4rem",
                       border: "none",
-                      outline: "none"
+                      outline: "none",
                     }}
                     onClick={() => {
                       navigate("/barber-dashboard/editprofile");
@@ -209,6 +210,17 @@ const MobileSidebar = () => {
                   />
                 </div>
               </nav>
+              <p
+                style={{
+                  padding: "2rem",
+                  color: "var(--text-secondary)",
+                  fontSize: "1.4rem",
+                  fontWeight: "600",
+                  textAlign: "center",
+                }}
+              >
+                {version_number}
+              </p>
             </div>
           </ClickAwayListener>
         ) : null}

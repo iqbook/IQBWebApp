@@ -12,7 +12,6 @@
 // import { DARK_MODE_OFF, DARK_MODE_ON } from '../../../Redux/Admin/Constants/constants.js';
 // import MenuData from '../Menudata.jsx';
 
-
 // const Sidebar = () => {
 //   const adminGetDefaultSalon = useSelector(state => state.adminGetDefaultSalon);
 
@@ -29,7 +28,6 @@
 //   const [loading, setLoading] = useState(false);
 
 //   const darkMode = useSelector(darkmodeSelector);
-
 
 //   const darkHandler = () => {
 //     dispatch({ type: DARK_MODE_ON });
@@ -121,20 +119,31 @@
 
 // export default Sidebar;
 
-
-import React, { useEffect, useState } from 'react'
-import style from './Sidebar.module.css'
-import { Link, Outlet, useLocation } from 'react-router-dom'
-import Header from '../Header/Header.jsx';
-import { AdvertisementIcon, AppointmentIcon, BarberIcon, CustomerIcon, DashboardIcon, MdPaymentIcon, QueueHistoryIcon, QueueIcon, ReportIcon, SalonIcon } from '../../../newicons.js';
-import { useSelector } from 'react-redux';
-import Skeleton from 'react-loading-skeleton';
-
+import React, { useEffect, useState } from "react";
+import style from "./Sidebar.module.css";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import Header from "../Header/Header.jsx";
+import {
+  AdvertisementIcon,
+  AppointmentIcon,
+  BarberIcon,
+  CustomerIcon,
+  DashboardIcon,
+  MdPaymentIcon,
+  QueueHistoryIcon,
+  QueueIcon,
+  ReportIcon,
+  SalonIcon,
+} from "../../../newicons.js";
+import { useSelector } from "react-redux";
+import Skeleton from "react-loading-skeleton";
+import version_number from "../../../version/version.js";
 
 const Sidebar = () => {
-
-  const adminProfile = useSelector(state => state.AdminLoggedInMiddleware.entiredata.user[0])
-  const [sidebar, setSidebar] = useState(true)
+  const adminProfile = useSelector(
+    (state) => state.AdminLoggedInMiddleware.entiredata.user[0]
+  );
+  const [sidebar, setSidebar] = useState(true);
 
   const sideMenuData = [
     {
@@ -145,37 +154,37 @@ const Sidebar = () => {
           name: "Dashboard",
           icon: <DashboardIcon />,
           url: "/admin-dashboard",
-          show: true
+          show: true,
         },
         {
           id: 2,
           name: "Salons",
           icon: <SalonIcon />,
           url: "/admin-salon",
-          show: true
+          show: true,
         },
         {
           id: 3,
           name: "Barbers",
           icon: <BarberIcon />,
           url: "/admin-barber",
-          show: true
+          show: true,
         },
         {
           id: 4,
           name: "Customers",
           icon: <CustomerIcon />,
           url: "/admin-customer",
-          show: true
+          show: true,
         },
         {
           id: 5,
           name: "Advertisements",
           icon: <AdvertisementIcon />,
           url: "/admin-advertise",
-          show: true
+          show: true,
         },
-      ]
+      ],
     },
     {
       heading: "Apps",
@@ -185,21 +194,21 @@ const Sidebar = () => {
           name: "Queue List",
           icon: <QueueIcon />,
           url: "/admin-queue",
-          show: adminProfile?.isQueueing
+          show: adminProfile?.isQueueing,
         },
         {
           id: 2,
           name: "Queue History",
           icon: <QueueHistoryIcon />,
           url: "/admin-quehistory",
-          show: adminProfile?.isQueueing
+          show: adminProfile?.isQueueing,
         },
         {
           id: 3,
           name: "Appointments",
           icon: <AppointmentIcon />,
           url: "/admin-appointments",
-          show: adminProfile?.isAppointments
+          show: adminProfile?.isAppointments,
         },
 
         {
@@ -207,7 +216,7 @@ const Sidebar = () => {
           name: "Appointments History",
           icon: <QueueHistoryIcon />,
           url: "/admin-appointmenthistory",
-          show: adminProfile?.isAppointments
+          show: adminProfile?.isAppointments,
         },
 
         {
@@ -215,9 +224,9 @@ const Sidebar = () => {
           name: "Reports",
           icon: <ReportIcon />,
           url: "/admin-reports",
-          show: true
+          show: true,
         },
-      ]
+      ],
     },
     {
       heading: "Other Options",
@@ -227,34 +236,39 @@ const Sidebar = () => {
           name: "Subscriptions",
           icon: <QueueIcon />,
           url: "/admin-subscription",
-          show: true
+          show: true,
         },
         {
           id: 2,
           name: "Payment history",
           icon: <MdPaymentIcon />,
           url: "/admin-paymentstatus",
-          show: true
+          show: true,
         },
-      ]
+      ],
     },
-  ]
+  ];
 
-  const location = useLocation()
+  const location = useLocation();
 
-  const adminGetDefaultSalon = useSelector(state => state.adminGetDefaultSalon)
+  const adminGetDefaultSalon = useSelector(
+    (state) => state.adminGetDefaultSalon
+  );
 
   const {
     loading: adminGetDefaultSalonLoading,
     resolve: adminGetDefaultSalonResolve,
-    response: adminGetDefaultSalonResponse
-  } = adminGetDefaultSalon
+    response: adminGetDefaultSalonResponse,
+  } = adminGetDefaultSalon;
 
   useEffect(() => {
     if (adminGetDefaultSalonResponse) {
-      localStorage.setItem("CurrentSalonType", adminGetDefaultSalonResponse.salonType)
+      localStorage.setItem(
+        "CurrentSalonType",
+        adminGetDefaultSalonResponse.salonType
+      );
     }
-  }, [adminGetDefaultSalonResponse])
+  }, [adminGetDefaultSalonResponse]);
 
   return (
     <main className={`${style.main_container}`}>
@@ -264,31 +278,30 @@ const Sidebar = () => {
         }}
       >
         <header>
-          {
-            adminGetDefaultSalonLoading ? (
+          {adminGetDefaultSalonLoading ? (
+            <div>
+              <Skeleton
+                baseColor={"var(--loader-bg-color)"}
+                highlightColor={"var(--loader-highlight-color)"}
+                style={{
+                  width: "3.5rem",
+                  height: "3.5rem",
+                  borderRadius: "50%",
+                }}
+              />
+            </div>
+          ) : (
+            <Link to={"/admin-dashboard"}>
               <div>
-                <Skeleton
-                  baseColor={"var(--loader-bg-color)"}
-                  highlightColor={"var(--loader-highlight-color)"}
-                  style={{
-                    width: "3.5rem",
-                    height: "3.5rem",
-                    borderRadius: "50%"
-                  }}
+                <img
+                  src={adminGetDefaultSalonResponse?.salonLogo?.[0]?.url}
+                  alt=""
                 />
               </div>
-            ) : (
-              <Link to={"/admin-dashboard"}>
-                <div>
-                  <img src={adminGetDefaultSalonResponse?.salonLogo?.[0]?.url} alt="" />
-                </div>
-              </Link>
-            )
-          }
+            </Link>
+          )}
 
-          {
-            sidebar ? (<p>{adminGetDefaultSalonResponse?.salonName}</p>) : null
-          }
+          {sidebar ? <p>{adminGetDefaultSalonResponse?.salonName}</p> : null}
         </header>
 
         <nav>
@@ -297,32 +310,45 @@ const Sidebar = () => {
               <li key={section.heading}>
                 {sidebar ? <p>{section.heading}</p> : null}
                 <ul>
-                  {section.menuItems.map((item, cIndex) => (
+                  {section.menuItems.map((item, cIndex) =>
                     item.show ? (
                       <li
                         key={item.id}
-                        className={`${location.pathname.includes(item?.url) ? style.activeMenu : ""}`}
+                        className={`${
+                          location.pathname.includes(item?.url)
+                            ? style.activeMenu
+                            : ""
+                        }`}
                       >
                         <Link to={item?.url}>
                           <span
                             style={{
-                              marginInline: sidebar ? "0rem" : "auto"
+                              marginInline: sidebar ? "0rem" : "auto",
                             }}
-                          >{item.icon}</span>
-                          {
-                            sidebar ? item.name : null
-                          }
+                          >
+                            {item.icon}
+                          </span>
+                          {sidebar ? item.name : null}
                         </Link>
                       </li>
                     ) : null
-
-                  ))}
+                  )}
                 </ul>
               </li>
             ))}
           </ul>
         </nav>
-
+        <p
+          style={{
+            padding: "2rem",
+            color: "var(--text-secondary)",
+            fontSize: "1.4rem",
+            fontWeight: "600",
+            textAlign: "center",
+          }}
+        >
+          {version_number}
+        </p>
       </aside>
 
       <section>
@@ -330,7 +356,7 @@ const Sidebar = () => {
         <Outlet />
       </section>
     </main>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
