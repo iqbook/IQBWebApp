@@ -637,9 +637,19 @@ const Dashboard = () => {
     boxShadow: 24,
     p: 2,
     overflow: "auto",
+
+    // Hide by default
+    display: "none",
+
+    // Show ONLY between 0px and 768px
+    "@media (max-width: 768px)": {
+      display: "block",
+    },
   };
 
   const [openMobileModal, setOpenMobileModal] = useState(false);
+
+  const isMobile = window.innerWidth <= 768;
 
   return barberProfile?.user[0]?.isApproved ? (
     <>
@@ -1375,182 +1385,184 @@ const Dashboard = () => {
               {Object.keys(currentSelectedSalon)?.length === 0 && (
                 <div className={style.empty_salon_container}>
                   <div>
-                    <ShowSalonInfo />
+                    <ShowSalonInfo color="var(--text-primary)" />
                   </div>
                   <p>Locate your barbershop to join their team</p>
                 </div>
               )}
             </div>
 
-            <Modal
-              open={openMobileModal}
-              onClose={() => setOpenMobileModal(false)}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={modal_style} className={style.modal_container}>
-                <div className={style.mobile_modal_header}>
-                  <p>Select Salon</p>
-                  <button onClick={() => setOpenMobileModal(false)}>
-                    <CloseIcon />
-                  </button>
-                </div>
-                <div className={style.map_data_mobile_container}>
-                  {Object.keys(currentSelectedSalon)?.length > 0 && (
-                    <div className={style.salon_card}>
-                      <div>
-                        <div>
-                          <p>{currentSelectedSalon?.salonName}</p>
-                          <p>{currentSelectedSalon?.salonEmail}</p>
-                        </div>
-
-                        <div>
-                          <img
-                            src={currentSelectedSalon?.salonLogo?.[0]?.url}
-                            alt=""
-                          />
-                        </div>
-                      </div>
-
-                      <div>
+            {isMobile && (
+              <Modal
+                open={openMobileModal}
+                onClose={() => setOpenMobileModal(false)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={modal_style} className={style.modal_container}>
+                  <div className={style.mobile_modal_header}>
+                    <p>Select Salon</p>
+                    <button onClick={() => setOpenMobileModal(false)}>
+                      <CloseIcon />
+                    </button>
+                  </div>
+                  <div className={style.map_data_mobile_container}>
+                    {Object.keys(currentSelectedSalon)?.length > 0 && (
+                      <div className={style.salon_card}>
                         <div>
                           <div>
-                            <SalonType color="var(--text-primary)" />
+                            <p>{currentSelectedSalon?.salonName}</p>
+                            <p>{currentSelectedSalon?.salonEmail}</p>
                           </div>
-                          <p>{currentSelectedSalon?.salonType}</p>
+
+                          <div>
+                            <img
+                              src={currentSelectedSalon?.salonLogo?.[0]?.url}
+                              alt=""
+                            />
+                          </div>
                         </div>
 
                         <div>
-                          <div>
-                            <AddressIcon color="var(--text-primary)" />
-                          </div>
-                          <p>
-                            {`${currentSelectedSalon?.address}, ${currentSelectedSalon?.city}, ${currentSelectedSalon?.country}`}
-                          </p>
-                        </div>
-
-                        {currentSelectedSalon?.contactTel && (
                           <div>
                             <div>
-                              <ContactTel color="var(--text-primary)" />
+                              <SalonType color="var(--text-primary)" />
                             </div>
-                            <a
-                              href={`tel:+${
-                                currentSelectedSalon?.mobileCountryCode ?? ""
-                              }${currentSelectedSalon?.contactTel ?? ""}`}
-                              style={{
-                                color: "var(--text-primary)",
-                                textDecoration: "underline",
-                              }}
-                            >
-                              +{currentSelectedSalon?.mobileCountryCode ?? ""}
-                              {currentSelectedSalon?.contactTel ?? ""}
-                            </a>
+                            <p>{currentSelectedSalon?.salonType}</p>
                           </div>
-                        )}
-                      </div>
 
-                      {barberConnectSalonLoading ? (
-                        <button
-                          style={{
-                            display: "grid",
-                            placeItems: "center",
-                          }}
-                        >
-                          <ButtonLoader />
-                        </button>
-                      ) : (
-                        <button onClick={connectSalonClicked}>
-                          Connect Salon
-                        </button>
-                      )}
-                    </div>
-                  )}
-
-                  {selectedServiceList.map((service) => (
-                    <div
-                      className={style.mobile_service_item}
-                      key={service.serviceId}
-                    >
-                      <div>
-                        <div>
                           <div>
-                            <img src={service?.serviceIcon?.url} alt="" />
-
-                            {service.vipService ? (
-                              <span>
-                                <CrownIcon />
-                              </span>
-                            ) : null}
+                            <div>
+                              <AddressIcon color="var(--text-primary)" />
+                            </div>
+                            <p>
+                              {`${currentSelectedSalon?.address}, ${currentSelectedSalon?.city}, ${currentSelectedSalon?.country}`}
+                            </p>
                           </div>
 
-                          <p>{service.serviceName}</p>
-                          <p>{service.serviceDesc}</p>
+                          {currentSelectedSalon?.contactTel && (
+                            <div>
+                              <div>
+                                <ContactTel color="var(--text-primary)" />
+                              </div>
+                              <a
+                                href={`tel:+${
+                                  currentSelectedSalon?.mobileCountryCode ?? ""
+                                }${currentSelectedSalon?.contactTel ?? ""}`}
+                                style={{
+                                  color: "var(--text-primary)",
+                                  textDecoration: "underline",
+                                }}
+                              >
+                                +{currentSelectedSalon?.mobileCountryCode ?? ""}
+                                {currentSelectedSalon?.contactTel ?? ""}
+                              </a>
+                            </div>
+                          )}
                         </div>
 
-                        {barberSelectedServices.some(
-                          (b) => b._id === service?._id
-                        ) ? (
+                        {barberConnectSalonLoading ? (
                           <button
                             style={{
-                              background: "#450a0a",
+                              display: "grid",
+                              placeItems: "center",
                             }}
-                            onClick={() => deleteServiceHandler(service)}
                           >
-                            Delete
+                            <ButtonLoader />
                           </button>
                         ) : (
-                          <button
-                            style={{
-                              background: "#052e16",
-                            }}
-                            onClick={() => selectServiceHandler(service)}
-                          >
-                            Add
+                          <button onClick={connectSalonClicked}>
+                            Connect Salon
                           </button>
                         )}
                       </div>
-                      <div>
-                        <div>
-                          <p>Price</p>
-                          <p>
-                            {currentSelectedSalon?.currency}
-                            {service?.servicePrice}
-                          </p>
-                        </div>
+                    )}
 
+                    {selectedServiceList.map((service) => (
+                      <div
+                        className={style.mobile_service_item}
+                        key={service.serviceId}
+                      >
                         <div>
-                          <p>Estimated Time</p>
                           <div>
-                            <input
-                              type="text"
-                              value={service?.serviceEWT}
-                              onChange={(e) =>
-                                handleBarberEwt(
-                                  service?.serviceId,
-                                  e.target.value
-                                )
-                              }
-                              maxLength={3}
-                            />
-                            <p>mins</p>
+                            <div>
+                              <img src={service?.serviceIcon?.url} alt="" />
+
+                              {service.vipService ? (
+                                <span>
+                                  <CrownIcon />
+                                </span>
+                              ) : null}
+                            </div>
+
+                            <p>{service.serviceName}</p>
+                            <p>{service.serviceDesc}</p>
+                          </div>
+
+                          {barberSelectedServices.some(
+                            (b) => b._id === service?._id
+                          ) ? (
+                            <button
+                              style={{
+                                background: "#450a0a",
+                              }}
+                              onClick={() => deleteServiceHandler(service)}
+                            >
+                              Delete
+                            </button>
+                          ) : (
+                            <button
+                              style={{
+                                background: "#052e16",
+                              }}
+                              onClick={() => selectServiceHandler(service)}
+                            >
+                              Add
+                            </button>
+                          )}
+                        </div>
+                        <div>
+                          <div>
+                            <p>Price</p>
+                            <p>
+                              {currentSelectedSalon?.currency}
+                              {service?.servicePrice}
+                            </p>
+                          </div>
+
+                          <div>
+                            <p>Estimated Time</p>
+                            <div>
+                              <input
+                                type="text"
+                                value={service?.serviceEWT}
+                                onChange={(e) =>
+                                  handleBarberEwt(
+                                    service?.serviceId,
+                                    e.target.value
+                                  )
+                                }
+                                maxLength={3}
+                              />
+                              <p>mins</p>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
 
-                  {Object.keys(currentSelectedSalon)?.length === 0 && (
-                    <div className={style.empty_salon_container}>
-                      <div>
-                        <ShowSalonInfo />
+                    {Object.keys(currentSelectedSalon)?.length === 0 && (
+                      <div className={style.empty_salon_container}>
+                        <div>
+                          <ShowSalonInfo />
+                        </div>
+                        <p>Locate your barbershop to join their team</p>
                       </div>
-                      <p>Locate your barbershop to join their team</p>
-                    </div>
-                  )}
-                </div>
-              </Box>
-            </Modal>
+                    )}
+                  </div>
+                </Box>
+              </Modal>
+            )}
           </div>
           <div className={style.map_container}>
             {isLoaded ? (
