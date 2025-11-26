@@ -14,9 +14,10 @@ import { BiLogoTiktok, BiSortAlt2 } from "react-icons/bi";
 import { IoIosPeople, IoMdCheckmark } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { AiOutlineShop } from "react-icons/ai";
-import { GrPowerReset } from "react-icons/gr";
+import { GrPowerReset, GrRadialSelected } from "react-icons/gr";
 import { CiShop } from "react-icons/ci";
 import { ImMobile2 } from "react-icons/im";
+import { HiOutlineLocationMarker } from "react-icons/hi";
 
 export const DashboardIcon = FiPieChart
 export const SalonIcon = TbScissors
@@ -75,3 +76,5 @@ export const GroupJoinIcon = IoIosPeople
 export const ScissorIcon = TbScissors
 export const LeftIcon = FaChevronLeft
 export const RightIcon = FaChevronRight
+export const SalonType = GrRadialSelected
+export const AddressIcon = HiOutlineLocationMarker

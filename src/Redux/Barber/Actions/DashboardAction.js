@@ -2,11 +2,11 @@ import toast from "react-hot-toast";
 import { BARBER_CONNECT_SALON_FAIL, BARBER_CONNECT_SALON_REQ, BARBER_CONNECT_SALON_SUCCESS, BARBER_LOGGED_IN_MIDDLEWARE_SUCCESS, CHANGE_BARBER_ONLINESTATUS_FAIL, CHANGE_BARBER_ONLINESTATUS_REQ, CHANGE_BARBER_ONLINESTATUS_SUCCESS, CONNECT_SALON_LIST_FAIL, CONNECT_SALON_LIST_REQ, CONNECT_SALON_LIST_SUCCESS, GET_BARBER_SALON_LOGO_FAIL, GET_BARBER_SALON_LOGO_REQ, GET_BARBER_SALON_LOGO_SUCCESS, BARBER_DASHBOARD_SALON_INFO_FAIL, BARBER_DASHBOARD_SALON_INFO_SUCCESS, BARBER_DASHBOARD_SALON_INFO_REQ } from "../Constants/constants";
 import api from "../../api/Api";
 
-export const connectSalonListAction = () => async (dispatch) => {
+export const connectSalonListAction = (search_query) => async (dispatch) => {
     try {
         dispatch({ type: CONNECT_SALON_LIST_REQ })
 
-        const { data } = await api.get(`/api/barber/getAllSalons`)
+        const { data } = await api.get(`/api/barber/getAllSalons?search=${search_query}`)
 
         dispatch({
             type: CONNECT_SALON_LIST_SUCCESS,
