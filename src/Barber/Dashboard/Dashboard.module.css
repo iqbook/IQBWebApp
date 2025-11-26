@@ -339,6 +339,7 @@
         color: var(--text-primary);
         font-family: "AirbnbCereal_Medium";
         margin-bottom: 2rem;
+        text-align: center;
       }
 
       & > button {
@@ -1420,6 +1421,10 @@
   flex: 1;
 }
 
+.map_data_mobile_container {
+  display: none;
+}
+
 @media screen and (min-width: 0px) and (max-width: 768px) {
   .dashboard_container {
     /* height: 100%; */
@@ -1533,6 +1538,10 @@
     }
   }
 
+  .search_bar{
+    max-width: 100% !important;
+  }
+
   .service_item {
     display: none !important;
   }
@@ -1542,14 +1551,13 @@
     flex-direction: column;
     background-color: var(--bg-primary);
     border: 0.1rem solid var(--border-secondary);
-    border-radius: var(--border-radius-primary);
-    -webkit-border-radius: var(--border-radius-primary);
-    -moz-border-radius: var(--border-radius-primary);
-    -ms-border-radius: var(--border-radius-primary);
-    -o-border-radius: var(--border-radius-primary);
+    border-radius: 1rem;
+    -webkit-border-radius: 1rem;
+    -moz-border-radius: 1rem;
+    -ms-border-radius: 1rem;
+    -o-border-radius: 1rem;
     /* min-width: 45.5rem; */
     width: 100%;
-    margin-bottom: 1rem;
 
     & > div:nth-child(1) {
       flex: 1;
@@ -1707,15 +1715,140 @@
     }
   }
 
-  .map_wrapper_container{
+  .mobile_modal_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+
+    & > p {
+      font-size: var(--font-size-1);
+      font-weight: 600;
+    }
+
+    & > button {
+      margin-left: auto;
+      height: 3.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3.2rem;
+      background-color: transparent;
+      border: 0.1rem solid var(--border-secondary);
+      cursor: pointer;
+      color: var(--color-6);
+      border-radius: var(--border-radius-primary);
+      -webkit-border-radius: var(--border-radius-primary);
+      -moz-border-radius: var(--border-radius-primary);
+      -ms-border-radius: var(--border-radius-primary);
+      -o-border-radius: var(--border-radius-primary);
+      transition: var(--btn-transition);
+      -webkit-transition: var(--btn-transition);
+      -moz-transition: var(--btn-transition);
+      -ms-transition: var(--btn-transition);
+      -o-transition: var(--btn-transition);
+      font-size: var(--font-size-2);
+      margin-bottom: 1rem;
+    }
+  }
+
+  .map_wrapper_container {
     flex-direction: column;
   }
 
-  .map_search_wrapper_container{
+  .map_search_wrapper_container {
     width: 100%;
+  }
 
-    .map_data_container{
-      display: none;
+  .map_data_container {
+    display: none !important;
+  }
+
+  .map_data_mobile_container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .salon_card {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      background-color: var(--bg-primary);
+      border: 0.1rem solid var(--border-secondary);
+      padding: 1rem;
+      border-radius: 1rem;
+
+      & > div:nth-child(1) {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+
+        & > div:nth-child(1) {
+          display: flex;
+          flex-direction: column;
+          gap: 0.4rem;
+
+          & > p:nth-child(1) {
+            font-family: "AirbnbCereal_Bold";
+            font-size: 2rem;
+            color: var(--text-primary);
+            word-break: break-all;
+          }
+
+          & > p:nth-child(2) {
+            font-size: 1.4rem;
+            font-family: "AirbnbCereal_Semibold";
+            color: var(--text-secondary);
+            word-break: break-all;
+          }
+        }
+
+        & > div:nth-child(2) {
+          height: 5rem;
+          width: 5rem;
+
+          & > img {
+            width: inherit;
+            height: inherit;
+            border-radius: 0.5rem;
+          }
+        }
+      }
+
+      & > div:nth-child(2) {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+
+        & > div {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+
+          & > div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          & > p {
+            font-weight: 500;
+          }
+        }
+      }
+
+      & > button {
+        height: 3.5rem;
+        border-radius: 2rem;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        background-color: var(--text-primary);
+        color: var(--btn-text-color);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
     }
   }
 

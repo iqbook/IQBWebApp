@@ -9,6 +9,7 @@ import {
   ChartIcon3,
   CheckIcon,
   ClockIcon,
+  CloseIcon,
   CrownIcon,
   DeleteIcon,
   ShowSalonInfo,
@@ -611,7 +612,7 @@ const Dashboard = () => {
     setCurrentSelectedSalon({});
     setSelectedServiceList([]);
     setMarkerPosition(null);
-    setOpenMobileModal(false)
+    setOpenMobileModal(false);
   };
 
   useEffect(() => {
@@ -631,7 +632,7 @@ const Dashboard = () => {
     width: "95%",
     maxHeight: "90vh", // ⬅️ required for scroll
     overflow: "scroll", // ⬅️ enable internal scroll
-    bgcolor: "var(--bg-primary)",
+    bgcolor: "var(--input-bg-color)",
     border: "0.1rem solid var(--border-primary)",
     boxShadow: 24,
     p: 2,
@@ -1193,12 +1194,14 @@ const Dashboard = () => {
                   onChange={(e) => query_onchange_handler(e)}
                 />
 
-                <button
-                  className={style.clear_btn}
-                  onClick={remove_query_handler}
-                >
-                  ✕
-                </button>
+                {search_salon_query && (
+                  <button
+                    className={style.clear_btn}
+                    onClick={remove_query_handler}
+                  >
+                    ✕
+                  </button>
+                )}
               </div>
 
               {search_salon_drop && (
@@ -1220,8 +1223,8 @@ const Dashboard = () => {
                       return (
                         <div
                           onClick={() => {
-                            setSelectedSalonId(item.salonId)
-                            setOpenMobileModal(false)
+                            setSelectedSalonId(item.salonId);
+                            setOpenMobileModal(true);
                           }}
                           key={item.salonId}
                           className={style.drop_item}
@@ -1386,6 +1389,12 @@ const Dashboard = () => {
               aria-describedby="modal-modal-description"
             >
               <Box sx={modal_style} className={style.modal_container}>
+                <div className={style.mobile_modal_header}>
+                  <p>Select Salon</p>
+                  <button onClick={() => setOpenMobileModal(false)}>
+                    <CloseIcon />
+                  </button>
+                </div>
                 <div className={style.map_data_mobile_container}>
                   {Object.keys(currentSelectedSalon)?.length > 0 && (
                     <div className={style.salon_card}>
@@ -1459,18 +1468,26 @@ const Dashboard = () => {
                   )}
 
                   {selectedServiceList.map((service) => (
-                    <div key={service.serviceId} className={style.service_item}>
+                    <div
+                      className={style.mobile_service_item}
+                      key={service.serviceId}
+                    >
                       <div>
                         <div>
                           <div>
-                            <img src={service?.serviceIcon?.url} alt={""} />
+                            <img src={service?.serviceIcon?.url} alt="" />
+
+                            {service.vipService ? (
+                              <span>
+                                <CrownIcon />
+                              </span>
+                            ) : null}
                           </div>
-                          <div>
-                            <p>{service.serviceName}</p>
-                            <p>{service.vipService ? "VIP" : "Regular"}</p>
-                            <p>{service.serviceDesc}</p>
-                          </div>
+
+                          <p>{service.serviceName}</p>
+                          <p>{service.serviceDesc}</p>
                         </div>
+
                         {barberSelectedServices.some(
                           (b) => b._id === service?._id
                         ) ? (
@@ -1501,6 +1518,7 @@ const Dashboard = () => {
                             {service?.servicePrice}
                           </p>
                         </div>
+
                         <div>
                           <p>Estimated Time</p>
                           <div>
