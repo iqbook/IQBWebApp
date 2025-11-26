@@ -586,7 +586,7 @@ const EditSalon = () => {
   const [selectedServices, setSelectedServices] = useState([]);
   const [get_services_loading, set_get_services_loading] = useState(false);
 
-  console.log("selectedServices ", selectedServices);
+  // console.log("selectedServices ", selectedServices);
 
   const fetch_salon_services = async () => {
     try {
