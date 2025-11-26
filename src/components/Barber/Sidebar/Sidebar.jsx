@@ -11,6 +11,7 @@ import {
 } from "../../../newicons.js";
 import { useSelector } from "react-redux";
 import { useBarberGlobal } from "../../../context/Barber/GlobalContext.jsx";
+import version_number from "../../../version/version.js"
 
 const Sidebar = () => {
   const [sidebar, setSidebar] = useState(true);
@@ -148,6 +149,13 @@ const Sidebar = () => {
             </button>
           </div>
         </nav>
+        <p style={{
+          padding: "2rem",
+          color: "var(--text-secondary)",
+          fontSize: "1.4rem",
+          fontWeight: "600",
+          textAlign: "center"
+        }}>{version_number}</p>
       </aside>
 
       <section>

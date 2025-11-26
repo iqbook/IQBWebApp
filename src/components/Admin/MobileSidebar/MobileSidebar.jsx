@@ -65,6 +65,7 @@ import {
 } from "../../../Redux/Admin/Constants/constants.js";
 import { adminSalonStatusAction } from "../../../Redux/Admin/Actions/DashboardAction.js";
 import { MobileCrossIcon } from "../../../icons.js";
+import version_number from "../../../version/version.js";
 
 const MobileSidebar = () => {
   const adminProfile = useSelector(
@@ -538,9 +539,18 @@ const MobileSidebar = () => {
                     />
                   </div>
                 )}
-
-                {/* <p className={style.version_text}> v 1.0.5</p> */}
               </nav>
+              <p
+                style={{
+                  padding: "2rem",
+                  color: "var(--text-secondary)",
+                  fontSize: "1.4rem",
+                  fontWeight: "600",
+                  textAlign: "center",
+                }}
+              >
+                {version_number}
+              </p>
             </div>
           </ClickAwayListener>
         ) : null}

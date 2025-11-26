@@ -460,13 +460,40 @@ const Appointment = () => {
   const [appointmentBreakEndTimeSelected, setAppointmentBreakEndTimeSelected] =
     useState("");
 
+  const [barberIntervalTime, setBarberIntervalTime] = useState({
+    open: true,
+    value: null,
+  });
+
   useEffect(() => {
+    // console.log(getBarberAppointmentHours)
     const appointment_time = getBarberAppointmentHours?.find(
       (item) => item.day === selected_drop_day?.item?.day
     );
+
+    setBarberIntervalTime({
+      open: false,
+      value: appointment_time?.barberIntervalTime,
+    });
+
     setAppointmentEndTimeSelected(appointment_time?.endTime);
     setAppointmentStartTimeSelected(appointment_time?.startTime);
   }, [selected_drop_day?.item?.day]);
+
+  const [barberIntervalTimeGap, setBarberIntervalTimeGap] = useState([]);
+
+  const generateBarberTimeIntervalInMinutes = () => {
+    const options = [];
+    for (let i = 5; i <= 60; i = i + 5) {
+      options.push(i);
+    }
+
+    setBarberIntervalTimeGap(options);
+  };
+
+  useEffect(() => {
+    generateBarberTimeIntervalInMinutes();
+  }, []);
 
   const [apply_appointment_loading, set_apply_appointment_loading] =
     useState(false);
@@ -508,6 +535,7 @@ const Appointment = () => {
           day: selected_drop_day?.item?.day,
           startTime: appointmentStartTimeSelected,
           endTime: appointmentEndTimeSelected,
+          barberIntervalTime: barberIntervalTime?.value,
         },
       ],
     };
@@ -878,6 +906,12 @@ const Appointment = () => {
         value: null,
       };
     });
+    setBarberIntervalTime((prev) => {
+      return {
+        open: false,
+        value: null,
+      };
+    });
     set_open_break_time(false);
     setAppointmentBreakStartTimeSelected("");
     setAppointmentBreakEndTimeSelected("");
@@ -1221,6 +1255,13 @@ const Appointment = () => {
                         value: null,
                       };
                     });
+
+                    setBarberIntervalTime((prev) => {
+                      return {
+                        ...prev,
+                        open: false,
+                      };
+                    });
                   }}
                 >
                   <p>{appointmentStartTimeSelected}</p>
@@ -1272,6 +1313,13 @@ const Appointment = () => {
                         value: null,
                       };
                     });
+
+                    setBarberIntervalTime((prev) => {
+                      return {
+                        ...prev,
+                        open: false,
+                      };
+                    });
                   }}
                 >
                   <p>{appointmentEndTimeSelected}</p>
@@ -1295,6 +1343,88 @@ const Appointment = () => {
                           }}
                         >
                           {item}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          </div>
+
+          <div className={style.set_time_modal_container}>
+            <p>Interval time</p>
+            <div>
+              <div>
+                <div
+                  onClick={() => {
+                    setAppointmentBreakStartTimeDrop((prev) => {
+                      return {
+                        open: false,
+                        value: null,
+                      };
+                    });
+                    setAppointmentBreakEndTimeDrop((prev) => {
+                      return {
+                        open: false,
+                        value: null,
+                      };
+                    });
+                    setAppointmentStartTimeDrop((prev) => {
+                      return {
+                        open: false,
+                        value: null,
+                      };
+                    });
+                    setAppointmentEndTimeDrop((prev) => {
+                      return {
+                        open: false,
+                        value: null,
+                      };
+                    });
+                    setBarberIntervalTime((prev) => {
+                      return {
+                        ...prev,
+                        open: !prev.open,
+                      };
+                    });
+                  }}
+                >
+                  <p>{barberIntervalTime?.value || 0} mins</p>
+                  <DropdownIcon size={"1.4rem"} color="var(--text-primary)" />
+                </div>
+
+                {barberIntervalTime?.open ? (
+                  <div className={style.timeslot_dropdown_container}>
+                    {barberIntervalTimeGap?.map((item) => {
+                      return (
+                        <button
+                          key={item}
+                          style={
+                            {
+                              // padding: "1rem",
+                              // minWidth: "10rem"
+                            }
+                          }
+                          // onClick={() => {
+                          //   setAppointmentStartTimeSelected(item);
+                          //   setAppointmentStartTimeDrop((prev) => {
+                          //     return {
+                          //       open: false,
+                          //       value: null,
+                          //     };
+                          //   });
+                          // }}
+                          onClick={() => {
+                            setBarberIntervalTime((prev) => {
+                              return {
+                                open: false,
+                                value: item,
+                              };
+                            });
+                          }}
+                        >
+                          {`${item} mins`}
                         </button>
                       );
                     })}
@@ -1389,6 +1519,12 @@ const Appointment = () => {
                       value: null,
                     };
                   });
+                  setBarberIntervalTime((prev) => {
+                    return {
+                      ...prev,
+                      open: false,
+                    };
+                  });
                   set_open_break_time(true);
                   setAppointmentBreakStartTimeDrop((prev) => {
                     return {
@@ -1467,6 +1603,12 @@ const Appointment = () => {
                     return {
                       open: false,
                       value: null,
+                    };
+                  });
+                  setBarberIntervalTime((prev) => {
+                    return {
+                      ...prev,
+                      open: false,
                     };
                   });
                   set_open_break_time(true);
@@ -1851,6 +1993,104 @@ const Appointment = () => {
                                           }}
                                         >
                                           {item}
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
+                                ) : null}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              marginBlock: "2rem"
+                            }}
+                            className={style.set_time_container}
+                          >
+                            <p>Interval time</p>
+                            <div>
+                              <div>
+                                <div
+                                  onClick={() => {
+                                    setAppointmentBreakStartTimeDrop((prev) => {
+                                      return {
+                                        open: false,
+                                        value: null,
+                                      };
+                                    });
+                                    setAppointmentBreakEndTimeDrop((prev) => {
+                                      return {
+                                        open: false,
+                                        value: null,
+                                      };
+                                    });
+                                    setAppointmentStartTimeDrop((prev) => {
+                                      return {
+                                        open: false,
+                                        value: null,
+                                      };
+                                    });
+                                    setAppointmentEndTimeDrop((prev) => {
+                                      return {
+                                        open: false,
+                                        value: null,
+                                      };
+                                    });
+                                    setBarberIntervalTime((prev) => {
+                                      return {
+                                        ...prev,
+                                        open: !prev.open,
+                                      };
+                                    });
+                                  }}
+                                >
+                                  <p>{barberIntervalTime?.value || 0} mins</p>
+                                  <DropdownIcon
+                                    size={"1.4rem"}
+                                    color="var(--text-primary)"
+                                  />
+                                </div>
+
+                                {barberIntervalTime?.open ? (
+                                  <div
+                                    className={
+                                      style.timeslot_dropdown_container
+                                    }
+                                  >
+                                    {barberIntervalTimeGap?.map((item) => {
+                                      return (
+                                        <button
+                                          key={item}
+                                          style={
+                                            {
+                                              // padding: "1rem",
+                                              // minWidth: "10rem"
+                                            }
+                                          }
+                                          // onClick={() => {
+                                          //   setAppointmentStartTimeSelected(item);
+                                          //   setAppointmentStartTimeDrop((prev) => {
+                                          //     return {
+                                          //       open: false,
+                                          //       value: null,
+                                          //     };
+                                          //   });
+                                          // }}
+                                          onClick={() => {
+                                            setBarberIntervalTime((prev) => {
+                                              return {
+                                                open: false,
+                                                value: item,
+                                              };
+                                            });
+                                          }}
+                                        >
+                                          {`${item} mins`}
                                         </button>
                                       );
                                     })}
