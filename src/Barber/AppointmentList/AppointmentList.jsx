@@ -513,7 +513,7 @@ const AppointmentList = () => {
                       </div>
                       <div>
                         <p>{item?.customerName}</p>
-                        <p>{item?.timeSlots}</p>
+                        <p>{item?.startTimeAmPm}</p>
                         <p>{item?.customerEmail}</p>
                       </div>
                     </div>
