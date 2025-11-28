@@ -627,7 +627,7 @@ const Report = () => {
 
 
   const [reportData, setReportData] = useState(dummyReport)
-
+  const [reportValueType, setReportValueType] = useState("")
 
   const [selectedDates, setSelectedDates] = useState([])
 
@@ -768,6 +768,7 @@ const Report = () => {
       }
 
       const { data } = await api.post("/api/reports/getSalonReports", reportOptions);
+      setReportValueType(data?.valueType)
       setReportData(data.response);
 
     } catch (error) {
@@ -862,6 +863,8 @@ const Report = () => {
 
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false)
 
+  console.log("reportValueType ", reportValueType)
+
   return (
     <div className={style.section}>
       <div>
@@ -915,7 +918,7 @@ const Report = () => {
                         ? "month"
                         : "range"
                 } />
-              <YAxis dataKey={"TotalQueue"} />
+              <YAxis dataKey={reportValueType} />
               <Tooltip
                 cursor={{ fill: "var(--input-bg-color)" }}
                 contentStyle={{
@@ -927,7 +930,7 @@ const Report = () => {
                 }}
               />
 
-              <Bar dataKey="TotalQueue" fill="var(--bg-secondary)" radius={[2, 2, 2, 2]} />
+              <Bar dataKey={reportValueType} fill="var(--bg-secondary)" radius={[2, 2, 2, 2]} />
             </BarChart>
           </ResponsiveContainer>
           <div className={`${style.report_footer}`}>
@@ -1095,7 +1098,7 @@ const Report = () => {
                         ? "month"
                         : "range"
                 } />
-              <YAxis dataKey={"TotalQueue"} />
+              <YAxis dataKey={reportValueType} />
               <Tooltip
                 cursor={{ fill: "var(--input-bg-color)" }}
                 contentStyle={{
@@ -1107,7 +1110,7 @@ const Report = () => {
                 }}
               />
 
-              <Bar dataKey="TotalQueue" fill="var(--bg-secondary)" radius={[2, 2, 2, 2]} />
+              <Bar dataKey={reportValueType} fill="var(--bg-secondary)" radius={[2, 2, 2, 2]} />
             </BarChart>
           </ResponsiveContainer>
 
@@ -1242,7 +1245,7 @@ const Report = () => {
             </div>
 
             {
-              selectType === "Barber" && BarberList?.length > 0 ? (<div className={`${style.barberlist_container}`}>
+              (selectType === "Barber" || selectType === "Stylist") && BarberList?.length > 0 ? (<div className={`${style.barberlist_container}`}>
                 {
                   BarberList?.map((item) => {
                     return (<div
@@ -1265,6 +1268,7 @@ const Report = () => {
                 }
               </div>) : (null)
             }
+
 
             <div>
               <Calendar
