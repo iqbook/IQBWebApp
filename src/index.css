@@ -171,8 +171,8 @@ body[data-theme="light"] {
   --input-bg-color: #efefef;
   --border-secondary: #e7e7e7;
 
-  --loader-bg-color: #ebebeb;
-  --loader-highlight-color: #f5f5f5;
+  --loader-bg-color: #d4d4d4;
+  --loader-highlight-color:#e0e0e0;
 
   --btn-primary-hover: #d3d3d3;
 
