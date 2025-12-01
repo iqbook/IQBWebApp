@@ -624,7 +624,7 @@ const AppointmentCalender = () => {
                   </div>
                   <div>
                     <p>{item?.barbername}</p>
-                    <p>{item?.startTimeAmPm}</p>
+                    <p>{item?.timeSlots}</p>
                   </div>
                 </div>
               </div>
