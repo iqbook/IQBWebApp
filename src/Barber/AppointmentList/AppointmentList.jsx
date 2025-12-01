@@ -237,7 +237,8 @@ const AppointmentList = () => {
             appointmentDate: selectedDay?.fullDate,
           },
           setOpenMobileModal,
-          setModalData
+          setModalData,
+          setOpenModal
         )
       );
     }
@@ -760,6 +761,7 @@ const AppointmentList = () => {
         </div>
       </Modal>
 
+      {/* Cancel Appointment Modal */}
       <Modal
         open={openModal}
         onClose={() => {
@@ -840,6 +842,7 @@ const AppointmentList = () => {
         </div>
       </Modal>
 
+      {/* Cancel All Appointment Modal */}
       <Modal
         open={cancelAllModalOpen}
         onClose={() => {

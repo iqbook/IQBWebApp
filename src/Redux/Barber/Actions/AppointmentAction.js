@@ -157,7 +157,7 @@ export const CancelAppointmentAction =
   };
 
 export const ServeAppointmentAction =
-  (servedata, appointmentBarberListData, setOpenMobileModal, setModalData) =>
+  (servedata, appointmentBarberListData, setOpenMobileModal, setModalData, setOpenModal) =>
   async (dispatch) => {
     try {
       dispatch({ type: SERVE_APPOINT_REQ });
@@ -210,6 +210,7 @@ export const ServeAppointmentAction =
         data: {},
       });
       setModalData({})
+      setOpenModal(false)
 
     } catch (error) {
       if (error?.response?.status === 500) {
