@@ -282,6 +282,7 @@
             justify-content: space-between;
             align-items: center;
             min-height: 3.5rem;
+            
 
             & > p {
               font-size: 1.4rem;
@@ -518,7 +519,7 @@
           & > div:nth-child(2) {
             & > button:nth-child(1),
             & > button:nth-child(2) {
-              display: none;
+              display: none !important;
             }
 
             & > button:nth-child(3) {

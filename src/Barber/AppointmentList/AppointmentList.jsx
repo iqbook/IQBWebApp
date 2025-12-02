@@ -212,6 +212,11 @@ const AppointmentList = () => {
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
 
+  const { loading: serveLoading } = useSelector(
+    (state) => state.ServeAppointment
+  );
+
+
   const ServeHandler = async (s) => {
     const servebody = {
       salonId: salonId,
@@ -231,11 +236,17 @@ const AppointmentList = () => {
             barberId,
             appointmentDate: selectedDay?.fullDate,
           },
-          setOpenMobileModal
+          setOpenMobileModal,
+          setModalData,
+          setOpenModal
         )
       );
     }
   };
+
+  const { loading: cancelLoading } = useSelector(
+    (state) => state.CancelAppointment
+  );
 
   const CancelHandler = async () => {
     if (!subject) {
@@ -377,6 +388,10 @@ const AppointmentList = () => {
     value: "",
     appt_id: "",
   });
+
+  const [selectedServeOrCancelItem, setSelectedServeOrCancelItem] =
+    useState(null);
+
 
   return (
     <section className={style.appointmentSection}>
@@ -520,14 +535,34 @@ const AppointmentList = () => {
                   </div>
 
                   <div>
-                    <button onClick={() => ServeHandler(item)}>Serve</button>
+                    <button
+                      disabled={serveLoading || cancelLoading}
+                      onClick={() => {
+                        setSelectedServeOrCancelItem(item);
+                        ServeHandler(item);
+                      }}
+                      style={{
+                        display: "grid",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {serveLoading &&
+                      item._id === selectedServeOrCancelItem._id ? (
+                        <ButtonLoader />
+                      ) : (
+                        "Serve"
+                      )}
+                    </button>
                     <button
                       onClick={() => {
+                        setSelectedServeOrCancelItem(item);
                         setModalData(item);
                         setOpenModal(true);
                         setSubject("");
                         setBody("");
                       }}
+                      disabled={serveLoading || cancelLoading}
                     >
                       Cancel
                     </button>
@@ -667,11 +702,13 @@ const AppointmentList = () => {
             <p>{openMobileModal?.data?.timeSlots}</p>
           </div>
           <div>
-            {false ? (
+            {serveLoading ? (
               <button
                 style={{
                   display: "grid",
                   placeItems: "center",
+                  background: "#0285c7",
+                  color: "#fff",
                 }}
               >
                 <ButtonLoader />
@@ -682,17 +719,23 @@ const AppointmentList = () => {
                   background: "#0285c7",
                   color: "#fff",
                 }}
-                onClick={() => ServeHandler(openMobileModal?.data)}
+                disabled={serveLoading || cancelLoading}
+                onClick={() => {
+                  setSelectedServeOrCancelItem(openMobileModal?.data)
+                  ServeHandler(openMobileModal?.data)
+                }}
               >
                 Serve
               </button>
             )}
 
-            {false ? (
+            {cancelLoading ? (
               <button
                 style={{
                   display: "grid",
                   placeItems: "center",
+                  background: "#450a0a",
+                  color: "#fff",
                 }}
               >
                 <ButtonLoader />
@@ -703,6 +746,7 @@ const AppointmentList = () => {
                   background: "#450a0a",
                   color: "#fff",
                 }}
+                disabled={serveLoading || cancelLoading}
                 onClick={() => {
                   setModalData(openMobileModal?.data);
                   setOpenModal(true);
@@ -717,6 +761,7 @@ const AppointmentList = () => {
         </div>
       </Modal>
 
+      {/* Cancel Appointment Modal */}
       <Modal
         open={openModal}
         onClose={() => {
@@ -736,6 +781,7 @@ const AppointmentList = () => {
           <div>
             <p>Cancel Appointment</p>
             <button
+              disabled={cancelLoading}
               onClick={() => {
                 setOpenModal(false);
                 setModalData({});
@@ -780,13 +826,23 @@ const AppointmentList = () => {
                 onChange={(e) => setBody(e.target.value)}
               ></textarea>
             </div>
-            <button className={style.cancel_btn} onClick={CancelHandler}>
-              Cancel
+            <button
+              className={style.cancel_btn}
+              onClick={CancelHandler}
+              disabled={cancelLoading}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {cancelLoading ? <ButtonLoader /> : "Cancel"}
             </button>
           </div>
         </div>
       </Modal>
 
+      {/* Cancel All Appointment Modal */}
       <Modal
         open={cancelAllModalOpen}
         onClose={() => {
@@ -861,8 +917,17 @@ const AppointmentList = () => {
                 onChange={(e) => setBody(e.target.value)}
               ></textarea>
             </div>
-            <button className={style.cancel_btn} onClick={CancelAllHandler}>
-              Cancel
+            <button
+              className={style.cancel_btn}
+              onClick={CancelAllHandler}
+              disabled={cancelLoading}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {cancelLoading ? <ButtonLoader /> : "Cancel All"}
             </button>
           </div>
         </div>

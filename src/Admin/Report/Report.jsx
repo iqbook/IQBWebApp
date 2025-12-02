@@ -1080,11 +1080,11 @@ const Report = () => {
 
       <div className={`${style.mobile_report_body}`}>
         <div className={`${style.report_body_content}`}>
-          <ResponsiveContainer width="200%" height="85%">
+          <ResponsiveContainer width="100%" height="85%">
             <BarChart
               data={reportData}
               margin={{
-                left: -10,
+                left: -35,
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />

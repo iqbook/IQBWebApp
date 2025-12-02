@@ -107,7 +107,6 @@
 //   }
 // }
 
-
 // const cancelQHandler = (b) => {
 //   const confirm = window.confirm("Are you Sure ?")
 
@@ -168,7 +167,6 @@
 //   getAllBarbers: BarberList
 // } = getAdminBarberList
 
-
 // const [copybarberlistdata, setCopybarberlistdata] = useState([])
 
 // useEffect(() => {
@@ -189,7 +187,6 @@
 
 //   dispatch(adminServeQueueAction(queuedata, salonId, setChoosebarbermodalopen))
 // }
-
 
 //   return (
 //     <div className={`${style.admin_queue_wrapper} ${darkmodeOn && style.dark}`}>
@@ -348,34 +345,46 @@
 
 // export default Queue
 
-import React, { useEffect, useRef, useState } from 'react'
-import style from "./Queue.module.css"
+import React, { useEffect, useRef, useState } from "react";
+import style from "./Queue.module.css";
 
-import { useNavigate } from 'react-router-dom'
-import { CloseIcon, CrownIcon, DeleteIcon, SearchIcon, ServeIcon } from '../../icons'
-import Skeleton from 'react-loading-skeleton'
-import { useDispatch, useSelector } from 'react-redux'
-import { getAllQueueListAction } from '../../Redux/Admin/Actions/DashboardAction'
-import { adminCancelQueueAction, adminServeQueueAction } from '../../Redux/Admin/Actions/QueueAction'
-import { darkmodeSelector } from '../../Redux/Admin/Reducers/AdminHeaderReducer'
-import toast from 'react-hot-toast'
-import { ClickAwayListener, Modal, Pagination } from '@mui/material'
-import { getAdminBarberListAction } from '../../Redux/Admin/Actions/BarberAction'
-import ButtonLoader from '../../components/ButtonLoader/ButtonLoader'
-import { DropdownIcon } from '../../newicons'
-import { useSocket } from '../../context/SocketContext'
-import { formatMinutesToHrMin } from '../../../utils/formatMinutesToHrMin'
+import { useNavigate } from "react-router-dom";
+import {
+  CloseIcon,
+  CrownIcon,
+  DeleteIcon,
+  SearchIcon,
+  ServeIcon,
+} from "../../icons";
+import Skeleton from "react-loading-skeleton";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllQueueListAction } from "../../Redux/Admin/Actions/DashboardAction";
+import {
+  adminCancelQueueAction,
+  adminServeQueueAction,
+} from "../../Redux/Admin/Actions/QueueAction";
+import { darkmodeSelector } from "../../Redux/Admin/Reducers/AdminHeaderReducer";
+import toast from "react-hot-toast";
+import { ClickAwayListener, Modal, Pagination } from "@mui/material";
+import { getAdminBarberListAction } from "../../Redux/Admin/Actions/BarberAction";
+import ButtonLoader from "../../components/ButtonLoader/ButtonLoader";
+import { DropdownIcon } from "../../newicons";
+import { useSocket } from "../../context/SocketContext";
+import { formatMinutesToHrMin } from "../../../utils/formatMinutesToHrMin";
 
 const Queue = () => {
-
   // const { socket } = useSocket()
 
   // console.log("The socket value is ", socket)
 
-  const salonId = useSelector(state => state.AdminLoggedInMiddleware.adminSalonId)
-  const adminEmail = useSelector(state => state.AdminLoggedInMiddleware.adminEmail)
+  const salonId = useSelector(
+    (state) => state.AdminLoggedInMiddleware.adminSalonId
+  );
+  const adminEmail = useSelector(
+    (state) => state.AdminLoggedInMiddleware.adminEmail
+  );
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const queuelistcontrollerRef = useRef(new AbortController());
 
@@ -392,30 +401,27 @@ const Queue = () => {
     };
   }, [salonId, dispatch]);
 
-  const getAllQueueList = useSelector(state => state.getAllQueueList)
+  const getAllQueueList = useSelector((state) => state.getAllQueueList);
 
   const {
     loading: getAllQueueListLoading,
     resolve: getAllQueueListResolve,
-    queueList: queuelist
-  } = getAllQueueList
+    queueList: queuelist,
+  } = getAllQueueList;
 
+  const adminGetDefaultSalon = useSelector(
+    (state) => state.adminGetDefaultSalon
+  );
 
-  const adminGetDefaultSalon = useSelector(state => state.adminGetDefaultSalon)
-
-  const {
-    response: adminGetDefaultSalonResponse
-  } = adminGetDefaultSalon
-
+  const { response: adminGetDefaultSalonResponse } = adminGetDefaultSalon;
 
   // console.log("queuelist ", queuelist)
 
+  const darkMode = useSelector(darkmodeSelector);
 
-  const darkMode = useSelector(darkmodeSelector)
+  const darkmodeOn = darkMode === "On";
 
-  const darkmodeOn = darkMode === "On"
-
-  const [queueItem, setQueueItem] = useState({})
+  const [queueItem, setQueueItem] = useState({});
 
   const selectHandler = (b) => {
     // if (!mobileWidth && b.qPosition !== 1) {
@@ -437,58 +443,61 @@ const Queue = () => {
       barberId: b.barberId,
       salonId,
       services: b.services,
-      _id: b._id
-    }
+      _id: b._id,
+    };
 
-    setQueueItem(queueData)
+    setQueueItem(queueData);
 
     // if (confirm) {
-    setChoosebarber(b?.barberName)
-    setChoosebarberemail(b?.barberEmail)
+    setChoosebarber(b?.barberName);
+    setChoosebarberemail(b?.barberEmail);
     setChoosebarbermodalopen({
       open: true,
-      data: queueData
-    })
+      data: queueData,
+    });
     // }
-  }
-
+  };
 
   const cancelQHandler = (b) => {
-    const confirm = window.confirm("Are you Sure ?")
+    const confirm = window.confirm("Are you Sure ?");
 
     const queueData = {
       adminEmail,
       barberId: b.barberId,
       salonId,
-      _id: b._id
-    }
+      _id: b._id,
+    };
 
     if (confirm) {
       // console.log(queueData)
-      dispatch(adminCancelQueueAction(queueData, salonId, setChoosebarbermodalopen, setQueueItem, setChoosebarber, setChoosebarberemail))
+      dispatch(
+        adminCancelQueueAction(
+          queueData,
+          salonId,
+          setChoosebarbermodalopen,
+          setQueueItem,
+          setChoosebarber,
+          setChoosebarberemail
+        )
+      );
     }
+  };
 
-  }
+  const adminServeQueue = useSelector((state) => state.adminServeQueue);
 
-  const adminServeQueue = useSelector(state => state.adminServeQueue)
+  const { loading: adminServeQueueLoading } = adminServeQueue;
 
-  const {
-    loading: adminServeQueueLoading
-  } = adminServeQueue
+  const adminCancelQueue = useSelector((state) => state.adminCancelQueue);
 
-  const adminCancelQueue = useSelector(state => state.adminCancelQueue)
-
-  const {
-    loading: adminCancelQueueLoading
-  } = adminCancelQueue
+  const { loading: adminCancelQueueLoading } = adminCancelQueue;
 
   const [choosebarbermodalopen, setChoosebarbermodalopen] = useState({
     open: false,
-    data: {}
-  })
+    data: {},
+  });
 
-  const [choosebarber, setChoosebarber] = useState("")
-  const [choosebarberemail, setChoosebarberemail] = useState("")
+  const [choosebarber, setChoosebarber] = useState("");
+  const [choosebarberemail, setChoosebarberemail] = useState("");
 
   const BarberListcontrollerRef = useRef(new AbortController());
 
@@ -505,44 +514,54 @@ const Queue = () => {
     };
   }, [salonId, dispatch]);
 
-  const getAdminBarberList = useSelector(state => state.getAdminBarberList)
+  const getAdminBarberList = useSelector((state) => state.getAdminBarberList);
 
   const {
     loading: getAdminBarberListLoading,
     resolve: getAdminBarberListResolve,
-    getAllBarbers: BarberList
-  } = getAdminBarberList
+    getAllBarbers: BarberList,
+  } = getAdminBarberList;
 
-
-  const [copybarberlistdata, setCopybarberlistdata] = useState([])
+  const [copybarberlistdata, setCopybarberlistdata] = useState([]);
 
   useEffect(() => {
     if (BarberList) {
       const clockedinbarbers = BarberList?.filter((b) => {
-        return b.isClockedIn
-      })
-      setCopybarberlistdata(clockedinbarbers)
+        return b.isClockedIn;
+      });
+      setCopybarberlistdata(clockedinbarbers);
     }
-  }, [BarberList])
+  }, [BarberList]);
 
   const serveQHandler = () => {
-
     const queuedata = {
       ...choosebarbermodalopen.data,
-      servedByEmail: choosebarberemail
-    }
+      servedByEmail: choosebarberemail,
+    };
 
-    dispatch(adminServeQueueAction(queuedata, salonId, setChoosebarbermodalopen))
-  }
+    dispatch(
+      adminServeQueueAction(queuedata, salonId, setChoosebarbermodalopen)
+    );
+  };
 
-  const currentSalonType = localStorage.getItem("CurrentSalonType")
+  const currentSalonType = localStorage.getItem("CurrentSalonType");
 
   // ========================================================
 
   const headRows = [
     { id: 1, heading: "#", key: "qpos" },
     { id: 2, heading: "Name", key: "customerName" },
-    { id: 3, heading: `${currentSalonType === "Barber Shop" ? "Barber Name" : currentSalonType === "Hair Dresser" ? "Stylist Name" : "Barber"}`, key: "barberName" },
+    {
+      id: 3,
+      heading: `${
+        currentSalonType === "Barber Shop"
+          ? "Barber Name"
+          : currentSalonType === "Hair Dresser"
+          ? "Stylist Name"
+          : "Barber"
+      }`,
+      key: "barberName",
+    },
     { id: 4, heading: "Time Joined", key: "timejoined" },
     { id: 5, heading: "Qg Code", key: "qgcode" },
     { id: 6, heading: "Type", key: "type" },
@@ -551,39 +570,38 @@ const Queue = () => {
     { id: 9, heading: "", key: "cancel" },
   ];
 
-  const [queuelistDataCopy, setQueuelistDataCopy] = useState([])
+  const [queuelistDataCopy, setQueuelistDataCopy] = useState([]);
 
-  const [queuelistData, setQueuelistData] = useState([])
-  const [mobileQueueList, setMobileQueueList] = useState([])
+  const [queuelistData, setQueuelistData] = useState([]);
+  const [mobileQueueList, setMobileQueueList] = useState([]);
 
   useEffect(() => {
     if (getAllQueueListResolve && queuelist?.length > 0) {
-      setQueuelistData(queuelist)
-      setQueuelistDataCopy(queuelist)
-      setMobileQueueList(queuelist)
+      setQueuelistData(queuelist);
+      setQueuelistDataCopy(queuelist);
+      setMobileQueueList(queuelist);
     }
+  }, [queuelist]);
 
-  }, [queuelist])
+  const [settingsIndex, setSettingsIndex] = useState("");
 
-  const [settingsIndex, setSettingsIndex] = useState("")
+  const [rowsPerPage, SetRowsPerPage] = useState(10);
 
-  const [rowsPerPage, SetRowsPerPage] = useState(10)
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(rowsPerPage);
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortColumn, setSortColumn] = useState("");
+  const [query, setQuery] = useState("");
 
-  const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [startIndex, setStartIndex] = useState(0)
-  const [endIndex, setEndIndex] = useState(rowsPerPage)
-  const [sortOrder, setSortOrder] = useState("asc")
-  const [sortColumn, setSortColumn] = useState("")
-  const [query, setQuery] = useState("")
-
-  const [queuePaginationData, setQueuePaginationData] = useState([])
+  const [queuePaginationData, setQueuePaginationData] = useState([]);
 
   useEffect(() => {
     if (queuelistData?.length > 0) {
-      setQueuePaginationData(queuelistData?.slice(startIndex, endIndex))
+      setQueuePaginationData(queuelistData?.slice(startIndex, endIndex));
     }
-  }, [queuelistData])
+  }, [queuelistData]);
 
   useEffect(() => {
     const totalPages = Math.ceil(queuelistData?.length / rowsPerPage); // Calculate based on filtered data
@@ -597,29 +615,25 @@ const Queue = () => {
     setQueuePaginationData(queuelistData.slice(startIndex, endIndex));
   }, [queuelistData, page, rowsPerPage]);
 
-
   const handleChange = (event, value) => {
     setPage(value);
-  }
-
+  };
 
   useEffect(() => {
-
     if (mobileWidth) {
       let filteredData = queuelistDataCopy;
 
-      if (query.trim() !== '') {
+      if (query.trim() !== "") {
         filteredData = queuelistDataCopy?.filter((item) =>
           item.customerName.toLowerCase().trim().includes(query.toLowerCase())
         );
       }
 
-      setMobileQueueList(filteredData)
-
+      setMobileQueueList(filteredData);
     } else {
       let filteredData = queuelistDataCopy;
 
-      if (query.trim() !== '') {
+      if (query.trim() !== "") {
         filteredData = queuelistDataCopy?.filter((item) =>
           item.customerName.toLowerCase().trim().includes(query.toLowerCase())
         );
@@ -628,41 +642,39 @@ const Queue = () => {
       setQueuelistData(filteredData);
       setPage(1);
     }
-
   }, [query]);
 
-  const [selectOpen, setSelectOpen] = useState(false)
+  const [selectOpen, setSelectOpen] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [mobileWidth, setMobileWidth] = useState(window.innerWidth <= 430 ? true : false)
+  const [mobileWidth, setMobileWidth] = useState(
+    window.innerWidth <= 430 ? true : false
+  );
 
   useEffect(() => {
     const resizeHandler = () => {
       if (window.innerWidth <= 430) {
-        setMobileWidth(true)
+        setMobileWidth(true);
       } else {
-        setMobileWidth(false)
+        setMobileWidth(false);
       }
-    }
-    window.addEventListener("resize", resizeHandler)
+    };
+    window.addEventListener("resize", resizeHandler);
 
     return () => {
-      window.removeEventListener("resize", resizeHandler)
-    }
-  }, [])
-
-
+      window.removeEventListener("resize", resizeHandler);
+    };
+  }, []);
 
   return (
     <section className={`${style.section}`}>
       <div>
         <h2>Queue List</h2>
         <div>
-
           <input
-            type='text'
-            placeholder='Search Customer'
+            type="text"
+            placeholder="Search Customer"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -670,84 +682,123 @@ const Queue = () => {
       </div>
 
       <div className={`${style.list_container}`}>
+        {getAllQueueListLoading ? (
+          <div className={`${style.list_body_container_loader}`}>
+            <Skeleton
+              count={6}
+              height={"6.5rem"}
+              baseColor={"var(--loader-bg-color)"}
+              highlightColor={"var(--loader-highlight-color)"}
+              style={{ marginBottom: "1rem" }}
+            />
+          </div>
+        ) : getAllQueueListResolve && queuelist?.length > 0 ? (
+          <div className={`${style.list_body_container}`}>
+            <div className={`${style.headRow}`}>
+              {headRows.map((item, index) => {
+                return (
+                  <div key={item.id}>
+                    <button
+                      className={`${
+                        item.key === "customerName" || item.key === "barberName"
+                          ? style.name_head_btn
+                          : ""
+                      }`}
+                      // onClick={() => sortFunction(item.key)}
+                    >
+                      {item.key === "customerName" ||
+                      item.key === "barberName" ? (
+                        <>
+                          <span></span>
+                          {item.heading}
+                        </>
+                      ) : (
+                        item.heading
+                      )}
 
-        {
-          getAllQueueListLoading ? (
-            <div className={`${style.list_body_container_loader}`}>
-              <Skeleton
-                count={6}
-                height={"6.5rem"}
-                baseColor={"var(--loader-bg-color)"}
-                highlightColor={"var(--loader-highlight-color)"}
-                style={{ marginBottom: "1rem" }} />
+                      {/* <span>{item.key && (sortColumn === item.key ? (sortOrder === 'asc' ? <SortUpIcon /> : <SortDownIcon />) : <SortUpDownArrowIcon />)}</span> */}
+                    </button>
+                  </div>
+                );
+              })}
             </div>
-          ) : getAllQueueListResolve && queuelist?.length > 0 ? (
-            <div className={`${style.list_body_container}`}>
 
-              <div className={`${style.headRow}`}>
-                {
-                  headRows.map((item, index) => {
-                    return (
-                      <div key={item.id}>
-                        <button
-                          className={`${item.key === "customerName" || item.key === "barberName" ? style.name_head_btn : ""}`}
-                        // onClick={() => sortFunction(item.key)}
-                        >
-                          {item.key === "customerName" || item.key === "barberName" ? (
-                            <>
-                              <span></span>
-                              {item.heading}
-                            </>
-                          ) : (
-                            item.heading
-                          )}
-
-                          {/* <span>{item.key && (sortColumn === item.key ? (sortOrder === 'asc' ? <SortUpIcon /> : <SortDownIcon />) : <SortUpDownArrowIcon />)}</span> */}
-                        </button>
-                      </div>
-                    )
-                  })
-                }
-
-              </div>
-
-
-              {
-                queuePaginationData?.map((item, index) => {
-                  return (
-                    <div key={item._id} style={{ borderBottom: (index === endIndex - 1) || (index === queuePaginationData.length - 1) ? null : "0.1rem solid var(--border-secondary)" }}>
-                      <div><p>{item.qPosition === 1 ? "Next" : item.qPosition}</p></div>
+            {queuePaginationData?.map((item, index) => {
+              return (
+                <div
+                  key={item._id}
+                  style={{
+                    borderBottom:
+                      index === endIndex - 1 ||
+                      index === queuePaginationData.length - 1
+                        ? null
+                        : "0.1rem solid var(--border-secondary)",
+                  }}
+                >
+                  <div>
+                    <p>{item.qPosition === 1 ? "Next" : item.qPosition}</p>
+                  </div>
+                  <div>
+                    <div>
                       <div>
-                        <div>
-                          <div><img src={item?.customerProfile?.[0]?.url} alt="" /></div>
-                          <p>{item.customerName}</p>
-                        </div>
+                        <img src={item?.customerProfile?.[0]?.url} alt="" />
                       </div>
-                      <div>
-                        <div>
-                          <div><img src={item?.barberProfile?.[0]?.url} alt="" /></div>
-                          <p>{item.barberName}</p>
-                        </div>
-                      </div>
-                      <div><p>{item.timeJoinedQ}</p></div>
-                      <div><p>{item.qgCode}</p></div>
-                      <div><p>{item.serviceType}</p></div>
-                      <div><p>{item?.customerEWT === 0 ? "-" : formatMinutesToHrMin(item?.customerEWT)}</p></div>
-                      <div><button onClick={() => selectHandler(item)} disabled={adminServeQueueLoading}>Serve</button></div>
-                      <div><button onClick={() => cancelQHandler(item)} disabled={adminCancelQueueLoading}>Cancel</button></div>
+                      <p>{item.customerName}</p>
                     </div>
-                  )
-                })
-              }
-            </div>
-          ) : (
-            <div className={`${style.list_body_container_error}`}>
-              <p>No queuelist available</p>
-            </div>
-          )
-        }
-
-
+                  </div>
+                  <div>
+                    <div>
+                      <div>
+                        <img src={item?.barberProfile?.[0]?.url} alt="" />
+                      </div>
+                      <p>{item.barberName}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <p>{item.timeJoinedQ}</p>
+                  </div>
+                  <div>
+                    <p>{item.qgCode}</p>
+                  </div>
+                  <div>
+                    <p>{item.serviceType}</p>
+                  </div>
+                  <div>
+                    <p>
+                      {item?.customerEWT === 0
+                        ? "-"
+                        : formatMinutesToHrMin(item?.customerEWT)}
+                    </p>
+                  </div>
+                  <div>
+                    <button
+                      onClick={() => selectHandler(item)}
+                      disabled={
+                        adminServeQueueLoading || adminCancelQueueLoading
+                      }
+                    >
+                      Serve
+                    </button>
+                  </div>
+                  <div>
+                    <button
+                      onClick={() => cancelQHandler(item)}
+                      disabled={
+                        adminCancelQueueLoading || adminServeQueueLoading
+                      }
+                    >
+                      {adminCancelQueueLoading ? <ButtonLoader /> : "Cancel"}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className={`${style.list_body_container_error}`}>
+            <p>No queuelist available</p>
+          </div>
+        )}
 
         <div className={`${style.pagination_container}`}>
           <div></div>
@@ -761,7 +812,10 @@ const Queue = () => {
                   color: "var(--text-primary)",
                   fontSize: "1.4rem",
                 },
-                "& .Mui-selected": { backgroundColor: "var(--bg-secondary) !important", color: "var(--btn-text-color)" },
+                "& .Mui-selected": {
+                  backgroundColor: "var(--bg-secondary) !important",
+                  color: "var(--btn-text-color)",
+                },
               }}
             />
           </div>
@@ -773,211 +827,286 @@ const Queue = () => {
                 <div className={`${style.select_container}`}>
                   <div onClick={() => setSelectOpen((prev) => !prev)}>
                     <input type="text" value={rowsPerPage} readOnly />
-                    <div><DropdownIcon /></div>
+                    <div>
+                      <DropdownIcon />
+                    </div>
                   </div>
 
-                  {
-                    selectOpen ? (<ul>
-                      {
-                        [10, 20, 30, 50].map((item, index) => {
-                          return (
-                            <li key={item} onClick={() => {
-                              setPage(1)
-                              SetRowsPerPage(item)
-                              setSelectOpen(false)
+                  {selectOpen ? (
+                    <ul>
+                      {[10, 20, 30, 50].map((item, index) => {
+                        return (
+                          <li
+                            key={item}
+                            onClick={() => {
+                              setPage(1);
+                              SetRowsPerPage(item);
+                              setSelectOpen(false);
                             }}
-                              style={{
-                                background: item === rowsPerPage ? "var(--bg-secondary)" : null,
-                                color: item === rowsPerPage ? "var(--btn-text-color)" : null,
-                                borderBottom: index === [10, 20, 30, 50].length - 1 ? "none" : "0.1rem solid var(--border-secondary)"
-                              }}
-                            >{item}</li>
-                          )
-                        })
-                      }
-
-                    </ul>) : (null)
-                  }
+                            style={{
+                              background:
+                                item === rowsPerPage
+                                  ? "var(--bg-secondary)"
+                                  : null,
+                              color:
+                                item === rowsPerPage
+                                  ? "var(--btn-text-color)"
+                                  : null,
+                              borderBottom:
+                                index === [10, 20, 30, 50].length - 1
+                                  ? "none"
+                                  : "0.1rem solid var(--border-secondary)",
+                            }}
+                          >
+                            {item}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : null}
                 </div>
               </ClickAwayListener>
-
             </div>
             <div>
-              <p>{startIndex} - {endIndex}{" "} of {totalPages}</p>
+              <p>
+                {startIndex} - {endIndex} of {totalPages}
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-
-      {
-        getAllQueueListLoading ? (
-          <div className={style.list_container_mobile_loader}>
-            <Skeleton
-              count={6}
-              height={"8rem"}
-              baseColor={"var(--loader-bg-color)"}
-              highlightColor={"var(--loader-highlight-color)"}
-              style={{ marginBottom: "1rem" }} />
-          </div>
-        ) : getAllQueueListResolve && mobileQueueList?.length > 0 ? (
-          <div className={style.list_container_mobile}>
-
-            {
-              mobileQueueList?.map((item, index) => {
-                return (
-                  <div
-                    onClick={() => selectHandler(item)}
-                    disabled={adminServeQueueLoading}
-                    className={style.list_mobile_item}
-                    key={item._id}>
-                    <div>
-                      <img src={item?.customerProfile?.[0]?.url} alt="" />
-                      <div>
-                        <p>{item.customerName}</p>
-                        <p>{item.barberName}</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <p>{item.qPosition === 1 ? "Next" : item.qPosition}</p>
-                      <p>{item?.customerEWT === 0 ? "-" : "Ewt : " + formatMinutesToHrMin(item?.customerEWT)}</p>
-                    </div>
+      {getAllQueueListLoading ? (
+        <div className={style.list_container_mobile_loader}>
+          <Skeleton
+            count={6}
+            height={"8rem"}
+            baseColor={"var(--loader-bg-color)"}
+            highlightColor={"var(--loader-highlight-color)"}
+            style={{ marginBottom: "1rem" }}
+          />
+        </div>
+      ) : getAllQueueListResolve && mobileQueueList?.length > 0 ? (
+        <div className={style.list_container_mobile}>
+          {mobileQueueList?.map((item, index) => {
+            return (
+              <div
+                onClick={() => selectHandler(item)}
+                disabled={adminServeQueueLoading}
+                className={style.list_mobile_item}
+                key={item._id}
+              >
+                <div>
+                  <img src={item?.customerProfile?.[0]?.url} alt="" />
+                  <div>
+                    <p>{item.customerName}</p>
+                    <p>{item.barberName}</p>
                   </div>
-                )
-              })
-            }
+                </div>
 
-          </div>
-        ) : (
-          <div className={style.list_container_mobile_error}>
-            <p>No queuelist available</p>
-          </div>
-        )
-      }
+                <div>
+                  <p>{item.qPosition === 1 ? "Next" : item.qPosition}</p>
+                  <p>
+                    {item?.customerEWT === 0
+                      ? "-"
+                      : "Ewt : " + formatMinutesToHrMin(item?.customerEWT)}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className={style.list_container_mobile_error}>
+          <p>No queuelist available</p>
+        </div>
+      )}
 
       <Modal
         open={choosebarbermodalopen.open}
-        onClose={() => setChoosebarbermodalopen({
-          open: false,
-          data: {}
-        })}
+        onClose={() => {
+          if (adminServeQueueLoading || adminCancelQueueLoading) {
+            return;
+          }
+          setChoosebarbermodalopen({
+            open: false,
+            data: {},
+          });
+        }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <div className={`${style.modal_container} ${darkmodeOn && style.dark}`}>
           <div>
-            <p>Choose {currentSalonType === "Barber Shop" ? "Barber" : currentSalonType === "Hair Dresser" ? "Stylist" : "Barber"}</p>
-            <button onClick={() => setChoosebarbermodalopen({
-              open: false,
-              data: {}
-            })}><CloseIcon /></button>
+            <p>
+              Choose{" "}
+              {currentSalonType === "Barber Shop"
+                ? "Barber"
+                : currentSalonType === "Hair Dresser"
+                ? "Stylist"
+                : "Barber"}
+            </p>
+            <button
+              onClick={() => {
+                if (adminServeQueueLoading) {
+                  return;
+                }
+                setChoosebarbermodalopen({
+                  open: false,
+                  data: {},
+                });
+              }}
+              disabled={adminServeQueueLoading || adminCancelQueueLoading}
+            >
+              <CloseIcon />
+            </button>
           </div>
 
-          <div className={`${style.modal_content_container} ${darkmodeOn && style.dark}`}>
-            <input type="text" value={choosebarber} placeholder='Choose Barber' readOnly />
+          <div
+            className={`${style.modal_content_container} ${
+              darkmodeOn && style.dark
+            }`}
+          >
+            <input
+              type="text"
+              value={choosebarber}
+              placeholder="Choose Barber"
+              readOnly
+            />
 
-            {
-              getAdminBarberListLoading ? (<div className={style.barber_dropdown_loading}>
-                <Skeleton count={3} height={"6rem"} style={{ marginBottom: "1rem" }}
+            {getAdminBarberListLoading ? (
+              <div className={style.barber_dropdown_loading}>
+                <Skeleton
+                  count={3}
+                  height={"6rem"}
+                  style={{ marginBottom: "1rem" }}
                   baseColor={"var(--loader-bg-color)"}
                   highlightColor={"var(--loader-highlight-color)"}
                 />
-              </div>) :
-                getAdminBarberListResolve && copybarberlistdata?.length > 0 ?
-                  (<div className={style.barber_dropdown}>
-                    {
-                      copybarberlistdata?.map((b) => {
-                        return (
-                          <div
-                            className={`${style.choose_barber_dropdown_item} ${choosebarberemail === b?.email && style.barber_select} ${darkmodeOn && style.dark}`}
-                            key={b._id}
-                            onClick={() => {
-                              setChoosebarberemail(b?.email)
-                              setChoosebarber(b?.name)
-                            }}
-                            style={{
-                              borderLeft: b.isOnline ? "0.5rem solid #00A36C" : "0.5rem solid rgb(244, 67, 54)",
-                            }}
-                          >
-                            <div>
-                              <img src={b?.profile?.[0]?.url} alt="img" />
-                              <div className={style.barber_online_dot}
-                                style={{
-                                  backgroundColor: b.isOnline ? "#00A36C" : "rgb(244, 67, 54)"
-                                }}
-                              ></div>
-                            </div>
-                            <div>
-                              <div>
-                                <p>{b.name}</p>
-                                <p>Queue Count : {b.queueCount}</p>
-                              </div>
-                              <div>
-                                <p>EWT</p>
-                                <p>{b.barberEWT} mins</p>
-                              </div>
-                            </div>
-                          </div>
-                        )
-                      })
-                    }
-                  </div>) :
-                  (<div className={style.barber_dropdown_error}>
-                    <p>No barbers available</p>
-                  </div>)
-            }
-
-          </div>
-
-          {
-            mobileWidth ? (
-              <div>
-                {
-                  adminServeQueueLoading ? <button style={{
-                    display: "grid",
-                    placeItems: "center",
-                  }}><ButtonLoader /></button> : <button
-                    style={{
-                      background: "#0285c7",
-                      color: "#fff"
-                    }}
-                    onClick={serveQHandler}>Serve</button>
-                }
-
-                {
-                  adminCancelQueueLoading ? <button style={{
-                    display: "grid",
-                    placeItems: "center",
-                  }}><ButtonLoader /></button> : <button
-                    style={{
-                      background: "#450a0a",
-                      color: "#fff"
-                    }}
-                    onClick={() => cancelQHandler(queueItem)}
-                    disabled={adminCancelQueueLoading}
-                  >Cancel</button>
-                }
-
+              </div>
+            ) : getAdminBarberListResolve && copybarberlistdata?.length > 0 ? (
+              <div className={style.barber_dropdown}>
+                {copybarberlistdata?.map((b) => {
+                  return (
+                    <div
+                      className={`${style.choose_barber_dropdown_item} ${
+                        choosebarberemail === b?.email && style.barber_select
+                      } ${darkmodeOn && style.dark}`}
+                      key={b._id}
+                      onClick={() => {
+                        setChoosebarberemail(b?.email);
+                        setChoosebarber(b?.name);
+                      }}
+                      style={{
+                        borderLeft: b.isOnline
+                          ? "0.5rem solid #00A36C"
+                          : "0.5rem solid rgb(244, 67, 54)",
+                      }}
+                    >
+                      <div>
+                        <img src={b?.profile?.[0]?.url} alt="img" />
+                        <div
+                          className={style.barber_online_dot}
+                          style={{
+                            backgroundColor: b.isOnline
+                              ? "#00A36C"
+                              : "rgb(244, 67, 54)",
+                          }}
+                        ></div>
+                      </div>
+                      <div>
+                        <div>
+                          <p>{b.name}</p>
+                          <p>Queue Count : {b.queueCount}</p>
+                        </div>
+                        <div>
+                          <p>EWT</p>
+                          <p>{b.barberEWT} mins</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             ) : (
+              <div className={style.barber_dropdown_error}>
+                <p>No barbers available</p>
+              </div>
+            )}
+          </div>
 
-              adminServeQueueLoading ? <button style={{
+          {mobileWidth ? (
+            <div>
+              {adminServeQueueLoading ? (
+                <button
+                  style={{
+                    display: "grid",
+                    placeItems: "center",
+                  }}
+                >
+                  <ButtonLoader />
+                </button>
+              ) : (
+                <button
+                  style={{
+                    background: "#0285c7",
+                    color: "#fff",
+                  }}
+                  onClick={serveQHandler}
+                  disabled={adminServeQueueLoading || adminCancelQueueLoading}
+                >
+                  Serve
+                </button>
+              )}
+
+              {adminCancelQueueLoading ? (
+                <button
+                  style={{
+                    display: "grid",
+                    placeItems: "center",
+                  }}
+                >
+                  <ButtonLoader />
+                </button>
+              ) : (
+                <button
+                  style={{
+                    background: "#450a0a",
+                    color: "#fff",
+                  }}
+                  onClick={() => cancelQHandler(queueItem)}
+                  disabled={adminServeQueueLoading || adminCancelQueueLoading}
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
+          ) : adminServeQueueLoading ? (
+            <button
+              style={{
                 display: "grid",
-                placeItems: "center"
-              }}><ButtonLoader /></button> : <button onClick={serveQHandler}>Serve</button>
-
-            )
-          }
-
-
-
+                placeItems: "center",
+              }}
+            >
+              <ButtonLoader />
+            </button>
+          ) : (
+            <button
+              disabled={adminServeQueueLoading || adminCancelQueueLoading}
+              onClick={serveQHandler}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              {adminServeQueueLoading ? <ButtonLoader/> : "Serve"}
+            </button>
+          )}
         </div>
       </Modal>
+    </section>
+  );
+};
 
-    </section >
-  )
-}
-
-export default Queue
-
+export default Queue;
