@@ -1080,7 +1080,7 @@ const Report = () => {
 
       <div className={`${style.mobile_report_body}`}>
         <div className={`${style.report_body_content}`}>
-          <ResponsiveContainer width="100%" height="85%">
+          <ResponsiveContainer width="100%" height="80%">
             <BarChart
               data={reportData}
               margin={{
