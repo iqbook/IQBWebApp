@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import style from "./AppointmentList.module.css";
 import {
   AppointmentIcon,
+  CheckIcon,
+  CheckIconOutline,
   DropdownIcon,
   DropUpIcon,
   LeftIcon,
   RightIcon,
+  WarningIcon,
 } from "../../newicons";
 import moment from "moment";
 import { RightArrow, CloseIcon } from "../../icons";
@@ -216,6 +219,16 @@ const AppointmentList = () => {
     (state) => state.ServeAppointment
   );
 
+  const [openConfirmationModal, setOpenConfirmationModal] = useState({
+    data: null,
+    open: false,
+  });
+
+  const [openConfirmationCancelModal, setOpenConfirmationCancelModal] =
+    useState({
+      data: null,
+      open: false,
+    });
 
   const ServeHandler = async (s) => {
     const servebody = {
@@ -225,23 +238,45 @@ const AppointmentList = () => {
       appointmentDate: s?.appointmentDate,
     };
 
-    const confirm = window.confirm("Are you sure ?");
+    setOpenConfirmationModal({
+      data: servebody,
+      open: true,
+    });
 
-    if (confirm) {
-      dispatch(
-        ServeAppointmentAction(
-          servebody,
-          {
-            salonId,
-            barberId,
-            appointmentDate: selectedDay?.fullDate,
-          },
-          setOpenMobileModal,
-          setModalData,
-          setOpenModal
-        )
-      );
-    }
+    // const confirm = window.confirm("Are you sure ?");
+
+    // if (confirm) {
+    //   dispatch(
+    //     ServeAppointmentAction(
+    //       servebody,
+    //       {
+    //         salonId,
+    //         barberId,
+    //         appointmentDate: selectedDay?.fullDate,
+    //       },
+    //       setOpenMobileModal,
+    //       setModalData,
+    //       setOpenModal
+    //     )
+    //   );
+    // }
+  };
+
+  const serveConfirmationHandler = async () => {
+    dispatch(
+      ServeAppointmentAction(
+        openConfirmationModal.data,
+        {
+          salonId,
+          barberId,
+          appointmentDate: selectedDay?.fullDate,
+        },
+        setOpenMobileModal,
+        setModalData,
+        setOpenModal,
+        setOpenConfirmationModal
+      )
+    );
   };
 
   const { loading: cancelLoading } = useSelector(
@@ -282,23 +317,45 @@ const AppointmentList = () => {
       body,
     };
 
-    const confirm = window.confirm("Are you sure ?");
+    setOpenConfirmationCancelModal({
+      data: cancelbody,
+      open: true,
+    });
 
-    if (confirm) {
-      dispatch(
-        CancelAppointmentAction(
-          cancelbody,
-          setCancelAllModalOpen,
-          setOpenModal,
-          {
-            salonId,
-            barberId,
-            appointmentDate: selectedDay?.fullDate,
-          },
-          setOpenMobileModal
-        )
-      );
-    }
+    // const confirm = window.confirm("Are you sure ?");
+
+    // if (confirm) {
+    //   dispatch(
+    //     CancelAppointmentAction(
+    //       cancelbody,
+    //       setCancelAllModalOpen,
+    //       setOpenModal,
+    //       {
+    //         salonId,
+    //         barberId,
+    //         appointmentDate: selectedDay?.fullDate,
+    //       },
+    //       setOpenMobileModal
+    //     )
+    //   );
+    // }
+  };
+
+  const CancelConfirmationHandler = async () => {
+    dispatch(
+      CancelAppointmentAction(
+        openConfirmationCancelModal.data,
+        setCancelAllModalOpen,
+        setOpenModal,
+        {
+          salonId,
+          barberId,
+          appointmentDate: selectedDay?.fullDate,
+        },
+        setOpenMobileModal,
+        setOpenConfirmationCancelModal
+      )
+    );
   };
 
   const CancelAllHandler = () => {
@@ -391,7 +448,6 @@ const AppointmentList = () => {
 
   const [selectedServeOrCancelItem, setSelectedServeOrCancelItem] =
     useState(null);
-
 
   return (
     <section className={style.appointmentSection}>
@@ -721,8 +777,8 @@ const AppointmentList = () => {
                 }}
                 disabled={serveLoading || cancelLoading}
                 onClick={() => {
-                  setSelectedServeOrCancelItem(openMobileModal?.data)
-                  ServeHandler(openMobileModal?.data)
+                  setSelectedServeOrCancelItem(openMobileModal?.data);
+                  ServeHandler(openMobileModal?.data);
                 }}
               >
                 Serve
@@ -836,7 +892,7 @@ const AppointmentList = () => {
                 alignItems: "center",
               }}
             >
-              {cancelLoading ? <ButtonLoader /> : "Cancel"}
+              Cancel
             </button>
           </div>
         </div>
@@ -928,6 +984,115 @@ const AppointmentList = () => {
               }}
             >
               {cancelLoading ? <ButtonLoader /> : "Cancel All"}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Confirmation Modal */}
+      <Modal
+        open={openConfirmationModal.open}
+        onClose={() => {
+          if (serveLoading) {
+            return;
+          }
+          setOpenConfirmationModal({
+            data: null,
+            open: false,
+          });
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div
+          className={`${style.modal_confirmation_container} ${
+            darkmodeOn && style.dark
+          }`}
+        >
+          <div>
+            <CheckIconOutline color="rgb(26, 219, 106)" />
+          </div>
+          <div>
+            <p>Confirm Appointment ?</p>
+            <div>
+              <p>You're about to mark this appointment as completed.</p>
+              <p>This action can't be undone.</p>
+            </div>
+          </div>
+          <div>
+            <button
+              onClick={() => {
+                if (serveLoading) {
+                  return;
+                }
+                setOpenConfirmationModal({
+                  data: null,
+                  open: false,
+                });
+              }}
+            >
+              Back
+            </button>
+            <button
+              onClick={() => {
+                serveConfirmationHandler();
+              }}
+            >
+              {serveLoading ? <ButtonLoader /> : "Serve"}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Confirmation CancelmModal */}
+      <Modal
+        open={openConfirmationCancelModal.open}
+        onClose={() => {
+          if (cancelLoading) {
+            return;
+          }
+          setOpenConfirmationCancelModal({
+            data: null,
+            open: false,
+          });
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div
+          className={`${style.modal_confirmation_container} ${
+            darkmodeOn && style.dark
+          }`}
+        >
+          <div>
+            <WarningIcon color="red" />
+          </div>
+          <div>
+            <p>Cancel This Appointment ?</p>
+            <div>
+              <p>This appointment will be removed permanently</p>
+            </div>
+          </div>
+          <div>
+            <button
+              onClick={() => {
+                if (cancelLoading) {
+                  return;
+                }
+                setOpenConfirmationCancelModal({
+                  data: null,
+                  open: false,
+                });
+              }}
+            >
+              Back
+            </button>
+            <button
+              onClick={() => {
+                CancelConfirmationHandler();
+              }}
+            >
+              {cancelLoading ? <ButtonLoader /> : "Cancel Appointment"}
             </button>
           </div>
         </div>

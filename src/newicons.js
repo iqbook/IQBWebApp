@@ -4,20 +4,21 @@ import { BsCalendar2X, BsGraphUp, BsInstagram, BsSunFill } from "react-icons/bs"
 import { FaChevronLeft, FaChevronRight, FaFacebookF, FaRegCalendarAlt, FaUsers, FaUsersSlash, FaWifi } from "react-icons/fa";
 import { FaChevronDown, FaChevronUp, FaUser } from "react-icons/fa6";
 import { FiPieChart } from "react-icons/fi";
-import { IoArrowDownSharp, IoArrowUpSharp, IoChevronDownOutline, IoPerson, IoPersonCircleOutline, IoSearch, IoSettingsSharp } from "react-icons/io5";
+import { IoArrowDownSharp, IoArrowUpSharp, IoCheckmarkCircleOutline, IoChevronDownOutline, IoPerson, IoPersonCircleOutline, IoSearch, IoSettingsSharp } from "react-icons/io5";
 import { LuFilter, LuHistory, LuMailWarning, LuPanelLeftOpen, LuPanelRightOpen } from "react-icons/lu";
-import { MdAdd, MdLogout, MdOutlineCameraAlt, MdOutlineMailOutline, MdOutlineMessage, MdOutlinePhoneInTalk, MdOutlinePhotoCamera, MdOutlineQueue, MdOutlineSubscriptions, MdOutlineWifiOff, MdPayment } from "react-icons/md";
+import { MdAdd, MdCheckCircleOutline, MdLogout, MdOutlineCameraAlt, MdOutlineMailOutline, MdOutlineMessage, MdOutlinePhoneInTalk, MdOutlinePhotoCamera, MdOutlineQueue, MdOutlineSubscriptions, MdOutlineWifiOff, MdPayment } from "react-icons/md";
 import { RiAdvertisementLine, RiMoonClearFill, RiDeleteBin6Line, RiTwitterXLine, RiMenuFill, RiComputerLine } from "react-icons/ri";
 import { TbCopyCheck, TbScissors, TbWorldWww } from "react-icons/tb";
-import { PiClockClockwiseBold, PiClockCounterClockwiseBold, PiDotsThreeOutlineFill } from "react-icons/pi";
+import { PiClockClockwiseBold, PiClockCounterClockwiseBold, PiDotsThreeOutlineFill, PiWarning } from "react-icons/pi";
 import { BiLogoTiktok, BiSortAlt2 } from "react-icons/bi";
 import { IoIosPeople, IoMdCheckmark } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { AiOutlineShop } from "react-icons/ai";
 import { GrPowerReset, GrRadialSelected } from "react-icons/gr";
 import { CiShop } from "react-icons/ci";
-import { ImMobile2 } from "react-icons/im";
+import { ImMobile2, ImWarning } from "react-icons/im";
 import { HiOutlineLocationMarker } from "react-icons/hi";
+import { VscWarning } from "react-icons/vsc";
 
 export const DashboardIcon = FiPieChart
 export const SalonIcon = TbScissors
@@ -51,6 +52,7 @@ export const EmailIcon = MdOutlineMailOutline
 export const MessageIcon = MdOutlineMessage
 export const AddIcon = MdAdd
 export const CheckIcon = IoMdCheckmark
+export const CheckIconOutline = IoCheckmarkCircleOutline
 export const CloseIcon = RxCross2
 export const ContactTel = MdOutlinePhoneInTalk
 export const CameraIcon = MdOutlinePhotoCamera
@@ -78,3 +80,4 @@ export const LeftIcon = FaChevronLeft
 export const RightIcon = FaChevronRight
 export const SalonType = GrRadialSelected
 export const AddressIcon = HiOutlineLocationMarker
+export const WarningIcon = VscWarning
