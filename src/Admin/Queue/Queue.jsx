@@ -787,7 +787,7 @@ const Queue = () => {
                         adminCancelQueueLoading || adminServeQueueLoading
                       }
                     >
-                      Cancel
+                      {adminCancelQueueLoading ? <ButtonLoader /> : "Cancel"}
                     </button>
                   </div>
                 </div>
@@ -925,7 +925,7 @@ const Queue = () => {
       <Modal
         open={choosebarbermodalopen.open}
         onClose={() => {
-          if (adminServeQueueLoading) {
+          if (adminServeQueueLoading || adminCancelQueueLoading) {
             return;
           }
           setChoosebarbermodalopen({
@@ -956,6 +956,7 @@ const Queue = () => {
                   data: {},
                 });
               }}
+              disabled={adminServeQueueLoading || adminCancelQueueLoading}
             >
               <CloseIcon />
             </button>
@@ -1052,6 +1053,7 @@ const Queue = () => {
                     color: "#fff",
                   }}
                   onClick={serveQHandler}
+                  disabled={adminServeQueueLoading || adminCancelQueueLoading}
                 >
                   Serve
                 </button>
@@ -1073,7 +1075,7 @@ const Queue = () => {
                     color: "#fff",
                   }}
                   onClick={() => cancelQHandler(queueItem)}
-                  disabled={adminCancelQueueLoading}
+                  disabled={adminServeQueueLoading || adminCancelQueueLoading}
                 >
                   Cancel
                 </button>
@@ -1089,7 +1091,17 @@ const Queue = () => {
               <ButtonLoader />
             </button>
           ) : (
-            <button onClick={serveQHandler}>Serve</button>
+            <button
+              disabled={adminServeQueueLoading || adminCancelQueueLoading}
+              onClick={serveQHandler}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              {adminServeQueueLoading ? <ButtonLoader/> : "Serve"}
+            </button>
           )}
         </div>
       </Modal>
