@@ -14,7 +14,7 @@ const CLIENTID = import.meta.env.VITE_GOOGLE_CLIENT_ID
 const registerServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
     try {
-      const reg = await navigator.serviceWorker.register('/firebase-messaging-sw-v2.js');
+      const reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
       console.log('Service Worker registered:', reg.scope);
       reg.update(); // check for updates
     } catch (err) {
