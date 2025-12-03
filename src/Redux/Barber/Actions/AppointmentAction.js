@@ -64,7 +64,8 @@ export const CancelAppointmentAction =
     setCancelAllModalOpen,
     setOpenModal,
     appointmentBarberListData,
-    setOpenMobileModal
+    setOpenMobileModal,
+    setOpenConfirmationCancelModal
   ) =>
   async (dispatch) => {
     try {
@@ -119,6 +120,10 @@ export const CancelAppointmentAction =
         open: false,
         data: {},
       });
+      setOpenConfirmationCancelModal({
+        data: false,
+        open: false
+      })
     } catch (error) {
       if (error?.response?.status === 500) {
         dispatch({
@@ -157,7 +162,7 @@ export const CancelAppointmentAction =
   };
 
 export const ServeAppointmentAction =
-  (servedata, appointmentBarberListData, setOpenMobileModal, setModalData, setOpenModal) =>
+  (servedata, appointmentBarberListData, setOpenMobileModal, setModalData, setOpenModal, setOpenConfirmationModal) =>
   async (dispatch) => {
     try {
       dispatch({ type: SERVE_APPOINT_REQ });
@@ -211,6 +216,10 @@ export const ServeAppointmentAction =
       });
       setModalData({})
       setOpenModal(false)
+      setOpenConfirmationModal({
+        data: null,
+        open: false
+      })
 
     } catch (error) {
       if (error?.response?.status === 500) {

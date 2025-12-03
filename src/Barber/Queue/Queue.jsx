@@ -15,12 +15,31 @@ import {
   getBarberQueueListAction,
 } from "../../Redux/Barber/Actions/BarberQueueAction";
 import toast from "react-hot-toast";
-import { DropdownIcon } from "../../newicons";
+import { CheckIconOutline, DropdownIcon, WarningIcon } from "../../newicons";
 import { ClickAwayListener, Modal, Pagination } from "@mui/material";
 import ButtonLoader from "../../components/ButtonLoader/ButtonLoader";
 import { formatMinutesToHrMin } from "../../../utils/formatMinutesToHrMin";
 
 const Queue = () => {
+  const [mobileWidth, setMobileWidth] = useState(
+    window.innerWidth <= 430 ? true : false
+  );
+
+  useEffect(() => {
+    const resizeHandler = () => {
+      if (window.innerWidth <= 430) {
+        setMobileWidth(true);
+      } else {
+        setMobileWidth(false);
+      }
+    };
+    window.addEventListener("resize", resizeHandler);
+
+    return () => {
+      window.removeEventListener("resize", resizeHandler);
+    };
+  }, []);
+
   const barberProfile = useSelector(
     (state) => state.BarberLoggedInMiddleware?.entiredata?.user[0]
   );
@@ -67,21 +86,20 @@ const Queue = () => {
   const [barberServeLoading, setBarberServeLoading] = useState(false);
   const [barberCancelLoading, setBarberCancelLoading] = useState(false);
 
+  const [openConfirmationQueueModal, setOpenConfirmationQueueModal] = useState({
+    data: null,
+    open: false,
+  });
+
+  const [
+    openConfirmationCancelQueueModal,
+    setOpenConfirmationCancelQueueModal,
+  ] = useState({
+    data: null,
+    open: false,
+  });
+
   const serveQHandler = (b) => {
-    // if (b.qPosition !== 1) {
-    //   return toast.error("Queue position is not 1", {
-    //     duration: 3000,
-    //     style: {
-    //       fontSize: "var(--font-size-2)",
-    //       borderRadius: '0.3rem',
-    //       background: '#333',
-    //       color: '#fff',
-    //     },
-    //   });
-    // }
-
-    const confirm = window.confirm("Are you Sure ?");
-
     const queueData = {
       servedByEmail: barberEmail,
       barberEmail,
@@ -91,17 +109,36 @@ const Queue = () => {
       _id: b._id,
     };
 
-    if (confirm) {
-      dispatch(
-        barberServeQueueAction(
-          queueData,
-          salonId,
-          b.barberId,
-          setBarberServeLoading,
-          setOpenModal
-        )
-      );
-    }
+    setOpenConfirmationQueueModal({
+      data: queueData,
+      open: true,
+    });
+
+    //  const confirm = window.confirm("Are you Sure ?");
+    // if (confirm) {
+    // dispatch(
+    //   barberServeQueueAction(
+    //     queueData,
+    //     salonId,
+    //     b.barberId,
+    //     setBarberServeLoading,
+    //     setOpenModal
+    //   )
+    // );
+    // }
+  };
+
+  const serveQConfirmationHandler = (b) => {
+    dispatch(
+      barberServeQueueAction(
+        openConfirmationQueueModal.data,
+        salonId,
+        openConfirmationQueueModal.data.barberId,
+        setBarberServeLoading,
+        setOpenModal,
+        setOpenConfirmationQueueModal
+      )
+    );
   };
 
   const [queueItem, setQueueItem] = useState({});
@@ -145,8 +182,6 @@ const Queue = () => {
   };
 
   const cancelQHandler = (b) => {
-    const confirm = window.confirm("Are you Sure ?");
-
     const queueData = {
       barberEmail,
       barberId: b.barberId,
@@ -154,17 +189,37 @@ const Queue = () => {
       _id: b._id,
     };
 
-    if (confirm) {
-      dispatch(
-        barberCancelQueueAction(
-          queueData,
-          salonId,
-          b.barberId,
-          setBarberCancelLoading,
-          setOpenModal
-        )
-      );
-    }
+    setOpenConfirmationCancelQueueModal({
+      data: queueData,
+      open: true,
+    });
+
+    // const confirm = window.confirm("Are you Sure ?");
+
+    // if (confirm) {
+    // dispatch(
+    //   barberCancelQueueAction(
+    //     queueData,
+    //     salonId,
+    //     b.barberId,
+    //     setBarberCancelLoading,
+    //     setOpenModal
+    //   )
+    // );
+    // }
+  };
+
+  const cancelQConfirmationHandler = () => {
+    dispatch(
+      barberCancelQueueAction(
+        openConfirmationCancelQueueModal?.data,
+        salonId,
+        openConfirmationCancelQueueModal?.data.barberId,
+        setBarberCancelLoading,
+        setOpenModal,
+        setOpenConfirmationCancelQueueModal
+      )
+    );
   };
 
   // const adminServeQueue = useSelector(state => state.adminServeQueue)
@@ -202,15 +257,17 @@ const Queue = () => {
   ];
 
   const [queuelistDataCopy, setQueuelistDataCopy] = useState([]);
-
   const [queuelistData, setqueuelistData] = useState([]);
+
   const [mobileQueueList, setMobileQueueList] = useState([]);
+  const [mobileQueueListCopy, setMobileQueueListCopy] = useState([])
 
   useEffect(() => {
     if (getBarberQueueListResolve && BarberQueueList?.length > 0) {
       setqueuelistData(BarberQueueList);
       setQueuelistDataCopy(BarberQueueList);
       setMobileQueueList(BarberQueueList);
+      setMobileQueueListCopy(BarberQueueList)
     }
   }, [BarberQueueList]);
 
@@ -252,10 +309,10 @@ const Queue = () => {
 
   useEffect(() => {
     if (mobileWidth) {
-      let filteredData = queuelistDataCopy;
+      let filteredData = mobileQueueListCopy;
 
       if (query.trim() !== "") {
-        filteredData = queuelistDataCopy.filter((item) =>
+        filteredData = mobileQueueListCopy.filter((item) =>
           item.customerName.toLowerCase().trim().includes(query.toLowerCase())
         );
       }
@@ -273,30 +330,11 @@ const Queue = () => {
       setqueuelistData(filteredData);
       setPage(1); // Reset page on filter
     }
-  }, [query]);
+  }, [query, mobileWidth]);
 
   const [selectOpen, setSelectOpen] = useState(false);
 
   const navigate = useNavigate();
-
-  const [mobileWidth, setMobileWidth] = useState(
-    window.innerWidth <= 430 ? true : false
-  );
-
-  useEffect(() => {
-    const resizeHandler = () => {
-      if (window.innerWidth <= 430) {
-        setMobileWidth(true);
-      } else {
-        setMobileWidth(false);
-      }
-    };
-    window.addEventListener("resize", resizeHandler);
-
-    return () => {
-      window.removeEventListener("resize", resizeHandler);
-    };
-  }, []);
 
   const [selectServeOrCancelQueueItem, setSelectedServeOrCancelQueueItem] =
     useState(null);
@@ -521,6 +559,115 @@ const Queue = () => {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Queue Modal */}
+      <Modal
+        open={openConfirmationQueueModal.open}
+        onClose={() => {
+          if (barberServeLoading) {
+            return;
+          }
+          setOpenConfirmationQueueModal({
+            data: null,
+            open: false,
+          });
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div
+          className={`${style.modal_confirmation_container} ${
+            darkmodeOn && style.dark
+          }`}
+        >
+          <div>
+            <CheckIconOutline color="rgb(26, 219, 106)" />
+          </div>
+          <div>
+            <p>Confirm Completion ?</p>
+            <div>
+              <p>This customer will be marked as served.</p>
+              <p>This action can't be undone.</p>
+            </div>
+          </div>
+          <div>
+            <button
+              onClick={() => {
+                if (barberServeLoading) {
+                  return;
+                }
+                setOpenConfirmationQueueModal({
+                  data: null,
+                  open: false,
+                });
+              }}
+            >
+              Back
+            </button>
+            <button
+              onClick={() => {
+                serveQConfirmationHandler();
+              }}
+            >
+              {barberServeLoading ? <ButtonLoader /> : "Confirm"}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Confirmation CancelmModal */}
+      <Modal
+        open={openConfirmationCancelQueueModal.open}
+        onClose={() => {
+          if (barberCancelLoading) {
+            return;
+          }
+          setOpenConfirmationCancelQueueModal({
+            data: null,
+            open: false,
+          });
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div
+          className={`${style.modal_confirmation_container} ${
+            darkmodeOn && style.dark
+          }`}
+        >
+          <div>
+            <WarningIcon color="red" />
+          </div>
+          <div>
+            <p>Remove From Queue ?</p>
+            <div>
+              <p>This customer will be removed permanently</p>
+            </div>
+          </div>
+          <div>
+            <button
+              onClick={() => {
+                if (barberCancelLoading) {
+                  return;
+                }
+                setOpenConfirmationCancelQueueModal({
+                  data: null,
+                  open: false,
+                });
+              }}
+            >
+              Back
+            </button>
+            <button
+              onClick={() => {
+                cancelQConfirmationHandler();
+              }}
+            >
+              {barberCancelLoading ? <ButtonLoader /> : "Cancel Queue"}
+            </button>
+          </div>
+        </div>
+      </Modal>
 
       {getBarberQueueListLoading ? (
         <div className={style.list_container_mobile_loader}>
