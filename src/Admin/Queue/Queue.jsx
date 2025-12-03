@@ -1,350 +1,3 @@
-// import React, { useEffect, useRef, useState } from 'react'
-// import style from "./Queue.module.css"
-
-// import { useNavigate } from 'react-router-dom'
-// import { CloseIcon, CrownIcon, DeleteIcon, SearchIcon, ServeIcon } from '../../icons'
-// import Skeleton from 'react-loading-skeleton'
-// import { useDispatch, useSelector } from 'react-redux'
-// import { getAllQueueListAction } from '../../Redux/Admin/Actions/DashboardAction'
-// import { adminCancelQueueAction, adminServeQueueAction } from '../../Redux/Admin/Actions/QueueAction'
-// import { darkmodeSelector } from '../../Redux/Admin/Reducers/AdminHeaderReducer'
-// import toast from 'react-hot-toast'
-// import { Modal } from '@mui/material'
-// import { getAdminBarberListAction } from '../../Redux/Admin/Actions/BarberAction'
-// import ButtonLoader from '../../components/ButtonLoader/ButtonLoader'
-
-// const Queue = () => {
-
-// const salonId = useSelector(state => state.AdminLoggedInMiddleware.adminSalonId)
-// const adminEmail = useSelector(state => state.AdminLoggedInMiddleware.adminEmail)
-
-// const dispatch = useDispatch()
-
-// const queuelistcontrollerRef = useRef(new AbortController());
-
-// useEffect(() => {
-//   const controller = new AbortController();
-//   queuelistcontrollerRef.current = controller;
-
-//   dispatch(getAllQueueListAction(salonId, controller.signal));
-
-//   return () => {
-//     if (queuelistcontrollerRef.current) {
-//       queuelistcontrollerRef.current.abort();
-//     }
-//   };
-// }, [salonId, dispatch]);
-
-// const getAllQueueList = useSelector(state => state.getAllQueueList)
-
-// const {
-//   loading: getAllQueueListLoading,
-//   resolve: getAllQueueListResolve,
-//   queueList: queuelist
-// } = getAllQueueList
-
-// const [copyQueueList, setCopyQueueList] = useState([])
-
-// useEffect(() => {
-//   if (queuelist) {
-//     setCopyQueueList(queuelist)
-//   }
-// }, [queuelist])
-
-// const [search, setSearch] = useState("")
-
-// const searchHandler = (value) => {
-//   setSearch(value)
-//   const searchValue = value.toLowerCase().trim();
-
-//   if (!search) {
-//     setCopyQueueList(queuelist)
-//   } else {
-//     setCopyQueueList((prev) => {
-//       const filteredArray = queuelist?.filter((queue) => {
-//         return (queue.name.toLowerCase().includes(searchValue) ||
-//           queue.barberName.toLowerCase().includes(searchValue))
-//       })
-//       return filteredArray
-//     })
-//   }
-// }
-
-// const darkMode = useSelector(darkmodeSelector)
-
-// const darkmodeOn = darkMode === "On"
-
-// const selectHandler = (b) => {
-//   if (b.qPosition !== 1) {
-//     return toast.error("Queue position is not 1", {
-//       duration: 3000,
-//       style: {
-//         fontSize: "var(--font-size-2)",
-//         borderRadius: '0.3rem',
-//         background: '#333',
-//         color: '#fff',
-//       },
-//     });
-//   }
-
-//   const confirm = window.confirm("Are you Sure ?")
-
-//   const queueData = {
-//     adminEmail,
-//     barberId: b.barberId,
-//     salonId,
-//     services: b.services,
-//     _id: b._id
-//   }
-
-//   if (confirm) {
-//     setChoosebarber(b?.barberName)
-//     setChoosebarberemail(b?.barberEmail)
-//     setChoosebarbermodalopen({
-//       open: true,
-//       data: queueData
-//     })
-//   }
-// }
-
-// const cancelQHandler = (b) => {
-//   const confirm = window.confirm("Are you Sure ?")
-
-//   const queueData = {
-//     adminEmail,
-//     barberId: b.barberId,
-//     salonId,
-//     _id: b._id
-//   }
-
-//   if (confirm) {
-//     // console.log(queueData)
-//     dispatch(adminCancelQueueAction(queueData, salonId))
-//   }
-
-// }
-
-// const adminServeQueue = useSelector(state => state.adminServeQueue)
-
-// const {
-//   loading: adminServeQueueLoading
-// } = adminServeQueue
-
-// const adminCancelQueue = useSelector(state => state.adminCancelQueue)
-
-// const {
-//   loading: adminCancelQueueLoading
-// } = adminCancelQueue
-
-// const [choosebarbermodalopen, setChoosebarbermodalopen] = useState({
-//   open: false,
-//   data: {}
-// })
-
-// const [choosebarber, setChoosebarber] = useState("")
-// const [choosebarberemail, setChoosebarberemail] = useState("")
-
-// const BarberListcontrollerRef = useRef(new AbortController());
-
-// useEffect(() => {
-//   const controller = new AbortController();
-//   BarberListcontrollerRef.current = controller;
-
-//   dispatch(getAdminBarberListAction(salonId, controller.signal));
-
-//   return () => {
-//     if (BarberListcontrollerRef.current) {
-//       BarberListcontrollerRef.current.abort();
-//     }
-//   };
-// }, [salonId, dispatch]);
-
-// const getAdminBarberList = useSelector(state => state.getAdminBarberList)
-
-// const {
-//   loading: getAdminBarberListLoading,
-//   resolve: getAdminBarberListResolve,
-//   getAllBarbers: BarberList
-// } = getAdminBarberList
-
-// const [copybarberlistdata, setCopybarberlistdata] = useState([])
-
-// useEffect(() => {
-//   if (BarberList) {
-//     const clockedinbarbers = BarberList?.filter((b) => {
-//       return b.isClockedIn
-//     })
-//     setCopybarberlistdata(clockedinbarbers)
-//   }
-// }, [BarberList])
-
-// const serveQHandler = () => {
-
-//   const queuedata = {
-//     ...choosebarbermodalopen.data,
-//     servedByEmail: choosebarberemail
-//   }
-
-//   dispatch(adminServeQueueAction(queuedata, salonId, setChoosebarbermodalopen))
-// }
-
-//   return (
-//     <div className={`${style.admin_queue_wrapper} ${darkmodeOn && style.dark}`}>
-//       <div>
-//         <p>Queue List</p>
-
-//         <div className={`${style.customer_search} ${darkmodeOn && style.dark}`}>
-//           <input
-//             type="text"
-//             placeholder='Search Queue'
-//             value={search}
-//             onChange={(e) => searchHandler(e.target.value)}
-//           />
-
-//           <div><SearchIcon /></div>
-//         </div>
-
-//       </div>
-
-//       <div className={`${style.admin_queue_content_wrapper} ${darkmodeOn && style.dark}`}>
-
-//         {
-//           getAllQueueListLoading ?
-//             <div className={style.admin_queue_content_body}>
-//               <Skeleton count={6} height={"6rem"} style={{ marginBottom: "1rem" }}
-//                 baseColor={darkmodeOn ? "var(--dark-loader-bg-color)" : "var(--light-loader-bg-color)"}
-//                 highlightColor={darkmodeOn ? "var(--dark-loader-highlight-color)" : "var(--light-loader-highlight-color)"} />
-//             </div> :
-//             getAllQueueListResolve && copyQueueList?.length > 0 ?
-//               <>
-//                 <div className={`${style.admin_queue_content_body} ${darkmodeOn && style.dark}`}>
-//                   <div>
-//                     <p>#</p>
-//                     <p>Name</p>
-//                     <p>Barber Name</p>
-//                     <p>Time Joined Q</p>
-//                     <div><p>Qg Code</p></div>
-//                     <div><p>EWT</p></div>
-//                     <div><p>Type</p></div>
-//                     <div><p>Serve</p></div>
-//                     <div><p>Cancel</p></div>
-//                   </div>
-
-//                   {copyQueueList?.map((b, index) => (
-//                     <div
-//                       className={`${style.admin_queue_content_body_item} ${darkmodeOn && style.dark}`}
-//                       key={b._id}
-//                       style={{
-//                         borderBottom: copyQueueList.length - 1 === index && "none"
-//                       }}
-//                     >
-//                       <p>{b.qPosition === 1 ? "Next" : b.qPosition}</p>
-//                       <p>{b.name.length > 18 ? b.name.slice(0, 18) + "..." : b.name}</p>
-//                       <p>{b.barberName.length > 18 ? b.barberName.slice(0, 18) + "..." : b.barberName}</p>
-//                       <p>{b.timeJoinedQ}</p>
-//                       <p>{b?.qgCode}</p>
-//                       <p>{b?.customerEWT === 0 ? "-" : b?.customerEWT + "mins"}</p>
-//                       <div>
-//                         {
-//                           b.serviceType === "VIP" ? <CrownIcon /> : "-"
-//                         }
-//                       </div>
-//                       <div><button onClick={() => selectHandler(b)} disabled={adminServeQueueLoading}>Serve</button></div>
-//                       <div><button onClick={() => cancelQHandler(b)} disabled={adminCancelQueueLoading}>Cancel</button></div>
-//                     </div>
-//                   ))}
-//                 </div>
-//               </> :
-//               <div className={`${style.admin_queue_content_body_error} ${darkmodeOn && style.dark}`}>
-//                 <p>Queue not available</p>
-//               </div>
-//         }
-//       </div>
-
-//       <Modal
-//         open={choosebarbermodalopen.open}
-//         onClose={() => setChoosebarbermodalopen({
-//           open: false,
-//           data: {}
-//         })}
-//         aria-labelledby="modal-modal-title"
-//         aria-describedby="modal-modal-description"
-//       >
-//         <div className={`${style.modal_container} ${darkmodeOn && style.dark}`}>
-//           <div>
-//             <p>Choose Barber</p>
-//             <button onClick={() => setChoosebarbermodalopen({
-//               open: false,
-//               data: {}
-//             })}><CloseIcon /></button>
-//           </div>
-
-//           <div className={`${style.modal_content_container} ${darkmodeOn && style.dark}`}>
-//             <input type="text" value={choosebarber} placeholder='Choose Barber' readOnly />
-
-//             {
-//               getAdminBarberListLoading ? (<div className={style.barber_dropdown_loading}>
-//                 <Skeleton count={3} height={"6rem"} style={{ marginBottom: "1rem" }}
-//                   baseColor={darkmodeOn ? "var(--dark-loader-bg-color)" : "var(--light-loader-bg-color)"}
-//                   highlightColor={darkmodeOn ? "var(--dark-loader-highlight-color)" : "var(--light-loader-highlight-color)"}
-//                 />
-//               </div>) :
-//                 getAdminBarberListResolve && copybarberlistdata?.length > 0 ?
-//                   (<div className={style.barber_dropdown}>
-//                     {
-//                       copybarberlistdata?.map((b) => {
-//                         return (
-//                           <div
-//                             className={`${style.choose_barber_dropdown_item} ${choosebarberemail === b?.email && style.barber_select} ${darkmodeOn && style.dark}`}
-//                             key={b._id}
-//                             onClick={() => {
-//                               setChoosebarberemail(b?.email)
-//                               setChoosebarber(b?.name)
-//                             }}
-//                             style={{
-//                               borderLeft: b.isOnline ? "0.5rem solid limegreen" : "0.5rem solid red",
-//                             }}
-//                           >
-//                             <div>
-//                               <img src={b?.profile?.[0]?.url} alt="img" />
-//                               <div className={style.barber_online_dot}
-//                                 style={{
-//                                   backgroundColor: b.isOnline ? "limegreen" : "red"
-//                                 }}
-//                               ></div>
-//                             </div>
-//                             <div>
-//                               <p>{b.name}</p>
-//                               <p>Queue Count : {b.queueCount}</p>
-//                               <p>EWT : {b.barberEWT} mins</p>
-//                             </div>
-//                           </div>
-//                         )
-//                       })
-//                     }
-//                   </div>) :
-//                   (<div className={style.barber_dropdown_error}>
-//                     <p>No barbers available</p>
-//                   </div>)
-//             }
-
-//           </div>
-
-//           {
-//             adminServeQueueLoading ? <button style={{
-//               display: "grid",
-//               placeItems: "center"
-//             }}><ButtonLoader /></button> : <button onClick={serveQHandler}>Serve</button>
-//           }
-
-//         </div>
-//       </Modal>
-//     </div>
-//   )
-// }
-
-// export default Queue
-
 import React, { useEffect, useRef, useState } from "react";
 import style from "./Queue.module.css";
 
@@ -368,7 +21,7 @@ import toast from "react-hot-toast";
 import { ClickAwayListener, Modal, Pagination } from "@mui/material";
 import { getAdminBarberListAction } from "../../Redux/Admin/Actions/BarberAction";
 import ButtonLoader from "../../components/ButtonLoader/ButtonLoader";
-import { DropdownIcon } from "../../newicons";
+import { CheckIconOutline, DropdownIcon, WarningIcon } from "../../newicons";
 import { useSocket } from "../../context/SocketContext";
 import { formatMinutesToHrMin } from "../../../utils/formatMinutesToHrMin";
 
@@ -376,6 +29,25 @@ const Queue = () => {
   // const { socket } = useSocket()
 
   // console.log("The socket value is ", socket)
+
+  const [mobileWidth, setMobileWidth] = useState(
+    window.innerWidth <= 430 ? true : false
+  );
+
+  useEffect(() => {
+    const resizeHandler = () => {
+      if (window.innerWidth <= 430) {
+        setMobileWidth(true);
+      } else {
+        setMobileWidth(false);
+      }
+    };
+    window.addEventListener("resize", resizeHandler);
+
+    return () => {
+      window.removeEventListener("resize", resizeHandler);
+    };
+  }, []);
 
   const salonId = useSelector(
     (state) => state.AdminLoggedInMiddleware.adminSalonId
@@ -424,20 +96,6 @@ const Queue = () => {
   const [queueItem, setQueueItem] = useState({});
 
   const selectHandler = (b) => {
-    // if (!mobileWidth && b.qPosition !== 1) {
-    //   return toast.error("Queue position is not 1", {
-    //     duration: 3000,
-    //     style: {
-    //       fontSize: "var(--font-size-2)",
-    //       borderRadius: '0.3rem',
-    //       background: '#333',
-    //       color: '#fff',
-    //     },
-    //   });
-    // }
-
-    // const confirm = window.confirm("Are you Sure ?")
-
     const queueData = {
       adminEmail,
       barberId: b.barberId,
@@ -448,19 +106,26 @@ const Queue = () => {
 
     setQueueItem(queueData);
 
-    // if (confirm) {
     setChoosebarber(b?.barberName);
     setChoosebarberemail(b?.barberEmail);
     setChoosebarbermodalopen({
       open: true,
       data: queueData,
     });
-    // }
   };
 
-  const cancelQHandler = (b) => {
-    const confirm = window.confirm("Are you Sure ?");
+  const [
+    openConfirmationCancelQueueModal,
+    setOpenConfirmationCancelQueueModal,
+  ] = useState({
+    data: null,
+    open: false,
+  });
 
+  const [selectServeOrCancelQueueItem, setSelectedServeOrCancelQueueItem] =
+    useState(null);
+
+  const cancelQHandler = (b) => {
     const queueData = {
       adminEmail,
       barberId: b.barberId,
@@ -468,19 +133,39 @@ const Queue = () => {
       _id: b._id,
     };
 
-    if (confirm) {
-      // console.log(queueData)
-      dispatch(
-        adminCancelQueueAction(
-          queueData,
-          salonId,
-          setChoosebarbermodalopen,
-          setQueueItem,
-          setChoosebarber,
-          setChoosebarberemail
-        )
-      );
-    }
+    setOpenConfirmationCancelQueueModal({
+      data: queueData,
+      open: true,
+    });
+
+    // const confirm = window.confirm("Are you Sure ?");
+
+    // if (confirm) {
+    // dispatch(
+    //   adminCancelQueueAction(
+    //     queueData,
+    //     salonId,
+    //     setChoosebarbermodalopen,
+    //     setQueueItem,
+    //     setChoosebarber,
+    //     setChoosebarberemail
+    //   )
+    // );
+    // }
+  };
+
+  const cancelQConfirmationHandler = (b) => {
+    dispatch(
+      adminCancelQueueAction(
+        openConfirmationCancelQueueModal?.data,
+        salonId,
+        setChoosebarbermodalopen,
+        setQueueItem,
+        setChoosebarber,
+        setChoosebarberemail,
+        setOpenConfirmationCancelQueueModal
+      )
+    );
   };
 
   const adminServeQueue = useSelector((state) => state.adminServeQueue);
@@ -533,16 +218,39 @@ const Queue = () => {
     }
   }, [BarberList]);
 
+  const [openConfirmationQueueModal, setOpenConfirmationQueueModal] = useState({
+    data: null,
+    open: false,
+  });
+
   const serveQHandler = () => {
     const queuedata = {
       ...choosebarbermodalopen.data,
       servedByEmail: choosebarberemail,
     };
 
-    dispatch(
-      adminServeQueueAction(queuedata, salonId, setChoosebarbermodalopen)
-    );
+    setOpenConfirmationQueueModal({
+      data: queuedata,
+      open: true
+    })
+
+    // dispatch(
+    //   adminServeQueueAction(queuedata, salonId, setChoosebarbermodalopen)
+    // );
   };
+
+  const serveQConfirmationHandler = () => {
+    dispatch(
+      adminServeQueueAction(
+        openConfirmationQueueModal.data, 
+        salonId, 
+        setChoosebarbermodalopen,
+        setOpenConfirmationQueueModal
+      )
+    );
+  }
+
+
 
   const currentSalonType = localStorage.getItem("CurrentSalonType");
 
@@ -571,15 +279,17 @@ const Queue = () => {
   ];
 
   const [queuelistDataCopy, setQueuelistDataCopy] = useState([]);
-
   const [queuelistData, setQueuelistData] = useState([]);
+
   const [mobileQueueList, setMobileQueueList] = useState([]);
+  const [mobileQueueListCopy, setMobileQueueListCopy] = useState([]);
 
   useEffect(() => {
     if (getAllQueueListResolve && queuelist?.length > 0) {
       setQueuelistData(queuelist);
       setQueuelistDataCopy(queuelist);
       setMobileQueueList(queuelist);
+      setMobileQueueListCopy(queuelist);
     }
   }, [queuelist]);
 
@@ -621,10 +331,10 @@ const Queue = () => {
 
   useEffect(() => {
     if (mobileWidth) {
-      let filteredData = queuelistDataCopy;
+      let filteredData = mobileQueueListCopy;
 
       if (query.trim() !== "") {
-        filteredData = queuelistDataCopy?.filter((item) =>
+        filteredData = mobileQueueListCopy?.filter((item) =>
           item.customerName.toLowerCase().trim().includes(query.toLowerCase())
         );
       }
@@ -642,30 +352,11 @@ const Queue = () => {
       setQueuelistData(filteredData);
       setPage(1);
     }
-  }, [query]);
+  }, [query, mobileWidth]);
 
   const [selectOpen, setSelectOpen] = useState(false);
 
   const navigate = useNavigate();
-
-  const [mobileWidth, setMobileWidth] = useState(
-    window.innerWidth <= 430 ? true : false
-  );
-
-  useEffect(() => {
-    const resizeHandler = () => {
-      if (window.innerWidth <= 430) {
-        setMobileWidth(true);
-      } else {
-        setMobileWidth(false);
-      }
-    };
-    window.addEventListener("resize", resizeHandler);
-
-    return () => {
-      window.removeEventListener("resize", resizeHandler);
-    };
-  }, []);
 
   return (
     <section className={`${style.section}`}>
@@ -782,12 +473,20 @@ const Queue = () => {
                   </div>
                   <div>
                     <button
-                      onClick={() => cancelQHandler(item)}
+                      onClick={() => {
+                        setSelectedServeOrCancelQueueItem(item);
+                        cancelQHandler(item);
+                      }}
                       disabled={
                         adminCancelQueueLoading || adminServeQueueLoading
                       }
                     >
-                      {adminCancelQueueLoading ? <ButtonLoader /> : "Cancel"}
+                      {adminCancelQueueLoading &&
+                      selectServeOrCancelQueueItem?._id === item?._id ? (
+                        <ButtonLoader />
+                      ) : (
+                        "Cancel"
+                      )}
                     </button>
                   </div>
                 </div>
@@ -922,6 +621,7 @@ const Queue = () => {
         </div>
       )}
 
+      {/* Serve choose barber modal */}
       <Modal
         open={choosebarbermodalopen.open}
         onClose={() => {
@@ -1074,7 +774,10 @@ const Queue = () => {
                     background: "#450a0a",
                     color: "#fff",
                   }}
-                  onClick={() => cancelQHandler(queueItem)}
+                  onClick={() => {
+                    setSelectedServeOrCancelQueueItem(queueItem);
+                    cancelQHandler(queueItem);
+                  }}
                   disabled={adminServeQueueLoading || adminCancelQueueLoading}
                 >
                   Cancel
@@ -1097,12 +800,121 @@ const Queue = () => {
               style={{
                 display: "flex",
                 justifyContent: "center",
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
-              {adminServeQueueLoading ? <ButtonLoader/> : "Serve"}
+              {adminServeQueueLoading ? <ButtonLoader /> : "Serve"}
             </button>
           )}
+        </div>
+      </Modal>
+
+      {/* Confirmation Queue Modal */}
+      <Modal
+        open={openConfirmationQueueModal.open}
+        onClose={() => {
+          if (adminServeQueueLoading) {
+            return;
+          }
+          setOpenConfirmationQueueModal({
+            data: null,
+            open: false,
+          });
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div
+          className={`${style.modal_confirmation_container} ${
+            darkmodeOn && style.dark
+          }`}
+        >
+          <div>
+            <CheckIconOutline color="rgb(26, 219, 106)" />
+          </div>
+          <div>
+            <p>Confirm Completion ?</p>
+            <div>
+              <p>This customer will be marked as served.</p>
+              <p>This action can't be undone.</p>
+            </div>
+          </div>
+          <div>
+            <button
+              onClick={() => {
+                if (adminServeQueueLoading) {
+                  return;
+                }
+                setOpenConfirmationQueueModal({
+                  data: null,
+                  open: false,
+                });
+              }}
+            >
+              Back
+            </button>
+            <button
+              onClick={() => {
+                serveQConfirmationHandler();
+              }}
+            >
+              {adminServeQueueLoading ? <ButtonLoader /> : "Confirm"}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Confirmation CancelmModal */}
+      <Modal
+        open={openConfirmationCancelQueueModal.open}
+        onClose={() => {
+          if (adminCancelQueueLoading) {
+            return;
+          }
+          setOpenConfirmationCancelQueueModal({
+            data: null,
+            open: false,
+          });
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div
+          className={`${style.modal_confirmation_container} ${
+            darkmodeOn && style.dark
+          }`}
+        >
+          <div>
+            <WarningIcon color="red" />
+          </div>
+          <div>
+            <p>Remove From Queue ?</p>
+            <div>
+              <p>This customer will be removed permanently</p>
+            </div>
+          </div>
+          <div>
+            <button
+              onClick={() => {
+                if (adminCancelQueueLoading) {
+                  return;
+                }
+                setOpenConfirmationCancelQueueModal({
+                  data: null,
+                  open: false,
+                });
+              }}
+            >
+              Back
+            </button>
+            <button
+              onClick={() => {
+                cancelQConfirmationHandler();
+              }}
+            >
+              {adminCancelQueueLoading ? <ButtonLoader /> : "Cancel Queue"}
+            </button>
+          </div>
         </div>
       </Modal>
     </section>
