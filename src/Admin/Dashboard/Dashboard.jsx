@@ -546,7 +546,7 @@ const Dashboard = () => {
     if (email) {
       const getToken = async () => {
         const token = await requestForToken();
-        console.log(token);
+
         if (token) {
           const { data } = await axios.post(
             "https://iqb-final.onrender.com/api/webNotifications/save-device-token",

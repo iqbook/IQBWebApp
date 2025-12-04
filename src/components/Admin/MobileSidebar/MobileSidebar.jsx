@@ -65,7 +65,7 @@ import {
 } from "../../../Redux/Admin/Constants/constants.js";
 import { adminSalonStatusAction } from "../../../Redux/Admin/Actions/DashboardAction.js";
 import { MobileCrossIcon } from "../../../icons.js";
-import version_number from "../../../version/version.js";
+import { version } from "../../../../package.json";
 
 const MobileSidebar = () => {
   const adminProfile = useSelector(
@@ -549,7 +549,7 @@ const MobileSidebar = () => {
                   textAlign: "center",
                 }}
               >
-                {version_number}
+                {version}
               </p>
             </div>
           </ClickAwayListener>
