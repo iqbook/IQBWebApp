@@ -29,7 +29,7 @@ const registerServiceWorker = async () => {
 
 registerServiceWorker();
 
-const current_mode = "development";
+const current_mode = "production";
 const isProduction = current_mode === "production";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
