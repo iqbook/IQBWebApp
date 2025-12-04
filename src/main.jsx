@@ -28,14 +28,13 @@ const registerServiceWorker = async () => {
 
 registerServiceWorker();
 
+const isProduction = import.meta.env.VITE_PROD === "production"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
   <CacheBuster
-    // Only enable in production build
-    // enabled={import.meta.env.PROD}
-    enabled={true}
-    loading={null}
+    enabled={isProduction}
+    loading={<h1>Checking for new updates...</h1>}
     verbose={false}
     storageKey="Iqbook-key" 
   >
