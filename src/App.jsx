@@ -250,7 +250,7 @@ const App = () => {
       metaThemeColor?.setAttribute("content", "#09090B");
     } else {
       body.setAttribute("data-theme", "light");
-      metaThemeColor?.setAttribute("content", "#fff"); 
+      metaThemeColor?.setAttribute("content", "#fff");
     }
   }, [currentTheme]);
 
@@ -306,7 +306,7 @@ const App = () => {
                       </ErrorBoundary>
                     }
                   >
-                    <Route path="/" element={<Public />} />
+                    <Route path="/" element={<Public />} />             
                     <Route path="/adminsignin" element={<AdminSignin />} />
                     <Route path="/adminsignup" element={<AdminSignup />} />
                     <Route

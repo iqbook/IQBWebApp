@@ -9,6 +9,7 @@ import store from "./Redux/store.js";
 import "../src/i18n.js";
 import CacheBuster from "react-cache-buster";
 import { version } from "../package.json";
+import VersionCheck from "./components/VersionCheck/VersionCheck.jsx"
 
 // The env should always in the root of my project else it will show undefined
 const CLIENTID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -38,7 +39,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     currentVersion={version}
     isEnabled={isProduction} //If false, the library is disabled.
     isVerboseMode={false} //If true, the library writes verbose logs to console.
-    loadingComponent={<h1>Checking My App Version</h1>} //If not pass, nothing appears at the time of new version check.
+    loadingComponent={<VersionCheck/>} //If not pass, nothing appears at the time of new version check.
     metaFileDirectory={"."} //If public assets are hosted somewhere other than root on your server.
   >
     <GoogleOAuthProvider clientId={CLIENTID}>
