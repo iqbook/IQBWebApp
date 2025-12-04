@@ -3,7 +3,7 @@ import style from "./Public.module.css";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { darkmodeSelector } from "../Redux/Admin/Reducers/AdminHeaderReducer";
-import version_number from "../../src/version/version.js"
+import { version } from "../../package.json";
 
 const Public = () => {
   const Theme = localStorage.getItem("Theme") || "Dark";
@@ -28,7 +28,7 @@ const Public = () => {
             <Link to="/adminsignin">Admin Signin</Link>
             <Link to="/barbersignin">Barber Signin</Link>
           </div>
-          <p className={"version_text"}>{version_number}</p>
+          <p className={"version_text"}>{version}</p>
         </div>
       </div>
     </section>

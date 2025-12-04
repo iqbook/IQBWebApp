@@ -14,7 +14,7 @@ import {
 import { Admincustomericon } from "../../../icons.js";
 import Switch from "react-switch";
 import { useBarberGlobal } from "../../../context/Barber/GlobalContext.jsx";
-import version_number from "../../../version/version.js";
+import { version } from "../../../../package.json";
 
 const MobileSidebar = () => {
   const { editServiceModal, setEditServiceModal } = useBarberGlobal();
@@ -219,7 +219,7 @@ const MobileSidebar = () => {
                   textAlign: "center",
                 }}
               >
-                {version_number}
+                {version}
               </p>
             </div>
           </ClickAwayListener>

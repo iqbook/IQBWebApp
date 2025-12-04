@@ -137,7 +137,7 @@ import {
 } from "../../../newicons.js";
 import { useSelector } from "react-redux";
 import Skeleton from "react-loading-skeleton";
-import version_number from "../../../version/version.js";
+import { version } from "../../../../package.json";
 
 const Sidebar = () => {
   const adminProfile = useSelector(
@@ -347,7 +347,7 @@ const Sidebar = () => {
             textAlign: "center",
           }}
         >
-          {version_number}
+          {version}
         </p>
       </aside>
 

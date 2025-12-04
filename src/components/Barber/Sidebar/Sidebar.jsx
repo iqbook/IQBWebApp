@@ -11,7 +11,7 @@ import {
 } from "../../../newicons.js";
 import { useSelector } from "react-redux";
 import { useBarberGlobal } from "../../../context/Barber/GlobalContext.jsx";
-import version_number from "../../../version/version.js"
+import { version } from "../../../../package.json";
 
 const Sidebar = () => {
   const [sidebar, setSidebar] = useState(true);
@@ -68,7 +68,7 @@ const Sidebar = () => {
   ];
 
   const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const barberProfile = useSelector(
     (state) => state.BarberLoggedInMiddleware?.entiredata?.user[0]
@@ -149,13 +149,17 @@ const Sidebar = () => {
             </button>
           </div>
         </nav>
-        <p style={{
-          padding: "2rem",
-          color: "var(--text-secondary)",
-          fontSize: "1.4rem",
-          fontWeight: "600",
-          textAlign: "center"
-        }}>{version_number}</p>
+        <p
+          style={{
+            padding: "2rem",
+            color: "var(--text-secondary)",
+            fontSize: "1.4rem",
+            fontWeight: "600",
+            textAlign: "center",
+          }}
+        >
+          {version}
+        </p>
       </aside>
 
       <section>
