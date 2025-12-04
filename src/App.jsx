@@ -3,8 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { ErrorBoundary } from "react-error-boundary";
 import "./App.css";
-import { version } from "../package.json";
-import CacheBuster from "react-cache-buster";
 
 const Public = React.lazy(() => import("./Public/Public"));
 const AdminSignin = React.lazy(() =>
@@ -263,18 +261,8 @@ const App = () => {
   //   );
   // }, [modecolors]);
 
-  const current_mode = "production";
-  const isProduction = current_mode === "production";
-
   return (
     <>
-      <CacheBuster
-        currentVersion={version}
-        isEnabled={isProduction} //If false, the library is disabled.
-        isVerboseMode={false} //If true, the library writes verbose logs to console.
-        loadingComponent={<h1>Version checking from app.....</h1>} //If not pass, nothing appears at the time of new version check.
-        metaFileDirectory={"."} //If public assets are hosted somewhere other than root on your server.
-      >
         {!isOnline ? (
           <div className="offline_container">
             <div>
@@ -674,7 +662,6 @@ const App = () => {
             </BarberGlobalProvider>
           </>
         )}
-      </CacheBuster>
     </>
   );
 };
