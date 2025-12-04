@@ -28,10 +28,6 @@ const registerServiceWorker = async () => {
 
 registerServiceWorker();
 
-const current_mode = "production";
-const isProduction = current_mode === "production";
-
-// @piplup/vite-plugin-cache-buster
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
