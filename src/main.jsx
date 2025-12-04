@@ -9,6 +9,7 @@ import store from "./Redux/store.js";
 import "../src/i18n.js";
 import CacheBuster from "react-cache-buster";
 import VersionCheck from "./components/VersionCheck/VersionCheck.jsx";
+import { version } from "../package.json";
 
 // The env should always in the root of my project else it will show undefined
 const CLIENTID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
