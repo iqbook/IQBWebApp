@@ -841,13 +841,16 @@
 import React, { useState } from "react";
 import style from "./SalonAdv.module.css";
 import { CloseIcon, FaFileIcon } from "../../icons";
+import { Modal } from "@mui/material";
 
 const SalonAdv = () => {
   const [openUpload, setOpenUpload] = useState(false);
-  const [selectedUploadImage, setSelectedUploadImage] = useState("");
-
   const [openEdit, setOpenEdit] = useState(false);
+  const [selectedUploadImage, setSelectedUploadImage] = useState("");
   const [selectedEditImage, setSelectedEditImage] = useState("");
+
+  const [openMobileUpload, setOpenMobileUpload] = useState(false);
+  const [openMobileEdit, setOpenMobileEdit] = useState(false);
 
   return (
     <section className={`${style.adv_section}`}>
@@ -933,9 +936,13 @@ const SalonAdv = () => {
                 </div>
               </div>
 
-              <button onClick={() => {
-                setOpenEdit(false)
-              }}><CloseIcon/></button>
+              <button
+                onClick={() => {
+                  setOpenEdit(false);
+                }}
+              >
+                <CloseIcon />
+              </button>
             </div>
 
             <div className={style.adv_image_box}>
@@ -1037,7 +1044,16 @@ const SalonAdv = () => {
             <p>Image: 3</p>
           </div>
 
-          <div>
+          <button
+            onClick={() => {
+              setOpenMobileUpload(true);
+            }}
+            className={style.adv_mobile_plus_container}
+          >
+            <p>+</p>
+          </button>
+
+          <div className={style.adv_image_scrolling_section}>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => {
               return (
                 <div
@@ -1045,6 +1061,7 @@ const SalonAdv = () => {
                     setOpenUpload(false);
                     setSelectedUploadImage("");
                     setOpenEdit(true);
+                    setOpenMobileEdit(true);
                     setSelectedEditImage(
                       "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=2800,h=1680,fit=crop/Yg2y44MM36I5P7eD/whatsapp-image-2025-07-13-at-15.44.55_a3d65a80-AoPJ44L0Q8u3Zolg.jpg"
                     );
@@ -1062,6 +1079,163 @@ const SalonAdv = () => {
           </div>
         </div>
       </div>
+
+      <Modal
+        open={openMobileUpload}
+        onClose={() => setOpenMobileUpload(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div className={style.modal_common_container}>
+          <div className={style.upload_container}>
+            <div>
+              <div>
+                <div>
+                  <FaFileIcon color={"var(--text-primary)"} />
+                </div>
+                <div>
+                  <p>Upload file</p>
+                  <p>Select and upload file of your choice</p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => {
+                  setOpenUpload(false);
+                  setOpenMobileUpload(false);
+                }}
+              >
+                <CloseIcon />
+              </button>
+            </div>
+
+            <div className={style.adv_image_box}>
+              {selectedUploadImage ? (
+                <div className={style.adv_image_present}>
+                  <img src={selectedUploadImage} alt="" />
+                  <button
+                    onClick={() => {
+                      setSelectedUploadImage("");
+                    }}
+                  >
+                    <CloseIcon />
+                  </button>
+                </div>
+              ) : (
+                <div className={style.adv_image_notpresent}>
+                  <div>
+                    <FaFileIcon color={"var(--text-primary)"} />
+                  </div>
+                  <p>Choose a file or drag & drop it here</p>
+                  <p>jpeg, png, webp formats, up to 2mb.</p>
+                  <button
+                    onClick={() => {
+                      setOpenUpload(true);
+                      setSelectedUploadImage(
+                        "https://img.freepik.com/free-vector/flat-design-beauty-salon-facebook-cover_23-2150819476.jpg?semt=ais_hybrid&w=740&q=80"
+                      );
+                    }}
+                  >
+                    Browse file
+                  </button>
+                </div>
+              )}
+
+              <div>
+                <div>
+                  <FaFileIcon />
+                </div>
+                <div>
+                  <p>Target url</p>
+                  <p>120 KB</p>
+                </div>
+                <input placeholder="https://example.com" type="text" />
+              </div>
+
+              <button className={style.upload_button}>upload</button>
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        open={openMobileEdit}
+        onClose={() => setOpenMobileEdit(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div className={style.modal_common_container}>
+          <div className={style.upload_container}>
+            <div>
+              <div>
+                <div>
+                  <FaFileIcon color={"var(--text-primary)"} />
+                </div>
+                <div>
+                  <p>Upload file</p>
+                  <p>Select and upload file of your choice</p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => {
+                  setOpenMobileEdit(false);
+                }}
+              >
+                <CloseIcon />
+              </button>
+            </div>
+
+            <div className={style.adv_image_box}>
+              {selectedEditImage ? (
+                <div className={style.adv_image_present}>
+                  <img src={selectedEditImage} alt="" />
+                  <button
+                    onClick={() => {
+                      setSelectedEditImage("");
+                    }}
+                  >
+                    <CloseIcon />
+                  </button>
+                </div>
+              ) : (
+                <div className={style.adv_image_notpresent}>
+                  <div>
+                    <FaFileIcon color={"var(--text-primary)"} />
+                  </div>
+                  <p>Choose a file or drag & drop it here</p>
+                  <p>jpeg, png, webp formats, up to 2mb.</p>
+                  <button
+                    onClick={() => {
+                      setSelectedEditImage(
+                        "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=2800,h=1680,fit=crop/Yg2y44MM36I5P7eD/whatsapp-image-2025-07-13-at-15.44.55_a3d65a80-AoPJ44L0Q8u3Zolg.jpg"
+                      );
+                    }}
+                  >
+                    Browse file
+                  </button>
+                </div>
+              )}
+
+              <div>
+                <div>
+                  <FaFileIcon />
+                </div>
+                <div>
+                  <p>Target url</p>
+                  <p>120 KB</p>
+                </div>
+                <input placeholder="https://example.com" type="text" />
+              </div>
+
+              <div className={style.edit_button_container}>
+                <button>Delete</button>
+                <button>Update</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </section>
   );
 };
