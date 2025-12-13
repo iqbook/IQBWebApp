@@ -894,7 +894,7 @@ const SalonAdv = () => {
                   <div>
                     <FaFileIcon color={"var(--text-primary)"} />
                   </div>
-                  <p>Choose a file or drag & drop it here</p>
+                  <p>Choose a file</p>
                   <p>jpeg, png, webp formats, up to 2mb.</p>
                   <button
                     onClick={() => {
@@ -962,7 +962,7 @@ const SalonAdv = () => {
                   <div>
                     <FaFileIcon color={"var(--text-primary)"} />
                   </div>
-                  <p>Choose a file or drag & drop it here</p>
+                  <p>Choose a file</p>
                   <p>jpeg, png, webp formats, up to 2mb.</p>
                   <button
                     onClick={() => {
@@ -1011,7 +1011,7 @@ const SalonAdv = () => {
               <div>
                 <FaFileIcon color={"var(--text-primary)"} />
               </div>
-              <p>Choose a file or drag & drop it here</p>
+              <p>Choose a file</p>
               <p>jpeg, png, webp formats, up to 2mb.</p>
               <button
                 onClick={() => {
