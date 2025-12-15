@@ -956,6 +956,9 @@ const SalonAdv = () => {
         setUploadLoader(false);
         setUploadAdvImages([]);
         setOpenUpload(false);
+        setOpenMobileUpload(false)
+        setSelectedUploadImage("")
+        setSelectedEditImage("")
         dispatch({
           type: "ADD_ADVETISEMENT",
           payload: imageResponse?.data?.response,
@@ -1031,9 +1034,9 @@ const SalonAdv = () => {
           },
         });
         setDeleteLoader(false);
-        setEditAdvData(null)
-        setOpenEdit(false)
-        setOpenUpload(false)
+        setEditAdvData(null);
+        setOpenEdit(false);
+        setOpenUpload(false);
         dispatch({
           type: "FILTER_ADVERTISEMENTLIST",
           payload: mongoid,
@@ -1191,6 +1194,8 @@ const SalonAdv = () => {
       setEditAdvData(null);
       setSelectedImage("");
       sethandleEditLoader(null);
+      setOpenMobileEdit(false)
+      setOpenMobileUpload(false)
 
       dispatch({
         type: "AFTER_UPDATE_ADVERTISEMENTLIST",
@@ -1599,7 +1604,7 @@ const SalonAdv = () => {
             </div>
 
             <div className={style.adv_image_box}>
-              {selectedUploadImage ? (
+              {/* {selectedUploadImage ? (
                 <div className={style.adv_image_present}>
                   <img src={selectedUploadImage} alt="" />
                   <button
@@ -1628,20 +1633,70 @@ const SalonAdv = () => {
                     Browse file
                   </button>
                 </div>
+              )} */}
+
+              {selectedUploadImage ? (
+                <div className={style.adv_image_present}>
+                  <img src={selectedUploadImage} alt="" />
+                  <button
+                    onClick={() => {
+                      setUploadAdvImages([]);
+                      setSelectedUploadImage("");
+                    }}
+                  >
+                    <CloseIcon />
+                  </button>
+                </div>
+              ) : (
+                <div className={style.adv_image_notpresent}>
+                  <div>
+                    <FaFileIcon color={"var(--text-primary)"} />
+                  </div>
+                  <p>Choose a file</p>
+                  <p>jpeg, png, webp formats, up to 2mb.</p>
+                  <button
+                    onClick={() => {
+                      handleAdvImageButtonClick();
+                    }}
+                  >
+                    Browse file
+                    <input
+                      type="file"
+                      ref={advImagefileInputRef}
+                      style={{ display: "none" }}
+                      onChange={handleAdvImageFileInputChange}
+                      disabled={uploadLoader ? true : false}
+                    />
+                  </button>
+                </div>
               )}
 
-              <div>
-                <div>
-                  <FaFileIcon />
-                </div>
-                <div>
-                  <p>Target url</p>
-                  <p>120 KB</p>
-                </div>
-                <input placeholder="https://example.com" type="text" />
-              </div>
+              {uploadAdvImages.map((item, index) => {
+                return (
+                  <div key={item?.lastModified}>
+                    <div>
+                      <FaFileIcon />
+                    </div>
+                    <div>
+                      <p>Target file</p>
+                      <p>{`${(item?.size / 1024).toFixed(2)} KB`}</p>
+                    </div>
+                    <input
+                      value={item?.link}
+                      onChange={(e) => fileLinkChangeHandler(e, item)}
+                      placeholder="https://example.com"
+                    />
+                  </div>
+                );
+              })}
 
-              <button className={style.upload_button}>upload</button>
+              <button
+                onClick={uploadAdvHandler}
+                className={style.upload_button}
+                disabled={uploadLoader}
+              >
+                {uploadLoader ? <ButtonLoader color="#fff" /> : "upload"}
+              </button>
             </div>
           </div>
         </div>
@@ -1676,7 +1731,7 @@ const SalonAdv = () => {
             </div>
 
             <div className={style.adv_image_box}>
-              {selectedEditImage ? (
+              {/* {selectedEditImage ? (
                 <div className={style.adv_image_present}>
                   <img src={selectedEditImage} alt="" />
                   <button
@@ -1718,9 +1773,90 @@ const SalonAdv = () => {
               </div>
 
               <div className={style.edit_button_container}>
-                <button>Delete</button>
                 <button>Update</button>
+              </div> */}
+
+              {editAdvData && Object.keys(editAdvData).length > 0 ? (
+                <div className={style.adv_image_present}>
+                  <img
+                    src={
+                      selectedEditImage ? selectedEditImage : editAdvData?.url
+                    }
+                    alt=""
+                  />
+                  <button
+                    onClick={() => {
+                      setEditAdvData(null);
+                      setSelectedEditImage("");
+                    }}
+                  >
+                    <CloseIcon />
+                  </button>
+                </div>
+              ) : (
+                <div className={style.adv_image_notpresent}>
+                  <div>
+                    <FaFileIcon color={"var(--text-primary)"} />
+                  </div>
+                  <p>Choose a file</p>
+                  <p>jpeg, png, webp formats, up to 2mb.</p>
+                  {/* <button
+                    onClick={() => {
+                      setSelectedEditImage(
+                        "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=2800,h=1680,fit=crop/Yg2y44MM36I5P7eD/whatsapp-image-2025-07-13-at-15.44.55_a3d65a80-AoPJ44L0Q8u3Zolg.jpg"
+                      );
+                    }}
+                  >
+                    Browse file
+                  </button> */}
+
+                  <button onClick={() => fileInputRef.current.click()}>
+                    Browse file
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      accept="image/jpeg,image/png,image/webp"
+                      style={{ display: "none" }}
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          setSelectedEditImage(URL.createObjectURL(file)); // 👈 Preview image
+                          setEditAdvData((prev) => ({ ...prev, file })); // 👈 Save file for upload
+                        }
+                      }}
+                    />
+                  </button>
+                </div>
+              )}
+
+              <div>
+                <div>
+                  <FaFileIcon />
+                </div>
+                <div>
+                  <p>Target file</p>
+                  <p>100 KB</p>
+                </div>
+
+                <input
+                  placeholder="https://example.com"
+                  type="text"
+                  value={editAdvData?.link || ""}
+                  onChange={(e) =>
+                    setEditAdvData((prev) => ({
+                      ...prev,
+                      link: e.target.value,
+                    }))
+                  }
+                />
               </div>
+
+              <div className={style.edit_button_container}>
+                <button onClick={handleEditFileInputChange}>
+                  {editImageLoader ? <ButtonLoader color="#fff" /> : "update"}
+                </button>
+              </div>
+              
             </div>
           </div>
         </div>
@@ -1766,7 +1902,10 @@ const Adv = ({
       {adv?.type !== "default" && (
         <div className={style.action_btn_container}>
           <button
-            onClick={() => editImageHandler(adv)}
+            onClick={() => {
+              setOpenMobileEdit(true)
+              editImageHandler(adv)
+            }}
             disabled={handleEditLoader === id}
           >
             Edit
