@@ -858,7 +858,12 @@
         border-radius: 0.5rem;
         padding-inline: 1rem;
         font-size: 1.4rem;
-        color: var(--text-secondary);
+        color: var(--text-primary);
+
+        &::placeholder {
+          color: var(--text-secondary);
+        }
+
       }
     }
 
@@ -871,6 +876,8 @@
       cursor: pointer;
       border-radius: 0.5rem;
       margin-top: 1rem;
+      display: grid;
+      place-items: center;
     }
 
     .edit_button_container {
@@ -888,10 +895,12 @@
         cursor: pointer;
         border-radius: 0.5rem;
         margin-top: 1rem;
+        display: grid;
+        place-items: center;
       }
 
       & > button:nth-child(1) {
-        background-color: rgb(69, 10, 10);
+        /* background-color: rgb(69, 10, 10); */
       }
     }
   }
@@ -918,7 +927,18 @@
   min-height: 0;
 }
 
-.adv_section_right > div > div:nth-child(1) {
+/* .adv_section_right > div > div:nth-child(1) {
+  height: 12rem;
+
+  & > img {
+    width: 100%;
+    height: inherit;
+    object-fit: fill;
+    border-radius: 1rem;
+  }
+} */
+
+.carousel_item {
   height: 12rem;
 
   & > img {
@@ -964,16 +984,56 @@
   flex-direction: column;
   gap: 2rem;
   min-height: 0;
+  position: relative;
+}
+
+.no_adv_present {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: 600;
+  font-size: 1.4rem;
+  width: 100%;
+  display: block;
+  text-align: center;
 }
 
 .adv_item {
   height: 12rem;
+  position: relative;
 
   & > img {
     width: 100%;
     height: inherit;
     object-fit: fill;
     border-radius: 1rem;
+  }
+
+  .action_btn_container {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    & > button {
+      font-size: 1.4rem;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 0.3rem 0.5rem;
+      border-radius: 0.3rem;
+      color: #fff;
+
+      &:nth-child(1) {
+        background-color: #0285c7;
+      }
+
+      &:nth-child(2) {
+        background-color: #450a0a;
+      }
+    }
   }
 }
 
