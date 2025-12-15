@@ -702,13 +702,36 @@ const AppointmentList = () => {
                     </div>
                   )}
 
-                  {item?.mobileNumber ? (
+                  {/* {item?.mobileNumber ? (
                     <p>
                       Contact the customer at{" "}
                       <a
                         href={`tel:+${item?.countryCode ?? ""}${
                           item?.mobileNumber ?? ""
                         }`}
+                        style={{
+                          color: "var(--text-primary)",
+                          textDecoration: "underline",
+                        }}
+                      >
+                        +{item?.countryCode ?? ""}
+                        {item?.mobileNumber ?? ""}
+                      </a>
+                    </p>
+                  ) : (
+                    <p>The customer has not added any contact number</p>
+                  )} */}
+
+                  {item?.mobileNumber ? (
+                    <p onClick={(e) => e.stopPropagation()}>
+                      Contact the customer at{" "}
+                      <a
+                        href={`tel:+${item?.countryCode ?? ""}${
+                          item?.mobileNumber ?? ""
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation(); // 🚫 stop parent click
+                        }}
                         style={{
                           color: "var(--text-primary)",
                           textDecoration: "underline",
