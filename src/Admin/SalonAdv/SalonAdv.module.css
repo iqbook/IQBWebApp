@@ -863,7 +863,6 @@
         &::placeholder {
           color: var(--text-secondary);
         }
-
       }
     }
 
@@ -1022,17 +1021,23 @@
       border: none;
       outline: none;
       cursor: pointer;
-      padding: 0.3rem 0.5rem;
+      padding: 0.4rem 0.6rem;
       border-radius: 0.3rem;
       color: #fff;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
-      &:nth-child(1) {
-        background-color: #0285c7;
-      }
-
-      &:nth-child(2) {
+      &:nth-last-child(1) {
         background-color: #450a0a;
       }
+    }
+
+    .action_btn_large {
+      display: block;
+      background-color: #0285c7;
+    }
+
+    .action_btn_large_small {
+      display: none;
     }
   }
 }
@@ -1091,6 +1096,19 @@
             font-size: 1.1rem;
           }
         }
+      }
+    }
+  }
+
+  .adv_item {
+    .action_btn_container {
+      .action_btn_large {
+        display: none;
+      }
+
+      .action_btn_large_small {
+        display: block;
+        background-color: #0285c7;
       }
     }
   }
