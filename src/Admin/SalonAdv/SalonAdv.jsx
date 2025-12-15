@@ -1235,8 +1235,6 @@ const SalonAdv = () => {
     }
   };
 
-  // console.log(editAdvData);
-
   return (
     <section className={`${style.adv_section}`}>
       <div className={style.adv_section_left}>
@@ -1303,7 +1301,7 @@ const SalonAdv = () => {
                 return (
                   <div key={item?.lastModified}>
                     <div>
-                      <FaFileIcon />
+                      <FaFileIcon color={"var(--text-primary)"} />
                     </div>
                     <div>
                       <p>Target file</p>
@@ -1374,15 +1372,6 @@ const SalonAdv = () => {
                   </div>
                   <p>Choose a file (16:9)</p>
                   <p>jpeg, png, webp formats, up to 2mb.</p>
-                  {/* <button
-                    onClick={() => {
-                      setSelectedEditImage(
-                        "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=2800,h=1680,fit=crop/Yg2y44MM36I5P7eD/whatsapp-image-2025-07-13-at-15.44.55_a3d65a80-AoPJ44L0Q8u3Zolg.jpg"
-                      );
-                    }}
-                  >
-                    Browse file
-                  </button> */}
 
                   <button onClick={() => fileInputRef.current.click()}>
                     Browse file
@@ -1405,7 +1394,7 @@ const SalonAdv = () => {
 
               <div>
                 <div>
-                  <FaFileIcon />
+                  <FaFileIcon color={"var(--text-primary)"} />
                 </div>
                 <div>
                   <p>Target file</p>
@@ -1816,6 +1805,18 @@ const Adv = ({
       {adv?.type !== "default" && (
         <div className={style.action_btn_container}>
           <button
+            className={style.action_btn_large}
+            onClick={() => {
+              // setOpenMobileEdit(true);
+              editImageHandler(adv);
+            }}
+            disabled={handleEditLoader === id}
+          >
+            Edit
+          </button>
+
+          <button
+            className={style.action_btn_large_small}
             onClick={() => {
               setOpenMobileEdit(true);
               editImageHandler(adv);
@@ -1824,6 +1825,7 @@ const Adv = ({
           >
             Edit
           </button>
+
           <button
             onClick={() => deleteHandler(adv.public_id, adv._id)}
             disabled={deleteLoader}
