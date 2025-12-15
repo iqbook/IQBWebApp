@@ -1604,36 +1604,6 @@ const SalonAdv = () => {
             </div>
 
             <div className={style.adv_image_box}>
-              {/* {selectedUploadImage ? (
-                <div className={style.adv_image_present}>
-                  <img src={selectedUploadImage} alt="" />
-                  <button
-                    onClick={() => {
-                      setSelectedUploadImage("");
-                    }}
-                  >
-                    <CloseIcon />
-                  </button>
-                </div>
-              ) : (
-                <div className={style.adv_image_notpresent}>
-                  <div>
-                    <FaFileIcon color={"var(--text-primary)"} />
-                  </div>
-                  <p>Choose a file or drag & drop it here</p>
-                  <p>jpeg, png, webp formats, up to 2mb.</p>
-                  <button
-                    onClick={() => {
-                      setOpenUpload(true);
-                      setSelectedUploadImage(
-                        "https://img.freepik.com/free-vector/flat-design-beauty-salon-facebook-cover_23-2150819476.jpg?semt=ais_hybrid&w=740&q=80"
-                      );
-                    }}
-                  >
-                    Browse file
-                  </button>
-                </div>
-              )} */}
 
               {selectedUploadImage ? (
                 <div className={style.adv_image_present}>
@@ -1675,7 +1645,7 @@ const SalonAdv = () => {
                 return (
                   <div key={item?.lastModified}>
                     <div>
-                      <FaFileIcon />
+                      <FaFileIcon color={"var(--text-primary)"}/>
                     </div>
                     <div>
                       <p>Target file</p>
@@ -1731,51 +1701,6 @@ const SalonAdv = () => {
             </div>
 
             <div className={style.adv_image_box}>
-              {/* {selectedEditImage ? (
-                <div className={style.adv_image_present}>
-                  <img src={selectedEditImage} alt="" />
-                  <button
-                    onClick={() => {
-                      setSelectedEditImage("");
-                    }}
-                  >
-                    <CloseIcon />
-                  </button>
-                </div>
-              ) : (
-                <div className={style.adv_image_notpresent}>
-                  <div>
-                    <FaFileIcon color={"var(--text-primary)"} />
-                  </div>
-                  <p>Choose a file or drag & drop it here</p>
-                  <p>jpeg, png, webp formats, up to 2mb.</p>
-                  <button
-                    onClick={() => {
-                      setSelectedEditImage(
-                        "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=2800,h=1680,fit=crop/Yg2y44MM36I5P7eD/whatsapp-image-2025-07-13-at-15.44.55_a3d65a80-AoPJ44L0Q8u3Zolg.jpg"
-                      );
-                    }}
-                  >
-                    Browse file
-                  </button>
-                </div>
-              )}
-
-              <div>
-                <div>
-                  <FaFileIcon />
-                </div>
-                <div>
-                  <p>Target url</p>
-                  <p>120 KB</p>
-                </div>
-                <input placeholder="https://example.com" type="text" />
-              </div>
-
-              <div className={style.edit_button_container}>
-                <button>Update</button>
-              </div> */}
-
               {editAdvData && Object.keys(editAdvData).length > 0 ? (
                 <div className={style.adv_image_present}>
                   <img
@@ -1800,15 +1725,6 @@ const SalonAdv = () => {
                   </div>
                   <p>Choose a file</p>
                   <p>jpeg, png, webp formats, up to 2mb.</p>
-                  {/* <button
-                    onClick={() => {
-                      setSelectedEditImage(
-                        "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=2800,h=1680,fit=crop/Yg2y44MM36I5P7eD/whatsapp-image-2025-07-13-at-15.44.55_a3d65a80-AoPJ44L0Q8u3Zolg.jpg"
-                      );
-                    }}
-                  >
-                    Browse file
-                  </button> */}
 
                   <button onClick={() => fileInputRef.current.click()}>
                     Browse file
@@ -1831,7 +1747,7 @@ const SalonAdv = () => {
 
               <div>
                 <div>
-                  <FaFileIcon />
+                  <FaFileIcon color={"var(--text-primary)"}/>
                 </div>
                 <div>
                   <p>Target file</p>
