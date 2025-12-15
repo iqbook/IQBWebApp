@@ -253,7 +253,7 @@
       }
 
       & > div:nth-child(2) {
-        padding: 1.2rem;
+        padding-inline: 1.2rem;
         display: flex;
         flex-direction: column;
         gap: 1rem;
@@ -266,7 +266,7 @@
 
         & > p {
           text-align: center;
-          margin-block: 2rem 0.5rem;
+          padding-block: 2rem 0.5rem;
           color: var(--text-secondary);
           line-height: 5rem;
         }
@@ -584,11 +584,11 @@
       cursor: pointer;
     }
 
-    &>button:nth-child(1){
+    & > button:nth-child(1) {
       background-color: #450a0a;
     }
 
-    &>button:nth-child(2){
+    & > button:nth-child(2) {
       background-color: #0285c7;
     }
   }
