@@ -1027,7 +1027,7 @@ const SalonAdv = () => {
     if (confirm) {
       try {
         setDeleteLoader(true);
-        await api.delete("/api/advertisement/deleteAdvertisements", {
+        const {data} = await api.delete("/api/advertisement/deleteAdvertisements", {
           data: {
             public_id: publicId,
             img_id: mongoid,
@@ -1040,6 +1040,16 @@ const SalonAdv = () => {
         dispatch({
           type: "FILTER_ADVERTISEMENTLIST",
           payload: mongoid,
+        });
+
+        toast.error(data?.message, {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
         });
       } catch (error) {
         if (error?.response?.status === 500) {
@@ -1202,6 +1212,15 @@ const SalonAdv = () => {
         payload: imageResponse?.data?.response,
       });
       setSalonEditModal(false);
+      toast.success(imageResponse?.data?.message, {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     } catch (error) {
       setSalonEditModal(false);
       setSelectedImage("");
@@ -1796,8 +1815,6 @@ const Adv = ({
       {...listeners}
       style={{ transition, transform: CSS.Transform.toString(transform) }}
       key={adv._id}
-      onPointerDown={(e) => e.stopPropagation()}
-      onTouchStart={(e) => e.stopPropagation()}
       className={style.adv_item}
     >
       <img src={adv?.url} alt="" />
@@ -1807,10 +1824,11 @@ const Adv = ({
           <button
             className={style.action_btn_large}
             onClick={() => {
-              // setOpenMobileEdit(true);
               editImageHandler(adv);
             }}
             disabled={handleEditLoader === id}
+            onPointerDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
           >
             Edit
           </button>
@@ -1822,6 +1840,8 @@ const Adv = ({
               editImageHandler(adv);
             }}
             disabled={handleEditLoader === id}
+            onPointerDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
           >
             Edit
           </button>
