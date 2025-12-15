@@ -956,9 +956,9 @@ const SalonAdv = () => {
         setUploadLoader(false);
         setUploadAdvImages([]);
         setOpenUpload(false);
-        setOpenMobileUpload(false)
-        setSelectedUploadImage("")
-        setSelectedEditImage("")
+        setOpenMobileUpload(false);
+        setSelectedUploadImage("");
+        setSelectedEditImage("");
         dispatch({
           type: "ADD_ADVETISEMENT",
           payload: imageResponse?.data?.response,
@@ -1194,8 +1194,8 @@ const SalonAdv = () => {
       setEditAdvData(null);
       setSelectedImage("");
       sethandleEditLoader(null);
-      setOpenMobileEdit(false)
-      setOpenMobileUpload(false)
+      setOpenMobileEdit(false);
+      setOpenMobileUpload(false);
 
       dispatch({
         type: "AFTER_UPDATE_ADVERTISEMENTLIST",
@@ -1280,7 +1280,7 @@ const SalonAdv = () => {
                   <div>
                     <FaFileIcon color={"var(--text-primary)"} />
                   </div>
-                  <p>Choose a file</p>
+                  <p>Choose a file (16:9)</p>
                   <p>jpeg, png, webp formats, up to 2mb.</p>
                   <button
                     onClick={() => {
@@ -1372,7 +1372,7 @@ const SalonAdv = () => {
                   <div>
                     <FaFileIcon color={"var(--text-primary)"} />
                   </div>
-                  <p>Choose a file</p>
+                  <p>Choose a file (16:9)</p>
                   <p>jpeg, png, webp formats, up to 2mb.</p>
                   {/* <button
                     onClick={() => {
@@ -1450,7 +1450,7 @@ const SalonAdv = () => {
               <div>
                 <FaFileIcon color={"var(--text-primary)"} />
               </div>
-              <p>Choose a file</p>
+              <p>Choose a file (16:9)</p>
               <p>jpeg, png, webp formats, up to 2mb.</p>
 
               <button
@@ -1504,7 +1504,7 @@ const SalonAdv = () => {
           <div>
             <div>
               <p>Advertisements</p>
-              <p>Tap to edit advertisements</p>
+              {/* <p>Tap to edit advertisements</p> */}
             </div>
             <p>Image: {advertisements?.length}</p>
           </div>
@@ -1604,7 +1604,6 @@ const SalonAdv = () => {
             </div>
 
             <div className={style.adv_image_box}>
-
               {selectedUploadImage ? (
                 <div className={style.adv_image_present}>
                   <img src={selectedUploadImage} alt="" />
@@ -1622,7 +1621,7 @@ const SalonAdv = () => {
                   <div>
                     <FaFileIcon color={"var(--text-primary)"} />
                   </div>
-                  <p>Choose a file</p>
+                  <p>Choose a file (16:9)</p>
                   <p>jpeg, png, webp formats, up to 2mb.</p>
                   <button
                     onClick={() => {
@@ -1645,7 +1644,7 @@ const SalonAdv = () => {
                 return (
                   <div key={item?.lastModified}>
                     <div>
-                      <FaFileIcon color={"var(--text-primary)"}/>
+                      <FaFileIcon color={"var(--text-primary)"} />
                     </div>
                     <div>
                       <p>Target file</p>
@@ -1723,7 +1722,7 @@ const SalonAdv = () => {
                   <div>
                     <FaFileIcon color={"var(--text-primary)"} />
                   </div>
-                  <p>Choose a file</p>
+                  <p>Choose a file (16:9)</p>
                   <p>jpeg, png, webp formats, up to 2mb.</p>
 
                   <button onClick={() => fileInputRef.current.click()}>
@@ -1747,7 +1746,7 @@ const SalonAdv = () => {
 
               <div>
                 <div>
-                  <FaFileIcon color={"var(--text-primary)"}/>
+                  <FaFileIcon color={"var(--text-primary)"} />
                 </div>
                 <div>
                   <p>Target file</p>
@@ -1772,7 +1771,6 @@ const SalonAdv = () => {
                   {editImageLoader ? <ButtonLoader color="#fff" /> : "update"}
                 </button>
               </div>
-              
             </div>
           </div>
         </div>
@@ -1819,8 +1817,8 @@ const Adv = ({
         <div className={style.action_btn_container}>
           <button
             onClick={() => {
-              setOpenMobileEdit(true)
-              editImageHandler(adv)
+              setOpenMobileEdit(true);
+              editImageHandler(adv);
             }}
             disabled={handleEditLoader === id}
           >
