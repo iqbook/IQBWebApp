@@ -688,7 +688,7 @@
   }
 
   .adv_empty_box {
-    height: 20rem;
+    height: auto;
     width: 100%;
     background-color: var(--section-bg-color);
     border: 0.2rem dotted var(--border-secondary);
@@ -743,14 +743,14 @@
     gap: 1rem;
 
     .adv_image_present {
-      height: 20rem;
+      height: 12rem;
       width: 100%;
       position: relative;
 
       & > img {
         width: inherit;
         height: inherit;
-        border-radius: 2rem;
+        border-radius: 1rem;
       }
 
       & > button {
@@ -771,7 +771,7 @@
     }
 
     .adv_image_notpresent {
-      height: 20rem;
+      height: auto;
       width: 100%;
       background-color: var(--section-bg-color);
       border: 0.2rem dotted var(--border-secondary);
@@ -913,7 +913,7 @@
 }
 
 .adv_section_right > div {
-  width: 50rem;
+  width: min(50rem, 100%);
   background-color: var(--bg-primary);
   border-radius: 1.2rem;
   padding: 2rem;
@@ -1055,6 +1055,67 @@
 }
 
 @media screen and (min-width: 0px) and (max-width: 430px) {
+  .adv_section_left {
+    display: none;
+  }
+
+  .adv_mobile_plus_container {
+    height: 8rem;
+    background-color: var(--section-bg-color);
+    display: grid;
+    place-items: center;
+    border-radius: 1rem;
+    border: 0.1rem dotted var(--border-secondary);
+
+    & > p {
+      font-size: 3rem;
+    }
+  }
+
+  .adv_section_right {
+    & > div {
+      width: 100%;
+    }
+  }
+
+  .upload_container {
+    .adv_image_box {
+      & > div:nth-child(2) {
+        & > div:nth-child(1) {
+          width: 3rem;
+          height: 3rem;
+          font-size: 1.2rem;
+        }
+
+        & > div:nth-child(2) {
+          & > p:nth-child(1) {
+            font-size: 1.2rem;
+          }
+
+          & > p:nth-child(2) {
+            font-size: 1.1rem;
+          }
+        }
+      }
+    }
+  }
+
+  .adv_item {
+    .action_btn_container {
+      .action_btn_large {
+        display: none;
+      }
+
+      .action_btn_large_small {
+        display: block;
+        background-color: #0285c7;
+      }
+    }
+  }
+}
+
+
+@media screen and (min-width: 431px) and (max-width: 768px) {
   .adv_section_left {
     display: none;
   }
