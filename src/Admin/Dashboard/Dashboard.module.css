@@ -1,65 +1,65 @@
 .dashboard_initial_ontainer {
-    height: calc(100svh - 6rem);
-    padding: 1.5rem;
+  height: calc(100svh - 6rem);
+  padding: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .dashboard_intial_content {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
 
-    .dashboard_intial_content {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-
-        &>p:nth-child(1) {
-            color: var(--text-primary);
-            font-size: 1.8rem;
-            font-family: 'AirbnbCereal_Medium';
-        }
-
-        &>p:nth-child(2) {
-            font-size: 1.6rem;
-            color: var(--text-secondary);
-        }
-
-        &>button {
-            height: 3.5rem;
-            padding-inline: 1.5rem;
-            border-radius: var(--border-radius-primary);
-            -webkit-border-radius: var(--border-radius-primary);
-            -moz-border-radius: var(--border-radius-primary);
-            -ms-border-radius: var(--border-radius-primary);
-            -o-border-radius: var(--border-radius-primary);
-            background-color: var(--bg-secondary);
-            color: var(--btn-text-color);
-            border: none;
-            outline: none;
-            cursor: pointer;
-            transition: var(--common-btn-transition);
-            -webkit-transition: var(--common-btn-transition);
-            -moz-transition: var(--common-btn-transition);
-            -ms-transition: var(--common-btn-transition);
-            -o-transition: var(--common-btn-transition);
-
-            &:hover {
-                background-color: var(--bg-secondary-hover);
-            }
-        }
+    & > p:nth-child(1) {
+      color: var(--text-primary);
+      font-size: 1.8rem;
+      font-family: "AirbnbCereal_Medium";
     }
+
+    & > p:nth-child(2) {
+      font-size: 1.6rem;
+      color: var(--text-secondary);
+    }
+
+    & > button {
+      height: 3.5rem;
+      padding-inline: 1.5rem;
+      border-radius: var(--border-radius-primary);
+      -webkit-border-radius: var(--border-radius-primary);
+      -moz-border-radius: var(--border-radius-primary);
+      -ms-border-radius: var(--border-radius-primary);
+      -o-border-radius: var(--border-radius-primary);
+      background-color: var(--bg-secondary);
+      color: var(--btn-text-color);
+      border: none;
+      outline: none;
+      cursor: pointer;
+      transition: var(--common-btn-transition);
+      -webkit-transition: var(--common-btn-transition);
+      -moz-transition: var(--common-btn-transition);
+      -ms-transition: var(--common-btn-transition);
+      -o-transition: var(--common-btn-transition);
+
+      &:hover {
+        background-color: var(--bg-secondary-hover);
+      }
+    }
+  }
 }
 
 .dashboard_container {
-    height: calc(100svh - 6rem);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    overflow: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+  height: calc(100svh - 6rem);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 
-    /* alt + up */
+  /* alt + up */
 
-    /* &>div:nth-child(1) {
+  /* &>div:nth-child(1) {
         height: 4rem;
         display: flex;
         align-items: center;
@@ -72,261 +72,288 @@
         }
     } */
 
-    .salonInfo_container {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
+  .salonInfo_container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem;
+    background-color: var(--bg-primary);
+    box-shadow: var(--cmmn-box-shadow);
 
-        &>textarea {
-            border-radius: 0.5rem;
-            -webkit-border-radius: 0.5rem;
-            -moz-border-radius: 0.5rem;
-            -ms-border-radius: 0.5rem;
-            -o-border-radius: 0.5rem;
-            padding: 1rem;
-            border: none;
-            outline: none;
-            background-color: var(--bg-primary);
-            box-shadow: var(--cmmn-box-shadow);
-            font-size: 1.4rem;
-            resize: none;
-            min-height: 10rem;
-            overflow: auto;
-        }
+    & > div {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      & > h3 {
+        font-size: var(--font-tertiary);
+        color: var(--text-primary);
+        font-family: "AirbnbCereal_Medium";
+      }
+
+      & > button {
+        width: 3rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--bg-secondary);
+        border-radius: 0.5rem;
+        border: none;
+        outline: none;
+        cursor: pointer;
+      }
     }
 
-    &>div:nth-child(2) {
-        flex: 1;
-        /* background-color: red; */
-        overflow: visible;
+    & > div:nth-last-child(1) {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
 
+      & > p {
+        color: var(--text-primary);
+        font-size: var(--font-primary);
+        line-height: 2rem;
+
+        width: 100%;
+        min-width: 0;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+      }
+    }
+  }
+
+  & > div:nth-child(2) {
+    flex: 1;
+    /* background-color: red; */
+    overflow: visible;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    & > div:nth-child(1) {
+      height: 27rem;
+      min-height: 27rem;
+      display: flex;
+      gap: 1.5rem;
+
+      & > div {
+        border: 0.1rem solid var(--border-secondary);
+        border-radius: var(--border-radius-primary);
+        -webkit-border-radius: var(--border-radius-primary);
+        -moz-border-radius: var(--border-radius-primary);
+        -ms-border-radius: var(--border-radius-primary);
+        -o-border-radius: var(--border-radius-primary);
+      }
+
+      & > div:nth-child(1) {
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
+        padding: 2rem;
+        gap: 2rem;
+        flex: 35%;
+        background-color: var(--bg-primary);
+        box-shadow: var(--cmmn-box-shadow);
 
-        &>div:nth-child(1) {
-            height: 27rem;
-            min-height: 27rem;
+        & > div:nth-child(1) {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+
+          & > p:nth-child(1) {
+            font-size: var(--font-tertiary);
+            color: var(--text-primary);
+            font-family: "AirbnbCereal_Medium";
+          }
+
+          & > p:nth-child(2) {
+            font-size: var(--font-primary);
+            color: var(--text-secondary);
+
+            & > span {
+              color: #00a36c;
+              font-family: "AirbnbCereal_Medium";
+            }
+          }
+        }
+
+        & > div:nth-child(2) {
+          overflow: auto;
+          display: flex;
+          gap: 2rem;
+          flex-wrap: wrap;
+
+          .barber_list_item {
+            flex: calc(50% - 1rem);
+            height: 4rem;
             display: flex;
-            gap: 1.5rem;
+            align-items: center;
+            gap: 1rem;
 
-            &>div {
-                border: 0.1rem solid var(--border-secondary);
-                border-radius: var(--border-radius-primary);
-                -webkit-border-radius: var(--border-radius-primary);
-                -moz-border-radius: var(--border-radius-primary);
-                -ms-border-radius: var(--border-radius-primary);
-                -o-border-radius: var(--border-radius-primary);
+            & > div {
+              width: 4rem;
+              height: 4rem;
+              border-radius: 50%;
+              -webkit-border-radius: 50%;
+              -moz-border-radius: 50%;
+              -ms-border-radius: 50%;
+              -o-border-radius: 50%;
+
+              & > img {
+                width: inherit;
+                height: inherit;
+                border-radius: 50%;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                -ms-border-radius: 50%;
+                -o-border-radius: 50%;
+              }
             }
 
-            &>div:nth-child(1) {
-                display: flex;
-                flex-direction: column;
-                padding: 2rem;
-                gap: 2rem;
-                flex: 35%;
-                background-color: var(--bg-primary);
-                box-shadow: var(--cmmn-box-shadow);
-
-                &>div:nth-child(1) {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1rem;
-
-                    &>p:nth-child(1) {
-                        font-size: var(--font-tertiary);
-                        color: var(--text-primary);
-                        font-family: "AirbnbCereal_Medium";
-                    }
-
-                    &>p:nth-child(2) {
-                        font-size: var(--font-primary);
-                        color: var(--text-secondary);
-
-                        &>span {
-                            color: #00A36C;
-                            font-family: "AirbnbCereal_Medium";
-                        }
-                    }
-                }
-
-                &>div:nth-child(2) {
-                    overflow: auto;
-                    display: flex;
-                    gap: 2rem;
-                    flex-wrap: wrap;
-
-                    .barber_list_item {
-                        flex: calc(50% - 1rem);
-                        height: 4rem;
-                        display: flex;
-                        align-items: center;
-                        gap: 1rem;
-
-                        &>div {
-                            width: 4rem;
-                            height: 4rem;
-                            border-radius: 50%;
-                            -webkit-border-radius: 50%;
-                            -moz-border-radius: 50%;
-                            -ms-border-radius: 50%;
-                            -o-border-radius: 50%;
-
-                            &>img {
-                                width: inherit;
-                                height: inherit;
-                                border-radius: 50%;
-                                -webkit-border-radius: 50%;
-                                -moz-border-radius: 50%;
-                                -ms-border-radius: 50%;
-                                -o-border-radius: 50%;
-                            }
-                        }
-
-                        &>p {
-                            color: var(--text-primary);
-                            font-size: var(--font-primary);
-                        }
-                    }
-                }
-
-                .barber_loading {
-                    display: block !important;
-                }
-
-                .barber_error {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    flex: 1;
-
-                    &>p {
-                        color: var(--text-primary);
-                        font-size: 1.6rem;
-                        font-family: 'AirbnbCereal_Medium';
-                    }
-                }
+            & > p {
+              color: var(--text-primary);
+              font-size: var(--font-primary);
             }
+          }
+        }
 
-            &>div:nth-child(2) {
-                display: flex;
-                flex-direction: column;
-                padding: 2rem;
-                gap: 2rem;
-                flex: 35%;
-                background-color: var(--bg-primary);
-                box-shadow: var(--cmmn-box-shadow);
+        .barber_loading {
+          display: block !important;
+        }
 
-                &>div:nth-child(1) {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1rem;
+        .barber_error {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex: 1;
 
-                    &>p:nth-child(1) {
-                        font-size: var(--font-tertiary);
-                        color: var(--text-primary);
-                        font-family: "AirbnbCereal_Medium";
-                    }
+          & > p {
+            color: var(--text-primary);
+            font-size: 1.6rem;
+            font-family: "AirbnbCereal_Medium";
+          }
+        }
+      }
 
-                    &>p:nth-child(2) {
-                        font-size: var(--font-primary);
-                        color: var(--text-secondary);
+      & > div:nth-child(2) {
+        display: flex;
+        flex-direction: column;
+        padding: 2rem;
+        gap: 2rem;
+        flex: 35%;
+        background-color: var(--bg-primary);
+        box-shadow: var(--cmmn-box-shadow);
 
-                        &>span {
-                            color: #00A36C;
-                            font-family: "AirbnbCereal_Medium";
-                        }
-                    }
+        & > div:nth-child(1) {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
 
-                    &>h2:nth-child(3) {
-                        color: var(--text-primary);
-                    }
+          & > p:nth-child(1) {
+            font-size: var(--font-tertiary);
+            color: var(--text-primary);
+            font-family: "AirbnbCereal_Medium";
+          }
 
-                }
+          & > p:nth-child(2) {
+            font-size: var(--font-primary);
+            color: var(--text-secondary);
 
-                .queue_report_container {
-                    flex: 1;
-                }
+            & > span {
+              color: #00a36c;
+              font-family: "AirbnbCereal_Medium";
             }
+          }
 
-            &>div:nth-child(3) {
+          & > h2:nth-child(3) {
+            color: var(--text-primary);
+          }
+        }
+
+        .queue_report_container {
+          flex: 1;
+        }
+      }
+
+      & > div:nth-child(3) {
+        display: flex;
+        flex-direction: column;
+        padding: 2rem;
+        gap: 2rem;
+        flex: calc(100% - 70%);
+        background-color: var(--bg-primary);
+        box-shadow: var(--cmmn-box-shadow);
+
+        & > div:nth-child(1) {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+
+          & > p:nth-child(1) {
+            font-size: var(--font-tertiary);
+            color: var(--text-primary);
+            font-family: "AirbnbCereal_Medium";
+          }
+
+          & > p:nth-child(2) {
+            font-size: var(--font-primary);
+            color: var(--text-secondary);
+
+            & > span {
+              /* color: #00A36C; */
+              font-family: "AirbnbCereal_Medium";
+            }
+          }
+
+          & > h2:nth-child(3) {
+            color: var(--text-primary);
+          }
+        }
+
+        .queue_history_container {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+
+          & > div:nth-child(1) {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+
+            & > div {
+              display: flex;
+              align-items: center;
+              gap: 1rem;
+
+              & > span {
+                min-width: 5.3rem;
+                min-height: 2.8rem;
+                padding: 0.5rem 0.6rem;
+                border-radius: 2rem;
+                -webkit-border-radius: 2rem;
+                -moz-border-radius: 2rem;
+                -ms-border-radius: 2rem;
+                -o-border-radius: 2rem;
                 display: flex;
-                flex-direction: column;
-                padding: 2rem;
-                gap: 2rem;
-                flex: calc(100% - 70%);
-                background-color: var(--bg-primary);
-                box-shadow: var(--cmmn-box-shadow);
+                justify-content: center;
+                align-items: center;
+                font-family: "AirbnbCereal_Medium";
+                color: #fff;
+              }
 
-                &>div:nth-child(1) {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1rem;
+              & > p {
+                color: var(--text-primary);
+                font-size: var(--font-primary);
+              }
+            }
+          }
 
-                    &>p:nth-child(1) {
-                        font-size: var(--font-tertiary);
-                        color: var(--text-primary);
-                        font-family: "AirbnbCereal_Medium";
-                    }
-
-                    &>p:nth-child(2) {
-                        font-size: var(--font-primary);
-                        color: var(--text-secondary);
-
-                        &>span {
-                            /* color: #00A36C; */
-                            font-family: "AirbnbCereal_Medium";
-                        }
-                    }
-
-                    &>h2:nth-child(3) {
-                        color: var(--text-primary);
-                    }
-
-                }
-
-                .queue_history_container {
-                    flex: 1;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-around;
-
-                    &>div:nth-child(1) {
-                        display: flex;
-                        flex-wrap: wrap;
-                        align-items: center;
-                        justify-content: space-between;
-                        gap: 2rem;
-
-                        &>div {
-                            display: flex;
-                            align-items: center;
-                            gap: 1rem;
-
-                            &>span {
-                                min-width: 5.3rem;
-                                min-height: 2.8rem;
-                                padding: 0.5rem 0.6rem;
-                                border-radius: 2rem;
-                                -webkit-border-radius: 2rem;
-                                -moz-border-radius: 2rem;
-                                -ms-border-radius: 2rem;
-                                -o-border-radius: 2rem;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                font-family: "AirbnbCereal_Medium";
-                                color: #fff;
-                            }
-
-                            &>p {
-                                color: var(--text-primary);
-                                font-size: var(--font-primary);
-                            }
-                        }
-                    }
-
-                    /* &>div:nth-child(2) {
+          /* &>div:nth-child(2) {
                         height: 1.5rem;
                         width: 100%;
                         background-color: #6366f1;
@@ -345,422 +372,502 @@
                         }
                     } */
 
-                    &>div:nth-child(2) {
-                        display: flex;
-                        height: 1.5rem;
-                        width: 100%;
+          & > div:nth-child(2) {
+            display: flex;
+            height: 1.5rem;
+            width: 100%;
 
-                        &>div:nth-child(1) {
-                            background-color: #00A36C;
-                            height: inherit;
-                            border-top-left-radius: 2rem;
-                            border-bottom-left-radius: 2rem;
-                        }
-
-                        &>div:nth-child(2) {
-                            background-color: rgb(244, 67, 54);
-                            height: inherit;
-                            border-top-right-radius: 2rem;
-                            border-bottom-right-radius: 2rem;
-                        }
-                    }
-                }
+            & > div:nth-child(1) {
+              background-color: #00a36c;
+              height: inherit;
+              border-top-left-radius: 2rem;
+              border-bottom-left-radius: 2rem;
             }
+
+            & > div:nth-child(2) {
+              background-color: rgb(244, 67, 54);
+              height: inherit;
+              border-top-right-radius: 2rem;
+              border-bottom-right-radius: 2rem;
+            }
+          }
+        }
+      }
+    }
+
+    & > div:nth-child(2) {
+      flex: 1;
+      /* max-height: 45rem; */
+      /* background-color: blue; */
+      display: flex;
+      gap: 1.5rem;
+
+      & > div {
+        border: 0.1rem solid var(--border-secondary);
+        border-radius: var(--border-radius-primary);
+        -webkit-border-radius: var(--border-radius-primary);
+        -moz-border-radius: var(--border-radius-primary);
+        -ms-border-radius: var(--border-radius-primary);
+        -o-border-radius: var(--border-radius-primary);
+      }
+
+      & > div:nth-child(1) {
+        flex: calc(70% + 1.5rem);
+        display: flex;
+        flex-direction: column;
+        padding: 2rem;
+        gap: 2rem;
+        background-color: var(--bg-primary);
+        box-shadow: var(--cmmn-box-shadow);
+
+        & > div:nth-child(1) {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          gap: 2rem;
+
+          & > div:nth-child(1) {
+            flex: 1.25;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+
+            & > div:nth-child(1) {
+              display: flex;
+              flex-direction: column;
+              gap: 1rem;
+
+              & > p:nth-child(1) {
+                font-size: var(--font-tertiary);
+                color: var(--text-primary);
+                font-family: "AirbnbCereal_Medium";
+              }
+
+              & > p:nth-child(2) {
+                font-size: var(--font-primary);
+                color: var(--text-secondary);
+              }
+            }
+
+            & > div:nth-child(2) {
+              display: flex;
+              flex-direction: column;
+
+              & > h1 {
+                color: var(--text-primary);
+              }
+
+              & > p:nth-child(2) {
+                font-size: var(--font-primary);
+                color: var(--text-secondary);
+                margin-top: -1rem;
+
+                & > span {
+                  /* color: #00A36C; */
+                  font-family: "AirbnbCereal_Medium";
+                }
+              }
+            }
+          }
+
+          & > div:nth-child(2) {
+            flex: 2;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
         }
 
+        & > div:nth-child(2) {
+          border: 0.1rem solid var(--border-secondary);
+          padding: 2rem;
+          display: flex;
+          align-items: center;
+          gap: 4rem;
 
-
-        &>div:nth-child(2) {
+          .appoint_report_item {
             flex: 1;
-            /* max-height: 45rem; */
-            /* background-color: blue; */
             display: flex;
+            flex-direction: column;
             gap: 1.5rem;
 
-            &>div {
-                border: 0.1rem solid var(--border-secondary);
-                border-radius: var(--border-radius-primary);
-                -webkit-border-radius: var(--border-radius-primary);
-                -moz-border-radius: var(--border-radius-primary);
-                -ms-border-radius: var(--border-radius-primary);
-                -o-border-radius: var(--border-radius-primary);
-            }
+            & > div:nth-child(1) {
+              display: flex;
+              align-items: center;
+              gap: 1rem;
 
-            &>div:nth-child(1) {
-                flex: calc(70% + 1.5rem);
-                display: flex;
-                flex-direction: column;
-                padding: 2rem;
-                gap: 2rem;
-                background-color: var(--bg-primary);
-                box-shadow: var(--cmmn-box-shadow);
-
-                &>div:nth-child(1) {
-                    flex: 1;
-                    display: flex;
-                    align-items: center;
-                    gap: 2rem;
-
-
-                    &>div:nth-child(1) {
-                        flex: 1.25;
-                        height: 100%;
-                        display: flex;
-                        flex-direction: column;
-                        gap: 2rem;
-
-                        &>div:nth-child(1) {
-                            display: flex;
-                            flex-direction: column;
-                            gap: 1rem;
-
-                            &>p:nth-child(1) {
-                                font-size: var(--font-tertiary);
-                                color: var(--text-primary);
-                                font-family: "AirbnbCereal_Medium";
-                            }
-
-                            &>p:nth-child(2) {
-                                font-size: var(--font-primary);
-                                color: var(--text-secondary);
-                            }
-                        }
-
-                        &>div:nth-child(2) {
-                            display: flex;
-                            flex-direction: column;
-
-                            &>h1 {
-                                color: var(--text-primary);
-                            }
-
-                            &>p:nth-child(2) {
-                                font-size: var(--font-primary);
-                                color: var(--text-secondary);
-                                margin-top: -1rem;
-
-                                &>span {
-                                    /* color: #00A36C; */
-                                    font-family: "AirbnbCereal_Medium";
-                                }
-                            }
-
-                        }
-                    }
-
-                    &>div:nth-child(2) {
-                        flex: 2;
-                        height: 100%;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                    }
-                }
-
-                &>div:nth-child(2) {
-                    border: 0.1rem solid var(--border-secondary);
-                    padding: 2rem;
-                    display: flex;
-                    align-items: center;
-                    gap: 4rem;
-
-                    .appoint_report_item {
-                        flex: 1;
-                        display: flex;
-                        flex-direction: column;
-                        gap: 1.5rem;
-
-                        &>div:nth-child(1) {
-                            display: flex;
-                            align-items: center;
-                            gap: 1rem;
-
-                            &>div {
-                                width: 3rem;
-                                height: 3rem;
-                                border-radius: 0.7rem;
-                                -webkit-border-radius: 0.7rem;
-                                -moz-border-radius: 0.7rem;
-                                -ms-border-radius: 0.7rem;
-                                -o-border-radius: 0.7rem;
-                                background-color: var(--btn-primary-hover);
-                                color: var(--text-primary);
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                font-size: var(--font-primary);
-                            }
-
-                            &>p {
-                                color: var(--text-primary);
-                                font-size: var(--font-primary);
-                                font-family: "AirbnbCereal_Medium";
-                            }
-                        }
-
-                        &>h2:nth-child(2) {
-                            color: var(--text-primary);
-                        }
-
-                        &>div:nth-child(3) {
-                            width: 100%;
-                            height: 0.35rem;
-                            background-color: var(--bg-tertiary);
-                            border-radius: 1rem;
-                            -webkit-border-radius: 1rem;
-                            -moz-border-radius: 1rem;
-                            -ms-border-radius: 1rem;
-                            -o-border-radius: 1rem;
-
-                            &>div {
-                                width: 0%;
-                                height: 0.35rem;
-                                background-color: var(--bg-secondary);
-                                border-top-left-radius: 0.35rem;
-                                border-bottom-left-radius: 0.35rem;
-                            }
-                        }
-                    }
-                }
-            }
-
-            &>div:nth-child(2) {
-                /* max-height: 45rem; */
-                flex: 30%;
-                display: flex;
-                flex-direction: column;
-                padding: 2rem;
-                gap: 2rem;
-                background-color: var(--bg-primary);
-                box-shadow: var(--cmmn-box-shadow);
-
-                &>div:nth-child(1) {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1rem;
-
-                    &>p:nth-child(1) {
-                        font-size: var(--font-tertiary);
-                        color: var(--text-primary);
-                        font-family: "AirbnbCereal_Medium";
-                    }
-
-                    &>p:nth-child(2) {
-                        font-size: var(--font-primary);
-                        color: var(--text-secondary);
-                    }
-                }
-
-                &>div:nth-child(2) {
-                    flex-grow: 1;
-                    flex-basis: 0;
-                    display: flex;
-                    flex-direction: column;
-                    overflow: auto;
-                    gap: 1.5rem;
-
-                    .queue_list_item {
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        width: 100%;
-                        /* width: 98%;
-                        min-width: 30rem; */
-
-                        &>div:nth-child(1) {
-                            display: flex;
-                            align-items: center;
-                            gap: 1rem;
-
-                            &>div:nth-child(1) {
-                                width: 4rem;
-                                height: 4rem;
-                                border-radius: 50%;
-                                -webkit-border-radius: 50%;
-                                -moz-border-radius: 50%;
-                                -ms-border-radius: 50%;
-                                -o-border-radius: 50%;
-
-                                &>img {
-                                    width: inherit;
-                                    height: inherit;
-                                    border-radius: 50%;
-                                    -webkit-border-radius: 50%;
-                                    -moz-border-radius: 50%;
-                                    -ms-border-radius: 50%;
-                                    -o-border-radius: 50%;
-                                }
-                            }
-
-                            &>div:nth-child(2) {
-                                display: flex;
-                                flex-direction: column;
-                                gap: 0.5rem;
-
-                                &>p {
-                                    color: var(--text-primary);
-                                    font-size: var(--font-primary);
-                                }
-
-                                &>p:nth-child(2) {
-                                    color: var(--text-secondary);
-                                }
-                            }
-                        }
-
-                        &>div:nth-child(2) {
-                            display: flex;
-                            flex-direction: column;
-                            gap: 0.5rem;
-
-                            &>h2 {
-                                color: var(--text-primary);
-                                margin-left: auto;
-                            }
-
-                            &>p:nth-child(2) {
-                                color: var(--text-secondary);
-                                font-size: var(--font-primary);
-                            }
-                        }
-                    }
-                }
-            }
-
-            .queuelist_loading {
-                display: block;
-            }
-
-            .queuelist_error {
+              & > div {
+                width: 3rem;
+                height: 3rem;
+                border-radius: 0.7rem;
+                -webkit-border-radius: 0.7rem;
+                -moz-border-radius: 0.7rem;
+                -ms-border-radius: 0.7rem;
+                -o-border-radius: 0.7rem;
+                background-color: var(--btn-primary-hover);
+                color: var(--text-primary);
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                font-size: var(--font-primary);
+              }
 
-                &>p {
-                    color: var(--text-primary);
-                    font-size: 1.6rem;
-                    font-family: 'AirbnbCereal_Medium';
-                }
+              & > p {
+                color: var(--text-primary);
+                font-size: var(--font-primary);
+                font-family: "AirbnbCereal_Medium";
+              }
             }
-        }
-    }
 
+            & > h2:nth-child(2) {
+              color: var(--text-primary);
+            }
+
+            & > div:nth-child(3) {
+              width: 100%;
+              height: 0.35rem;
+              background-color: var(--bg-tertiary);
+              border-radius: 1rem;
+              -webkit-border-radius: 1rem;
+              -moz-border-radius: 1rem;
+              -ms-border-radius: 1rem;
+              -o-border-radius: 1rem;
+
+              & > div {
+                width: 0%;
+                height: 0.35rem;
+                background-color: var(--bg-secondary);
+                border-top-left-radius: 0.35rem;
+                border-bottom-left-radius: 0.35rem;
+              }
+            }
+          }
+        }
+      }
+
+      & > div:nth-child(2) {
+        /* max-height: 45rem; */
+        flex: 30%;
+        display: flex;
+        flex-direction: column;
+        padding: 2rem;
+        gap: 2rem;
+        background-color: var(--bg-primary);
+        box-shadow: var(--cmmn-box-shadow);
+
+        & > div:nth-child(1) {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+
+          & > p:nth-child(1) {
+            font-size: var(--font-tertiary);
+            color: var(--text-primary);
+            font-family: "AirbnbCereal_Medium";
+          }
+
+          & > p:nth-child(2) {
+            font-size: var(--font-primary);
+            color: var(--text-secondary);
+          }
+        }
+
+        & > div:nth-child(2) {
+          flex-grow: 1;
+          flex-basis: 0;
+          display: flex;
+          flex-direction: column;
+          overflow: auto;
+          gap: 1.5rem;
+
+          .queue_list_item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            /* width: 98%;
+                        min-width: 30rem; */
+
+            & > div:nth-child(1) {
+              display: flex;
+              align-items: center;
+              gap: 1rem;
+
+              & > div:nth-child(1) {
+                width: 4rem;
+                height: 4rem;
+                border-radius: 50%;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                -ms-border-radius: 50%;
+                -o-border-radius: 50%;
+
+                & > img {
+                  width: inherit;
+                  height: inherit;
+                  border-radius: 50%;
+                  -webkit-border-radius: 50%;
+                  -moz-border-radius: 50%;
+                  -ms-border-radius: 50%;
+                  -o-border-radius: 50%;
+                }
+              }
+
+              & > div:nth-child(2) {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+
+                & > p {
+                  color: var(--text-primary);
+                  font-size: var(--font-primary);
+                }
+
+                & > p:nth-child(2) {
+                  color: var(--text-secondary);
+                }
+              }
+            }
+
+            & > div:nth-child(2) {
+              display: flex;
+              flex-direction: column;
+              gap: 0.5rem;
+
+              & > h2 {
+                color: var(--text-primary);
+                margin-left: auto;
+              }
+
+              & > p:nth-child(2) {
+                color: var(--text-secondary);
+                font-size: var(--font-primary);
+              }
+            }
+          }
+        }
+      }
+
+      .queuelist_loading {
+        display: block;
+      }
+
+      .queuelist_error {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        & > p {
+          color: var(--text-primary);
+          font-size: 1.6rem;
+          font-family: "AirbnbCereal_Medium";
+        }
+      }
+    }
+  }
 }
 
-@media screen and (min-width:0px) and (max-width:768px) {
-    .dashboard_container {
-        /* height: 100%; */
+.salon_modal_container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(95vw, 50rem);
+  background-color: var(--bg-primary);
+  border: 0.2rem solid var(--border-secondary);
+  border-radius: var(--list-wrapper-border-radius);
+  padding: 2rem;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
-        &>div:nth-child(2) {
+  & > div:nth-child(1) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-            flex-direction: column-reverse;
-
-            &>div:nth-child(1) {
-                flex-direction: column;
-                height: auto;
-                min-height: min-content;
-
-                &>div:nth-child(1) {
-                    min-height: 28rem;
-                    max-height: 28rem;
-                    gap: 0rem;
-                    padding: 0rem;
-
-                    &>div:nth-child(1) {
-                        padding: 2rem;
-                    }
-
-                    &>div:nth-child(2) {
-                        padding: 1rem;
-                    }
-                }
-
-                &>div:nth-child(2) {
-                    flex: none;
-                    padding: 0rem;
-                    gap: 0rem;
-
-                    &>div:nth-child(1) {
-                        padding: 2rem;
-                    }
-
-                    .queue_report_container {
-                        height: 12rem;
-                        flex: none;
-                        padding: 1rem;
-                    }
-
-                }
-
-                &>div:nth-child(3) {
-                    padding: 0rem;
-                    gap: 0rem;
-                    flex: none;
-
-                    &>div:nth-child(1) {
-                        padding: 2rem;
-                    }
-
-                    .queue_history_container {
-                        justify-content: space-between;
-                        gap: 3rem;
-                        padding: 1rem;
-                    }
-                }
-
-            }
-
-            &>div:nth-child(2) {
-                flex-direction: column-reverse;
-                height: auto;
-                min-height: min-content;
-
-                &>div:nth-child(1) {
-                    flex: none;
-                    gap: 0rem;
-                    padding: 0rem;
-
-                    &>div:nth-child(1) {
-                        flex-direction: column;
-                        gap: 0rem;
-                        /* padding: 1rem; */
-
-                        &>div:nth-child(1) {
-                            /* background-color: red; */
-                            gap: 1rem;
-                            padding: 2rem;
-                        }
-
-                        &>div:nth-child(2) {
-                            width: 100%;
-                            min-height: 30vh;
-                            max-height: 30vh;
-                        }
-                    }
-
-                    &>div:nth-child(2) {
-                        flex-direction: column;
-                        align-items: normal;
-                        border: none;
-                    }
-                }
-
-                &>div:nth-child(2) {
-                    height: 60rem;
-                    flex: none;
-                    gap: 0rem;
-                    padding: 0rem;
-
-                    &>div:nth-child(1) {
-                        padding: 2rem;
-                    }
-
-                    &>div:nth-child(2) {
-                        padding: 1rem;
-                    }
-                }
-
-            }
-        }
+    & > p:nth-child(1) {
+      font-size: var(--font-size-1);
+      font-weight: 600;
     }
+
+    & > button {
+      margin-left: auto;
+      height: 3.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3.2rem;
+      background-color: transparent;
+      border: 0.1rem solid var(--border-secondary);
+      cursor: pointer;
+      color: var(--color-6);
+      border-radius: var(--border-radius-primary);
+      -webkit-border-radius: var(--border-radius-primary);
+      -moz-border-radius: var(--border-radius-primary);
+      -ms-border-radius: var(--border-radius-primary);
+      -o-border-radius: var(--border-radius-primary);
+      transition: var(--btn-transition);
+      -webkit-transition: var(--btn-transition);
+      -moz-transition: var(--btn-transition);
+      -ms-transition: var(--btn-transition);
+      -o-transition: var(--btn-transition);
+      font-size: var(--font-size-2);
+      margin-bottom: 1rem;
+    }
+  }
+
+  & > textarea {
+    border-radius: 0.5rem;
+    -webkit-border-radius: 0.5rem;
+    -moz-border-radius: 0.5rem;
+    -ms-border-radius: 0.5rem;
+    -o-border-radius: 0.5rem;
+    padding: 1rem;
+    border: none;
+    outline: none;
+    width: 100%;
+    background-color: var(--section-bg-color);
+    border: 0.1rem solid var(--border-secondary);
+    font-size: 1.4rem;
+    resize: none;
+    min-height: 20rem;
+    overflow: auto;
+    line-height: 2rem;
+  }
+
+  & > button {
+    margin-top: 1rem;
+    height: 3.5rem;
+    padding-inline: 1.5rem;
+    border-radius: var(--border-radius-primary);
+    -webkit-border-radius: var(--border-radius-primary);
+    -moz-border-radius: var(--border-radius-primary);
+    -ms-border-radius: var(--border-radius-primary);
+    -o-border-radius: var(--border-radius-primary);
+    background-color: var(--bg-secondary);
+    color: var(--btn-text-color);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: var(--common-btn-transition);
+    -webkit-transition: var(--common-btn-transition);
+  }
+}
+
+@media screen and (min-width: 0px) and (max-width: 768px) {
+  .dashboard_container {
+    /* height: 100%; */
+
+    & > div:nth-child(2) {
+      flex-direction: column-reverse;
+
+      & > div:nth-child(1) {
+        flex-direction: column;
+        height: auto;
+        min-height: min-content;
+
+        & > div:nth-child(1) {
+          min-height: 28rem;
+          max-height: 28rem;
+          gap: 0rem;
+          padding: 0rem;
+
+          & > div:nth-child(1) {
+            padding: 2rem;
+          }
+
+          & > div:nth-child(2) {
+            padding: 1rem;
+          }
+        }
+
+        & > div:nth-child(2) {
+          flex: none;
+          padding: 0rem;
+          gap: 0rem;
+
+          & > div:nth-child(1) {
+            padding: 2rem;
+          }
+
+          .queue_report_container {
+            height: 12rem;
+            flex: none;
+            padding: 1rem;
+          }
+        }
+
+        & > div:nth-child(3) {
+          padding: 0rem;
+          gap: 0rem;
+          flex: none;
+
+          & > div:nth-child(1) {
+            padding: 2rem;
+          }
+
+          .queue_history_container {
+            justify-content: space-between;
+            gap: 3rem;
+            padding: 1rem;
+          }
+        }
+      }
+
+      & > div:nth-child(2) {
+        flex-direction: column-reverse;
+        height: auto;
+        min-height: min-content;
+
+        & > div:nth-child(1) {
+          flex: none;
+          gap: 0rem;
+          padding: 0rem;
+
+          & > div:nth-child(1) {
+            flex-direction: column;
+            gap: 0rem;
+            /* padding: 1rem; */
+
+            & > div:nth-child(1) {
+              /* background-color: red; */
+              gap: 1rem;
+              padding: 2rem;
+            }
+
+            & > div:nth-child(2) {
+              width: 100%;
+              min-height: 30vh;
+              max-height: 30vh;
+            }
+          }
+
+          & > div:nth-child(2) {
+            flex-direction: column;
+            align-items: normal;
+            border: none;
+          }
+        }
+
+        & > div:nth-child(2) {
+          height: 60rem;
+          flex: none;
+          gap: 0rem;
+          padding: 0rem;
+
+          & > div:nth-child(1) {
+            padding: 2rem;
+          }
+
+          & > div:nth-child(2) {
+            padding: 1rem;
+          }
+        }
+      }
+    }
+  }
 }

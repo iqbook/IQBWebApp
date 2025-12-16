@@ -452,7 +452,7 @@ import {
   getAdminBarberListAction,
   getBarberDashboardAction,
 } from "../../Redux/Admin/Actions/BarberAction";
-import { AppointmentIcon } from "../../newicons";
+import { AppointmentIcon, CloseIcon } from "../../newicons";
 import {
   Bar,
   BarChart,
@@ -470,6 +470,8 @@ import { adminGetDefaultSalonAction } from "../../Redux/Admin/Actions/AdminHeade
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import axios from "axios";
+import { EditIcon } from "../../icons";
+import { Modal } from "@mui/material";
 
 // created in arghyas account
 
@@ -790,6 +792,8 @@ const Dashboard = () => {
 
   const currentSalonType = localStorage.getItem("CurrentSalonType");
 
+  const [salonInfoOpen, setSalonInfoOpen] = useState(false);
+
   return salonId === 0 ? (
     <>
       <section className={`${style.dashboard_initial_ontainer}`}>
@@ -806,52 +810,27 @@ const Dashboard = () => {
     <>
       <section className={`${style.dashboard_container}`}>
         <div className={style.salonInfo_container}>
-          <h3>Salon Info</h3>
+          <div>
+            <h3>Salon Info</h3>
+            <button onClick={() => setSalonInfoOpen(true)}>
+              <EditIcon size={"1.4rem"} color="var(--btn-text-color)" />
+            </button>
+          </div>
           {adminGetDefaultSalonLoading ? (
-            <div
+            <Skeleton
+              count={2}
+              width={"100%"}
+              height={"2rem"}
               style={{
-                paddingBlock: "1rem",
-                display: "flex",
-                flexDirection: "column",
-                gap: "1rem",
+                marginBottom: "1rem",
               }}
-            >
-              <Skeleton
-                count={1}
-                width={"100%"}
-                height={"2rem"}
-                baseColor={"var(--loader-bg-color)"}
-                highlightColor={"var(--loader-highlight-color)"}
-              />
-
-              <Skeleton
-                count={1}
-                width={"100%"}
-                height={"2rem"}
-                baseColor={"var(--loader-bg-color)"}
-                highlightColor={"var(--loader-highlight-color)"}
-              />
-              <Skeleton
-                count={1}
-                width={"100%"}
-                height={"2rem"}
-                baseColor={"var(--loader-bg-color)"}
-                highlightColor={"var(--loader-highlight-color)"}
-              />
-            </div>
-          ) : (
-            <textarea
-              value={salonInfo}
-              disabled={adminGetDefaultSalonLoading}
-              placeholder="Enter your salon info"
-              onChange={(e) => {
-                const lines = e.target.value.split("\n");
-                // if (lines.length <= 5) {
-                //   setSalonInfo(e.target.value);
-                // }
-                setSalonInfo(e.target.value);
-              }}
+              baseColor={"var(--loader-bg-color)"}
+              highlightColor={"var(--loader-highlight-color)"}
             />
+          ) : (
+            <div>
+              <p>{salonInfo}</p>
+            </div>
           )}
         </div>
 
@@ -1164,6 +1143,33 @@ const Dashboard = () => {
           </div>
         </div>
       </section>
+
+      <Modal
+        open={salonInfoOpen}
+        onClose={() => setSalonInfoOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div className={style.salon_modal_container}>
+          <div>
+            <p>Salon Info</p>
+            <button onClick={() => setSalonInfoOpen(false)}>
+              <CloseIcon />
+            </button>
+          </div>
+
+          <textarea
+            value={salonInfo}
+            disabled={adminGetDefaultSalonLoading}
+            placeholder="Enter your salon info"
+            onChange={(e) => {
+              setSalonInfo(e.target.value);
+            }}
+          />
+
+          <button>Save</button>
+        </div>
+      </Modal>
     </>
   );
 };
