@@ -472,6 +472,7 @@ import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import axios from "axios";
 import { EditIcon } from "../../icons";
 import { Modal } from "@mui/material";
+import ButtonLoader from "../../components/ButtonLoader/ButtonLoader";
 
 // created in arghyas account
 
@@ -751,44 +752,56 @@ const Dashboard = () => {
     },
   ];
 
+  const [salonInfo, setSalonInfo] = useState("");
+  const [updateSalonInfoLoader, setUpdateSalonInfoLoader] = useState(false);
+
   const updateSalonInfo = async (salonInfoText) => {
     try {
+      setUpdateSalonInfoLoader(true);
       const { data } = await api.post("/api/salon/updateSalonInfo", {
         salonId,
-        salonInfo: salonInfoText,
+        salonInfo,
       });
+      setUpdateSalonInfoLoader(false);
+      setSalonInfoOpen(false)
 
       dispatch(adminGetDefaultSalonAction(email));
-      // toast.success(data.message);
     } catch (error) {
-      console.log("Error ", error);
+      setUpdateSalonInfoLoader(false);
+      toast.error(error?.response?.data?.message, {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     }
   };
 
-  const [salonInfo, setSalonInfo] = useState("");
+  // // Keep latest value in a ref (avoids stale closures)
+  // const salonInfoRef = useRef(salonInfo);
+  // useEffect(() => {
+  //   salonInfoRef.current = salonInfo;
+  // }, [salonInfo]);
 
-  // Keep latest value in a ref (avoids stale closures)
-  const salonInfoRef = useRef(salonInfo);
-  useEffect(() => {
-    salonInfoRef.current = salonInfo;
-  }, [salonInfo]);
+  // // Debounce timer stored in a ref so we can clear it
+  // const timerRef = useRef(null);
 
-  // Debounce timer stored in a ref so we can clear it
-  const timerRef = useRef(null);
+  // useEffect(() => {
+  //   if (timerRef.current) clearTimeout(timerRef.current);
 
-  useEffect(() => {
-    if (timerRef.current) clearTimeout(timerRef.current);
+  //   timerRef.current = setTimeout(() => {
+  //     // console.log("Salon Info triggered:", salonInfoRef.current);
+  //     updateSalonInfo(salonInfoRef.current);
+  //   }, 2000);
 
-    timerRef.current = setTimeout(() => {
-      // console.log("Salon Info triggered:", salonInfoRef.current);
-      updateSalonInfo(salonInfoRef.current);
-    }, 2000);
-
-    // cleanup on unmount or before next run
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, [salonInfo]);
+  //   // cleanup on unmount or before next run
+  //   return () => {
+  //     if (timerRef.current) clearTimeout(timerRef.current);
+  //   };
+  // }, [salonInfo]);
 
   const currentSalonType = localStorage.getItem("CurrentSalonType");
 
@@ -1167,7 +1180,9 @@ const Dashboard = () => {
             }}
           />
 
-          <button>Save</button>
+          <button onClick={updateSalonInfo}>
+            {updateSalonInfoLoader ? <ButtonLoader /> : "Save"}
+          </button>
         </div>
       </Modal>
     </>

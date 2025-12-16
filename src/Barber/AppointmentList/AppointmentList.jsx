@@ -776,6 +776,16 @@ const AppointmentList = () => {
         aria-describedby="modal-modal-description"
       >
         <div className={style.modal_container}>
+          <button
+            onClick={() =>
+              setOpenMobileModal({
+                open: false,
+                data: {},
+              })
+            }
+          >
+            <CloseIcon />
+          </button>
           <div>
             <p>{openMobileModal?.data?.customerName}</p>
             <p>{openMobileModal?.data?.timeSlots}</p>

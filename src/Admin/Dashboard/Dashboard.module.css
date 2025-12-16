@@ -755,6 +755,9 @@
     cursor: pointer;
     transition: var(--common-btn-transition);
     -webkit-transition: var(--common-btn-transition);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
