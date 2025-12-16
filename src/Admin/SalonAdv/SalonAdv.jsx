@@ -1027,12 +1027,15 @@ const SalonAdv = () => {
     if (confirm) {
       try {
         setDeleteLoader(true);
-        const {data} = await api.delete("/api/advertisement/deleteAdvertisements", {
-          data: {
-            public_id: publicId,
-            img_id: mongoid,
-          },
-        });
+        const { data } = await api.delete(
+          "/api/advertisement/deleteAdvertisements",
+          {
+            data: {
+              public_id: publicId,
+              img_id: mongoid,
+            },
+          }
+        );
         setDeleteLoader(false);
         setEditAdvData(null);
         setOpenEdit(false);
@@ -1512,7 +1515,6 @@ const SalonAdv = () => {
           <div>
             <div>
               <p>Advertisements</p>
-              {/* <p>Tap to edit advertisements</p> */}
             </div>
             <p>Image: {advertisements?.length}</p>
           </div>
@@ -1859,3 +1861,4 @@ const Adv = ({
     </div>
   );
 };
+

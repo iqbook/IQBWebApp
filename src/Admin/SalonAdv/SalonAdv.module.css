@@ -1000,6 +1000,7 @@
 .adv_item {
   height: 12rem;
   position: relative;
+  touch-action: none;
 
   & > img {
     width: 100%;
@@ -1053,6 +1054,7 @@
   /* padding: 2rem; */
   border-radius: 1rem;
 }
+
 
 @media screen and (min-width: 0px) and (max-width: 430px) {
   .adv_section_left {
@@ -1113,7 +1115,6 @@
     }
   }
 }
-
 
 @media screen and (min-width: 431px) and (max-width: 768px) {
   .adv_section_left {
