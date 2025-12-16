@@ -22,7 +22,7 @@ import { FaChartPie } from "react-icons/fa";
 import { FaChartSimple } from "react-icons/fa6";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { MdOutlineCameraAlt } from "react-icons/md";
-import { AiOutlineCloudUpload } from "react-icons/ai";
+import { AiFillEdit, AiOutlineCloudUpload } from "react-icons/ai";
 import { AiOutlineMenu } from "react-icons/ai";
 import { RxCross1 } from "react-icons/rx";
 import { IoPersonCircle } from "react-icons/io5";
@@ -79,7 +79,7 @@ export const ChartIcon2 = FaChartPie
 export const ChartIcon3 = FaChartSimple
 export const Threeverticaldots = BsThreeDotsVertical
 
-export const EditIcon = FaEdit
+export const EditIcon = AiFillEdit
 export const DeleteIcon = RiDeleteBin5Fill
 
 export const CameraIcon = MdOutlineCameraAlt

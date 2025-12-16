@@ -638,14 +638,36 @@
     -ms-border-radius: var(--border-radius-primary);
     -o-border-radius: var(--border-radius-primary);
     outline: none;
+    position: relative;
 
-    /* &>p {
-            color: var(--text-primary);
-            text-align: center;
-            margin-bottom: 2rem;
-        } */
+    & > button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      height: 3.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3.2rem;
+      background-color: transparent;
+      border: 0.1rem solid var(--border-secondary);
+      cursor: pointer;
+      color: var(--color-6);
+      border-radius: var(--border-radius-primary);
+      -webkit-border-radius: var(--border-radius-primary);
+      -moz-border-radius: var(--border-radius-primary);
+      -ms-border-radius: var(--border-radius-primary);
+      -o-border-radius: var(--border-radius-primary);
+      transition: var(--btn-transition);
+      -webkit-transition: var(--btn-transition);
+      -moz-transition: var(--btn-transition);
+      -ms-transition: var(--btn-transition);
+      -o-transition: var(--btn-transition);
+      font-size: var(--font-size-2);
+      margin-bottom: 1rem;
+    }
 
-    & > div:nth-child(1) {
+    & > div:nth-child(2) {
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
@@ -663,7 +685,7 @@
       }
     }
 
-    & > div:nth-child(2) {
+    & > div:nth-child(3) {
       display: flex;
       align-items: center;
       gap: 2rem;
