@@ -79,6 +79,7 @@
     padding: 2rem;
     background-color: var(--bg-primary);
     box-shadow: var(--cmmn-box-shadow);
+    border: 0.1rem solid var(--border-secondary);
 
     & > div {
       display: flex;
