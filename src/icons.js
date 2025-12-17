@@ -37,7 +37,7 @@ import { FaFile } from "react-icons/fa";
 import { IoHome } from "react-icons/io5";
 import { PiPaperPlaneRightFill } from "react-icons/pi";
 import { RiVipCrownFill } from 'react-icons/ri'
-import { FiClock, FiPieChart } from "react-icons/fi";
+import { FiBarChart2, FiClock, FiPieChart } from "react-icons/fi";
 import { MdAdd } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { CiSaveDown2 } from "react-icons/ci";
@@ -110,5 +110,6 @@ export const PaymentIcon = MdOutlinePayment
 export const StripeIcon = FaStripeS
 export const Subscription = MdSubscriptions
 export const FileImage = FaFileImage
+export const BarIcon = FiBarChart2
 
 

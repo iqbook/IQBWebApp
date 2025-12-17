@@ -1055,7 +1055,6 @@
   border-radius: 1rem;
 }
 
-
 @media screen and (min-width: 0px) and (max-width: 430px) {
   .adv_section_left {
     display: none;
@@ -1076,6 +1075,7 @@
 
   .adv_section_right {
     & > div {
+      padding: 0.5rem;
       width: 100%;
     }
   }
@@ -1103,6 +1103,7 @@
   }
 
   .adv_item {
+    width: 85%;
     .action_btn_container {
       .action_btn_large {
         display: none;
@@ -1136,6 +1137,7 @@
 
   .adv_section_right {
     & > div {
+      padding: 0.5rem;
       width: 100%;
     }
   }
@@ -1163,6 +1165,7 @@
   }
 
   .adv_item {
+    width: 88%;
     .action_btn_container {
       .action_btn_large {
         display: none;
