@@ -69,6 +69,7 @@
       display: flex;
       flex-direction: row;
       align-items: center;
+      flex-wrap: wrap;
       gap: 1rem;
 
       & > button {
@@ -158,9 +159,6 @@
   flex-direction: row;
   align-items: center;
   margin-bottom: 1.5rem;
-
-  /* height: 40rem; */
-  /* margin-bottom: 1.5rem; */
 }
 
 .report_bottom_left {
@@ -235,25 +233,26 @@
   justify-content: space-between;
 }
 
-.report_pie_stylist_container{
+.report_pie_stylist_container {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  height: 6rem;
-  
-  &>div{
+  flex-wrap: wrap;
+  min-height: 6rem;
+
+  & > div {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 1rem;
 
-    &>div{
+    & > div {
       width: 1.5rem;
       height: 1.5rem;
       background-color: red;
       border-radius: 50%;
     }
 
-    &>p{
+    & > p {
       font-size: 1.4rem;
       font-weight: 600;
     }
@@ -304,5 +303,26 @@
       place-items: center;
       padding: 0.7rem;
     }
+  }
+}
+
+@media screen and (min-width: 0px) and (max-width: 430px) {
+  .report_top_right{
+    display: none;
+  }
+
+  .report_bottom_right{
+    display: none;
+  }
+}
+
+
+@media screen and (min-width: 431px) and (max-width: 768px) {
+  .report_top_right{
+    display: none;
+  }
+
+  .report_bottom_right{
+    display: none;
   }
 }

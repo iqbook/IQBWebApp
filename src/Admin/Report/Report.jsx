@@ -96,19 +96,19 @@
 //     setDayOption("");
 //   };
 
-//   useEffect(() => {
-//     const handleResize = () => {
-//       setIsMobile(window.matchMedia("(max-width: 600px)").matches);
-//     };
+// useEffect(() => {
+//   const handleResize = () => {
+//     setIsMobile(window.matchMedia("(max-width: 600px)").matches);
+//   };
 
-//     handleResize();
+//   handleResize();
 
-//     window.addEventListener("resize", handleResize);
+//   window.addEventListener("resize", handleResize);
 
-//     return () => {
-//       window.removeEventListener("resize", handleResize);
-//     };
-//   }, []);
+//   return () => {
+//     window.removeEventListener("resize", handleResize);
+//   };
+// }, []);
 
 //   const [selectedbarber, setSelectedbarber] = useState("");
 //   const [selectedbarberId, setSelectedbarberId] = useState("");
@@ -877,9 +877,11 @@
 
 // export default Report;
 
-import React, { useState } from "react";
+//=====
+
+import React, { useEffect, useState } from "react";
 import style from "./Report.module.css";
-import { Calendar } from "react-multi-date-picker";
+import Calendar from "react-multi-date-picker";
 import { BarIcon } from "../../icons";
 import {
   Bar,
@@ -960,6 +962,33 @@ const Report = () => {
     reportUIArr[0]
   );
 
+  const [selectedDates, setSelectedDates] = useState([]);
+
+  const handleDateChange = (dates) => {
+    const formatedDates = dates.map((date) => date.format("DD/MM/YYYY"));
+    setSelectedDates(formatedDates);
+    setSelectedFilter("");
+    setWeekOption("");
+    setMonthOption("");
+    setDayOption("");
+  };
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.matchMedia("(max-width: 600px)").matches);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div className={style.section}>
       <div className={style.section_header}>
@@ -974,7 +1003,23 @@ const Report = () => {
               <p>Appointments summary</p>
 
               <div>
-                <p>12-05-25 - 25-07-25</p>
+                <Calendar
+                  numberOfMonths={isMobile ? 1 : 2}
+                  value={selectedDates}
+                  onChange={handleDateChange}
+                  range
+                  placeholder="dd/mm/yyyy - dd/mm/yyyy"
+                  // onChange={handleDateChange}
+                  dateSeparator={" - "}
+                  calendarPosition={"bottom-left"}
+                  format="DD/MM/YYYY"
+                  className={true ? "dark-theme" : "light-theme"}
+                  style={
+                    {
+                      // background: true ? "#222" : "#fff"
+                    }
+                  }
+                />
               </div>
             </div>
 
@@ -1004,23 +1049,25 @@ const Report = () => {
             <div>
               <p>Select Stylist</p>
               <div>
-                {["All", "John", "Bob"].map((item, index) => {
-                  return (
-                    <button
-                      key={item}
-                      style={{
-                        backgroundColor:
-                          index === 0 ? "var(--bg-secondary)" : "transparent",
-                        color:
-                          index === 0
-                            ? "var(--btn-text-color)"
-                            : "var(--text-primary)",
-                      }}
-                    >
-                      {item}
-                    </button>
-                  );
-                })}
+                {["All", "John", "Bob", "Jazz", "Rohan", "Rahul", "Emilly"].map(
+                  (item, index) => {
+                    return (
+                      <button
+                        key={item}
+                        style={{
+                          backgroundColor:
+                            index === 0 ? "var(--bg-secondary)" : "transparent",
+                          color:
+                            index === 0
+                              ? "var(--btn-text-color)"
+                              : "var(--text-primary)",
+                        }}
+                      >
+                        {item}
+                      </button>
+                    );
+                  }
+                )}
               </div>
             </div>
 
@@ -1248,102 +1295,6 @@ const Report = () => {
                 </div>
               </div>
             )}
-
-            {/* <ResponsiveContainer width="100%" height="100%">
-              <PieChart
-                style={{
-                  width: "60rem",
-                }}
-              >
-                <Pie
-                  data={piechartData}
-                  innerRadius="65%"
-                  outerRadius="100%"
-                  cornerRadius="12%"
-                  paddingAngle={1}
-                  dataKey="value"
-                >
-                  <Label content={renderCenterContent} />
-
-                  <LabelList
-                    dataKey="value"
-                    position="inside"
-                    fill="#fff"
-                    fontSize={14}
-                    fontWeight={600}
-                  />
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer> */}
-
-            {/* <ResponsiveContainer width="100%" height={380}>
-              <BarChart
-                data={barchartData}
-                margin={{ top: 30, right: 20, left: 0, bottom: 10 }}
-                barGap={4}
-              >
-
-                <defs>
-                  {GRADIENTS.map((g) => (
-                    <linearGradient
-                      key={g.key}
-                      id={`grad-${g.key}`}
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
-                    >
-                      <stop offset="0%" stopColor={g.from} />
-                      <stop offset="100%" stopColor={g.to} />
-                    </linearGradient>
-                  ))}
-                </defs>
-
-                <CartesianGrid
-                  strokeDasharray="4 6"
-                  stroke="rgba(0,0,0,0.08)"
-                  vertical={false}
-                />
-
-                <XAxis
-                  dataKey="month"
-                  tick={{ fill: "#6b7280", fontSize: 12 }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <YAxis
-                  tick={{ fill: "#6b7280", fontSize: 12 }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-
-                <Tooltip
-                  cursor={{ fill: "rgba(0,0,0,0.04)" }}
-                  contentStyle={{
-                    borderRadius: 12,
-                    border: "none",
-                    boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
-                    fontSize: 13,
-                  }}
-                />
-
-                <Legend iconType="circle" />
-
-                {GRADIENTS.map((g, index) => (
-                  <Bar
-                    key={g.key}
-                    dataKey={g.key}
-                    stackId="total"
-                    fill={`url(#grad-${g.key})`}
-                    radius={
-                      index === GRADIENTS.length - 1
-                        ? [10, 10, 0, 0] 
-                        : [0, 0, 0, 0]
-                    }
-                  />
-                ))}
-              </BarChart>
-            </ResponsiveContainer> */}
           </div>
           <div className={style.report_bottom_right}>
             <p>Upcoming analytics</p>
