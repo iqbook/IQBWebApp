@@ -1257,6 +1257,8 @@ const SalonAdv = () => {
     }
   };
 
+  const [activeImageIndex, setActiveImageIndex] = useState(1);
+
   return (
     <section className={`${style.adv_section}`}>
       <div className={style.adv_section_left}>
@@ -1503,6 +1505,7 @@ const SalonAdv = () => {
               showArrows={false}
               stopOnHover
               renderIndicator={false}
+              onChange={(index) => setActiveImageIndex(index + 1)}
             >
               {advertisements.map((adv) => (
                 <div className={style.carousel_item} key={adv?._id}>
@@ -1515,8 +1518,9 @@ const SalonAdv = () => {
           <div>
             <div>
               <p>Advertisements</p>
+              <p>Drag images to change position</p>
             </div>
-            <p>Image: {advertisements?.length}</p>
+            <p>Image: {activeImageIndex} of {advertisements?.length}</p>
           </div>
 
           <button
