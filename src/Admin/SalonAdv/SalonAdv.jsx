@@ -806,7 +806,7 @@ import Skeleton from "react-loading-skeleton";
 import toast from "react-hot-toast";
 import { Carousel } from "react-responsive-carousel";
 import { Modal } from "@mui/material";
-import { EqualIcon } from "../../newicons";
+import { AddIcon, EqualIcon } from "../../newicons";
 
 const SalonAdv = () => {
   const [openUpload, setOpenUpload] = useState(false);
@@ -1525,7 +1525,7 @@ const SalonAdv = () => {
               }}
               className={style.adv_mobile_plus_container}
             >
-              +
+              <AddIcon/>
             </button>
             {/* <p>{activeImageIndex} of {advertisements?.length}</p> */}
           </div>

@@ -1084,12 +1084,12 @@
   .adv_mobile_plus_container {
     width: 3.5rem;
     height: 3.5rem;
-    background-color: var(--section-bg-color);
+    background-color: var(--bg-secondary);
     display: grid;
     place-items: center;
-    border: 0.1rem dotted var(--border-secondary);
+    border: 0.1rem solid var(--border-secondary);
     font-size: 2rem;
-    color: var(--text-primary);
+    color: var(--btn-text-color);
     border-radius: 0.5rem;
   }
 
@@ -1146,6 +1146,7 @@
   }
 }
 
+
 @media screen and (min-width: 431px) and (max-width: 768px) {
   .carousel_item {
     margin: 1rem;
@@ -1158,12 +1159,12 @@
   .adv_mobile_plus_container {
     width: 3.5rem;
     height: 3.5rem;
-    background-color: var(--section-bg-color);
+    background-color: var(--bg-secondary);
     display: grid;
     place-items: center;
-    border: 0.1rem dotted var(--border-secondary);
+    border: 0.1rem solid var(--border-secondary);
     font-size: 2rem;
-    color: var(--text-primary);
+    color: var(--btn-text-color);
     border-radius: 0.5rem;
   }
 
