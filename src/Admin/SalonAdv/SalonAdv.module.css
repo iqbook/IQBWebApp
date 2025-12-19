@@ -920,12 +920,14 @@
   /* KEY FIX */
   flex: 1; /* Let card fill available height */
   min-height: 0;
-}
 
+  & > div:nth-child(1) {
+    margin: 2rem 2rem 0rem 2rem;
+  }
+}
 
 .carousel_item {
   height: 12rem;
-  margin: 2rem;
 
   & > img {
     width: 100%;
@@ -1080,22 +1082,29 @@
   }
 
   .adv_mobile_plus_container {
-    margin-inline: 1rem;
-    height: 5rem;
+    width: 3.5rem;
+    height: 3.5rem;
     background-color: var(--section-bg-color);
     display: grid;
     place-items: center;
     border: 0.1rem dotted var(--border-secondary);
-
-    & > p {
-      font-size: 3rem;
-    }
+    font-size: 2rem;
+    color: var(--text-primary);
+    border-radius: 0.5rem;
   }
 
   .adv_section_right {
     & > div {
       padding: 0.5rem;
       width: 100%;
+
+      & > div:nth-child(1) {
+        margin: 0rem;
+      }
+
+      & > div:nth-child(2) {
+        padding-inline: 1rem;
+      }
     }
   }
 
@@ -1147,22 +1156,29 @@
   }
 
   .adv_mobile_plus_container {
-    margin-inline: 1rem;
-    height: 5rem;
+    width: 3.5rem;
+    height: 3.5rem;
     background-color: var(--section-bg-color);
     display: grid;
     place-items: center;
     border: 0.1rem dotted var(--border-secondary);
-
-    & > p {
-      font-size: 3rem;
-    }
+    font-size: 2rem;
+    color: var(--text-primary);
+    border-radius: 0.5rem;
   }
 
   .adv_section_right {
     & > div {
       padding: 0.5rem;
       width: 100%;
+
+      & > div:nth-child(1) {
+        margin: 0rem;
+      }
+
+      & > div:nth-child(2) {
+        padding-inline: 1rem;
+      }
     }
   }
 
