@@ -842,7 +842,7 @@ const Dashboard = () => {
             />
           ) : (
             <div>
-              <p>{salonInfo}</p>
+              <p>{adminGetDefaultSalonResponse?.salonInfo}</p>
             </div>
           )}
         </div>

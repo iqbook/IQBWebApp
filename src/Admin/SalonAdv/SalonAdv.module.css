@@ -916,7 +916,7 @@
   width: min(50rem, 100%);
   background-color: var(--bg-primary);
   border-radius: 1.2rem;
-  padding: 2rem;
+  /* padding: 2rem; */
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -939,6 +939,7 @@
 
 .carousel_item {
   height: 12rem;
+  margin: 2rem;
 
   & > img {
     width: 100%;
@@ -952,6 +953,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-inline: 2rem;
 
   & > div:nth-child(1) {
     & > p:nth-child(1) {
@@ -998,49 +1000,75 @@
 }
 
 .adv_item {
+  margin-right: 2rem;
   height: 12rem;
   position: relative;
-  touch-action: none;
+  display: flex;
+  align-items: center;
 
-  & > img {
-    width: 100%;
+  & > button {
+    padding-inline: 1rem;
     height: inherit;
-    object-fit: fill;
-    border-radius: 1rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
   }
 
-  .action_btn_container {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  & > div {
+    height: inherit;
+    width: 100%;
+    & > img {
+      width: 100%;
+      height: inherit;
+      object-fit: fill;
+    }
 
-    & > button {
-      font-size: 1.4rem;
-      border: none;
-      outline: none;
-      cursor: pointer;
-      padding: 0.4rem 0.6rem;
-      border-radius: 0.3rem;
-      color: #fff;
-      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    .action_btn_container {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
 
-      &:nth-last-child(1) {
-        background-color: #450a0a;
+      & > button {
+        font-size: 1.4rem;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 0.4rem 0.6rem;
+        border-radius: 0.3rem;
+        color: #fff;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+        &:nth-last-child(1) {
+          background-color: #450a0a;
+        }
+      }
+
+      .action_btn_large {
+        display: block;
+        background-color: #0285c7;
+      }
+
+      .action_btn_large_small {
+        display: none;
       }
     }
-
-    .action_btn_large {
-      display: block;
-      background-color: #0285c7;
-    }
-
-    .action_btn_large_small {
-      display: none;
-    }
   }
+}
+
+.adv_item_active {
+  background-color: var(--section-bg-color); /* example */
+}
+
+.drag_handle {
+  cursor: grab;
+  touch-action: none;
+}
+.drag_handle:active {
+  cursor: grabbing;
 }
 
 .modal_common_container {
@@ -1056,11 +1084,16 @@
 }
 
 @media screen and (min-width: 0px) and (max-width: 430px) {
+  .carousel_item{
+    margin: 1rem;
+  }
+
   .adv_section_left {
     display: none;
   }
 
   .adv_mobile_plus_container {
+    margin-inline: 1rem;
     height: 8rem;
     background-color: var(--section-bg-color);
     display: grid;
@@ -1103,7 +1136,7 @@
   }
 
   .adv_item {
-    width: 85%;
+    margin-right: 0rem;
     .action_btn_container {
       .action_btn_large {
         display: none;
@@ -1117,12 +1150,18 @@
   }
 }
 
+
 @media screen and (min-width: 431px) and (max-width: 768px) {
+  .carousel_item{
+    margin: 1rem;
+  }
+  
   .adv_section_left {
     display: none;
   }
 
   .adv_mobile_plus_container {
+    margin-inline: 1rem;
     height: 8rem;
     background-color: var(--section-bg-color);
     display: grid;
@@ -1165,7 +1204,7 @@
   }
 
   .adv_item {
-    width: 88%;
+    margin-right: 0rem;
     .action_btn_container {
       .action_btn_large {
         display: none;

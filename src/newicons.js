@@ -8,8 +8,8 @@ import { IoArrowDownSharp, IoArrowUpSharp, IoCheckmarkCircleOutline, IoChevronDo
 import { LuFilter, LuHistory, LuMailWarning, LuPanelLeftOpen, LuPanelRightOpen } from "react-icons/lu";
 import { MdAdd, MdCheckCircleOutline, MdLogout, MdOutlineCameraAlt, MdOutlineMailOutline, MdOutlineMessage, MdOutlinePhoneInTalk, MdOutlinePhotoCamera, MdOutlineQueue, MdOutlineSubscriptions, MdOutlineWifiOff, MdPayment } from "react-icons/md";
 import { RiAdvertisementLine, RiMoonClearFill, RiDeleteBin6Line, RiTwitterXLine, RiMenuFill, RiComputerLine } from "react-icons/ri";
-import { TbCopyCheck, TbScissors, TbWorldWww } from "react-icons/tb";
-import { PiClockClockwiseBold, PiClockCounterClockwiseBold, PiDotsThreeOutlineFill, PiWarning } from "react-icons/pi";
+import { TbChartPieFilled, TbCopyCheck, TbScissors, TbWorldWww } from "react-icons/tb";
+import { PiClockClockwiseBold, PiClockCounterClockwiseBold, PiDotsThreeOutlineFill, PiEquals, PiWarning } from "react-icons/pi";
 import { BiLogoTiktok, BiSortAlt2 } from "react-icons/bi";
 import { IoIosPeople, IoMdCheckmark } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
@@ -81,3 +81,5 @@ export const RightIcon = FaChevronRight
 export const SalonType = GrRadialSelected
 export const AddressIcon = HiOutlineLocationMarker
 export const WarningIcon = VscWarning
+export const PieChartIcon = TbChartPieFilled
+export const EqualIcon = PiEquals
