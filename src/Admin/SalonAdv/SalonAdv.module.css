@@ -1023,39 +1023,39 @@
       height: inherit;
       object-fit: fill;
     }
+  }
+}
 
-    .action_btn_container {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
+.action_btn_container {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 
-      & > button {
-        font-size: 1.4rem;
-        border: none;
-        outline: none;
-        cursor: pointer;
-        padding: 0.4rem 0.6rem;
-        border-radius: 0.3rem;
-        color: #fff;
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  & > button {
+    font-size: 1.4rem;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.3rem;
+    color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
-        &:nth-last-child(1) {
-          background-color: #450a0a;
-        }
-      }
-
-      .action_btn_large {
-        display: block;
-        background-color: #0285c7;
-      }
-
-      .action_btn_large_small {
-        display: none;
-      }
+    &:nth-last-child(1) {
+      background-color: #450a0a;
     }
+  }
+
+  .action_btn_large {
+    display: block;
+    background-color: #0285c7;
+  }
+
+  .action_btn_large_small {
+    display: none;
   }
 }
 
@@ -1084,7 +1084,7 @@
 }
 
 @media screen and (min-width: 0px) and (max-width: 430px) {
-  .carousel_item{
+  .carousel_item {
     margin: 1rem;
   }
 
@@ -1137,25 +1137,25 @@
 
   .adv_item {
     margin-right: 0rem;
-    .action_btn_container {
-      .action_btn_large {
-        display: none;
-      }
+  }
 
-      .action_btn_large_small {
-        display: block;
-        background-color: #0285c7;
-      }
+  .action_btn_container {
+    .action_btn_large {
+      display: none;
+    }
+
+    .action_btn_large_small {
+      display: block;
+      background-color: #0285c7;
     }
   }
 }
 
-
 @media screen and (min-width: 431px) and (max-width: 768px) {
-  .carousel_item{
+  .carousel_item {
     margin: 1rem;
   }
-  
+
   .adv_section_left {
     display: none;
   }
@@ -1205,15 +1205,16 @@
 
   .adv_item {
     margin-right: 0rem;
-    .action_btn_container {
-      .action_btn_large {
-        display: none;
-      }
+  }
 
-      .action_btn_large_small {
-        display: block;
-        background-color: #0285c7;
-      }
+  .action_btn_container {
+    .action_btn_large {
+      display: none;
+    }
+
+    .action_btn_large_small {
+      display: block;
+      background-color: #0285c7;
     }
   }
 }

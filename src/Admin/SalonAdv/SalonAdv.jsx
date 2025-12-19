@@ -1798,79 +1798,6 @@ const SalonAdv = () => {
 
 export default SalonAdv;
 
-// const Adv = ({
-// adv,
-// id,
-// editImageHandler,
-// handleEditLoader,
-// deleteHandler,
-// deleteLoader,
-// handleEditFileInputChange,
-// darkmodeOn,
-
-// setOpenUpload,
-// setSelectedUploadImage,
-// setOpenEdit,
-// setOpenMobileEdit,
-// setSelectedEditImage,
-// }) => {
-//   const { attributes, listeners, setNodeRef, transform, transition } =
-//     useSortable({ id });
-
-//   return (
-//     <div
-//       ref={setNodeRef}
-//       {...attributes}
-//       {...listeners}
-//       style={{ transition, transform: CSS.Transform.toString(transform) }}
-//       key={adv._id}
-//       className={style.adv_item}
-//     >
-//       <button>=</button>
-//       <div>
-//         <img src={adv?.url} alt="" />
-
-//         {adv?.type !== "default" && (
-//           <div className={style.action_btn_container}>
-//             <button
-//               className={style.action_btn_large}
-//               onClick={() => {
-//                 editImageHandler(adv);
-//               }}
-//               disabled={handleEditLoader === id}
-//               onPointerDown={(e) => e.stopPropagation()}
-//               onTouchStart={(e) => e.stopPropagation()}
-//             >
-//               Edit
-//             </button>
-
-//             <button
-//               className={style.action_btn_large_small}
-//               onClick={() => {
-//                 setOpenMobileEdit(true);
-//                 editImageHandler(adv);
-//               }}
-//               disabled={handleEditLoader === id}
-//               onPointerDown={(e) => e.stopPropagation()}
-//               onTouchStart={(e) => e.stopPropagation()}
-//             >
-//               Edit
-//             </button>
-
-//             <button
-//               onClick={() => deleteHandler(adv.public_id, adv._id)}
-//               disabled={deleteLoader}
-//               onPointerDown={(e) => e.stopPropagation()}
-//               onTouchStart={(e) => e.stopPropagation()}
-//             >
-//               Delete
-//             </button>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
 
 const Adv = ({
   adv,
@@ -1906,7 +1833,6 @@ const Adv = ({
       }}
       className={`${style.adv_item} ${isDragging ? style.adv_item_active : ""}`}
     >
-      {/* ✅ Drag handle */}
       <button className={style.drag_handle} {...listeners} {...attributes}>
         <EqualIcon color="var(--text-primary)" />
       </button>
