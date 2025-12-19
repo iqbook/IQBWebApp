@@ -1522,7 +1522,7 @@ const SalonAdv = () => {
               <p>Drag images to change position</p>
             </div>
             <p>
-              Image: {activeImageIndex} of {advertisements?.length}
+              {activeImageIndex} of {advertisements?.length}
             </p>
           </div>
 
