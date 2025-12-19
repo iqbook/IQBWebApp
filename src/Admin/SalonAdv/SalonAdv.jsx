@@ -806,7 +806,7 @@ import Skeleton from "react-loading-skeleton";
 import toast from "react-hot-toast";
 import { Carousel } from "react-responsive-carousel";
 import { Modal } from "@mui/material";
-import { EqualIcon } from "../../newicons";
+import { AddIcon, EqualIcon } from "../../newicons";
 
 const SalonAdv = () => {
   const [openUpload, setOpenUpload] = useState(false);
@@ -1258,8 +1258,6 @@ const SalonAdv = () => {
     }
   };
 
-  const [activeImageIndex, setActiveImageIndex] = useState(1);
-
   return (
     <section className={`${style.adv_section}`}>
       <div className={style.adv_section_left}>
@@ -1487,53 +1485,59 @@ const SalonAdv = () => {
       </div>
       <div className={style.adv_section_right}>
         <div>
-          {getAllAdvertisementLoading ? (
-            <Skeleton
-              count={1}
-              width="92%"
-              height="12rem"
-              style={{ borderRadius: "1rem", margin: "2rem" }}
-              baseColor="var(--loader-bg-color)"
-              highlightColor="var(--loader-highlight-color)"
-            />
-          ) : advertisements?.length > 0 ? (
-            <Carousel
-              showThumbs={false}
-              infiniteLoop
-              autoPlay
-              interval={5000}
-              showStatus={false}
-              showArrows={false}
-              stopOnHover
-              renderIndicator={false}
-              onChange={(index) => setActiveImageIndex(index + 1)}
-            >
-              {advertisements.map((adv) => (
-                <div className={style.carousel_item} key={adv?._id}>
-                  <img src={adv?.url} alt="Advertisement" />
-                </div>
-              ))}
-            </Carousel>
-          ) : null}
+          <div>
+            {getAllAdvertisementLoading ? (
+              <Skeleton
+                count={1}
+                width="92%"
+                height="12rem"
+                style={{ borderRadius: "1rem", margin: "2rem" }}
+                baseColor="var(--loader-bg-color)"
+                highlightColor="var(--loader-highlight-color)"
+              />
+            ) : advertisements?.length > 0 ? (
+              <Carousel
+                showThumbs={false}
+                infiniteLoop
+                autoPlay
+                interval={5000}
+                showStatus={false}
+                showArrows={false}
+                stopOnHover
+              >
+                {advertisements?.map((adv) => (
+                  <div className={style.carousel_item} key={adv?._id}>
+                    <img src={adv?.url} alt="Advertisement" />
+                  </div>
+                ))}
+              </Carousel>
+            ) : null}
+          </div>
 
           <div>
             <div>
               <p>Advertisements</p>
               <p>Drag images to change position</p>
             </div>
-            <p>
-              Image: {activeImageIndex} of {advertisements?.length}
-            </p>
+            <button
+              onClick={() => {
+                setOpenMobileUpload(true);
+              }}
+              className={style.adv_mobile_plus_container}
+            >
+              <AddIcon/>
+            </button>
+            {/* <p>{activeImageIndex} of {advertisements?.length}</p> */}
           </div>
 
-          <button
+          {/* <button
             onClick={() => {
               setOpenMobileUpload(true);
             }}
             className={style.adv_mobile_plus_container}
           >
             <p>+</p>
-          </button>
+          </button> */}
 
           <div className={style.adv_image_scrolling_section}>
             {getAllAdvertisementLoading ? (
@@ -1798,80 +1802,6 @@ const SalonAdv = () => {
 
 export default SalonAdv;
 
-// const Adv = ({
-// adv,
-// id,
-// editImageHandler,
-// handleEditLoader,
-// deleteHandler,
-// deleteLoader,
-// handleEditFileInputChange,
-// darkmodeOn,
-
-// setOpenUpload,
-// setSelectedUploadImage,
-// setOpenEdit,
-// setOpenMobileEdit,
-// setSelectedEditImage,
-// }) => {
-//   const { attributes, listeners, setNodeRef, transform, transition } =
-//     useSortable({ id });
-
-//   return (
-//     <div
-//       ref={setNodeRef}
-//       {...attributes}
-//       {...listeners}
-//       style={{ transition, transform: CSS.Transform.toString(transform) }}
-//       key={adv._id}
-//       className={style.adv_item}
-//     >
-//       <button>=</button>
-//       <div>
-//         <img src={adv?.url} alt="" />
-
-//         {adv?.type !== "default" && (
-//           <div className={style.action_btn_container}>
-//             <button
-//               className={style.action_btn_large}
-//               onClick={() => {
-//                 editImageHandler(adv);
-//               }}
-//               disabled={handleEditLoader === id}
-//               onPointerDown={(e) => e.stopPropagation()}
-//               onTouchStart={(e) => e.stopPropagation()}
-//             >
-//               Edit
-//             </button>
-
-//             <button
-//               className={style.action_btn_large_small}
-//               onClick={() => {
-//                 setOpenMobileEdit(true);
-//                 editImageHandler(adv);
-//               }}
-//               disabled={handleEditLoader === id}
-//               onPointerDown={(e) => e.stopPropagation()}
-//               onTouchStart={(e) => e.stopPropagation()}
-//             >
-//               Edit
-//             </button>
-
-//             <button
-//               onClick={() => deleteHandler(adv.public_id, adv._id)}
-//               disabled={deleteLoader}
-//               onPointerDown={(e) => e.stopPropagation()}
-//               onTouchStart={(e) => e.stopPropagation()}
-//             >
-//               Delete
-//             </button>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
 const Adv = ({
   adv,
   id,
@@ -1906,7 +1836,6 @@ const Adv = ({
       }}
       className={`${style.adv_item} ${isDragging ? style.adv_item_active : ""}`}
     >
-      {/* ✅ Drag handle */}
       <button className={style.drag_handle} {...listeners} {...attributes}>
         <EqualIcon color="var(--text-primary)" />
       </button>
