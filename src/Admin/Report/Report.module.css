@@ -333,6 +333,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  background-color: var(--section-bg-color);
 }
 
 .report_header {
@@ -443,118 +444,118 @@
       width: 1.6rem;
       height: 1.6rem;
     }
-
-    .filter_popup {
-      position: absolute;
-      top: 5rem;
-      right: 0;
-      width: 33rem;
-      max-height: 70vh;
-      background-color: var(--bg-primary);
-      border-radius: 1.2rem;
-      border: 0.1rem solid var(--border-secondary);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-      display: flex;
-      flex-direction: column;
-      z-index: 20;
-    }
-
-    .filter_popup::before {
-      content: "";
-      position: absolute;
-      top: -1rem;
-      right: 2rem;
-      border-left: 1rem solid transparent;
-      border-right: 1rem solid transparent;
-      border-bottom: 1rem solid var(--border-secondary);
-    }
-
-    .filter_popup::after {
-      content: "";
-      position: absolute;
-      top: -0.8rem;
-      right: 2rem;
-      border-left: 0.8rem solid transparent;
-      border-right: 0.8rem solid transparent;
-      border-bottom: 0.8rem solid var(--bg-primary);
-    }
-
-    .filter_popup_header {
-      padding: 1.5rem;
-      border-bottom: 0.1rem solid var(--border-secondary);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .filter_popup_header p {
-      font-size: 1.6rem;
-      font-weight: 600;
-    }
-
-    .filterpopup_close_btn {
-      width: 3rem;
-      height: 3rem;
-      border-radius: 50%;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      color: red;
-    }
-
-    .filter_popup_body {
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      overflow-y: auto;
-    }
-
-    .filter_section p {
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin-bottom: 0.8rem;
-    }
-
-    .filter_chip_group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-    }
-
-    .filter_chip {
-      padding: 0.6rem 1.2rem;
-      border-radius: 2rem;
-      border: 0.1rem solid var(--border-secondary);
-      font-size: 1.2rem;
-      background-color: transparent;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .filter_chip:hover {
-      background-color: var(--section-bg-color);
-    }
-
-    .filter_apply_btn {
-      margin-top: 1rem;
-      min-height: 3.8rem;
-      width: 100%;
-      border-radius: 0.8rem;
-      border: none;
-      background-color: var(--bg-secondary);
-      color: var(--btn-text-color);
-      font-size: 1.4rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .filter_popup .rmdp-wrapper {
-      width: 100%;
-    }
   }
+}
+
+.filter_popup {
+  position: absolute;
+  top: 5rem;
+  right: 0;
+  width: 33rem;
+  max-height: 70vh;
+  background-color: var(--bg-primary);
+  border-radius: 1.2rem;
+  border: 0.1rem solid var(--border-secondary);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+}
+
+.filter_popup::before {
+  content: "";
+  position: absolute;
+  top: -1rem;
+  right: 2rem;
+  border-left: 1rem solid transparent;
+  border-right: 1rem solid transparent;
+  border-bottom: 1rem solid var(--border-secondary);
+}
+
+.filter_popup::after {
+  content: "";
+  position: absolute;
+  top: -0.8rem;
+  right: 2rem;
+  border-left: 0.8rem solid transparent;
+  border-right: 0.8rem solid transparent;
+  border-bottom: 0.8rem solid var(--bg-primary);
+}
+
+.filter_popup_header {
+  padding: 1.5rem;
+  border-bottom: 0.1rem solid var(--border-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filter_popup_header p {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.filterpopup_close_btn {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  color: red;
+}
+
+.filter_popup_body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  overflow-y: auto;
+}
+
+.filter_section p {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.filter_chip_group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.filter_chip {
+  padding: 0.6rem 1.2rem;
+  border-radius: 2rem;
+  border: 0.1rem solid var(--border-secondary);
+  font-size: 1.2rem;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.filter_chip:hover {
+  background-color: var(--section-bg-color);
+}
+
+.filter_apply_btn {
+  margin-top: 1rem;
+  min-height: 3.8rem;
+  width: 100%;
+  border-radius: 0.8rem;
+  border: none;
+  background-color: var(--bg-secondary);
+  color: var(--btn-text-color);
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.filter_popup .rmdp-wrapper {
+  width: 100%;
 }
 
 .report_container {
@@ -695,7 +696,42 @@
   display: none;
 }
 
-@media screen and (min-width: 0px) and (max-width: 430px) {
+.modal_common_container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(95vw, 40rem);
+  background-color: var(--bg-primary);
+  border: 0.2rem solid var(--border-secondary);
+  /* padding: 2rem; */
+  border-radius: 1rem;
+  outline: none;
+}
+.report_chart_wrapper {
+  flex: 1;
+  min-height: 0;
+}
+
+.report_pie_mobile_container {
+  display: none;
+}
+
+@media screen and (min-width: 0px) and (max-width: 768px) {
+  .report_pie_container {
+    display: none;
+  }
+
+  .report_pie_mobile_container {
+    flex: 1;
+    /* height: 35rem; */
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    justify-content: space-between;
+    overflow: scroll;
+  }
+
   .report_section {
     height: auto;
     overflow: auto;
@@ -785,6 +821,8 @@
       align-items: center;
       gap: 2rem;
       margin-inline: auto;
+      flex-wrap: wrap;
+      justify-content: center;
 
       & > button {
         padding: 0.5rem 1.2rem;
@@ -826,48 +864,18 @@
     /* background-color: red; */
   }
 
-  .mobile_filter_modal {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    height: 90svh;
-    background-color: var(--bg-primary);
-    border-top-left-radius: 1.6rem;
-    border-top-right-radius: 1.6rem;
-
-    display: flex;
-    flex-direction: column;
-
-    box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.25);
+  .filter_popup {
+    position: relative;
+    top: 0rem;
+    right: 0rem;
+    width: 100%;
+    border: none;
     outline: none;
+    box-shadow: none;
   }
 
-  .filter_popup_header {
-    padding: 1.5rem;
-    border-bottom: 0.1rem solid var(--border-secondary);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .filter_popup_body {
-    flex: 1;
-    overflow-y: auto;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .filter_chip_group {
-    gap: 0.6rem;
-  }
-
-  .filter_apply_btn {
-    position: sticky;
-    bottom: 0;
-    margin-top: auto;
+  .filter_popup::after,
+  .filter_popup::before {
+    display: none;
   }
 }

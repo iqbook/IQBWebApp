@@ -1754,6 +1754,7 @@ const Report = () => {
                 <ResponsiveContainer
                   style={{
                     width: "100%",
+
                     height: "100%",
                     display: "flex",
                     alignItems: "center",
@@ -1916,6 +1917,8 @@ const Report = () => {
               </div>
             </div>
           )}
+
+
         </div>
         <div className={style.report_content_container}>
           <p>Upcoming analytics</p>
@@ -1937,79 +1940,115 @@ const Report = () => {
           })}
         </div>
       </div>
+      
 
       {/* FILTER MODAL */}
       <Modal open={openFilter} onClose={() => setOpenFilter(false)}>
-        <Box className={style.filter_popup}>
-          <div className={style.filter_popup_header}>
-            <p>Select Filter</p>
-            <button onClick={() => setOpenFilter(false)}>
-              <CloseIcon />
-            </button>
-          </div>
-
-          <div className={style.filter_popup_body}>
-            <div className={style.filter_section}>
-              <p>Date Range</p>
-              <Calendar
-                range
-                value={selectedDates}
-                onChange={handleDateChange}
-              />
+        <div className={style.modal_common_container}>
+          <div className={style.filter_popup}>
+            <div className={style.filter_popup_header}>
+              <p>Select Filter</p>
+              <button
+                onClick={() => setOpenFilter(false)}
+                className={style.filterpopup_close_btn}
+              >
+                <CloseIcon />
+              </button>
             </div>
 
-            <div className={style.filter_section}>
-              <p>Report Type</p>
-              <div className={style.filter_chip_group}>
-                {["Daily", "Weekly", "Monthly"].map((item) => (
-                  <button
-                    key={item}
-                    className={style.filter_chip}
-                    onClick={() => setSelectedReportType(item)}
-                    style={{
-                      background:
-                        selectedReportType === item
-                          ? "var(--bg-secondary)"
-                          : "transparent",
-                    }}
-                  >
-                    {item}
-                  </button>
-                ))}
+            <div className={style.filter_popup_body}>
+              <div className={style.filter_section}>
+                <p>Date Range</p>
+                <Calendar
+                  numberOfMonths={1}
+                  value={selectedDates}
+                  onChange={handleDateChange}
+                  range
+                  placeholder="dd/mm/yyyy - dd/mm/yyyy"
+                  dateSeparator=" - "
+                  calendarPosition="bottom-right"
+                  format="DD/MM/YYYY"
+                  className="dark-theme"
+                />
               </div>
-            </div>
 
-            <div className={style.filter_section}>
-              <p>Select Stylist</p>
-              <div className={style.filter_chip_group}>
-                {["All", "John", "Bob", "Jazz", "Rohan", "Rahul", "Emily"].map(
-                  (item) => (
+              <div className={style.filter_section}>
+                <p>Report Type</p>
+                <div className={style.filter_chip_group}>
+                  {["Daily", "Weekly", "Monthly"].map((item, index) => (
                     <button
                       key={item}
+                      onClick={() => {
+                        setSelectedReportType(item);
+                      }}
                       className={style.filter_chip}
-                      onClick={() => setSelectedReportBarber(item)}
                       style={{
-                        background:
-                          selectedReportBarber === item
+                        backgroundColor:
+                          selectedReportType === item
                             ? "var(--bg-secondary)"
                             : "transparent",
+                        color:
+                          selectedReportType === item
+                            ? "var(--btn-text-color)"
+                            : "var(--text-primary)",
                       }}
                     >
                       {item}
                     </button>
-                  )
-                )}
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <button
-              className={style.filter_apply_btn}
-              onClick={() => setOpenFilter(false)}
-            >
-              View Report
-            </button>
+              <div className={style.filter_section}>
+                <p>Select Stylist</p>
+                <div className={style.filter_chip_group}>
+                  {[
+                    "All",
+                    "John",
+                    "Bob",
+                    "Jazz",
+                    "Rohan",
+                    "Rahul",
+                    "Emily",
+                    "Aarav",
+                    "Karan",
+                    "Neha",
+                    "Priya",
+                    "Sahil",
+                    "Ananya",
+                    "Vikram",
+                    "Arjun",
+                    "Meera",
+                    "Nikhil",
+                    "Pooja",
+                  ].map((item, index) => (
+                    <button
+                      key={item}
+                      onClick={() => {
+                        setSelectedReportBarber(item);
+                      }}
+                      className={style.filter_chip}
+                      style={{
+                        backgroundColor:
+                          selectedReportBarber === item
+                            ? "var(--bg-secondary)"
+                            : "transparent",
+                        color:
+                          selectedReportBarber === item
+                            ? "var(--btn-text-color)"
+                            : "var(--text-primary)",
+                      }}
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <button className={style.filter_apply_btn}>View Report</button>
+            </div>
           </div>
-        </Box>
+        </div>
       </Modal>
     </div>
   );
