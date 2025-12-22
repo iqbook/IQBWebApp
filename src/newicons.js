@@ -2,7 +2,7 @@
 
 import { BsCalendar2X, BsGraphUp, BsInstagram, BsSunFill } from "react-icons/bs";
 import { FaChevronLeft, FaChevronRight, FaFacebookF, FaRegCalendarAlt, FaUsers, FaUsersSlash, FaWifi } from "react-icons/fa";
-import { FaChevronDown, FaChevronUp, FaUser } from "react-icons/fa6";
+import { FaChevronDown, FaChevronUp, FaFilter, FaUser } from "react-icons/fa6";
 import { FiPieChart } from "react-icons/fi";
 import { IoArrowDownSharp, IoArrowUpSharp, IoCheckmarkCircleOutline, IoChevronDownOutline, IoPerson, IoPersonCircleOutline, IoSearch, IoSettingsSharp } from "react-icons/io5";
 import { LuFilter, LuHistory, LuMailWarning, LuPanelLeftOpen, LuPanelRightOpen } from "react-icons/lu";
@@ -60,7 +60,7 @@ export const ChangeSalonIcon = AiOutlineShop
 export const SearchIcon = IoSearch
 export const ReportIcon = BsGraphUp
 export const ResetIcon = GrPowerReset
-export const FilterIcon = LuFilter
+export const FilterIcon = FaFilter
 export const ConnectSalonIcon = CiShop
 export const OtpEmailIcon = LuMailWarning
 export const MobileSiderbarMenuIcon = RiMenuFill
