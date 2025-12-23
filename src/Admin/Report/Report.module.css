@@ -347,6 +347,7 @@
     flex: 2;
     display: flex;
     align-items: center;
+    gap: 2rem;
 
     & > div:nth-child(1) {
       display: flex;
@@ -378,6 +379,7 @@
       align-items: center;
       gap: 2rem;
       margin-inline: auto;
+      flex-wrap: wrap;
 
       & > button {
         padding: 0.5rem 1.2rem;
@@ -637,7 +639,6 @@
     & > div {
       width: 1.5rem;
       height: 1.5rem;
-      background-color: red;
       border-radius: 50%;
     }
 
