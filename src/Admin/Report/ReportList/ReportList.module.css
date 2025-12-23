@@ -1,0 +1,91 @@
+.report_section {
+  height: calc(100svh - 6rem);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--section-bg-color);
+}
+
+/* main card */
+.report_section > div {
+  flex: 1; /* 🔑 constrain height */
+  min-height: 0; /* 🔑 allow overflow */
+  padding: 2rem;
+  border-radius: 1rem;
+  background-color: var(--bg-primary);
+  border: 0.1rem solid var(--border-secondary);
+  /* width: min(65rem, 100%); */
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* tabs */
+.report_section_header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.report_section_header > button {
+  height: 3.5rem;
+  padding-inline: 2rem;
+  border-radius: 0.6rem;
+  border: none;
+  cursor: pointer;
+}
+
+/* scrollable content */
+.report_section_container {
+  flex: 1; /* fill remaining space */
+  min-height: 0; /* 🔑 critical */
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  overflow-y: auto;
+}
+
+.report_section_item {
+  background-color: var(--section-bg-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start; 
+  gap: 1rem;
+  text-align: left; 
+  border: none; 
+  cursor: pointer;
+}
+
+/* icon box */
+.report_section_item > div:nth-child(1) {
+  background-color: var(--bg-secondary);
+  border-radius: 0.5rem;
+  display: grid;
+  place-items: center;
+  height: 3.5rem;
+  width: 3.5rem;
+  flex-shrink: 0; /* 🔑 prevents collapse */
+}
+
+/* text container */
+.report_section_item > div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* title */
+.report_section_item > div:nth-child(2) > p:nth-child(1) {
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* subtitle */
+.report_section_item > div:nth-child(2) > p:nth-child(2) {
+  font-size: 1.4rem;
+  line-height: 1.3;
+}

@@ -1373,8 +1373,8 @@
 // Report Third
 
 import React, { useEffect, useState } from "react";
-import style from "./Report.module.css";
-import { BarIcon, LeftArrow } from "../../icons";
+import style from "./ReportChart.module.css";
+import { BarIcon, LeftArrow } from "../../../icons";
 import {
   Bar,
   BarChart,
@@ -1395,15 +1395,18 @@ import {
   LeftIcon,
   PieChartIcon,
   RightIcon,
-} from "../../newicons";
+} from "../../../newicons";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Calendar from "react-multi-date-picker";
 import { Box, Modal } from "@mui/material";
-import api from "../../Redux/api/Api";
+import api from "../../../Redux/api/Api";
 import { useSelector } from "react-redux";
 import moment from "moment/moment";
+import { useNavigate } from "react-router-dom";
 
 const Report = () => {
+  const navigate = useNavigate();
+
   const salonId = useSelector(
     (state) => state.AdminLoggedInMiddleware.adminSalonId
   );
@@ -1523,7 +1526,11 @@ const Report = () => {
       <div className={style.report_header}>
         <div>
           <div>
-            <button>
+            <button
+              onClick={() => {
+                navigate("/admin-reports")
+              }}
+            >
               <LeftArrow color="var(--text-primary)" />
             </button>
             <h2>Reports</h2>
