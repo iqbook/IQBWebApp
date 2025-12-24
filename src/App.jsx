@@ -134,7 +134,12 @@ const PaymentStatus = React.lazy(() =>
 const BarberAppointmentList = React.lazy(() =>
   import("./Barber/AppointmentList/AppointmentList")
 );
-const AdminReports = React.lazy(() => import("./Admin/Report/Report"));
+const AdminReportChart = React.lazy(() =>
+  import("./Admin/Report/ReportChart/ReportChart")
+);
+const AdminReportList = React.lazy(() =>
+  import("./Admin/Report/ReportList/ReportList")
+);
 
 import ProtectedAdminRoute from "./Admin/ProtectedRoutes/ProtectedRoute";
 import ProtectedAdminAuthRoute from "./Admin/ProtectedRoutes/ProtectedAuthRoute";
@@ -263,337 +268,334 @@ const App = () => {
 
   return (
     <>
-        {!isOnline ? (
-          <div className="offline_container">
+      {!isOnline ? (
+        <div className="offline_container">
+          <div>
             <div>
-              <div>
-                <WifiIcon />
-              </div>
-              <p>
-                You are <span>offline</span>
-              </p>
-              <p>Please check your internet connection</p>
+              <WifiIcon />
             </div>
+            <p>
+              You are <span>offline</span>
+            </p>
+            <p>Please check your internet connection</p>
           </div>
-        ) : (
-          <>
-            <Toaster />
-            <BarberGlobalProvider>
-              <BrowserRouter>
-                <React.Suspense
-                  fallback={
-                    <div
-                      style={{
-                        width: "100vw",
-                        height: "100svh",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        // background: darkmodeOn ? "var(--dark-color-2)" : "var(--light-color-4)"
-                        background: "var(--bg-primary)",
-                      }}
-                    >
-                      <Loader />
-                    </div>
-                  }
-                >
-                  <Routes>
-                    {/* Admin Auth Screens */}
+        </div>
+      ) : (
+        <>
+          <Toaster />
+          <BarberGlobalProvider>
+            <BrowserRouter>
+              <React.Suspense
+                fallback={
+                  <div
+                    style={{
+                      width: "100vw",
+                      height: "100svh",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      // background: darkmodeOn ? "var(--dark-color-2)" : "var(--light-color-4)"
+                      background: "var(--bg-primary)",
+                    }}
+                  >
+                    <Loader />
+                  </div>
+                }
+              >
+                <Routes>
+                  {/* Admin Auth Screens */}
+                  <Route
+                    element={
+                      <ErrorBoundary FallbackComponent={ErrorFallbackRoute}>
+                        <ProtectedAdminAuthRoute />
+                      </ErrorBoundary>
+                    }
+                  >
+                    <Route path="/" element={<Public />} />
+                    <Route path="/adminsignin" element={<AdminSignin />} />
+                    <Route path="/adminsignup" element={<AdminSignup />} />
+                    <Route
+                      path="/adminforgotpassword"
+                      element={<AdminForgotPassword />}
+                    />
+                    <Route
+                      path="/admincheckemail"
+                      element={<AdminCheckEmail />}
+                    />
+                    <Route
+                      path="/adminchangepassword/:token"
+                      element={<AdminChangePassword />}
+                    />
+                    <Route
+                      path="/adminpasswordreset"
+                      element={<AdminPasswordReset />}
+                    />
+                    <Route
+                      path="/admin-signupeditprofile"
+                      element={<AdminSignupEditProfile />}
+                    />
+                  </Route>
+
+                  {/* Admin Main Pages  */}
+
+                  <Route element={<ProtectedAdminRoute />}>
                     <Route
                       element={
-                        <ErrorBoundary FallbackComponent={ErrorFallbackRoute}>
-                          <ProtectedAdminAuthRoute />
-                        </ErrorBoundary>
+                        isMobile ? (
+                          <SocketProvider>
+                            <AdminMobileSidebar />
+                          </SocketProvider>
+                        ) : (
+                          <SocketProvider>
+                            <AdminSidebar />
+                          </SocketProvider>
+                        )
                       }
                     >
-                      <Route path="/" element={<Public />} />
-                      <Route path="/adminsignin" element={<AdminSignin />} />
-                      <Route path="/adminsignup" element={<AdminSignup />} />
                       <Route
-                        path="/adminforgotpassword"
-                        element={<AdminForgotPassword />}
-                      />
-                      <Route
-                        path="/admincheckemail"
-                        element={<AdminCheckEmail />}
-                      />
-                      <Route
-                        path="/adminchangepassword/:token"
-                        element={<AdminChangePassword />}
-                      />
-                      <Route
-                        path="/adminpasswordreset"
-                        element={<AdminPasswordReset />}
-                      />
-                      <Route
-                        path="/admin-signupeditprofile"
-                        element={<AdminSignupEditProfile />}
-                      />
-                    </Route>
-
-                    {/* Admin Main Pages  */}
-
-                    <Route element={<ProtectedAdminRoute />}>
-                      <Route
+                        path="/admin-dashboard"
                         element={
-                          isMobile ? (
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
                             <SocketProvider>
-                              <AdminMobileSidebar />
+                              <AdminDashboard />
                             </SocketProvider>
-                          ) : (
-                            <SocketProvider>
-                              <AdminSidebar />
-                            </SocketProvider>
-                          )
+                          </ErrorBoundary>
                         }
-                      >
-                        <Route
-                          path="/admin-dashboard"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <SocketProvider>
-                                <AdminDashboard />
-                              </SocketProvider>
-                            </ErrorBoundary>
-                          }
-                        />
-
-                        <Route path="/dummy" element={<Dummy />} />
-                        <Route
-                          path="/admin-dashboard/editprofile"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminEditProfile />
-                            </ErrorBoundary>
-                          }
-                        />
-                        <Route
-                          path="/admin-salon"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminSalonList />
-                            </ErrorBoundary>
-                          }
-                        />
-                        <Route
-                          path="/admin-salon/createsalon"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminCreateSalon />
-                            </ErrorBoundary>
-                          }
-                        />
-                        <Route
-                          path="/admin-salon/editsalon/:salonid"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminEditSalon />
-                            </ErrorBoundary>
-                          }
-                        />
-                        <Route
-                          path="/admin-salon/appointment/:salonid"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminSalonAppointmentSettings />
-                            </ErrorBoundary>
-                          }
-                        />
-                        <Route
-                          path="/admin-barber"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminBarberList />
-                            </ErrorBoundary>
-                          }
-                        />
-                        <Route
-                          path="/admin-barber/createbarber"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminCreateBarber />
-                            </ErrorBoundary>
-                          }
-                        />
-                        <Route
-                          path="/admin-barber/editbarber/:salonid"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminEditBarber />
-                            </ErrorBoundary>
-                          }
-                        />
-
-                        <Route
-                          path="/admin-customer"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminCustomerList />
-                            </ErrorBoundary>
-                          }
-                        />
-
-                        <Route
-                          path="/admin-advertise"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminSalonAdv />
-                            </ErrorBoundary>
-                          }
-                        />
-                        <Route
-                          path="/admin-queue"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <SocketProvider>
-                                <AdminQueue />
-                              </SocketProvider>
-                            </ErrorBoundary>
-                          }
-                        />
-
-                        <Route
-                          path="/admin-quehistory"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminQueHistory />
-                            </ErrorBoundary>
-                          }
-                        />
-
-                        <Route
-                          path="/admin-appointments"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AppointmentCalender />
-                            </ErrorBoundary>
-                          }
-                        />
-
-                        <Route
-                          path="/admin-appointmenthistory"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminAppointmentHistory />
-                            </ErrorBoundary>
-                          }
-                        />
-
-                        <Route
-                          path="/admin-appointments-list"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AppointmentList />
-                            </ErrorBoundary>
-                          }
-                        />
-
-                        <Route
-                          path="/admin-book-appointments"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminBookAppointments />
-                            </ErrorBoundary>
-                          }
-                        />
-
-                        <Route
-                          path="/admin-book-editappointments"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminBookEditAppointments />
-                            </ErrorBoundary>
-                          }
-                        />
-
-                        <Route
-                          path="/admin-subscription"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminSubscription />
-                            </ErrorBoundary>
-                          }
-                        />
-
-                        <Route
-                          path="/admin-reports"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <AdminReports />
-                            </ErrorBoundary>
-                          }
-                        />
-
-                        <Route
-                          path="/admin-paymentstatus"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <PaymentStatus />
-                            </ErrorBoundary>
-                          }
-                        />
-                      </Route>
+                      />
+                      <Route path="/dummy" element={<Dummy />} />
+                      <Route
+                        path="/admin-dashboard/editprofile"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminEditProfile />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-salon"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminSalonList />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-salon/createsalon"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminCreateSalon />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-salon/editsalon/:salonid"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminEditSalon />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-salon/appointment/:salonid"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminSalonAppointmentSettings />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-barber"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminBarberList />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-barber/createbarber"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminCreateBarber />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-barber/editbarber/:salonid"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminEditBarber />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-customer"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminCustomerList />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-advertise"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminSalonAdv />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-queue"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <SocketProvider>
+                              <AdminQueue />
+                            </SocketProvider>
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-quehistory"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminQueHistory />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-appointments"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AppointmentCalender />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-appointmenthistory"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminAppointmentHistory />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-appointments-list"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AppointmentList />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-book-appointments"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminBookAppointments />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-book-editappointments"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminBookEditAppointments />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-subscription"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminSubscription />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-reportchart"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminReportChart />
+                          </ErrorBoundary>
+                        }
+                      />
+                      
+                      <Route
+                        path="/admin-reports"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <AdminReportList />
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="/admin-paymentstatus"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <PaymentStatus />
+                          </ErrorBoundary>
+                        }
+                      />
                     </Route>
+                  </Route>
 
-                    {/* Barber Auth Screens */}
+                  {/* Barber Auth Screens */}
+                  <Route
+                    element={
+                      <ErrorBoundary FallbackComponent={ErrorFallbackRoute}>
+                        <ProtectedBarberAuthRoute />
+                      </ErrorBoundary>
+                    }
+                  >
+                    <Route path="/" element={<Public />} />
+                    <Route path="/barbersignin" element={<BarberSignin />} />
+                    <Route path="/barbersignup" element={<BarberSignup />} />
+                    <Route
+                      path="/barberforgotpassword"
+                      element={<BarberForgotPassword />}
+                    />
+                    <Route
+                      path="/barbercheckemail"
+                      element={<BarberCheckEmail />}
+                    />
+                    <Route
+                      path="/barberchangepassword/:token"
+                      element={<BarberChangePassword />}
+                    />
+                    <Route
+                      path="/barberpasswordreset"
+                      element={<BarberPasswordReset />}
+                    />
+                    <Route
+                      path="/barber-signupeditprofile"
+                      element={<BarberSignupEditProfile />}
+                    />
+                  </Route>
+
+                  {/* Barber Main Pages  */}
+                  <Route element={<ProtectedBarberRoute />}>
                     <Route
                       element={
-                        <ErrorBoundary FallbackComponent={ErrorFallbackRoute}>
-                          <ProtectedBarberAuthRoute />
-                        </ErrorBoundary>
+                        isMobile ? <BarberMobileSidebar /> : <BarberSidebar />
                       }
                     >
-                      <Route path="/" element={<Public />} />
-                      <Route path="/barbersignin" element={<BarberSignin />} />
-                      <Route path="/barbersignup" element={<BarberSignup />} />
                       <Route
-                        path="/barberforgotpassword"
-                        element={<BarberForgotPassword />}
-                      />
-                      <Route
-                        path="/barbercheckemail"
-                        element={<BarberCheckEmail />}
-                      />
-                      <Route
-                        path="/barberchangepassword/:token"
-                        element={<BarberChangePassword />}
-                      />
-                      <Route
-                        path="/barberpasswordreset"
-                        element={<BarberPasswordReset />}
-                      />
-                      <Route
-                        path="/barber-signupeditprofile"
-                        element={<BarberSignupEditProfile />}
-                      />
-                    </Route>
-
-                    {/* Barber Main Pages  */}
-                    <Route element={<ProtectedBarberRoute />}>
-                      <Route
+                        path="/barber-dashboard"
                         element={
-                          isMobile ? <BarberMobileSidebar /> : <BarberSidebar />
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <SocketProvider>
+                              <BarberDashboard />
+                            </SocketProvider>
+                          </ErrorBoundary>
                         }
-                      >
-                        <Route
-                          path="/barber-dashboard"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <SocketProvider>
-                                <BarberDashboard />
-                              </SocketProvider>
-                            </ErrorBoundary>
-                          }
-                        />
-                        <Route
-                          path="/barber-dashboard/editprofile"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <BarberEditProfile />
-                            </ErrorBoundary>
-                          }
-                        />
-                        {/* <Route
+                      />
+                      <Route
+                        path="/barber-dashboard/editprofile"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <BarberEditProfile />
+                          </ErrorBoundary>
+                        }
+                      />
+                      {/* <Route
                       path="/barber-customer"
                       element={
                         <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -601,67 +603,64 @@ const App = () => {
                         </ErrorBoundary>
                       }
                     /> */}
-                        <Route
-                          path="/barber-quehistory"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <BarberQueHistory />
-                            </ErrorBoundary>
-                          }
-                        />
+                      <Route
+                        path="/barber-quehistory"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <BarberQueHistory />
+                          </ErrorBoundary>
+                        }
+                      />
 
-                        <Route
-                          path="/barber-queue"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <SocketProvider>
-                                <BarberQueueList />
-                              </SocketProvider>
-                            </ErrorBoundary>
-                          }
-                        />
+                      <Route
+                        path="/barber-queue"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <SocketProvider>
+                              <BarberQueueList />
+                            </SocketProvider>
+                          </ErrorBoundary>
+                        }
+                      />
 
-                        <Route
-                          path="/barber-appointment"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <BarberAppointment />
-                            </ErrorBoundary>
-                          }
-                        />
+                      <Route
+                        path="/barber-appointment"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <BarberAppointment />
+                          </ErrorBoundary>
+                        }
+                      />
 
-                        <Route
-                          path="/barber-appointlist"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <BarberAppointmentList />
-                            </ErrorBoundary>
-                          }
-                        />
+                      <Route
+                        path="/barber-appointlist"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <BarberAppointmentList />
+                          </ErrorBoundary>
+                        }
+                      />
 
-                        <Route
-                          path="/barber-apphistory"
-                          element={
-                            <ErrorBoundary FallbackComponent={ErrorFallback}>
-                              <BarberAppointmentHistory />
-                            </ErrorBoundary>
-                          }
-                        />
-                      </Route>
+                      <Route
+                        path="/barber-apphistory"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <BarberAppointmentHistory />
+                          </ErrorBoundary>
+                        }
+                      />
                     </Route>
+                  </Route>
 
-                    <Route path="*" element={<ErrorPage />} />
-                    <Route path="/mobilecus" element={<MobileCus />} />
-                    <Route
-                      path="/mobilesuccess"
-                      element={<MobileCusSuccess />}
-                    />
-                  </Routes>
-                </React.Suspense>
-              </BrowserRouter>
-            </BarberGlobalProvider>
-          </>
-        )}
+                  <Route path="*" element={<ErrorPage />} />
+                  <Route path="/mobilecus" element={<MobileCus />} />
+                  <Route path="/mobilesuccess" element={<MobileCusSuccess />} />
+                </Routes>
+              </React.Suspense>
+            </BrowserRouter>
+          </BarberGlobalProvider>
+        </>
+      )}
     </>
   );
 };
