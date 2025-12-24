@@ -15,7 +15,7 @@ const Public = () => {
       <div>
         <div>
           <img
-            src="./iqbook.png"
+            src="./IQBOOK logo MASTER Black.svg"
             alt=""
             height={100}
             width={100}
