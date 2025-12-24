@@ -1830,7 +1830,7 @@ const Report = () => {
                         dataKey="yaxis"
                         position="inside"
                         fill="#fff"
-                        fontSize={14}
+                        fontSize={"1.4rem"}
                         fontWeight={600}
                       />
                     </Pie>
@@ -1861,7 +1861,7 @@ const Report = () => {
                 }}
               >
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData} barGap={10}>
+                  <BarChart data={chartData} barGap={10} margin={{ top: 30 }}>
                     {/* 🔹 Dynamic gradients */}
                     <defs>
                       {chartData.map((item) => (
@@ -1906,7 +1906,7 @@ const Report = () => {
                         dataKey="yaxis"
                         position="top"
                         fill="var(--text-primary)"
-                        fontSize={"1.6rem"}
+                        fontSize={"1.4rem"}
                         fontWeight={600}
                       />
                     </Bar>

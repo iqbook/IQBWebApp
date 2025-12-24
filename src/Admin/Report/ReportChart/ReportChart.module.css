@@ -876,6 +876,7 @@
   }
 
   .report_main_container {
+    /* background-color: red; */
     flex: none;
     height: 60rem; /* IMPORTANT: Recharts needs this height to render */
     padding: 1.5rem;
