@@ -149,17 +149,19 @@ const Sidebar = () => {
             </button>
           </div>
         </nav>
-        <p
-          style={{
-            padding: "2rem",
-            color: "var(--text-secondary)",
-            fontSize: "1.4rem",
-            fontWeight: "600",
-            textAlign: "center",
-          }}
-        >
-          {version}
-        </p>
+        {sidebar ? (
+          <p
+            style={{
+              padding: "2rem",
+              color: "var(--text-secondary)",
+              fontSize: "1.4rem",
+              fontWeight: "600",
+              textAlign: "center",
+            }}
+          >
+            {version}
+          </p>
+        ) : null}
       </aside>
 
       <section>

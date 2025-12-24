@@ -65,16 +65,6 @@ const REPORT_ITEMS = [
   },
   {
     id: 7,
-    title: "Attendance summary",
-    headerTitle: "Attendance Summary",
-    subTitle:
-      "Overview of team members' punctuality and attendance for their shifts",
-    tag: "Staff",
-    iconType: "customer",
-    reportType: "attendanceSummary",
-  },
-  {
-    id: 8,
     title: "Working hours queue",
     headerTitle: "Queue Working Hours",
     subTitle: "Overview of operational hours and productivity",
@@ -83,7 +73,7 @@ const REPORT_ITEMS = [
     reportType: "queueWorkingHours",
   },
   {
-    id: 9,
+    id: 8,
     title: "Working hours appointment",
     headerTitle: "Appointment Working Hours",
     subTitle: "Overview of operational hours and productivity",
@@ -92,7 +82,7 @@ const REPORT_ITEMS = [
     reportType: "appointmentWorkingHours",
   },
   {
-    id: 10,
+    id: 9,
     title: "Performance dashboard Queue",
     headerTitle: "Queue Performance",
     subTitle: "Daily total payment received by each barber.",
