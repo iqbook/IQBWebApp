@@ -667,7 +667,7 @@
   }
 }
 
-.report_analytic_item {
+/* .report_analytic_item {
   background-color: var(--section-bg-color);
   border-radius: 0.5rem;
   padding: 1rem;
@@ -691,6 +691,50 @@
       width: 3.5rem;
     }
   }
+} */
+
+.report_section_item {
+  background-color: var(--section-bg-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1rem;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+}
+
+/* icon box */
+.report_section_item > div:nth-child(1) {
+  background-color: var(--bg-secondary);
+  border-radius: 0.5rem;
+  display: grid;
+  place-items: center;
+  height: 3.5rem;
+  width: 3.5rem;
+  flex-shrink: 0; /* 🔑 prevents collapse */
+}
+
+/* text container */
+.report_section_item > div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* title */
+.report_section_item > div:nth-child(2) > p:nth-child(1) {
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* subtitle */
+.report_section_item > div:nth-child(2) > p:nth-child(2) {
+  font-size: 1.4rem;
+  line-height: 1.3;
 }
 
 .report_mobile_header {
@@ -711,6 +755,159 @@
 }
 
 @media screen and (min-width: 0px) and (max-width: 430px) {
+  .report_section {
+    height: auto;
+    overflow: auto;
+  }
+
+  .report_header {
+    display: none;
+  }
+
+  .report_mobile_header {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    & > div:nth-child(1) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      & > div:nth-child(1) {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        & > button {
+          width: 3.5rem;
+          height: 3.5rem;
+          border-radius: 50%;
+          border: none;
+          outline: none;
+          background-color: var(--bg-primary);
+          border: 0.1rem solid var(--border-secondary);
+          display: grid;
+          place-items: center;
+        }
+
+        & > h2 {
+          color: var(--text-primary);
+          line-height: inherit;
+          font-family: "AirbnbCereal_Medium";
+          font-size: clamp(18px, 2vw, 24px);
+        }
+      }
+
+      & > div:nth-child(2) {
+        flex: 0.75;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        position: relative;
+        justify-content: flex-end;
+
+        & > button {
+          width: 3.5rem;
+          height: 3.5rem;
+          background-color: var(--bg-primary);
+          border: 0.1rem solid var(--border-secondary);
+          color: var(--text-primary);
+          font-size: 1.4rem;
+        }
+
+        .filter_btn {
+          display: inline-flex;
+          align-items: center;
+          width: max-content;
+          gap: 0.6rem;
+          padding: 0.6rem 1.2rem;
+          height: 3.5rem;
+          border: 0.1rem solid var(--border-secondary);
+          background-color: var(--bg-primary);
+          color: var(--text-primary);
+          font-size: 1.4rem;
+          font-weight: 500;
+          cursor: pointer;
+          font-weight: 600;
+        }
+
+        .filter_btn svg {
+          width: 1.6rem;
+          height: 1.6rem;
+        }
+      }
+    }
+
+    & > div:nth-child(2) {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-inline: auto;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      & > button {
+        padding: 0.5rem 1.2rem;
+        border-radius: 999px;
+
+        background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+
+        color: #1d4ed8;
+        font-size: 1.3rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+
+        border: 0.1rem solid rgba(59, 130, 246, 0.25);
+
+        cursor: pointer;
+        outline: none;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
+          inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+        transition: all 0.15s ease;
+      }
+    }
+  }
+
+  .report_main_container {
+    flex: none;
+    height: 60rem; /* IMPORTANT: Recharts needs this height to render */
+    padding: 1.5rem;
+    width: 100%;
+    & > div:nth-child(1) {
+      flex-direction: column;
+      gap: 2rem;
+    }
+  }
+
+  .report_container {
+    flex-direction: column;
+    /* background-color: red; */
+  }
+
+  .filter_popup {
+    position: relative;
+    top: 0rem;
+    right: 0rem;
+    width: 100%;
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
+
+  .filter_popup::after,
+  .filter_popup::before {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 431px) and (max-width: 768px) {
   .report_section {
     height: auto;
     overflow: auto;

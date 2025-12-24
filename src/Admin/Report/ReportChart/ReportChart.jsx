@@ -1391,6 +1391,7 @@ import {
 } from "recharts";
 import {
   CloseIcon,
+  CustomerIcon,
   FilterIcon,
   LeftIcon,
   PieChartIcon,
@@ -1402,9 +1403,15 @@ import { Box, Modal } from "@mui/material";
 import api from "../../../Redux/api/Api";
 import { useSelector } from "react-redux";
 import moment from "moment/moment";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Report = () => {
+  const location = useLocation();
+
+  const [selectedReportChartType, setSelectedReportChartType] = useState(
+    location?.state?.reportTypeItem
+  );
+
   const navigate = useNavigate();
 
   const salonId = useSelector(
@@ -1469,7 +1476,12 @@ const Report = () => {
     if (startDate && endDate) {
       view_report();
     }
-  }, [startDate, endDate, selectedReportBarber]);
+  }, [
+    startDate,
+    endDate,
+    selectedReportBarber,
+    selectedReportChartType?.reportType,
+  ]);
 
   const [chartData, setChartData] = useState([]);
 
@@ -1479,7 +1491,7 @@ const Report = () => {
         salonId,
         startDate,
         endDate,
-        reportType: "appointmentServed",
+        reportType: selectedReportChartType?.reportType,
         barberId: selectedReportBarber.map((item) => item?.barberId),
       };
 
@@ -1495,10 +1507,7 @@ const Report = () => {
     } catch (error) {}
   };
 
-  const totalServed = chartData.reduce(
-    (sum, item) => sum + item.servedCount,
-    0
-  );
+  const totalServed = chartData.reduce((sum, item) => sum + item.yaxis, 0);
 
   const toggleBarber = (barber) => {
     setSelectedReportBarber((prev) => {
@@ -1521,6 +1530,11 @@ const Report = () => {
     setEndDate(moment().subtract(1, "day").format("DD-MM-YYYY"));
   };
 
+  const upcommingAnalyticsSelectionList =
+    location?.state?.upcommingAnalytics?.filter(
+      (upc) => upc?.id !== selectedReportChartType?.id
+    );
+
   return (
     <div className={style.report_section}>
       <div className={style.report_header}>
@@ -1528,7 +1542,7 @@ const Report = () => {
           <div>
             <button
               onClick={() => {
-                navigate("/admin-reports")
+                navigate("/admin-reports");
               }}
             >
               <LeftArrow color="var(--text-primary)" />
@@ -1539,7 +1553,7 @@ const Report = () => {
           <div>
             {/* <button>{selectedReportType}</button> */}
             {selectedReportBarber?.map((item) => {
-              return <button key={item?.barberId}>{item?.barberName}</button>;
+              return <button key={item?.barberId}>{item?.xaxis}</button>;
             })}
             {selectedDates?.length === 2 && (
               <button>
@@ -1668,7 +1682,7 @@ const Report = () => {
                                 : "var(--text-primary)",
                             }}
                           >
-                            {item.barberName}
+                            {item.xaxis}
                           </button>
                         );
                       })}
@@ -1737,7 +1751,7 @@ const Report = () => {
 
         <div>
           {selectedReportBarber?.map((item) => {
-            return <button key={item?.barberId}>{item?.barberName}</button>;
+            return <button key={item?.barberId}>{item?.xaxis}</button>;
           })}
           {selectedDates?.length === 2 && (
             <button>
@@ -1756,7 +1770,7 @@ const Report = () => {
         <div className={style.report_main_container}>
           <div>
             <p style={{ textAlign: "center", width: "100%" }}>
-              Appointment Served
+              {selectedReportChartType?.headerTitle}
             </p>
             {/* <div>
               <button onClick={decreaseDate}>
@@ -1796,7 +1810,7 @@ const Report = () => {
 
                     <Pie
                       data={chartData}
-                      dataKey="servedCount"
+                      dataKey="yaxis"
                       innerRadius="65%"
                       outerRadius="100%"
                       cornerRadius="12%"
@@ -1829,7 +1843,7 @@ const Report = () => {
                           backgroundColor: item?.fill,
                         }}
                       />
-                      <p>{item?.barberName}</p>
+                      <p>{item?.xaxis}</p>
                     </div>
                   );
                 })}
@@ -1868,14 +1882,14 @@ const Report = () => {
                     />
 
                     <XAxis
-                      dataKey="barberName"
+                      dataKey="xaxis"
                       interval={0}
                       tick={renderXAxisTick}
                       axisLine={false}
                       tickLine={false}
                     />
 
-                    <Bar dataKey="servedCount" radius={[8, 8, 0, 0]}>
+                    <Bar dataKey="yaxis" radius={[8, 8, 0, 0]}>
                       {/* 🔹 Apply gradient per bar */}
                       {chartData.map((item) => (
                         <Cell
@@ -1885,7 +1899,7 @@ const Report = () => {
                       ))}
 
                       <LabelList
-                        dataKey="servedCount"
+                        dataKey="yaxis"
                         position="top"
                         fill="var(--text-primary)"
                         fontSize={"1.6rem"}
@@ -1905,7 +1919,7 @@ const Report = () => {
                           backgroundColor: item?.fill,
                         }}
                       />
-                      <p>{item?.barberName}</p>
+                      <p>{item?.xaxis}</p>
                     </div>
                   );
                 })}
@@ -1914,21 +1928,22 @@ const Report = () => {
           )}
         </div>
         <div className={style.report_content_container}>
-          <p>Upcoming analytics</p>
+          <p>Select analytics</p>
 
-          {[1, 2, 3, 4, 5].map((item) => {
+          {upcommingAnalyticsSelectionList?.map((item) => {
             return (
-              <div className={style.report_analytic_item}>
-                <div>
-                  <div>
-                    <BarIcon color="var(--btn-text-color)" />
-                  </div>
-                  <p>Tuesday</p>
-                </div>
+              <button
+                onClick={() => setSelectedReportChartType(item)}
+                key={item.id}
+                className={style.report_section_item}
+              >
+                <div>{renderIcon(item.iconType)}</div>
 
-                <p>04/11/2025</p>
-                <p>54</p>
-              </div>
+                <div>
+                  <p>{item.title}</p>
+                  <p>{item.subTitle}</p>
+                </div>
+              </button>
             );
           })}
         </div>
@@ -2013,7 +2028,7 @@ const Report = () => {
                             : "var(--text-primary)",
                         }}
                       >
-                        {item.barberName}
+                        {item.xaxis}
                       </button>
                     );
                   })}
@@ -2066,4 +2081,15 @@ const renderXAxisTick = ({ x, y, payload }) => {
       {label}
     </text>
   );
+};
+
+const renderIcon = (type) => {
+  switch (type) {
+    case "bar":
+      return <BarIcon color="var(--btn-text-color)" />;
+    case "customer":
+      return <CustomerIcon color="var(--btn-text-color)" />;
+    default:
+      return null;
+  }
 };
