@@ -1827,7 +1827,7 @@ const Report = () => {
                       <Label content={renderCenterContent(totalServed)} />
 
                       <LabelList
-                        dataKey="servedCount"
+                        dataKey="yaxis"
                         position="inside"
                         fill="#fff"
                         fontSize={14}
