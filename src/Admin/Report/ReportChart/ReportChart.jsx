@@ -1705,7 +1705,11 @@ const Report = () => {
       <div className={style.report_mobile_header}>
         <div>
           <div>
-            <button>
+            <button
+              onClick={() => {
+                navigate("/admin-reports");
+              }}
+            >
               <LeftArrow color="var(--text-primary)" />
             </button>
             <h2>Reports</h2>
