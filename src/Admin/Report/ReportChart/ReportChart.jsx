@@ -1391,7 +1391,9 @@ import {
 } from "recharts";
 import {
   CloseIcon,
+  ContactTel,
   CustomerIcon,
+  EmailIcon,
   FilterIcon,
   LeftIcon,
   PieChartIcon,
@@ -1535,7 +1537,214 @@ const Report = () => {
       (upc) => upc?.id !== selectedReportChartType?.id
     );
 
-  return (
+  const attendanceData = [
+    {
+      date: "01 Sep 2025",
+      day: "Mon",
+      signInTime: "09:30 AM",
+      signOutTime: "06:00 PM",
+    },
+    {
+      date: "02 Sep 2025",
+      day: "Tue",
+      signInTime: "09:25 AM",
+      signOutTime: "06:10 PM",
+    },
+    {
+      date: "03 Sep 2025",
+      day: "Wed",
+      signInTime: "09:40 AM",
+      signOutTime: "06:05 PM",
+    },
+    {
+      date: "04 Sep 2025",
+      day: "Thu",
+      signInTime: "09:35 AM",
+      signOutTime: "06:15 PM",
+    },
+    {
+      date: "05 Sep 2025",
+      day: "Fri",
+      signInTime: "09:20 AM",
+      signOutTime: "05:55 PM",
+    },
+
+    {
+      date: "06 Sep 2025",
+      day: "Sat",
+      signInTime: "10:00 AM",
+      signOutTime: "04:00 PM",
+    },
+    {
+      date: "07 Sep 2025",
+      day: "Sun",
+      signInTime: "10:15 AM",
+      signOutTime: "03:45 PM",
+    },
+
+    {
+      date: "08 Sep 2025",
+      day: "Mon",
+      signInTime: "09:30 AM",
+      signOutTime: "06:05 PM",
+    },
+    {
+      date: "09 Sep 2025",
+      day: "Tue",
+      signInTime: "09:28 AM",
+      signOutTime: "06:00 PM",
+    },
+    {
+      date: "10 Sep 2025",
+      day: "Wed",
+      signInTime: "09:45 AM",
+      signOutTime: "06:20 PM",
+    },
+    {
+      date: "11 Sep 2025",
+      day: "Thu",
+      signInTime: "09:32 AM",
+      signOutTime: "06:10 PM",
+    },
+    {
+      date: "12 Sep 2025",
+      day: "Fri",
+      signInTime: "09:25 AM",
+      signOutTime: "05:50 PM",
+    },
+
+    {
+      date: "13 Sep 2025",
+      day: "Sat",
+      signInTime: "10:05 AM",
+      signOutTime: "04:10 PM",
+    },
+    {
+      date: "14 Sep 2025",
+      day: "Sun",
+      signInTime: "10:20 AM",
+      signOutTime: "03:50 PM",
+    },
+
+    {
+      date: "15 Sep 2025",
+      day: "Mon",
+      signInTime: "09:30 AM",
+      signOutTime: "06:00 PM",
+    },
+    {
+      date: "16 Sep 2025",
+      day: "Tue",
+      signInTime: "09:35 AM",
+      signOutTime: "06:05 PM",
+    },
+    {
+      date: "17 Sep 2025",
+      day: "Wed",
+      signInTime: "09:40 AM",
+      signOutTime: "06:15 PM",
+    },
+    {
+      date: "18 Sep 2025",
+      day: "Thu",
+      signInTime: "09:30 AM",
+      signOutTime: "06:10 PM",
+    },
+    {
+      date: "19 Sep 2025",
+      day: "Fri",
+      signInTime: "09:25 AM",
+      signOutTime: "05:55 PM",
+    },
+    {
+      date: "20 Sep 2025",
+      day: "Sat",
+      signInTime: "10:00 AM",
+      signOutTime: "04:00 PM",
+    },
+  ];
+
+  return selectedReportChartType?.reportType === "stylistattendence" ? (
+    <div className={style.report_section_attendence}>
+      <div className={style.report_section_attendence_header}>
+        <img
+          src={"https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"}
+          alt=""
+          style={{
+            border: `0.1rem solid var(--border-secondary)`,
+          }}
+        />
+        <div>
+          <h2>John Doe</h2>
+          <p>
+            <span>
+              <EmailIcon />
+            </span>
+            john@hotmail.com
+          </p>
+          <p>
+            <span>
+              <ContactTel />
+            </span>
+            +91 6271897455
+          </p>
+        </div>
+      </div>
+      <div className={style.report_section_attendence_container}>
+        {attendanceData.length > 0 ? (
+          attendanceData.map((item, index) => (
+            <div
+              key={index}
+              className={style.attendence_item}
+              style={{
+                backgroundColor: "var(--bg-primary)",
+                border: `0.1rem solid var(--border-secondary)`,
+              }}
+            >
+              <div>
+                <p>{item.date}</p>
+                <div
+                  style={{
+                    backgroundColor: "var(--bg-secondary)",
+                  }}
+                >
+                  <p
+                    style={{
+                      color: "var(--btn-text-color)",
+                    }}
+                  >
+                    {item.day}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <div>
+                  <p>Time in</p>
+                  <p>{item.signInTime || "-"}</p>
+                </div>
+
+                <div>
+                  <p>Time out</p>
+                  <p>{item.signOutTime || "-"}</p>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <p>No attendance available</p>
+          </div>
+        )}
+      </div>
+    </div>
+  ) : (
     <div className={style.report_section}>
       <div className={style.report_header}>
         <div>

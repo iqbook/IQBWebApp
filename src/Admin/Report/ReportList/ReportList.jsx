@@ -90,6 +90,15 @@ const REPORT_ITEMS = [
     iconType: "bar",
     reportType: "queuePerformance",
   },
+  {
+    id: 10,
+    title: "Stylist attendence dashboard",
+    headerTitle: "Stylist Attendence",
+    subTitle: "Attendence report of stylists",
+    tag: "Others",
+    iconType: "bar",
+    reportType: "stylistattendence",
+  },
 ];
 
 const renderIcon = (type) => {
