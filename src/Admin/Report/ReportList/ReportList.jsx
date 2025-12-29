@@ -95,7 +95,7 @@ const REPORT_ITEMS = [
     title: "Stylist attendence dashboard",
     headerTitle: "Stylist Attendence",
     subTitle: "Attendence report of stylists",
-    tag: "Others",
+    tag: "Staff",
     iconType: "bar",
     reportType: "stylistattendence",
   },

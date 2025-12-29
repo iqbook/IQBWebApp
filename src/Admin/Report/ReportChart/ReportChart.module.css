@@ -446,13 +446,12 @@
 }
 
 .report_section_attendence_header > img {
-  width: 12rem;
-  height: 12rem;
+  width: 8rem;
+  height: 8rem;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
 }
-
 
 .report_section_attendence_header > div {
   display: flex;
@@ -461,7 +460,7 @@
 }
 
 .report_section_attendence_header h2 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -482,6 +481,13 @@
   color: var(--icon-color);
 }
 
+.report_section_attendence_container_loading {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+}
 
 .report_section_attendence_container {
   flex: 1;
@@ -492,8 +498,19 @@
   padding-bottom: 1.5rem; /* bottom padding FIX */
 }
 
+.report_section_attendence_container_error {
+  flex: 1;
+  display: grid;
+  place-items: center;
+
+  & > p {
+    font-size: 1.6rem;
+  }
+}
+
 .attendence_item {
   border-radius: 1.2rem;
+  max-height: 17rem;
   padding: 2rem;
 
   & > div:nth-child(1) {
@@ -519,9 +536,8 @@
       -o-border-radius: 1rem;
 
       & > p {
-        font-weight: 500;
+        font-weight: 600;
         font-size: 1.4rem;
-        opacity: 0.6;
       }
     }
   }
@@ -674,9 +690,8 @@
   }
 
   .report_main_container {
-    /* background-color: red; */
     flex: none;
-    height: 60rem; /* IMPORTANT: Recharts needs this height to render */
+    height: 60rem;
     padding: 1.5rem;
     width: 100%;
     & > div:nth-child(1) {
@@ -687,7 +702,6 @@
 
   .report_container {
     flex-direction: column;
-    /* background-color: red; */
   }
 
   .filter_popup {
@@ -715,7 +729,7 @@
     height: 9rem;
   }
 
-  .report_section_attendence_container{
+  .report_section_attendence_container {
     grid-template-columns: 1fr;
   }
 }
@@ -843,7 +857,7 @@
 
   .report_main_container {
     flex: none;
-    height: 60rem; /* IMPORTANT: Recharts needs this height to render */
+    height: 60rem;
     padding: 1.5rem;
     width: 100%;
     & > div:nth-child(1) {
@@ -854,7 +868,6 @@
 
   .report_container {
     flex-direction: column;
-    /* background-color: red; */
   }
 
   .filter_popup {
@@ -870,5 +883,19 @@
   .filter_popup::after,
   .filter_popup::before {
     display: none;
+  }
+
+  .report_section_attendence_header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .report_section_attendence_header > img {
+    width: 9rem;
+    height: 9rem;
+  }
+
+  .report_section_attendence_container {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
