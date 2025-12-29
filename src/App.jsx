@@ -131,6 +131,11 @@ const BarberAppointment = React.lazy(() =>
 const PaymentStatus = React.lazy(() =>
   import("./Admin/Payment/PaymentStatus/PaymentStatus")
 );
+
+const PaymentSettings = React.lazy(() =>
+  import("./Admin/Payment/PaymentSettings/PaymentSettings")
+);
+
 const BarberAppointmentList = React.lazy(() =>
   import("./Barber/AppointmentList/AppointmentList")
 );
@@ -517,7 +522,7 @@ const App = () => {
                           </ErrorBoundary>
                         }
                       />
-                      
+
                       <Route
                         path="/admin-reports"
                         element={
@@ -531,6 +536,15 @@ const App = () => {
                         element={
                           <ErrorBoundary FallbackComponent={ErrorFallback}>
                             <PaymentStatus />
+                          </ErrorBoundary>
+                        }
+                      />
+
+                      <Route
+                        path="/admin-paymentsettings"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <PaymentSettings />
                           </ErrorBoundary>
                         }
                       />

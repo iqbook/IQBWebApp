@@ -11,7 +11,7 @@ import { RiAdvertisementLine, RiMoonClearFill, RiDeleteBin6Line, RiTwitterXLine,
 import { TbChartPieFilled, TbCopyCheck, TbScissors, TbWorldWww } from "react-icons/tb";
 import { PiClockClockwiseBold, PiClockCounterClockwiseBold, PiDotsThreeOutlineFill, PiEquals, PiWarning } from "react-icons/pi";
 import { BiLogoTiktok, BiSortAlt2 } from "react-icons/bi";
-import { IoIosPeople, IoMdCheckmark } from "react-icons/io";
+import { IoIosPeople, IoIosSettings, IoMdCheckmark } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { AiOutlineShop } from "react-icons/ai";
 import { GrPowerReset, GrRadialSelected } from "react-icons/gr";
@@ -83,3 +83,4 @@ export const AddressIcon = HiOutlineLocationMarker
 export const WarningIcon = VscWarning
 export const PieChartIcon = TbChartPieFilled
 export const EqualIcon = PiEquals
+export const SettingsIcon = IoIosSettings

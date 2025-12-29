@@ -1549,7 +1549,7 @@ const Report = () => {
   const resetFilter = () => {
     setSelectedReportBarber([]);
     setSelectedDates([]);
-    setSelected_attendence_stylist(null)
+    setSelected_attendence_stylist(null);
     setStartDate(moment().subtract(31, "day").format("DD-MM-YYYY"));
     setEndDate(moment().subtract(1, "day").format("DD-MM-YYYY"));
   };
@@ -1777,7 +1777,11 @@ const Report = () => {
         </div>
       )}
 
-      {barber_attendence_list_loading ? (
+      {!selected_attendence_stylist?.barberId ? (
+        <div className={style.report_section_attendence_container_error}>
+          <p>Select a barber to view their attendance records.</p>
+        </div>
+      ) : barber_attendence_list_loading ? (
         <div className={style.report_section_attendence_container_loading}>
           {Array.from({ length: 12 }).map((_, index) => (
             <div key={index} className={style.skeleton_item}>
@@ -1790,11 +1794,7 @@ const Report = () => {
             </div>
           ))}
         </div>
-      ) : !selected_attendence_stylist?.barberId ? (
-        <div className={style.report_section_attendence_container_error}>
-          <p>Select a barber to see attendence</p>
-        </div>
-      ) : barber_attendence_list?.length ? (
+      ) : barber_attendence_list?.length > 0 ? (
         <div className={style.report_section_attendence_container}>
           {barber_attendence_list.map((item, index) => (
             <div
@@ -1838,7 +1838,9 @@ const Report = () => {
         </div>
       ) : (
         <div className={style.report_section_attendence_container_error}>
-          <p>Select a barber to see its attendence</p>
+          <p>
+            No attendence available for this {selected_attendence_stylist?.name}
+          </p>
         </div>
       )}
 
