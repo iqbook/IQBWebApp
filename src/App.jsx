@@ -146,6 +146,13 @@ const AdminReportList = React.lazy(() =>
   import("./Admin/Report/ReportList/ReportList")
 );
 
+const BarberReportList = React.lazy(() =>
+  import("./Barber/Report/ReportList/ReportList")
+);
+const BarberReportChart = React.lazy(() =>
+  import("./Barber/Report/ReportChart/ReportChart")
+);
+
 import ProtectedAdminRoute from "./Admin/ProtectedRoutes/ProtectedRoute";
 import ProtectedAdminAuthRoute from "./Admin/ProtectedRoutes/ProtectedAuthRoute";
 import ProtectedBarberRoute from "./Barber/ProtectedRoutes/ProtectedRoute";
@@ -663,6 +670,25 @@ const App = () => {
                           </ErrorBoundary>
                         }
                       />
+
+                      <Route
+                        path="/barber-reports"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <BarberReportList />
+                          </ErrorBoundary>
+                        }
+                      />
+
+                      <Route
+                        path="/barber-reportchart"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <BarberReportChart />
+                          </ErrorBoundary>
+                        }
+                      />
+                      
                     </Route>
                   </Route>
 

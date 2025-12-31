@@ -10,6 +10,7 @@ import {
   DashboardIcon,
   QueueHistoryIcon,
   QueueIcon,
+  ReportIcon,
 } from "../../../newicons.js";
 import { Admincustomericon } from "../../../icons.js";
 import Switch from "react-switch";
@@ -77,6 +78,12 @@ const MobileSidebar = () => {
           name: "Appointment History",
           icon: <QueueHistoryIcon />,
           url: "/barber-apphistory",
+        },
+        {
+          id: 7,
+          name: "Reports",
+          icon: <ReportIcon />,
+          url: "/barber-reports",
         },
       ],
     },
