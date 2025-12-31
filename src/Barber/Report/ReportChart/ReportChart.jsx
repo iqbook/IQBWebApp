@@ -105,13 +105,14 @@ const Report = () => {
   const [selected_attendence_stylist, setSelected_attendence_stylist] =
     useState(null);
 
+
   useEffect(() => {
     if (selectedReportChartType?.reportType === "stylistattendence") {
-      fetch_stylist_barberlist();
+      if (startDate && endDate) {
+        fetch_barber_attendence_list();
+      }
     } else {
-      // if (startDate && endDate) {
       view_report();
-      // }
     }
   }, [
     startDate,
@@ -124,16 +125,6 @@ const Report = () => {
   // selectedReportChartType?.reportType === "stylistattendence"
 
   const [chartData, setChartData] = useState([]);
-
-  const fetch_stylist_barberlist = async () => {
-    try {
-      const { data } = await api.post(
-        `api/barber/getAllBarberBySalonId?salonId=${salonId}`
-      );
-
-      setStylistBarberList(data?.getAllBarbers);
-    } catch (error) {}
-  };
 
   const view_report = async () => {
     try {
@@ -195,14 +186,6 @@ const Report = () => {
   //   }
   // }, [selected_attendence_stylist?.barberId, startDate, endDate]);
 
-  useEffect(() => {
-    if (!barberId) return;
-
-    if ((startDate && endDate) || (!startDate && !endDate)) {
-      fetch_barber_attendence_list();
-    }
-  }, [barberId, startDate, endDate]);
-
   const fetch_barber_attendence_list = async () => {
     try {
       const attendenceData = {
@@ -225,6 +208,8 @@ const Report = () => {
       setBarber_attendence_list_loading(false);
     }
   };
+
+  const isSmallScreen = window.innerWidth < 768;
 
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.report_section_attendence}>
@@ -887,12 +872,21 @@ const Report = () => {
                       vertical={false}
                     />
 
+                    {/* <XAxis
+                      dataKey="xaxis"
+                      interval={0}
+                      tick={renderXAxisTick}
+                      axisLine={false}
+                      tickLine={false}
+                    /> */}
+
                     <XAxis
                       dataKey="xaxis"
                       interval={0}
                       tick={renderXAxisTick}
                       axisLine={false}
                       tickLine={false}
+                      hide={isSmallScreen}
                     />
 
                     <Bar dataKey="yaxis" radius={[8, 8, 0, 0]}>

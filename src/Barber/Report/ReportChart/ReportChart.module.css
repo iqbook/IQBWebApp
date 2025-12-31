@@ -487,6 +487,7 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   padding-bottom: 1.5rem;
+  align-content: flex-start;
 }
 
 .report_section_attendence_container {
@@ -731,7 +732,8 @@
     height: 9rem;
   }
 
-  .report_section_attendence_container {
+  .report_section_attendence_container,
+  .report_section_attendence_container_loading {
     grid-template-columns: 1fr;
   }
 }
@@ -897,7 +899,8 @@
     height: 9rem;
   }
 
-  .report_section_attendence_container {
+  .report_section_attendence_container,
+  .report_section_attendence_container_loading {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -1063,7 +1066,8 @@
     height: 9rem;
   }
 
-  .report_section_attendence_container {
+  .report_section_attendence_container,
+  .report_section_attendence_container_loading {
     grid-template-columns: repeat(3, 1fr);
   }
 }
