@@ -50,6 +50,7 @@ import {
   QueueIcon,
   ReportIcon,
   SalonIcon,
+  SettingsIcon,
 } from "../../../newicons.js";
 import Switch from "react-switch";
 import { useDispatch } from "react-redux";
@@ -388,6 +389,13 @@ const MobileSidebar = () => {
           name: "Payment history",
           icon: <MdPaymentIcon />,
           url: "/admin-paymentstatus",
+          show: true,
+        },
+        {
+          id: 3,
+          name: "Payment settings",
+          icon: <SettingsIcon />,
+          url: "/admin-paymentsettings",
           show: true,
         },
       ],
