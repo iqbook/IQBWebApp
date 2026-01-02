@@ -159,7 +159,7 @@ const ReportList = () => {
                 key={item.id}
                 className={style.report_section_item}
                 onClick={() =>
-                  navigate("/admin-reportchart", {
+                  navigate("/barber-reportchart", {
                     state: {
                       reportTypeItem: item,
                       tag: item.tag,

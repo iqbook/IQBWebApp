@@ -1391,7 +1391,9 @@ import {
 } from "recharts";
 import {
   CloseIcon,
+  ContactTel,
   CustomerIcon,
+  EmailIcon,
   FilterIcon,
   LeftIcon,
   PieChartIcon,
@@ -1404,6 +1406,7 @@ import api from "../../../Redux/api/Api";
 import { useSelector } from "react-redux";
 import moment from "moment/moment";
 import { useLocation, useNavigate } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 
 const Report = () => {
   const location = useLocation();
@@ -1472,9 +1475,17 @@ const Report = () => {
 
   const [copyFilterBarberList, setCopyFilterBarberList] = useState([]);
 
+  const [stylistBarberList, setStylistBarberList] = useState([]);
+  const [selected_attendence_stylist, setSelected_attendence_stylist] =
+    useState(null);
+
   useEffect(() => {
-    if (startDate && endDate) {
-      view_report();
+    if (selectedReportChartType?.reportType === "stylistattendence") {
+      fetch_stylist_barberlist();
+    } else {
+      if (startDate && endDate) {
+        view_report();
+      }
     }
   }, [
     startDate,
@@ -1483,7 +1494,19 @@ const Report = () => {
     selectedReportChartType?.reportType,
   ]);
 
+  // selectedReportChartType?.reportType === "stylistattendence"
+
   const [chartData, setChartData] = useState([]);
+
+  const fetch_stylist_barberlist = async () => {
+    try {
+      const { data } = await api.post(
+        `api/barber/getAllBarberBySalonId?salonId=${salonId}`
+      );
+
+      setStylistBarberList(data?.getAllBarbers);
+    } catch (error) {}
+  };
 
   const view_report = async () => {
     try {
@@ -1526,6 +1549,7 @@ const Report = () => {
   const resetFilter = () => {
     setSelectedReportBarber([]);
     setSelectedDates([]);
+    setSelected_attendence_stylist(null);
     setStartDate(moment().subtract(31, "day").format("DD-MM-YYYY"));
     setEndDate(moment().subtract(1, "day").format("DD-MM-YYYY"));
   };
@@ -1535,7 +1559,358 @@ const Report = () => {
       (upc) => upc?.id !== selectedReportChartType?.id
     );
 
-  return (
+  const [barber_attendence_list, setBarber_attendence_list] = useState([]);
+  const [barber_attendence_list_loading, setBarber_attendence_list_loading] =
+    useState(false);
+
+  // useEffect(() => {
+  //   if (selected_attendence_stylist?.barberId) {
+  //     fetch_barber_attendence_list();
+  //   }
+  // }, [selected_attendence_stylist?.barberId, startDate, endDate]);
+
+  useEffect(() => {
+    if (!selected_attendence_stylist?.barberId) return;
+
+    if ((startDate && endDate) || (!startDate && !endDate)) {
+      fetch_barber_attendence_list();
+    }
+  }, [selected_attendence_stylist?.barberId, startDate, endDate]);
+
+  const fetch_barber_attendence_list = async () => {
+    try {
+      const attendenceData = {
+        salonId,
+        barberId: selected_attendence_stylist?.barberId,
+        startDate,
+        endDate,
+      };
+
+      setBarber_attendence_list_loading(true);
+
+      const { data } = await api.post(
+        `/api/admin/getAttendenceByBarberId`,
+        attendenceData
+      );
+
+      setBarber_attendence_list(data?.response?.attendance);
+    } catch (error) {
+    } finally {
+      setBarber_attendence_list_loading(false);
+    }
+  };
+  return selectedReportChartType?.reportType === "stylistattendence" ? (
+    <div className={style.report_section_attendence}>
+      <div className={style.report_header}>
+        <div>
+          <div>
+            <button
+              onClick={() => {
+                navigate("/admin-reports");
+              }}
+            >
+              <LeftArrow color="var(--text-primary)" />
+            </button>
+            <h2>Reports</h2>
+          </div>
+        </div>
+
+        <div>
+          {/* {reportUIArr.map((item, index) => {
+            return (
+              <button
+                onClick={() => {
+                  setSelectedReport(item);
+                }}
+                style={{
+                  backgroundColor:
+                    selectedReport.id === item.id
+                      ? "var(--bg-secondary)"
+                      : "var(--bg-primary)",
+                }}
+                key={index}
+              >
+                <item.icon
+                  color={
+                    selectedReport.id === item.id
+                      ? "var(--btn-text-color)"
+                      : "var(--text-primary)"
+                  }
+                />
+              </button>
+            );
+          })} */}
+
+          <button
+            onClick={() => {
+              setOpenFilterPopup((prev) => !prev);
+            }}
+            className={style.filter_btn}
+          >
+            <FilterIcon />
+            <span>Filter</span>
+          </button>
+
+          {openFilterPopup && (
+            <ClickAwayListener onClickAway={() => setOpenFilterPopup(false)}>
+              <div className={style.filter_popup}>
+                <div className={style.filter_popup_header}>
+                  <p>Select Filter</p>
+                  <button
+                    onClick={() => setOpenFilterPopup(false)}
+                    className={style.filterpopup_close_btn}
+                  >
+                    <CloseIcon />
+                  </button>
+                </div>
+
+                <div className={style.filter_popup_body}>
+                  <div className={style.filter_section}>
+                    <p>Date Range</p>
+                    <Calendar
+                      numberOfMonths={1}
+                      value={selectedDates}
+                      onChange={handleDateChange}
+                      range
+                      placeholder="dd/mm/yyyy - dd/mm/yyyy"
+                      dateSeparator=" - "
+                      calendarPosition="bottom-right"
+                      format="DD/MM/YYYY"
+                      className="dark-theme"
+                    />
+                  </div>
+
+                  <div className={style.filter_section}>
+                    <p>Select Stylist</p>
+                    <div className={style.filter_chip_group}>
+                      {stylistBarberList?.map((item) => {
+                        const isActive =
+                          selected_attendence_stylist?.barberId ===
+                          item.barberId;
+
+                        return (
+                          <button
+                            key={item.barberId}
+                            onClick={() => setSelected_attendence_stylist(item)}
+                            className={style.filter_chip}
+                            style={{
+                              backgroundColor: isActive
+                                ? "var(--bg-secondary)"
+                                : "transparent",
+                              color: isActive
+                                ? "var(--btn-text-color)"
+                                : "var(--text-primary)",
+                            }}
+                          >
+                            {item.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={resetFilter}
+                    className={style.filter_apply_btn}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </ClickAwayListener>
+          )}
+        </div>
+      </div>
+
+      <div className={style.report_mobile_header}>
+        <div>
+          <div>
+            <button
+              onClick={() => {
+                navigate("/admin-reports");
+              }}
+            >
+              <LeftArrow color="var(--text-primary)" />
+            </button>
+            <h2>Reports</h2>
+          </div>
+
+          <div>
+            <button
+              onClick={() => {
+                setOpenFilter((prev) => !prev);
+              }}
+              className={style.filter_btn}
+            >
+              <FilterIcon />
+              <span>Filter</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {selected_attendence_stylist && (
+        <div className={style.report_section_attendence_header}>
+          <img
+            src={selected_attendence_stylist?.profile?.[0]?.url}
+            alt=""
+            style={{
+              border: `0.1rem solid var(--border-secondary)`,
+            }}
+          />
+          <div>
+            <h2>{selected_attendence_stylist?.name}</h2>
+            <p>
+              <span>
+                <EmailIcon />
+              </span>
+              {selected_attendence_stylist?.email}
+            </p>
+            <p>
+              <span>
+                <ContactTel />
+              </span>
+              +{selected_attendence_stylist?.mobileCountryCode}{" "}
+              {selected_attendence_stylist?.mobileNumber}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {!selected_attendence_stylist?.barberId ? (
+        <div className={style.report_section_attendence_container_error}>
+          <p>Select a barber to view their attendance records.</p>
+        </div>
+      ) : barber_attendence_list_loading ? (
+        <div className={style.report_section_attendence_container_loading}>
+          {Array.from({ length: 12 }).map((_, index) => (
+            <div key={index} className={style.skeleton_item}>
+              <Skeleton
+                width="100%"
+                height="15rem"
+                baseColor="var(--loader-bg-color)"
+                highlightColor="var(--loader-highlight-color)"
+              />
+            </div>
+          ))}
+        </div>
+      ) : barber_attendence_list?.length > 0 ? (
+        <div className={style.report_section_attendence_container}>
+          {barber_attendence_list.map((item, index) => (
+            <div
+              key={item?._id}
+              className={style.attendence_item}
+              style={{
+                backgroundColor: "var(--bg-primary)",
+                border: `0.1rem solid var(--border-secondary)`,
+              }}
+            >
+              <div>
+                <p>{item.date}</p>
+                <div
+                  style={{
+                    backgroundColor: "var(--bg-secondary)",
+                  }}
+                >
+                  <p
+                    style={{
+                      color: "var(--btn-text-color)",
+                    }}
+                  >
+                    {item.day}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <div>
+                  <p>Time in</p>
+                  <p>{item.signInTime || "-"}</p>
+                </div>
+
+                <div>
+                  <p>Time out</p>
+                  <p>{item.signOutTime || "-"}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className={style.report_section_attendence_container_error}>
+          <p>
+            No attendence available for this {selected_attendence_stylist?.name}
+          </p>
+        </div>
+      )}
+
+      {/* FILTER MODAL */}
+      <Modal open={openFilter} onClose={() => setOpenFilter(false)}>
+        <div className={style.modal_common_container}>
+          <div className={style.filter_popup}>
+            <div className={style.filter_popup_header}>
+              <p>Select Filter</p>
+              <button
+                onClick={() => setOpenFilter(false)}
+                className={style.filterpopup_close_btn}
+              >
+                <CloseIcon />
+              </button>
+            </div>
+
+            <div className={style.filter_popup_body}>
+              <div className={style.filter_section}>
+                <p>Date Range</p>
+                <Calendar
+                  numberOfMonths={1}
+                  value={selectedDates}
+                  onChange={handleDateChange}
+                  range
+                  placeholder="dd/mm/yyyy - dd/mm/yyyy"
+                  dateSeparator=" - "
+                  calendarPosition="bottom-left"
+                  format="DD/MM/YYYY"
+                  className="dark-theme"
+                />
+              </div>
+
+              <div className={style.filter_section}>
+                <p>Select Stylist</p>
+                <div className={style.filter_chip_group}>
+                  {stylistBarberList?.map((item) => {
+                    const isActive =
+                      selected_attendence_stylist?.barberId === item.barberId;
+
+                    return (
+                      <button
+                        key={item.barberId}
+                        onClick={() => setSelected_attendence_stylist(item)}
+                        className={style.filter_chip}
+                        style={{
+                          backgroundColor: isActive
+                            ? "var(--bg-secondary)"
+                            : "transparent",
+                          color: isActive
+                            ? "var(--btn-text-color)"
+                            : "var(--text-primary)",
+                        }}
+                      >
+                        {item.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <button onClick={resetFilter} className={style.filter_apply_btn}>
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
+    </div>
+  ) : (
     <div className={style.report_section}>
       <div className={style.report_header}>
         <div>

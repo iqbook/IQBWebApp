@@ -8,6 +8,7 @@ import {
   DashboardIcon,
   QueueHistoryIcon,
   QueueIcon,
+  ReportIcon,
 } from "../../../newicons.js";
 import { useSelector } from "react-redux";
 import { useBarberGlobal } from "../../../context/Barber/GlobalContext.jsx";
@@ -62,6 +63,12 @@ const Sidebar = () => {
           name: "Appointment History",
           icon: <QueueHistoryIcon />,
           url: "/barber-apphistory",
+        },
+        {
+          id: 7,
+          name: "Reports",
+          icon: <ReportIcon />,
+          url: "/barber-reports",
         },
       ],
     },

@@ -131,6 +131,11 @@ const BarberAppointment = React.lazy(() =>
 const PaymentStatus = React.lazy(() =>
   import("./Admin/Payment/PaymentStatus/PaymentStatus")
 );
+
+const PaymentSettings = React.lazy(() =>
+  import("./Admin/Payment/PaymentSettings/PaymentSettings")
+);
+
 const BarberAppointmentList = React.lazy(() =>
   import("./Barber/AppointmentList/AppointmentList")
 );
@@ -139,6 +144,13 @@ const AdminReportChart = React.lazy(() =>
 );
 const AdminReportList = React.lazy(() =>
   import("./Admin/Report/ReportList/ReportList")
+);
+
+const BarberReportList = React.lazy(() =>
+  import("./Barber/Report/ReportList/ReportList")
+);
+const BarberReportChart = React.lazy(() =>
+  import("./Barber/Report/ReportChart/ReportChart")
 );
 
 import ProtectedAdminRoute from "./Admin/ProtectedRoutes/ProtectedRoute";
@@ -517,7 +529,7 @@ const App = () => {
                           </ErrorBoundary>
                         }
                       />
-                      
+
                       <Route
                         path="/admin-reports"
                         element={
@@ -531,6 +543,15 @@ const App = () => {
                         element={
                           <ErrorBoundary FallbackComponent={ErrorFallback}>
                             <PaymentStatus />
+                          </ErrorBoundary>
+                        }
+                      />
+
+                      <Route
+                        path="/admin-paymentsettings"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <PaymentSettings />
                           </ErrorBoundary>
                         }
                       />
@@ -649,6 +670,25 @@ const App = () => {
                           </ErrorBoundary>
                         }
                       />
+
+                      <Route
+                        path="/barber-reports"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <BarberReportList />
+                          </ErrorBoundary>
+                        }
+                      />
+
+                      <Route
+                        path="/barber-reportchart"
+                        element={
+                          <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <BarberReportChart />
+                          </ErrorBoundary>
+                        }
+                      />
+                      
                     </Route>
                   </Route>
 
