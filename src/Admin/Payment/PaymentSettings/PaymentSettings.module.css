@@ -122,6 +122,35 @@
   transform: translateX(2.2rem);
 }
 
+/* Percentage list */
+.percentageList {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.percentBtn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.8rem;
+  border: 0.1rem solid var(--border-secondary);
+  background: transparent;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  color: var(--text-primary);
+}
+
+.percentBtn:hover {
+  border-color: #4f46e5;
+  color: #4f46e5;
+}
+
+.percentBtn.active {
+  background-color: #4f46e5;
+  color: #ffffff;
+  border-color: #4f46e5;
+}
+
 /* ========================= */
 /* 📱 Mobile optimizations */
 /* ========================= */
