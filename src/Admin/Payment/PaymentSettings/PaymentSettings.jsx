@@ -1,12 +1,128 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./PaymentSettings.module.css";
+import { useSelector } from "react-redux";
+import api from "../../../Redux/api/Api";
+
+const PERCENTAGE_OPTIONS = [10, 20, 30, 50, 100];
 
 const PaymentSettings = () => {
-  const [queueEnabled, setQueueEnabled] = useState(true);
+  const salonId = useSelector(
+    (state) => state.AdminLoggedInMiddleware.adminSalonId
+  );
+
+  const [queueEnabled, setQueueEnabled] = useState(false);
   const [appointmentEnabled, setAppointmentEnabled] = useState(false);
 
   const [queueAdvance, setQueueAdvance] = useState(20);
   const [appointmentAdvance, setAppointmentAdvance] = useState(30);
+
+  const [fetchPaymentLoading, setFetchPaymentLoading] = useState(false);
+
+  const fetchPaymentSettings = async () => {
+    try {
+      setFetchPaymentLoading(true);
+      const res = await api.get(
+        `/api/salon/getPaymentSettings?salonId=${salonId}`
+      );
+
+      const settings = res?.data?.response || [];
+
+      settings.forEach((item) => {
+        if (item.type === "queue") {
+          setQueueEnabled(item.enabled);
+          setQueueAdvance(item.advancePaymentPercent);
+        }
+
+        if (item.type === "appointment") {
+          setAppointmentEnabled(item.enabled);
+          setAppointmentAdvance(item.advancePaymentPercent);
+        }
+      });
+    } catch (error) {
+      console.error("Failed to fetch payment settings", error);
+    } finally {
+      setFetchPaymentLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!salonId) return;
+
+    fetchPaymentSettings();
+  }, [salonId]);
+
+  const updatePaymentSettings = async ({
+    isEnabled,
+    type,
+    advancePaymentPercent,
+  }) => {
+    try {
+      await api.post("/api/salon/updatePaymentSettings", {
+        salonId,
+        isEnabled,
+        type,
+        advancePaymentPercent,
+      });
+
+      if (!isEnabled) {
+        fetchPaymentSettings();
+      }
+    } catch (error) {
+      console.error("Payment settings update failed", error);
+    }
+  };
+
+  const handleToggle = async (type, enabled) => {
+    if (type === "queue") {
+      setQueueEnabled(enabled);
+      updatePaymentSettings({
+        isEnabled: enabled,
+        type,
+        advancePaymentPercent: queueAdvance,
+      });
+    } else {
+      setAppointmentEnabled(enabled);
+      updatePaymentSettings({
+        isEnabled: enabled,
+        type,
+        advancePaymentPercent: appointmentAdvance,
+      });
+    }
+  };
+
+  const handlePercentageSelect = (type, percent) => {
+    if (type === "queue") {
+      setQueueAdvance(percent);
+      updatePaymentSettings({
+        isEnabled: queueEnabled,
+        type,
+        advancePaymentPercent: percent,
+      });
+    } else {
+      setAppointmentAdvance(percent);
+      updatePaymentSettings({
+        isEnabled: appointmentEnabled,
+        type,
+        advancePaymentPercent: percent,
+      });
+    }
+  };
+
+  const renderPercentageList = (type, selected) => (
+    <div className={style.percentageList}>
+      {PERCENTAGE_OPTIONS.map((percent) => (
+        <button
+          key={percent}
+          className={`${style.percentBtn} ${
+            selected === percent ? style.active : ""
+          }`}
+          onClick={() => handlePercentageSelect(type, percent)}
+        >
+          {percent}%
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <div className={style.container}>
@@ -28,7 +144,7 @@ const PaymentSettings = () => {
             <input
               type="checkbox"
               checked={queueEnabled}
-              onChange={() => setQueueEnabled(!queueEnabled)}
+              onChange={(e) => handleToggle("queue", e.target.checked)}
             />
             <span className={style.slider}></span>
           </label>
@@ -36,14 +152,8 @@ const PaymentSettings = () => {
 
         {queueEnabled && (
           <div className={style.cardBody}>
-            <label>Advance Payment (%)</label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              value={queueAdvance}
-              onChange={(e) => setQueueAdvance(e.target.value)}
-            />
+            <label>Advance Payment</label>
+            {renderPercentageList("queue", queueAdvance)}
           </div>
         )}
       </div>
@@ -60,7 +170,7 @@ const PaymentSettings = () => {
             <input
               type="checkbox"
               checked={appointmentEnabled}
-              onChange={() => setAppointmentEnabled(!appointmentEnabled)}
+              onChange={(e) => handleToggle("appointment", e.target.checked)}
             />
             <span className={style.slider}></span>
           </label>
@@ -68,14 +178,8 @@ const PaymentSettings = () => {
 
         {appointmentEnabled && (
           <div className={style.cardBody}>
-            <label>Advance Payment (%)</label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              value={appointmentAdvance}
-              onChange={(e) => setAppointmentAdvance(e.target.value)}
-            />
+            <label>Advance Payment</label>
+            {renderPercentageList("appointment", appointmentAdvance)}
           </div>
         )}
       </div>

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { BarIcon } from "../../../icons";
 import { CustomerIcon } from "../../../newicons";
 
-const TABS = ["All Reports", "Queue", "Appointment", "Staff", "Others"];
+const TABS = ["All Reports", "Queue", "Appointment", "Staff", "Professional"];
 
 const REPORT_ITEMS = [
   {
@@ -12,16 +12,16 @@ const REPORT_ITEMS = [
     title: "Performance dashboard appt.",
     headerTitle: "Appointment Performance",
     subTitle: "Daily total payment received by each barber.",
-    tag: "Others",
+    tag: "Appointment",
     iconType: "bar",
     reportType: "appointmentPerformance",
   },
   {
     id: 2,
-    title: "Online Presence Dashboard",
-    headerTitle: "Online Presence",
+    title: "Working Hours Dashboard",
+    headerTitle: "Working Hours",
     subTitle: "Amount of busy time per day (service time)",
-    tag: "Others",
+    tag: "Professional",
     iconType: "bar",
     reportType: "onlinePresence",
   },
@@ -86,7 +86,7 @@ const REPORT_ITEMS = [
     title: "Performance dashboard Queue",
     headerTitle: "Queue Performance",
     subTitle: "Daily total payment received by each barber.",
-    tag: "Others",
+    tag: "Queue",
     iconType: "bar",
     reportType: "queuePerformance",
   },
