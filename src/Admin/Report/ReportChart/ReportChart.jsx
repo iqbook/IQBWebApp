@@ -303,7 +303,7 @@ const Report = () => {
                       calendarPosition="bottom-right"
                       format="DD/MM/YYYY"
                       className="dark-theme"
-                      maxDate={new Date()} 
+                      maxDate={new Date()}
                     />
                   </div>
 
@@ -557,7 +557,7 @@ const Report = () => {
             {selectedReportBarber?.map((item) => {
               return <button key={item?.barberId}>{item?.xaxis}</button>;
             })}
-            {selectedDates?.length === 2 && (
+            {/* {selectedDates?.length === 2 && (
               <button>
                 {selectedDates.map((item, index) => (
                   <span key={index}>
@@ -566,6 +566,15 @@ const Report = () => {
                   </span>
                 ))}
               </button>
+            )} */}
+            {startDate && endDate && (
+              <>
+                <button>
+                  {startDate}
+                  <span style={{ margin: "0 8px" }}>-</span>
+                  {endDate}
+                </button>
+              </>
             )}
           </div>
         </div>
@@ -632,7 +641,7 @@ const Report = () => {
                       calendarPosition="bottom-right"
                       format="DD/MM/YYYY"
                       className="dark-theme"
-                      maxDate={new Date()} 
+                      maxDate={new Date()}
                     />
                   </div>
 
@@ -760,7 +769,7 @@ const Report = () => {
           {selectedReportBarber?.map((item) => {
             return <button key={item?.barberId}>{item?.xaxis}</button>;
           })}
-          {selectedDates?.length === 2 && (
+          {/* {selectedDates?.length === 2 && (
             <button>
               {selectedDates.map((item, index) => (
                 <span key={index}>
@@ -769,6 +778,16 @@ const Report = () => {
                 </span>
               ))}
             </button>
+          )} */}
+
+          {startDate && endDate && (
+            <>
+              <button>
+                {startDate}
+                <span style={{ margin: "0 8px" }}>-</span>
+                {endDate}
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -983,7 +1002,7 @@ const Report = () => {
                   calendarPosition="bottom-left"
                   format="DD/MM/YYYY"
                   className="dark-theme"
-                  maxDate={new Date()} 
+                  maxDate={new Date()}
                 />
               </div>
 
