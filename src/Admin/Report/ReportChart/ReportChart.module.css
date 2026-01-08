@@ -292,6 +292,10 @@
   gap: 2rem;
   justify-content: space-between;
   overflow: scroll;
+
+  & > div:nth-child(1) {
+    height: 80%;
+  }
 }
 
 .report_pie_stylist_container {
@@ -693,12 +697,18 @@
 
   .report_main_container {
     flex: none;
-    height: 60rem;
+    height: auto;
     padding: 1.5rem;
     width: 100%;
     & > div:nth-child(1) {
       flex-direction: column;
       gap: 2rem;
+    }
+  }
+
+  .report_pie_container {
+    & > div:nth-child(1) {
+      height: 40rem;
     }
   }
 
@@ -860,12 +870,17 @@
 
   .report_main_container {
     flex: none;
-    height: 60rem;
+    height: auto;
     padding: 1.5rem;
     width: 100%;
     & > div:nth-child(1) {
       flex-direction: column;
       gap: 2rem;
+    }
+  }
+  .report_pie_container {
+    & > div:nth-child(1) {
+      height: 40rem;
     }
   }
 
@@ -1027,12 +1042,18 @@
 
   .report_main_container {
     flex: none;
-    height: 60rem;
+    height: auto;
     padding: 1.5rem;
     width: 100%;
     & > div:nth-child(1) {
       flex-direction: column;
       gap: 2rem;
+    }
+  }
+
+  .report_pie_container {
+    & > div:nth-child(1) {
+      height: 40rem;
     }
   }
 

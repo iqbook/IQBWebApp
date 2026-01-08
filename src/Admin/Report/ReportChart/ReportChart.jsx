@@ -811,11 +811,7 @@ const Report = () => {
 
           {selectedReport.text === "Pie" ? (
             <div className={style.report_pie_container}>
-              <div
-                style={{
-                  height: "80%",
-                }}
-              >
+              <div>
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <defs>
@@ -877,13 +873,9 @@ const Report = () => {
             </div>
           ) : (
             <div className={style.report_pie_container}>
-              <div
-                style={{
-                  height: "100%",
-                }}
-              >
+              <div>
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData} barGap={10} margin={{ top: 30 }}>
+                  <BarChart data={chartData} barGap={10} margin={{ top: 30, left: -10 }}>
                     {/* 🔹 Dynamic gradients */}
                     <defs>
                       {chartData.map((item) => (
@@ -905,6 +897,12 @@ const Report = () => {
                       strokeDasharray="4 6"
                       stroke="rgba(0,0,0,0.08)"
                       vertical={false}
+                    />
+
+                    <YAxis
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fill: "var(--text-secondary)", fontSize: "1.2rem" }}
                     />
 
                     <XAxis
