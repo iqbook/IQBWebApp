@@ -812,9 +812,9 @@ const Report = () => {
           {selectedReport.text === "Pie" ? (
             <div className={style.report_pie_container}>
               <div
-                style={{
-                  height: "80%",
-                }}
+                // style={{
+                //   height: "100%",
+                // }}
               >
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
@@ -878,9 +878,9 @@ const Report = () => {
           ) : (
             <div className={style.report_pie_container}>
               <div
-                style={{
-                  height: "100%",
-                }}
+                // style={{
+                //   height: "100%",
+                // }}
               >
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData} barGap={10} margin={{ top: 30 }}>
