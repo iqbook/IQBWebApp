@@ -66,10 +66,12 @@ const Report = () => {
   const [selectedDates, setSelectedDates] = useState([]);
 
   const [startDate, setStartDate] = useState(
-    moment().subtract(31, "day").format("DD-MM-YYYY")
+    // moment().subtract(31, "day").format("DD-MM-YYYY")
+    null
   );
   const [endDate, setEndDate] = useState(
-    moment().subtract(1, "day").format("DD-MM-YYYY")
+    // moment().subtract(1, "day").format("DD-MM-YYYY")
+    null
   );
 
   const handleDateChange = (dates) => {
@@ -77,6 +79,7 @@ const Report = () => {
     setStartDate(formatedDates[0]);
     setEndDate(formatedDates[1]);
     setSelectedDates(formatedDates);
+    setSelectedReportType("daily")
   };
 
   const [isMobile, setIsMobile] = useState(false);
@@ -109,9 +112,9 @@ const Report = () => {
     if (selectedReportChartType?.reportType === "stylistattendence") {
       fetch_stylist_barberlist();
     } else {
-      if (startDate && endDate) {
-        view_report();
-      }
+      // if (startDate && endDate) {
+      view_report();
+      // }
     }
   }, [
     startDate,
@@ -135,6 +138,8 @@ const Report = () => {
     } catch (error) {}
   };
 
+  const [chartDefaultValue, setChartReportValueData] = useState(null);
+
   const view_report = async () => {
     try {
       const reportData = {
@@ -152,6 +157,7 @@ const Report = () => {
       );
 
       setChartData(data?.response);
+      setChartReportValueData(data?.dateRange);
       if (!copyFilterBarberList?.length) {
         setCopyFilterBarberList(data?.response);
       }
@@ -563,6 +569,9 @@ const Report = () => {
               <button
                 key={item}
                 onClick={() => {
+                  setStartDate(null);
+                  setEndDate(null);
+                  setSelectedDates([]);
                   setSelectedReportType(item);
                 }}
                 className={style.report_type_chip}
@@ -754,6 +763,9 @@ const Report = () => {
               <button
                 key={item}
                 onClick={() => {
+                  setStartDate(null);
+                  setEndDate(null);
+                  setSelectedDates([]);
                   setSelectedReportType(item);
                 }}
                 className={style.report_type_chip}
@@ -791,7 +803,7 @@ const Report = () => {
               </button>
             </div> */}
           </div>
-          {startDate && endDate && (
+          {startDate && endDate ? (
             <>
               <div className={style.appointment_date_chip}>
                 {startDate}
@@ -799,7 +811,15 @@ const Report = () => {
                 {endDate}
               </div>
             </>
-          )}
+          ) : chartDefaultValue ? (
+            <>
+              <div className={style.appointment_date_chip}>
+                {chartDefaultValue?.startDate}
+                <span style={{ margin: "0 8px" }}>-</span>
+                {chartDefaultValue?.endDate}
+              </div>
+            </>
+          ) : null}
 
           {selectedReport.text === "Pie" ? (
             <div className={style.report_pie_container}>
