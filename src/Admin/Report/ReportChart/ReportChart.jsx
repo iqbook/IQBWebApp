@@ -225,6 +225,9 @@ const Report = () => {
       setBarber_attendence_list_loading(false);
     }
   };
+
+  const [openStylistDropdown, setOpenStylistDropdown] = useState(false);
+
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.report_section_attendence}>
       <div className={style.report_header}>
@@ -552,21 +555,11 @@ const Report = () => {
             <h2>Reports</h2>
           </div>
 
-          <div>
-            {/* <button>{selectedReportType}</button> */}
+          {/* <div>
             {selectedReportBarber?.map((item) => {
               return <button key={item?.barberId}>{item?.xaxis}</button>;
             })}
-            {/* {selectedDates?.length === 2 && (
-              <button>
-                {selectedDates.map((item, index) => (
-                  <span key={index}>
-                    {item}
-                    {index === 0 && " - "}
-                  </span>
-                ))}
-              </button>
-            )} */}
+
             {startDate && endDate && (
               <>
                 <button>
@@ -576,6 +569,30 @@ const Report = () => {
                 </button>
               </>
             )}
+          </div> */}
+
+          <div>
+            {["Daily", "Weekly", "Monthly"].map((item, index) => (
+              <button
+                key={item}
+                onClick={() => {
+                  setSelectedReportType(item);
+                }}
+                className={style.report_type_chip}
+                style={{
+                  backgroundColor:
+                    selectedReportType === item
+                      ? "var(--bg-secondary)"
+                      : "transparent",
+                  color:
+                    selectedReportType === item
+                      ? "var(--btn-text-color)"
+                      : "var(--text-primary)",
+                }}
+              >
+                {item}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -583,6 +600,7 @@ const Report = () => {
           {reportUIArr.map((item, index) => {
             return (
               <button
+                className={style.graph_btn}
                 onClick={() => {
                   setSelectedReport(item);
                 }}
@@ -605,7 +623,162 @@ const Report = () => {
             );
           })}
 
+          <Calendar
+            numberOfMonths={1}
+            value={selectedDates}
+            onChange={handleDateChange}
+            range
+            placeholder="dd/mm/yyyy - dd/mm/yyyy"
+            dateSeparator=" - "
+            calendarPosition="bottom-right"
+            format="DD/MM/YYYY"
+            className="dark-theme"
+            maxDate={new Date()}
+          />
+
           <button
+            onClick={() => setOpenStylistDropdown((prev) => !prev)}
+            className={style.stylist_btn}
+          >
+            <span>
+              <CustomerIcon />
+            </span>
+            Select Stylists
+          </button>
+
+          {openStylistDropdown && (
+            <ClickAwayListener
+              onClickAway={() => setOpenStylistDropdown(false)}
+            >
+              <div className={style.filter_popup}>
+                <div className={style.filter_popup_header}>
+                  <p>Select Stylists</p>
+                  <button
+                    onClick={() => setOpenStylistDropdown(false)}
+                    className={style.filterpopup_close_btn}
+                  >
+                    <CloseIcon />
+                  </button>
+                </div>
+
+                <div className={style.filter_popup_body}>
+                  {copyFilterBarberList?.map((item) => {
+                    const isChecked = selectedReportBarber.some(
+                      (b) => b.barberId === item.barberId
+                    );
+
+                    return (
+                      <div
+                        key={item.barberId}
+                        className={style.barber_item}
+                        onClick={() => toggleBarber(item)}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => toggleBarber(item)}
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                        <p>{item.xaxis}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* <div className={style.filter_popup_body}>
+                  <div className={style.barber_item}>
+                    <input type="checkbox" />
+                    <p>John Doe</p>
+                  </div>
+                </div> */}
+
+                {/* 
+
+                <div className={style.filter_popup_body}>
+                  <div className={style.filter_section}>
+                    <p>Date Range</p>
+                    <Calendar
+                      numberOfMonths={1}
+                      value={selectedDates}
+                      onChange={handleDateChange}
+                      range
+                      placeholder="dd/mm/yyyy - dd/mm/yyyy"
+                      dateSeparator=" - "
+                      calendarPosition="bottom-right"
+                      format="DD/MM/YYYY"
+                      className="dark-theme"
+                      maxDate={new Date()}
+                    />
+                  </div>
+
+                  <div className={style.filter_section}>
+                    <p>Report Type</p>
+                    <div className={style.filter_chip_group}>
+                      {["Daily", "Weekly", "Monthly"].map((item, index) => (
+                        <button
+                          key={item}
+                          onClick={() => {
+                            setSelectedReportType(item);
+                          }}
+                          className={style.filter_chip}
+                          style={{
+                            backgroundColor:
+                              selectedReportType === item
+                                ? "var(--bg-secondary)"
+                                : "transparent",
+                            color:
+                              selectedReportType === item
+                                ? "var(--btn-text-color)"
+                                : "var(--text-primary)",
+                          }}
+                        >
+                          {item}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className={style.filter_section}>
+                    <p>Select Stylist</p>
+                    <div className={style.filter_chip_group}>
+                      {copyFilterBarberList?.map((item) => {
+                        const isActive = selectedReportBarber.some(
+                          (b) => b.barberId === item.barberId
+                        );
+
+                        return (
+                          <button
+                            key={item.barberId}
+                            onClick={() => toggleBarber(item)}
+                            className={style.filter_chip}
+                            style={{
+                              backgroundColor: isActive
+                                ? "var(--bg-secondary)"
+                                : "transparent",
+                              color: isActive
+                                ? "var(--btn-text-color)"
+                                : "var(--text-primary)",
+                            }}
+                          >
+                            {item.xaxis}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={resetFilter}
+                    className={style.filter_apply_btn}
+                  >
+                    Reset
+                  </button>
+                </div> */}
+              </div>
+            </ClickAwayListener>
+          )}
+
+          {/* <button
             onClick={() => {
               setOpenFilterPopup((prev) => !prev);
             }}
@@ -645,7 +818,7 @@ const Report = () => {
                     />
                   </div>
 
-                  {/* <div className={style.filter_section}>
+                  <div className={style.filter_section}>
                     <p>Report Type</p>
                     <div className={style.filter_chip_group}>
                       {["Daily", "Weekly", "Monthly"].map((item, index) => (
@@ -670,7 +843,7 @@ const Report = () => {
                         </button>
                       ))}
                     </div>
-                  </div> */}
+                  </div>
 
                   <div className={style.filter_section}>
                     <p>Select Stylist</p>
@@ -710,7 +883,7 @@ const Report = () => {
                 </div>
               </div>
             </ClickAwayListener>
-          )}
+          )} */}
         </div>
       </div>
 
@@ -808,6 +981,15 @@ const Report = () => {
               </button>
             </div> */}
           </div>
+          {startDate && endDate && (
+            <>
+              <div className={style.appointment_date_chip}>
+                {startDate}
+                <span style={{ margin: "0 8px" }}>-</span>
+                {endDate}
+              </div>
+            </>
+          )}
 
           {selectedReport.text === "Pie" ? (
             <div className={style.report_pie_container}>
@@ -875,7 +1057,11 @@ const Report = () => {
             <div className={style.report_pie_container}>
               <div>
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData} barGap={10} margin={{ top: 30, left: -10 }}>
+                  <BarChart
+                    data={chartData}
+                    barGap={10}
+                    margin={{ top: 30, left: -10 }}
+                  >
                     {/* 🔹 Dynamic gradients */}
                     <defs>
                       {chartData.map((item) => (
@@ -902,7 +1088,10 @@ const Report = () => {
                     <YAxis
                       axisLine={false}
                       tickLine={false}
-                      tick={{ fill: "var(--text-secondary)", fontSize: "1.2rem" }}
+                      tick={{
+                        fill: "var(--text-secondary)",
+                        fontSize: "1.2rem",
+                      }}
                     />
 
                     <XAxis
