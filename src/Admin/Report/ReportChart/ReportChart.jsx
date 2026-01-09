@@ -79,7 +79,7 @@ const Report = () => {
     setStartDate(formatedDates[0]);
     setEndDate(formatedDates[1]);
     setSelectedDates(formatedDates);
-    setSelectedReportType("daily")
+    setSelectedReportType("daily");
   };
 
   const [isMobile, setIsMobile] = useState(false);
@@ -139,6 +139,7 @@ const Report = () => {
   };
 
   const [chartDefaultValue, setChartReportValueData] = useState(null);
+  const [selectedAllBarber, setSelectedAllBarber] = useState(false);
 
   const view_report = async () => {
     try {
@@ -160,6 +161,7 @@ const Report = () => {
       setChartReportValueData(data?.dateRange);
       if (!copyFilterBarberList?.length) {
         setCopyFilterBarberList(data?.response);
+        setSelectedAllBarber(true);
       }
     } catch (error) {}
   };
@@ -658,6 +660,20 @@ const Report = () => {
                 </div>
 
                 <div className={style.filter_popup_body}>
+                  <div className={style.barber_item}>
+                    <input
+                      type="checkbox"
+                      checked={
+                        selectedReportBarber.length === 0 && selectedAllBarber
+                      }
+                      onChange={() => {
+                        setSelectedReportBarber([]);
+                        setSelectedAllBarber(true);
+                      }}
+                      // onClick={(e) => e.stopPropagation()}
+                    />
+                    <p>All</p>
+                  </div>
                   {copyFilterBarberList?.map((item) => {
                     const isChecked = selectedReportBarber.some(
                       (b) => b.barberId === item.barberId
