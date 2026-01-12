@@ -543,6 +543,9 @@ const Report = () => {
               <button
                 key={item}
                 onClick={() => {
+                  setStartDate(null);
+                  setEndDate(null);
+                  setSelectedDates([]);
                   setSelectedReportValue(item);
                 }}
                 className={style.report_type_chip}
@@ -561,20 +564,6 @@ const Report = () => {
               </button>
             ))}
           </div>
-
-          {/* <div>
-            {selectedReportValue && <button>{selectedReportValue}</button>}
-            {selectedDates?.length === 2 && (
-              <button>
-                {selectedDates.map((item, index) => (
-                  <span key={index}>
-                    {item}
-                    {index === 0 && " - "}
-                  </span>
-                ))}
-              </button>
-            )}
-          </div> */}
         </div>
 
         <div>
@@ -615,88 +604,6 @@ const Report = () => {
             className="dark-theme"
             maxDate={new Date()}
           />
-
-          {/* <button
-            onClick={() => {
-              setOpenFilterPopup((prev) => !prev);
-            }}
-            className={style.filter_btn}
-          >
-            <FilterIcon />
-            <span>Filter</span>
-          </button>
-
-          {openFilterPopup && (
-            <ClickAwayListener onClickAway={() => setOpenFilterPopup(false)}>
-              <div className={style.filter_popup}>
-                <div className={style.filter_popup_header}>
-                  <p>Select Filter</p>
-                  <button
-                    onClick={() => setOpenFilterPopup(false)}
-                    className={style.filterpopup_close_btn}
-                  >
-                    <CloseIcon />
-                  </button>
-                </div>
-
-                <div className={style.filter_popup_body}>
-                  <div className={style.filter_section}>
-                    <p>Date Range</p>
-                    <Calendar
-                      numberOfMonths={1}
-                      value={selectedDates}
-                      onChange={handleDateChange}
-                      range
-                      placeholder="dd/mm/yyyy - dd/mm/yyyy"
-                      dateSeparator=" - "
-                      calendarPosition="bottom-right"
-                      format="DD/MM/YYYY"
-                      className="dark-theme"
-                      maxDate={new Date()}
-                    />
-                  </div>
-
-                  <div className={style.filter_section}>
-                    <p>Report Type</p>
-                    <div className={style.filter_chip_group}>
-                      {["daily", "weekly", "monthly"].map((item, index) => (
-                        <button
-                          key={item}
-                          onClick={() => {
-                            setStartDate(null);
-                            setEndDate(null);
-                            setSelectedDates([]);
-                            setSelectedReportValue(item);
-                          }}
-                          className={style.filter_chip}
-                          style={{
-                            backgroundColor:
-                              selectedReportValue === item
-                                ? "var(--bg-secondary)"
-                                : "transparent",
-                            color:
-                              selectedReportValue === item
-                                ? "var(--btn-text-color)"
-                                : "var(--text-primary)",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          {item}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={resetFilter}
-                    className={style.filter_apply_btn}
-                  >
-                    Reset
-                  </button>
-                </div>
-              </div>
-            </ClickAwayListener>
-          )} */}
         </div>
       </div>
 
@@ -770,6 +677,9 @@ const Report = () => {
               <button
                 key={item}
                 onClick={() => {
+                  setStartDate(null);
+                  setEndDate(null);
+                  setSelectedDates([]);
                   setSelectedReportValue(item);
                 }}
                 className={style.report_type_chip}
