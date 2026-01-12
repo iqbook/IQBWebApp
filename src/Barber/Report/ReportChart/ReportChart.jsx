@@ -739,7 +739,7 @@ const Report = () => {
               );
             })}
 
-            <button
+            {/* <button
               onClick={() => {
                 setOpenFilter((prev) => !prev);
               }}
@@ -747,11 +747,50 @@ const Report = () => {
             >
               <FilterIcon />
               <span>Filter</span>
-            </button>
+            </button> */}
           </div>
         </div>
 
-        <div>
+        <Calendar
+          numberOfMonths={1}
+          value={selectedDates}
+          onChange={handleDateChange}
+          range
+          placeholder="dd/mm/yyyy - dd/mm/yyyy"
+          dateSeparator=" - "
+          calendarPosition="bottom-right"
+          format="DD/MM/YYYY"
+          className="dark-theme"
+          maxDate={new Date()}
+        />
+
+        <div className={style.stylist_calender_report_value}>
+          <div>
+            {["daily", "weekly", "monthly"].map((item, index) => (
+              <button
+                key={item}
+                onClick={() => {
+                  setSelectedReportValue(item);
+                }}
+                className={style.report_type_chip}
+                style={{
+                  backgroundColor:
+                    selectedReportValue === item
+                      ? "var(--bg-secondary)"
+                      : "transparent",
+                  color:
+                    selectedReportValue === item
+                      ? "var(--btn-text-color)"
+                      : "var(--text-primary)",
+                }}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* <div>
           {selectedReportValue && <button>{selectedReportValue}</button>}
 
           {selectedDates?.length === 2 && (
@@ -764,7 +803,7 @@ const Report = () => {
               ))}
             </button>
           )}
-        </div>
+        </div> */}
       </div>
 
       <div className={style.report_container}>

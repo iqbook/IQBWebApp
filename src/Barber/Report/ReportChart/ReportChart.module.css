@@ -780,6 +780,41 @@
   .report_section_attendence_container_loading {
     grid-template-columns: 1fr;
   }
+
+  .stylist_calender_report_value {
+    /* padding-inline: 15%; */
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    & > div {
+      width: 70vw;
+      display: flex;
+      justify-content: space-between;
+      margin-inline: auto;
+    }
+
+    .report_type_chip {
+      height: 3.5rem;
+      padding: 0 1.4rem;
+      text-transform: capitalize;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 999px; /* pill shape */
+      border: 1px solid var(--border-color);
+
+      background-color: transparent;
+      color: var(--text-primary);
+
+      font-size: 1.4rem;
+      font-family: "AirbnbCereal_Medium";
+
+      cursor: pointer;
+      user-select: none;
+    }
+  }
 }
 
 @media screen and (min-width: 431px) and (max-width: 768px) {
