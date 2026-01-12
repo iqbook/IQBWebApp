@@ -882,78 +882,120 @@ const Report = () => {
               className={style.report_test_container}
               style={{ overflowX: "auto" }}
             >
-              <ResponsiveContainer
-                width={chartData.length * 120} // ensures min 80px per bar + gap
-                height="100%"
-              >
-                <BarChart
-                  data={chartData}
-                  margin={{
-                    top: 30,
-                    right: 20,
-                    left: 10,
-                    bottom: 20,
-                  }}
-                  barCategoryGap={20}
-                >
-                  <defs>
-                    {chartData.map((item) => (
-                      <linearGradient
-                        key={item.barberId}
-                        id={`grad-${item.barberId}`}
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop offset="0%" stopColor={item.fill} />
-                        <stop offset="100%" stopColor={item.fill2} />
-                      </linearGradient>
-                    ))}
-                  </defs>
+              {selectedReport.text === "Pie" ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <defs>
+                      {chartData.map((item, index) => (
+                        <linearGradient
+                          key={index}
+                          id={`pieGrad-${index}`}
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop offset="0%" stopColor={item.fill} />
+                          <stop offset="100%" stopColor={item.fill2} />
+                        </linearGradient>
+                      ))}
+                    </defs>
 
-                  <CartesianGrid
-                    strokeDasharray="4 6"
-                    stroke="rgba(0,0,0,0.08)"
-                    vertical={false}
-                  />
-
-                  <XAxis
-                    dataKey="xaxis"
-                    // interval={0}
-                    // tick={renderXAxisTick}
-                    // axisLine={false}
-                    // tickLine={false}
-                    interval={0}
-                    tick={{ fontSize: 12 }}
-                    axisLine={false}
-                    tickLine={false}
-                  />
-
-                  {/* <YAxis axisLine={false} tickLine={false} /> */}
-
-                  <Bar
-                    dataKey="yaxis"
-                    radius={[8, 8, 0, 0]}
-                    barSize={80} // ✅ minimum bar width
-                  >
-                    {chartData.map((item) => (
-                      <Cell
-                        key={item.barberId}
-                        fill={`url(#grad-${item.barberId})`}
-                      />
-                    ))}
-
-                    <LabelList
+                    <Pie
+                      data={chartData}
                       dataKey="yaxis"
-                      position="top"
-                      fill="var(--text-primary)"
-                      fontSize="1.4rem"
-                      fontWeight={600}
+                      innerRadius="65%"
+                      outerRadius="100%"
+                      cornerRadius="12%"
+                      paddingAngle={1}
+                    >
+                      {chartData.map((_, index) => (
+                        <Cell key={index} fill={`url(#pieGrad-${index})`} />
+                      ))}
+
+                      <Label content={renderCenterContent(totalServed)} />
+
+                      <LabelList
+                        dataKey="yaxis"
+                        position="inside"
+                        fill="#fff"
+                        fontSize={"1.4rem"}
+                        fontWeight={600}
+                      />
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <ResponsiveContainer
+                  width={chartData.length * 120} // ensures min 80px per bar + gap
+                  height="100%"
+                >
+                  <BarChart
+                    data={chartData}
+                    margin={{
+                      top: 10,
+                    }}
+                    barCategoryGap={20}
+                  >
+                    <defs>
+                      {chartData.map((item) => (
+                        <linearGradient
+                          key={item.barberId}
+                          id={`grad-${item.barberId}`}
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop offset="0%" stopColor={item.fill} />
+                          <stop offset="100%" stopColor={item.fill2} />
+                        </linearGradient>
+                      ))}
+                    </defs>
+
+                    <CartesianGrid
+                      strokeDasharray="4 6"
+                      stroke="rgba(0,0,0,0.08)"
+                      vertical={false}
                     />
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+
+                    <XAxis
+                      dataKey="xaxis"
+                      // interval={0}
+                      // tick={renderXAxisTick}
+                      // axisLine={false}
+                      // tickLine={false}
+                      interval={0}
+                      tick={{ fontSize: 12 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+
+                    {/* <YAxis axisLine={false} tickLine={false} /> */}
+
+                    <Bar
+                      dataKey="yaxis"
+                      radius={[8, 8, 0, 0]}
+                      barSize={80} // ✅ minimum bar width
+                    >
+                      {chartData.map((item) => (
+                        <Cell
+                          key={item.barberId}
+                          fill={`url(#grad-${item.barberId})`}
+                        />
+                      ))}
+
+                      <LabelList
+                        dataKey="yaxis"
+                        position="top"
+                        fill="var(--text-primary)"
+                        fontSize="1.4rem"
+                        fontWeight={600}
+                      />
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
             </div>
 
             <div className={style.report_pie_stylist_container}>
