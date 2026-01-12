@@ -282,7 +282,7 @@
 }
 
 .report_main_container {
-  flex: 2;
+  /* flex: 2; */
   background-color: var(--bg-primary);
   box-shadow: var(--cmmn-box-shadow);
   border: 0.1rem solid var(--border-secondary);
@@ -291,6 +291,7 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  /* background-color: blue; */
 
   & > div:nth-child(1) {
     display: flex;
@@ -327,10 +328,26 @@
   }
 }
 
+.report_test_wrapper_container{
+  width: 85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: inherit;
+  background-color: blue;
+  overflow: auto;
+}
+
+.report_test_container {
+  width: 85rem;
+  min-height: 80%; /* important for ResponsiveContainer */
+  background-color: red;
+  overflow-x: auto; /* 🔑 horizontal scroll */
+}
+
 .report_pie_container {
   flex: 1;
-  width: 80rem;
-  /* height: 35rem; */
+  width: 85rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -339,8 +356,8 @@
 
   & > div:nth-child(1) {
     height: 80%;
-    min-width: 100rem;
-    background-color: red;
+    /* min-width: 100rem; */
+    /* background-color: red; */
     overflow: scroll;
   }
 }
@@ -351,6 +368,7 @@
   justify-content: space-around;
   flex-wrap: wrap;
   gap: 2rem;
+  /* background-color: green; */
 
   & > div {
     display: flex;
@@ -372,7 +390,7 @@
 }
 
 .report_content_container {
-  flex: 0.75;
+  flex: 1;
   background-color: var(--bg-primary);
   box-shadow: var(--cmmn-box-shadow);
   border: 0.1rem solid var(--border-secondary);

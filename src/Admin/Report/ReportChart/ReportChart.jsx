@@ -240,6 +240,13 @@ const Report = () => {
   const [openStylistMobileDropdown, setOpenStylistMobileDropdown] =
     useState(false);
 
+  const dummyData = Array.from({ length: 120 }).map((_, i) => ({
+    name: `Bar ${i + 1}`,
+    value: Math.floor(Math.random() * 100) + 10,
+  }));
+
+  const MIN_BAR_WIDTH = 80;
+
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.report_section_attendence}>
       <div className={style.report_header}>
@@ -828,58 +835,48 @@ const Report = () => {
             </>
           ) : null}
 
-          <div className={style.report_pie_container}>
-            <div>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} barGap={10} margin={{ top: 30 }}>
-                  <defs>
-                    {chartData.map((item) => (
-                      <linearGradient
-                        key={item.barberId}
-                        id={`grad-${item.barberId}`}
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop offset="0%" stopColor={item.fill} />
-                        <stop offset="100%" stopColor={item.fill2} />
-                      </linearGradient>
-                    ))}
-                  </defs>
+          <div className={style.report_test_wrapper_container}>
+            <div className={style.report_test_container}>
+              {/* Scroll wrapper */}
+              <div
+                style={{
+                  width: dummyData.length * MIN_BAR_WIDTH,
+                  height: "100%",
+                }}
+              >
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={dummyData}
+                    margin={{ top: 30, right: 20, left: 10, bottom: 20 }}
+                    barCategoryGap={20}
+                  >
+                    <CartesianGrid strokeDasharray="4 6" vertical={false} />
 
-                  <CartesianGrid
-                    strokeDasharray="4 6"
-                    stroke="rgba(0,0,0,0.08)"
-                    vertical={false}
-                  />
-
-                  <XAxis
-                    dataKey="xaxis"
-                    interval={0}
-                    tick={renderXAxisTick}
-                    axisLine={false}
-                    tickLine={false}
-                  />
-
-                  <Bar dataKey="yaxis" radius={[8, 8, 0, 0]}>
-                    {chartData.map((item) => (
-                      <Cell
-                        key={item.barberId}
-                        fill={`url(#grad-${item.barberId})`}
-                      />
-                    ))}
-
-                    <LabelList
-                      dataKey="yaxis"
-                      position="top"
-                      fill="var(--text-primary)"
-                      fontSize={"1.4rem"}
-                      fontWeight={600}
+                    <XAxis
+                      dataKey="name"
+                      interval={0}
+                      tick={{ fontSize: 12 }}
+                      axisLine={false}
+                      tickLine={false}
                     />
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+
+                    <YAxis axisLine={false} tickLine={false} />
+
+                    <Bar
+                      dataKey="value"
+                      radius={[8, 8, 0, 0]}
+                      maxBarSize={80} // ✅ never exceed 80px
+                    >
+                      <LabelList
+                        dataKey="value"
+                        position="top"
+                        fontSize={12}
+                        fontWeight={600}
+                      />
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
 
             <div className={style.report_pie_stylist_container}>
@@ -995,7 +992,12 @@ const Report = () => {
                       tickLine={false}
                     />
 
-                    <Bar dataKey="yaxis" radius={[8, 8, 0, 0]}>
+                    <Bar
+                      dataKey="yaxis"
+                      radius={[8, 8, 0, 0]}
+                      barSize={200}
+                      // maxBarSize={60}
+                    >
                       {chartData.map((item) => (
                         <Cell
                           key={item.barberId}
