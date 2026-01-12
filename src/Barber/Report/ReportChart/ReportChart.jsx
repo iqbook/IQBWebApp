@@ -74,11 +74,11 @@ const Report = () => {
   // moment().subtract(1, "day").format("DD-MM-YYYY")
 
   const handleDateChange = (dates) => {
-    setSelectedReportValue(null);
     const formatedDates = dates.map((date) => date.format("DD-MM-YYYY"));
     setStartDate(formatedDates[0]);
     setEndDate(formatedDates[1]);
     setSelectedDates(formatedDates);
+    setSelectedReportValue("daily");
   };
 
   const [isMobile, setIsMobile] = useState(false);
@@ -105,7 +105,6 @@ const Report = () => {
   const [selected_attendence_stylist, setSelected_attendence_stylist] =
     useState(null);
 
-
   useEffect(() => {
     if (selectedReportChartType?.reportType === "stylistattendence") {
       if (startDate && endDate) {
@@ -125,6 +124,7 @@ const Report = () => {
   // selectedReportChartType?.reportType === "stylistattendence"
 
   const [chartData, setChartData] = useState([]);
+  const [chartDefaultValue, setChartReportValueData] = useState(null);
 
   const view_report = async () => {
     try {
@@ -143,6 +143,7 @@ const Report = () => {
       );
 
       setChartData(data?.response);
+      setChartReportValueData(data?.dateRange);
     } catch (error) {}
   };
 
@@ -538,6 +539,30 @@ const Report = () => {
           </div>
 
           <div>
+            {["daily", "weekly", "monthly"].map((item, index) => (
+              <button
+                key={item}
+                onClick={() => {
+                  setSelectedReportValue(item);
+                }}
+                className={style.report_type_chip}
+                style={{
+                  backgroundColor:
+                    selectedReportValue === item
+                      ? "var(--bg-secondary)"
+                      : "transparent",
+                  color:
+                    selectedReportValue === item
+                      ? "var(--btn-text-color)"
+                      : "var(--text-primary)",
+                }}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+
+          {/* <div>
             {selectedReportValue && <button>{selectedReportValue}</button>}
             {selectedDates?.length === 2 && (
               <button>
@@ -549,7 +574,7 @@ const Report = () => {
                 ))}
               </button>
             )}
-          </div>
+          </div> */}
         </div>
 
         <div>
@@ -578,7 +603,20 @@ const Report = () => {
             );
           })}
 
-          <button
+          <Calendar
+            numberOfMonths={1}
+            value={selectedDates}
+            onChange={handleDateChange}
+            range
+            placeholder="dd/mm/yyyy - dd/mm/yyyy"
+            dateSeparator=" - "
+            calendarPosition="bottom-right"
+            format="DD/MM/YYYY"
+            className="dark-theme"
+            maxDate={new Date()}
+          />
+
+          {/* <button
             onClick={() => {
               setOpenFilterPopup((prev) => !prev);
             }}
@@ -614,6 +652,7 @@ const Report = () => {
                       calendarPosition="bottom-right"
                       format="DD/MM/YYYY"
                       className="dark-theme"
+                      maxDate={new Date()}
                     />
                   </div>
 
@@ -648,35 +687,6 @@ const Report = () => {
                     </div>
                   </div>
 
-                  {/* <div className={style.filter_section}>
-                    <p>Select Stylist</p>
-                    <div className={style.filter_chip_group}>
-                      {copyFilterBarberList?.map((item) => {
-                        const isActive = selectedReportBarber.some(
-                          (b) => b.barberId === item.barberId
-                        );
-
-                        return (
-                          <button
-                            key={item.barberId}
-                            onClick={() => toggleBarber(item)}
-                            className={style.filter_chip}
-                            style={{
-                              backgroundColor: isActive
-                                ? "var(--bg-secondary)"
-                                : "transparent",
-                              color: isActive
-                                ? "var(--btn-text-color)"
-                                : "var(--text-primary)",
-                            }}
-                          >
-                            {item.xaxis}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div> */}
-
                   <button
                     onClick={resetFilter}
                     className={style.filter_apply_btn}
@@ -686,7 +696,7 @@ const Report = () => {
                 </div>
               </div>
             </ClickAwayListener>
-          )}
+          )} */}
         </div>
       </div>
 
@@ -773,6 +783,24 @@ const Report = () => {
               </button>
             </div> */}
           </div>
+
+          {startDate && endDate ? (
+            <>
+              <div className={style.appointment_date_chip}>
+                {startDate}
+                <span style={{ margin: "0 8px" }}>-</span>
+                {endDate}
+              </div>
+            </>
+          ) : chartDefaultValue ? (
+            <>
+              <div className={style.appointment_date_chip}>
+                {chartDefaultValue?.startDate}
+                <span style={{ margin: "0 8px" }}>-</span>
+                {chartDefaultValue?.endDate}
+              </div>
+            </>
+          ) : null}
 
           {selectedReport.text === "Pie" ? (
             <div className={style.report_pie_container}>

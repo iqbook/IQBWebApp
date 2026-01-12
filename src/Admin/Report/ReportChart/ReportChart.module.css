@@ -329,6 +329,7 @@
 
 .report_pie_container {
   flex: 1;
+  width: 80rem;
   /* height: 35rem; */
   display: flex;
   flex-direction: column;
@@ -338,6 +339,9 @@
 
   & > div:nth-child(1) {
     height: 80%;
+    min-width: 100rem;
+    background-color: red;
+    overflow: scroll;
   }
 }
 

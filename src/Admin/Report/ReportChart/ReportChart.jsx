@@ -828,7 +828,77 @@ const Report = () => {
             </>
           ) : null}
 
-          {selectedReport.text === "Pie" ? (
+          <div className={style.report_pie_container}>
+            <div>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData} barGap={10} margin={{ top: 30 }}>
+                  <defs>
+                    {chartData.map((item) => (
+                      <linearGradient
+                        key={item.barberId}
+                        id={`grad-${item.barberId}`}
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop offset="0%" stopColor={item.fill} />
+                        <stop offset="100%" stopColor={item.fill2} />
+                      </linearGradient>
+                    ))}
+                  </defs>
+
+                  <CartesianGrid
+                    strokeDasharray="4 6"
+                    stroke="rgba(0,0,0,0.08)"
+                    vertical={false}
+                  />
+
+                  <XAxis
+                    dataKey="xaxis"
+                    interval={0}
+                    tick={renderXAxisTick}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+
+                  <Bar dataKey="yaxis" radius={[8, 8, 0, 0]}>
+                    {chartData.map((item) => (
+                      <Cell
+                        key={item.barberId}
+                        fill={`url(#grad-${item.barberId})`}
+                      />
+                    ))}
+
+                    <LabelList
+                      dataKey="yaxis"
+                      position="top"
+                      fill="var(--text-primary)"
+                      fontSize={"1.4rem"}
+                      fontWeight={600}
+                    />
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className={style.report_pie_stylist_container}>
+              {chartData?.map((item, index) => {
+                return (
+                  <div key={item?.barberId}>
+                    <div
+                      style={{
+                        backgroundColor: item?.fill,
+                      }}
+                    />
+                    <p>{item?.xaxis}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* {selectedReport.text === "Pie" ? (
             <div className={style.report_pie_container}>
               <div>
                 <ResponsiveContainer width="100%" height="100%">
@@ -960,7 +1030,7 @@ const Report = () => {
                 })}
               </div>
             </div>
-          )}
+          )} */}
         </div>
         <div className={style.report_content_container}>
           <p>Select analytics</p>
