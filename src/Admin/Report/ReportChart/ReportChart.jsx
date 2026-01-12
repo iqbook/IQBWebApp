@@ -809,15 +809,6 @@ const Report = () => {
             <p style={{ textAlign: "center", width: "100%" }}>
               {selectedReportChartType?.headerTitle}
             </p>
-            {/* <div>
-              <button onClick={decreaseDate}>
-                <LeftIcon color="var(--text-primary)" />
-              </button>
-              <p>{reportDateText}</p>
-              <button onClick={increaseDate}>
-                <RightIcon color="var(--text-primary)" />
-              </button>
-            </div> */}
           </div>
           {startDate && endDate ? (
             <>
@@ -904,7 +895,6 @@ const Report = () => {
               <div>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData} barGap={10} margin={{ top: 30 }}>
-                    {/* 🔹 Dynamic gradients */}
                     <defs>
                       {chartData.map((item) => (
                         <linearGradient
@@ -927,15 +917,6 @@ const Report = () => {
                       vertical={false}
                     />
 
-                    {/* <YAxis
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{
-                        fill: "var(--text-secondary)",
-                        fontSize: "1.2rem",
-                      }}
-                    /> */}
-
                     <XAxis
                       dataKey="xaxis"
                       interval={0}
@@ -945,7 +926,6 @@ const Report = () => {
                     />
 
                     <Bar dataKey="yaxis" radius={[8, 8, 0, 0]}>
-                      {/* 🔹 Apply gradient per bar */}
                       {chartData.map((item) => (
                         <Cell
                           key={item.barberId}
