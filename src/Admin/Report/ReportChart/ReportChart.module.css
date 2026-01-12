@@ -328,21 +328,23 @@
   }
 }
 
-.report_test_wrapper_container{
+.report_test_wrapper_container {
   width: 85rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
   height: inherit;
-  background-color: blue;
-  overflow: auto;
+  /* background-color: blue; */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .report_test_container {
   width: 85rem;
   min-height: 80%; /* important for ResponsiveContainer */
-  background-color: red;
+  /* background-color: red; */
   overflow-x: auto; /* 🔑 horizontal scroll */
+  overflow-y: hidden;
 }
 
 .report_pie_container {
