@@ -210,8 +210,6 @@ const Report = () => {
     }
   };
 
-  const isSmallScreen = window.innerWidth < 768;
-
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.report_section_attendence}>
       <div className={style.report_header}>
@@ -699,21 +697,6 @@ const Report = () => {
             ))}
           </div>
         </div>
-
-        {/* <div>
-          {selectedReportValue && <button>{selectedReportValue}</button>}
-
-          {selectedDates?.length === 2 && (
-            <button>
-              {selectedDates.map((item, index) => (
-                <span key={index}>
-                  {item}
-                  {index === 0 && " - "}
-                </span>
-              ))}
-            </button>
-          )}
-        </div> */}
       </div>
 
       <div className={style.report_container}>
@@ -722,15 +705,6 @@ const Report = () => {
             <p style={{ textAlign: "center", width: "100%" }}>
               {selectedReportChartType?.headerTitle}
             </p>
-            {/* <div>
-              <button onClick={decreaseDate}>
-                <LeftIcon color="var(--text-primary)" />
-              </button>
-              <p>{reportDateText}</p>
-              <button onClick={increaseDate}>
-                <RightIcon color="var(--text-primary)" />
-              </button>
-            </div> */}
           </div>
 
           {startDate && endDate ? (
@@ -751,7 +725,7 @@ const Report = () => {
             </>
           ) : null}
 
-          {selectedReport.text === "Pie" ? (
+          {/* {selectedReport.text === "Pie" ? (
             <div className={style.report_pie_container}>
               <div
                 style={{
@@ -826,7 +800,6 @@ const Report = () => {
               >
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData} barGap={10} margin={{ top: 30 }}>
-                    {/* 🔹 Dynamic gradients */}
                     <defs>
                       {chartData.map((item, index) => (
                         <linearGradient
@@ -849,14 +822,6 @@ const Report = () => {
                       vertical={false}
                     />
 
-                    {/* <XAxis
-                      dataKey="xaxis"
-                      interval={0}
-                      tick={renderXAxisTick}
-                      axisLine={false}
-                      tickLine={false}
-                    /> */}
-
                     <XAxis
                       dataKey="xaxis"
                       interval={0}
@@ -867,7 +832,6 @@ const Report = () => {
                     />
 
                     <Bar dataKey="yaxis" radius={[8, 8, 0, 0]}>
-                      {/* 🔹 Apply gradient per bar */}
                       {chartData.map((item, index) => (
                         <Cell key={index} fill={`url(#grad-${index})`} />
                       ))}
@@ -899,7 +863,141 @@ const Report = () => {
                 })}
               </div>
             </div>
-          )}
+          )} */}
+
+          <div className={style.report_test_wrapper_container}>
+            <div className={style.report_test_container}>
+              {selectedReport.text === "Pie" ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <defs>
+                      {chartData.map((item, index) => (
+                        <linearGradient
+                          key={index}
+                          id={`pieGrad-${index}`}
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop offset="0%" stopColor={item.fill} />
+                          <stop offset="100%" stopColor={item.fill2} />
+                        </linearGradient>
+                      ))}
+                    </defs>
+
+                    <Pie
+                      data={chartData}
+                      dataKey="yaxis"
+                      innerRadius="65%"
+                      outerRadius="100%"
+                      cornerRadius="12%"
+                      paddingAngle={1}
+                    >
+                      {chartData.map((_, index) => (
+                        <Cell key={index} fill={`url(#pieGrad-${index})`} />
+                      ))}
+
+                      <Label content={renderCenterContent(totalServed)} />
+
+                      <LabelList
+                        dataKey="yaxis"
+                        position="inside"
+                        fill="#fff"
+                        fontSize={"1.4rem"}
+                        fontWeight={600}
+                      />
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <ResponsiveContainer
+                  minWidth={
+                    chartData.length *
+                    (selectedReportValue === "weekly" ? 150 : 120)
+                  } // ensures min 80px per bar + gap
+                  height="100%"
+                >
+                  <BarChart
+                    data={chartData}
+                    margin={{
+                      top: 30,
+                    }}
+                    barCategoryGap={50}
+                  >
+                    <defs>
+                      {chartData.map((item, index) => (
+                        <linearGradient
+                          key={index}
+                          id={`grad-${index}`}
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop offset="0%" stopColor={item.fill} />
+                          <stop offset="100%" stopColor={item.fill2} />
+                        </linearGradient>
+                      ))}
+                    </defs>
+
+                    <CartesianGrid
+                      strokeDasharray="4 6"
+                      stroke="rgba(0,0,0,0.08)"
+                      vertical={false}
+                    />
+
+                    <XAxis
+                      dataKey="xaxis"
+                      // interval={0}
+                      // tick={renderXAxisTick}
+                      // axisLine={false}
+                      // tickLine={false}
+                      interval={0}
+                      tick={{ fontSize: 12 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+
+                    {/* <YAxis axisLine={false} tickLine={false} /> */}
+
+                    <Bar
+                      dataKey="yaxis"
+                      radius={[8, 8, 0, 0]}
+                      barSize={80} // ✅ minimum bar width
+                    >
+                      {chartData.map((item, index) => (
+                        <Cell key={index} fill={`url(#grad-${index})`} />
+                      ))}
+
+                      <LabelList
+                        dataKey="yaxis"
+                        position="top"
+                        fill="var(--text-primary)"
+                        fontSize="1.4rem"
+                        fontWeight={600}
+                      />
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
+            </div>
+
+            <div className={style.report_pie_stylist_container}>
+              {chartData?.map((item, index) => {
+                return (
+                  <div key={item?.barberId}>
+                    <div
+                      style={{
+                        backgroundColor: item?.fill,
+                      }}
+                    />
+                    <p>{item?.xaxis}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
         <div className={style.report_content_container}>
           <p>Select analytics</p>

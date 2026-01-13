@@ -240,13 +240,6 @@ const Report = () => {
   const [openStylistMobileDropdown, setOpenStylistMobileDropdown] =
     useState(false);
 
-  const dummyData = Array.from({ length: 120 }).map((_, i) => ({
-    name: `Bar ${i + 1}`,
-    value: Math.floor(Math.random() * 100) + 10,
-  }));
-
-  const MIN_BAR_WIDTH = 80;
-
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.report_section_attendence}>
       <div className={style.report_header}>
@@ -927,13 +920,13 @@ const Report = () => {
                 </ResponsiveContainer>
               ) : (
                 <ResponsiveContainer
-                  width={chartData.length * 120} // ensures min 80px per bar + gap
+                  minWidth={chartData.length * 120} // ensures min 80px per bar + gap
                   height="100%"
                 >
                   <BarChart
                     data={chartData}
                     margin={{
-                      top: 10,
+                      top: 30,
                     }}
                     barCategoryGap={20}
                   >

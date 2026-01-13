@@ -283,6 +283,7 @@
 
 .report_main_container {
   /* flex: 2; */
+  width: 92rem;
   background-color: var(--bg-primary);
   box-shadow: var(--cmmn-box-shadow);
   border: 0.1rem solid var(--border-secondary);

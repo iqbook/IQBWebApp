@@ -260,7 +260,7 @@
 }
 
 .report_main_container {
-  flex: 2;
+  width: 92rem;
   background-color: var(--bg-primary);
   box-shadow: var(--cmmn-box-shadow);
   border: 0.1rem solid var(--border-secondary);
@@ -303,6 +303,25 @@
       }
     }
   }
+}
+
+.report_test_wrapper_container {
+  width: 85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: inherit;
+  /* background-color: blue; */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.report_test_container {
+  width: 85rem;
+  min-height: 80%; /* important for ResponsiveContainer */
+  /* background-color: red; */
+  overflow-x: auto; /* 🔑 horizontal scroll */
+  overflow-y: hidden;
 }
 
 .report_pie_container {
@@ -365,7 +384,7 @@
 }
 
 .report_content_container {
-  flex: 0.75;
+  flex: 1;
   background-color: var(--bg-primary);
   box-shadow: var(--cmmn-box-shadow);
   border: 0.1rem solid var(--border-secondary);
@@ -736,9 +755,18 @@
     }
   }
 
+  .report_test_wrapper_container {
+    width: 100%;
+  }
+
+  .report_test_container {
+    width: 100%;
+    height: 50rem;
+  }
+
   .report_main_container {
     flex: none;
-    height: 60rem;
+    height: auto;
     padding: 1.5rem;
     width: 100%;
     & > div:nth-child(1) {
@@ -816,7 +844,6 @@
     }
   }
 }
-
 
 @media screen and (min-width: 431px) and (max-width: 768px) {
   .report_section {
@@ -939,9 +966,18 @@
     }
   }
 
+  .report_test_wrapper_container {
+    width: 100%;
+  }
+
+  .report_test_container {
+    width: 100%;
+    height: 50rem;
+  }
+
   .report_main_container {
     flex: none;
-    height: 60rem;
+    height: auto;
     padding: 1.5rem;
     width: 100%;
     & > div:nth-child(1) {
@@ -1141,9 +1177,18 @@
     }
   }
 
+  .report_test_wrapper_container {
+    width: 100%;
+  }
+
+  .report_test_container {
+    width: 100%;
+    height: 50rem;
+  }
+
   .report_main_container {
     flex: none;
-    height: 60rem;
+    height: auto;
     padding: 1.5rem;
     width: 100%;
     & > div:nth-child(1) {
