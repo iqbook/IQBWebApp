@@ -52,7 +52,28 @@
       margin-inline: auto;
       flex-wrap: wrap;
 
-      & > button {
+      .report_type_chip {
+        height: 3.5rem;
+        padding: 0 1.4rem;
+        text-transform: capitalize;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 999px; /* pill shape */
+        border: 1px solid var(--border-color);
+
+        background-color: transparent;
+        color: var(--text-primary);
+
+        font-size: 1.4rem;
+        font-family: "AirbnbCereal_Medium";
+
+        cursor: pointer;
+        user-select: none;
+      }
+
+      /* & > button {
         padding: 0.5rem 1.2rem;
         border-radius: 999px;
 
@@ -76,7 +97,7 @@
           inset 0 1px 0 rgba(255, 255, 255, 0.7);
 
         transition: all 0.15s ease;
-      }
+      } */
     }
   }
 
@@ -88,13 +109,27 @@
     position: relative;
     justify-content: flex-end;
 
-    & > button {
+    .graph_btn {
       width: 3.5rem;
       height: 3.5rem;
       background-color: var(--bg-primary);
       border: 0.1rem solid var(--border-secondary);
       color: var(--text-primary);
       font-size: 1.4rem;
+    }
+
+    .stylist_btn {
+      width: max-content;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      height: 3.5rem;
+      background-color: var(--bg-primary);
+      border: 0.1rem solid var(--border-secondary);
+      color: var(--text-primary);
+      font-size: 1.4rem;
+      padding-inline: 1rem;
+      cursor: pointer;
     }
 
     .filter_btn {
@@ -117,6 +152,40 @@
       width: 1.6rem;
       height: 1.6rem;
     }
+  }
+}
+
+.appointment_date_chip {
+  width: max-content;
+  margin-inline: auto;
+  height: 3.5rem;
+  padding: 0 1.4rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px; /* pill shape */
+  border: 1px solid var(--border-color);
+
+  background-color: var(--bg-secondary);
+  color: var(--btn-text-color);
+
+  font-size: 1.4rem;
+  font-family: "AirbnbCereal_Medium";
+
+  cursor: pointer;
+  user-select: none;
+}
+
+.barber_item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  & > p {
+    font-size: 1.4rem;
+    font-weight: 600;
   }
 }
 
@@ -188,32 +257,6 @@
   overflow-y: auto;
 }
 
-.filter_section p {
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin-bottom: 0.8rem;
-}
-
-.filter_chip_group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-}
-
-.filter_chip {
-  padding: 0.6rem 1.2rem;
-  border-radius: 2rem;
-  border: 0.1rem solid var(--border-secondary);
-  font-size: 1.2rem;
-  background-color: transparent;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.filter_chip:hover {
-  background-color: var(--section-bg-color);
-}
-
 .filter_apply_btn {
   margin-top: 1rem;
   min-height: 3.8rem;
@@ -239,7 +282,8 @@
 }
 
 .report_main_container {
-  flex: 2;
+  /* flex: 2; */
+  width: 92rem;
   background-color: var(--bg-primary);
   box-shadow: var(--cmmn-box-shadow);
   border: 0.1rem solid var(--border-secondary);
@@ -248,6 +292,7 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  /* background-color: blue; */
 
   & > div:nth-child(1) {
     display: flex;
@@ -284,9 +329,28 @@
   }
 }
 
+.report_test_wrapper_container {
+  width: 85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: inherit;
+  /* background-color: blue; */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.report_test_container {
+  width: 85rem;
+  min-height: 80%; /* important for ResponsiveContainer */
+  /* background-color: red; */
+  overflow-x: auto; /* 🔑 horizontal scroll */
+  overflow-y: hidden;
+}
+
 .report_pie_container {
   flex: 1;
-  /* height: 35rem; */
+  width: 85rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -295,6 +359,9 @@
 
   & > div:nth-child(1) {
     height: 80%;
+    /* min-width: 100rem; */
+    /* background-color: red; */
+    overflow: scroll;
   }
 }
 
@@ -304,6 +371,7 @@
   justify-content: space-around;
   flex-wrap: wrap;
   gap: 2rem;
+  /* background-color: green; */
 
   & > div {
     display: flex;
@@ -325,7 +393,7 @@
 }
 
 .report_content_container {
-  flex: 0.75;
+  flex: 1;
   background-color: var(--bg-primary);
   box-shadow: var(--cmmn-box-shadow);
   border: 0.1rem solid var(--border-secondary);
@@ -414,19 +482,6 @@
 
 .report_mobile_header {
   display: none;
-}
-
-.modal_common_container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(95vw, 40rem);
-  background-color: var(--bg-primary);
-  border: 0.2rem solid var(--border-secondary);
-  /* padding: 2rem; */
-  border-radius: 1rem;
-  outline: none;
 }
 
 .report_section_attendence {
@@ -659,7 +714,63 @@
       }
     }
 
-    & > div:nth-child(2) {
+    .stylist_calender_mobile_header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .stylist_btn {
+        width: max-content;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        height: 3.5rem;
+        background-color: var(--bg-primary);
+        border: 0.1rem solid var(--border-secondary);
+        color: var(--text-primary);
+        font-size: 1.4rem;
+        padding-inline: 1rem;
+        cursor: pointer;
+      }
+    }
+
+    .stylist_calender_report_value {
+      /* padding-inline: 15%; */
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+
+      & > div {
+        width: 70vw;
+        display: flex;
+        justify-content: space-between;
+        margin-inline: auto;
+      }
+
+      .report_type_chip {
+        height: 3.5rem;
+        padding: 0 1.4rem;
+        text-transform: capitalize;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 999px; /* pill shape */
+        border: 1px solid var(--border-color);
+
+        background-color: transparent;
+        color: var(--text-primary);
+
+        font-size: 1.4rem;
+        font-family: "AirbnbCereal_Medium";
+
+        cursor: pointer;
+        user-select: none;
+      }
+    }
+
+    /* & > div:nth-child(2) {
       display: flex;
       align-items: center;
       gap: 2rem;
@@ -692,7 +803,30 @@
 
         transition: all 0.15s ease;
       }
-    }
+    } */
+  }
+
+  .modal_common_container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(95vw, 40rem);
+    max-height: 60vh;
+    background-color: var(--bg-primary);
+    border: 0.2rem solid var(--border-secondary);
+    border-radius: 1rem;
+    outline: none;
+    overflow: auto;
+  }
+
+  .report_test_wrapper_container {
+    width: 100%;
+  }
+
+  .report_test_container {
+    width: 100%;
+    height: 50rem;
   }
 
   .report_main_container {
@@ -717,13 +851,14 @@
   }
 
   .filter_popup {
-    position: relative;
-    top: 0rem;
+    position: absolute;
+    top: 4rem;
     right: 0rem;
     width: 100%;
     border: none;
     outline: none;
     box-shadow: none;
+    border: 0.1rem solid var(--border-secondary);
   }
 
   .filter_popup::after,
@@ -832,7 +967,63 @@
       }
     }
 
-    & > div:nth-child(2) {
+    .stylist_calender_mobile_header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .stylist_btn {
+        width: max-content;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        height: 3.5rem;
+        background-color: var(--bg-primary);
+        border: 0.1rem solid var(--border-secondary);
+        color: var(--text-primary);
+        font-size: 1.4rem;
+        padding-inline: 1rem;
+        cursor: pointer;
+      }
+    }
+
+    .stylist_calender_report_value {
+      /* padding-inline: 15%; */
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+
+      & > div {
+        width: 50vw;
+        display: flex;
+        justify-content: space-between;
+        margin-inline: auto;
+      }
+
+      .report_type_chip {
+        height: 3.5rem;
+        padding: 0 1.4rem;
+        text-transform: capitalize;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 999px; /* pill shape */
+        border: 1px solid var(--border-color);
+
+        background-color: transparent;
+        color: var(--text-primary);
+
+        font-size: 1.4rem;
+        font-family: "AirbnbCereal_Medium";
+
+        cursor: pointer;
+        user-select: none;
+      }
+    }
+
+    /* & > div:nth-child(2) {
       display: flex;
       align-items: center;
       gap: 2rem;
@@ -865,7 +1056,30 @@
 
         transition: all 0.15s ease;
       }
-    }
+    } */
+  }
+
+  .modal_common_container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(95vw, 40rem);
+    max-height: 60vh;
+    background-color: var(--bg-primary);
+    border: 0.2rem solid var(--border-secondary);
+    border-radius: 1rem;
+    outline: none;
+    overflow: auto;
+  }
+
+  .report_test_wrapper_container {
+    width: 100%;
+  }
+
+  .report_test_container {
+    width: 100%;
+    height: 50rem;
   }
 
   .report_main_container {
@@ -878,6 +1092,7 @@
       gap: 2rem;
     }
   }
+
   .report_pie_container {
     & > div:nth-child(1) {
       height: 40rem;
@@ -889,13 +1104,14 @@
   }
 
   .filter_popup {
-    position: relative;
-    top: 0rem;
+    position: absolute;
+    top: 4rem;
     right: 0rem;
     width: 100%;
     border: none;
     outline: none;
     box-shadow: none;
+    border: 0.1rem solid var(--border-secondary);
   }
 
   .filter_popup::after,
@@ -915,7 +1131,7 @@
 
   .report_section_attendence_container,
   .report_section_attendence_container_loading {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1004,7 +1220,64 @@
       }
     }
 
-    & > div:nth-child(2) {
+    .stylist_calender_mobile_header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .stylist_btn {
+        width: max-content;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        height: 3.5rem;
+        background-color: var(--bg-primary);
+        border: 0.1rem solid var(--border-secondary);
+        color: var(--text-primary);
+        font-size: 1.4rem;
+        padding-inline: 1rem;
+        cursor: pointer;
+      }
+    }
+
+    .stylist_calender_report_value {
+      /* padding-inline: 15%; */
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+
+      & > div {
+        width: 40vw;
+        display: flex;
+        justify-content: space-between;
+        margin-inline: auto;
+      }
+
+      .report_type_chip {
+        height: 3.5rem;
+        text-transform: capitalize;
+        padding: 0 1.4rem;
+        text-transform: capitalize;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 999px; /* pill shape */
+        border: 1px solid var(--border-color);
+
+        background-color: transparent;
+        color: var(--text-primary);
+
+        font-size: 1.4rem;
+        font-family: "AirbnbCereal_Medium";
+
+        cursor: pointer;
+        user-select: none;
+      }
+    }
+
+    /* & > div:nth-child(2) {
       display: flex;
       align-items: center;
       gap: 2rem;
@@ -1037,7 +1310,30 @@
 
         transition: all 0.15s ease;
       }
-    }
+    } */
+  }
+
+  .modal_common_container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(95vw, 40rem);
+    max-height: 60vh;
+    background-color: var(--bg-primary);
+    border: 0.2rem solid var(--border-secondary);
+    border-radius: 1rem;
+    outline: none;
+    overflow: auto;
+  }
+
+  .report_test_wrapper_container {
+    width: 100%;
+  }
+
+  .report_test_container {
+    width: 100%;
+    height: 50rem;
   }
 
   .report_main_container {
@@ -1062,13 +1358,14 @@
   }
 
   .filter_popup {
-    position: relative;
-    top: 0rem;
+    position: absolute;
+    top: 4rem;
     right: 0rem;
     width: 100%;
     border: none;
     outline: none;
     box-shadow: none;
+    border: 0.1rem solid var(--border-secondary);
   }
 
   .filter_popup::after,
@@ -1088,6 +1385,6 @@
 
   .report_section_attendence_container,
   .report_section_attendence_container_loading {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;
   }
 }

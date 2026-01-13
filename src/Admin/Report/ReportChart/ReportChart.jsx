@@ -66,10 +66,12 @@ const Report = () => {
   const [selectedDates, setSelectedDates] = useState([]);
 
   const [startDate, setStartDate] = useState(
-    moment().subtract(31, "day").format("DD-MM-YYYY")
+    // moment().subtract(31, "day").format("DD-MM-YYYY")
+    null
   );
   const [endDate, setEndDate] = useState(
-    moment().subtract(1, "day").format("DD-MM-YYYY")
+    // moment().subtract(1, "day").format("DD-MM-YYYY")
+    null
   );
 
   const handleDateChange = (dates) => {
@@ -77,6 +79,7 @@ const Report = () => {
     setStartDate(formatedDates[0]);
     setEndDate(formatedDates[1]);
     setSelectedDates(formatedDates);
+    setSelectedReportType("daily");
   };
 
   const [isMobile, setIsMobile] = useState(false);
@@ -95,7 +98,7 @@ const Report = () => {
     };
   }, []);
 
-  const [selectedReportType, setSelectedReportType] = useState("Daily");
+  const [selectedReportType, setSelectedReportType] = useState("daily");
   const [selectedReportBarber, setSelectedReportBarber] = useState([]);
   const [openFilter, setOpenFilter] = useState(false);
 
@@ -109,13 +112,14 @@ const Report = () => {
     if (selectedReportChartType?.reportType === "stylistattendence") {
       fetch_stylist_barberlist();
     } else {
-      if (startDate && endDate) {
-        view_report();
-      }
+      // if (startDate && endDate) {
+      view_report();
+      // }
     }
   }, [
     startDate,
     endDate,
+    selectedReportType,
     selectedReportBarber,
     selectedReportChartType?.reportType,
   ]);
@@ -134,6 +138,9 @@ const Report = () => {
     } catch (error) {}
   };
 
+  const [chartDefaultValue, setChartReportValueData] = useState(null);
+  const [selectedAllBarber, setSelectedAllBarber] = useState(false);
+
   const view_report = async () => {
     try {
       const reportData = {
@@ -142,6 +149,7 @@ const Report = () => {
         endDate,
         reportType: selectedReportChartType?.reportType,
         barberId: selectedReportBarber.map((item) => item?.barberId),
+        reportValue: selectedReportType,
       };
 
       const { data } = await api.post(
@@ -150,8 +158,10 @@ const Report = () => {
       );
 
       setChartData(data?.response);
+      setChartReportValueData(data?.dateRange);
       if (!copyFilterBarberList?.length) {
         setCopyFilterBarberList(data?.response);
+        setSelectedAllBarber(true);
       }
     } catch (error) {}
   };
@@ -225,6 +235,11 @@ const Report = () => {
       setBarber_attendence_list_loading(false);
     }
   };
+
+  const [openStylistDropdown, setOpenStylistDropdown] = useState(false);
+  const [openStylistMobileDropdown, setOpenStylistMobileDropdown] =
+    useState(false);
+
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.report_section_attendence}>
       <div className={style.report_header}>
@@ -551,31 +566,31 @@ const Report = () => {
             </button>
             <h2>Reports</h2>
           </div>
-
           <div>
-            {/* <button>{selectedReportType}</button> */}
-            {selectedReportBarber?.map((item) => {
-              return <button key={item?.barberId}>{item?.xaxis}</button>;
-            })}
-            {/* {selectedDates?.length === 2 && (
-              <button>
-                {selectedDates.map((item, index) => (
-                  <span key={index}>
-                    {item}
-                    {index === 0 && " - "}
-                  </span>
-                ))}
+            {["daily", "weekly", "monthly"].map((item, index) => (
+              <button
+                key={item}
+                onClick={() => {
+                  setStartDate(null);
+                  setEndDate(null);
+                  setSelectedDates([]);
+                  setSelectedReportType(item);
+                }}
+                className={style.report_type_chip}
+                style={{
+                  backgroundColor:
+                    selectedReportType === item
+                      ? "var(--bg-secondary)"
+                      : "transparent",
+                  color:
+                    selectedReportType === item
+                      ? "var(--btn-text-color)"
+                      : "var(--text-primary)",
+                }}
+              >
+                {item}
               </button>
-            )} */}
-            {startDate && endDate && (
-              <>
-                <button>
-                  {startDate}
-                  <span style={{ margin: "0 8px" }}>-</span>
-                  {endDate}
-                </button>
-              </>
-            )}
+            ))}
           </div>
         </div>
 
@@ -583,6 +598,7 @@ const Report = () => {
           {reportUIArr.map((item, index) => {
             return (
               <button
+                className={style.graph_btn}
                 onClick={() => {
                   setSelectedReport(item);
                 }}
@@ -605,23 +621,38 @@ const Report = () => {
             );
           })}
 
+          <Calendar
+            numberOfMonths={1}
+            value={selectedDates}
+            onChange={handleDateChange}
+            range
+            placeholder="dd/mm/yyyy - dd/mm/yyyy"
+            dateSeparator=" - "
+            calendarPosition="bottom-right"
+            format="DD/MM/YYYY"
+            className="dark-theme"
+            maxDate={new Date()}
+          />
+
           <button
-            onClick={() => {
-              setOpenFilterPopup((prev) => !prev);
-            }}
-            className={style.filter_btn}
+            onClick={() => setOpenStylistDropdown((prev) => !prev)}
+            className={style.stylist_btn}
           >
-            <FilterIcon />
-            <span>Filter</span>
+            <span>
+              <CustomerIcon />
+            </span>
+            Select Stylists
           </button>
 
-          {openFilterPopup && (
-            <ClickAwayListener onClickAway={() => setOpenFilterPopup(false)}>
+          {openStylistDropdown && (
+            <ClickAwayListener
+              onClickAway={() => setOpenStylistDropdown(false)}
+            >
               <div className={style.filter_popup}>
                 <div className={style.filter_popup_header}>
-                  <p>Select Filter</p>
+                  <p>Select Stylists</p>
                   <button
-                    onClick={() => setOpenFilterPopup(false)}
+                    onClick={() => setOpenStylistDropdown(false)}
                     className={style.filterpopup_close_btn}
                   >
                     <CloseIcon />
@@ -629,84 +660,41 @@ const Report = () => {
                 </div>
 
                 <div className={style.filter_popup_body}>
-                  <div className={style.filter_section}>
-                    <p>Date Range</p>
-                    <Calendar
-                      numberOfMonths={1}
-                      value={selectedDates}
-                      onChange={handleDateChange}
-                      range
-                      placeholder="dd/mm/yyyy - dd/mm/yyyy"
-                      dateSeparator=" - "
-                      calendarPosition="bottom-right"
-                      format="DD/MM/YYYY"
-                      className="dark-theme"
-                      maxDate={new Date()}
+                  <div className={style.barber_item}>
+                    <input
+                      type="checkbox"
+                      checked={
+                        selectedReportBarber.length === 0 && selectedAllBarber
+                      }
+                      onChange={() => {
+                        setSelectedReportBarber([]);
+                        setSelectedAllBarber(true);
+                      }}
+                      // onClick={(e) => e.stopPropagation()}
                     />
+                    <p>All</p>
                   </div>
+                  {copyFilterBarberList?.map((item) => {
+                    const isChecked = selectedReportBarber.some(
+                      (b) => b.barberId === item.barberId
+                    );
 
-                  {/* <div className={style.filter_section}>
-                    <p>Report Type</p>
-                    <div className={style.filter_chip_group}>
-                      {["Daily", "Weekly", "Monthly"].map((item, index) => (
-                        <button
-                          key={item}
-                          onClick={() => {
-                            setSelectedReportType(item);
-                          }}
-                          className={style.filter_chip}
-                          style={{
-                            backgroundColor:
-                              selectedReportType === item
-                                ? "var(--bg-secondary)"
-                                : "transparent",
-                            color:
-                              selectedReportType === item
-                                ? "var(--btn-text-color)"
-                                : "var(--text-primary)",
-                          }}
-                        >
-                          {item}
-                        </button>
-                      ))}
-                    </div>
-                  </div> */}
-
-                  <div className={style.filter_section}>
-                    <p>Select Stylist</p>
-                    <div className={style.filter_chip_group}>
-                      {copyFilterBarberList?.map((item) => {
-                        const isActive = selectedReportBarber.some(
-                          (b) => b.barberId === item.barberId
-                        );
-
-                        return (
-                          <button
-                            key={item.barberId}
-                            onClick={() => toggleBarber(item)}
-                            className={style.filter_chip}
-                            style={{
-                              backgroundColor: isActive
-                                ? "var(--bg-secondary)"
-                                : "transparent",
-                              color: isActive
-                                ? "var(--btn-text-color)"
-                                : "var(--text-primary)",
-                            }}
-                          >
-                            {item.xaxis}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={resetFilter}
-                    className={style.filter_apply_btn}
-                  >
-                    Reset
-                  </button>
+                    return (
+                      <div
+                        key={item.barberId}
+                        className={style.barber_item}
+                        onClick={() => toggleBarber(item)}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => toggleBarber(item)}
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                        <p>{item.xaxis}</p>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </ClickAwayListener>
@@ -752,43 +740,66 @@ const Report = () => {
                 </button>
               );
             })}
-
-            <button
-              onClick={() => {
-                setOpenFilter((prev) => !prev);
-              }}
-              className={style.filter_btn}
-            >
-              <FilterIcon />
-              <span>Filter</span>
-            </button>
           </div>
         </div>
 
-        <div>
-          {selectedReportBarber?.map((item) => {
-            return <button key={item?.barberId}>{item?.xaxis}</button>;
-          })}
-          {/* {selectedDates?.length === 2 && (
-            <button>
-              {selectedDates.map((item, index) => (
-                <span key={index}>
-                  {item}
-                  {index === 0 && " - "}
-                </span>
-              ))}
-            </button>
-          )} */}
+        <div className={style.stylist_calender_mobile_header}>
+          {/* Calendar */}
+          <Calendar
+            numberOfMonths={1}
+            value={selectedDates}
+            onChange={handleDateChange}
+            range
+            placeholder="dd/mm/yyyy - dd/mm/yyyy"
+            dateSeparator=" - "
+            // calendarPosition="bottom-right"
+            format="DD/MM/YYYY"
+            className="dark-theme"
+            maxDate={new Date()}
+          />
 
-          {startDate && endDate && (
-            <>
-              <button>
-                {startDate}
-                <span style={{ margin: "0 8px" }}>-</span>
-                {endDate}
+          {/* Open dropdown button */}
+          <button
+            className={style.stylist_btn}
+            onMouseDown={(e) => {
+              e.stopPropagation();
+              setOpenStylistMobileDropdown(true);
+            }}
+          >
+            {/* <span>
+              <CustomerIcon />
+            </span> */}
+            Select Stylists
+          </button>
+        </div>
+
+        <div className={style.stylist_calender_report_value}>
+          <div>
+            {["daily", "weekly", "monthly"].map((item, index) => (
+              <button
+                key={item}
+                onClick={() => {
+                  setStartDate(null);
+                  setEndDate(null);
+                  setSelectedDates([]);
+                  setSelectedReportType(item);
+                }}
+                className={style.report_type_chip}
+                style={{
+                  backgroundColor:
+                    selectedReportType === item
+                      ? "var(--bg-secondary)"
+                      : "transparent",
+                  color:
+                    selectedReportType === item
+                      ? "var(--btn-text-color)"
+                      : "var(--text-primary)",
+                }}
+              >
+                {item}
               </button>
-            </>
-          )}
+            ))}
+          </div>
         </div>
       </div>
 
@@ -798,18 +809,205 @@ const Report = () => {
             <p style={{ textAlign: "center", width: "100%" }}>
               {selectedReportChartType?.headerTitle}
             </p>
-            {/* <div>
-              <button onClick={decreaseDate}>
-                <LeftIcon color="var(--text-primary)" />
-              </button>
-              <p>{reportDateText}</p>
-              <button onClick={increaseDate}>
-                <RightIcon color="var(--text-primary)" />
-              </button>
+          </div>
+          {startDate && endDate ? (
+            <>
+              <div className={style.appointment_date_chip}>
+                {startDate}
+                <span style={{ margin: "0 8px" }}>-</span>
+                {endDate}
+              </div>
+            </>
+          ) : chartDefaultValue ? (
+            <>
+              <div className={style.appointment_date_chip}>
+                {chartDefaultValue?.startDate}
+                <span style={{ margin: "0 8px" }}>-</span>
+                {chartDefaultValue?.endDate}
+              </div>
+            </>
+          ) : null}
+
+          <div className={style.report_test_wrapper_container}>
+            {/* <div className={style.report_test_container}>
+              <div
+                style={{
+                  width: dummyData.length * MIN_BAR_WIDTH,
+                  height: "100%",
+                }}
+              >
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={dummyData}
+                    margin={{ top: 30, right: 20, left: 10, bottom: 20 }}
+                    barCategoryGap={20}
+                  >
+                    <CartesianGrid strokeDasharray="4 6" vertical={false} />
+
+                    <XAxis
+                      dataKey="name"
+                      interval={0}
+                      tick={{ fontSize: 12 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+
+                    <YAxis axisLine={false} tickLine={false} />
+
+                    <Bar
+                      dataKey="value"
+                      radius={[8, 8, 0, 0]}
+                      maxBarSize={80} // ✅ never exceed 80px
+                    >
+                      <LabelList
+                        dataKey="value"
+                        position="top"
+                        fontSize={12}
+                        fontWeight={600}
+                      />
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div> */}
+
+            <div
+              className={style.report_test_container}
+              style={{ overflowX: "auto" }}
+            >
+              {selectedReport.text === "Pie" ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <defs>
+                      {chartData.map((item, index) => (
+                        <linearGradient
+                          key={index}
+                          id={`pieGrad-${index}`}
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop offset="0%" stopColor={item.fill} />
+                          <stop offset="100%" stopColor={item.fill2} />
+                        </linearGradient>
+                      ))}
+                    </defs>
+
+                    <Pie
+                      data={chartData}
+                      dataKey="yaxis"
+                      innerRadius="65%"
+                      outerRadius="100%"
+                      cornerRadius="12%"
+                      paddingAngle={1}
+                    >
+                      {chartData.map((_, index) => (
+                        <Cell key={index} fill={`url(#pieGrad-${index})`} />
+                      ))}
+
+                      <Label content={renderCenterContent(totalServed)} />
+
+                      <LabelList
+                        dataKey="yaxis"
+                        position="inside"
+                        fill="#fff"
+                        fontSize={"1.4rem"}
+                        fontWeight={600}
+                      />
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <ResponsiveContainer
+                  minWidth={chartData.length * 120} // ensures min 80px per bar + gap
+                  height="100%"
+                >
+                  <BarChart
+                    data={chartData}
+                    margin={{
+                      top: 30,
+                    }}
+                    barCategoryGap={20}
+                  >
+                    <defs>
+                      {chartData.map((item) => (
+                        <linearGradient
+                          key={item.barberId}
+                          id={`grad-${item.barberId}`}
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop offset="0%" stopColor={item.fill} />
+                          <stop offset="100%" stopColor={item.fill2} />
+                        </linearGradient>
+                      ))}
+                    </defs>
+
+                    <CartesianGrid
+                      strokeDasharray="4 6"
+                      stroke="rgba(0,0,0,0.08)"
+                      vertical={false}
+                    />
+
+                    <XAxis
+                      dataKey="xaxis"
+                      // interval={0}
+                      // tick={renderXAxisTick}
+                      // axisLine={false}
+                      // tickLine={false}
+                      interval={0}
+                      tick={{ fontSize: 12 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+
+                    {/* <YAxis axisLine={false} tickLine={false} /> */}
+
+                    <Bar
+                      dataKey="yaxis"
+                      radius={[8, 8, 0, 0]}
+                      barSize={80} // ✅ minimum bar width
+                    >
+                      {chartData.map((item) => (
+                        <Cell
+                          key={item.barberId}
+                          fill={`url(#grad-${item.barberId})`}
+                        />
+                      ))}
+
+                      <LabelList
+                        dataKey="yaxis"
+                        position="top"
+                        fill="var(--text-primary)"
+                        fontSize="1.4rem"
+                        fontWeight={600}
+                      />
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
+            </div>
+
+            <div className={style.report_pie_stylist_container}>
+              {chartData?.map((item, index) => {
+                return (
+                  <div key={item?.barberId}>
+                    <div
+                      style={{
+                        backgroundColor: item?.fill,
+                      }}
+                    />
+                    <p>{item?.xaxis}</p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          {selectedReport.text === "Pie" ? (
+          {/* {selectedReport.text === "Pie" ? (
             <div className={style.report_pie_container}>
               <div>
                 <ResponsiveContainer width="100%" height="100%">
@@ -875,8 +1073,7 @@ const Report = () => {
             <div className={style.report_pie_container}>
               <div>
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData} barGap={10} margin={{ top: 30, left: -10 }}>
-                    {/* 🔹 Dynamic gradients */}
+                  <BarChart data={chartData} barGap={10} margin={{ top: 30 }}>
                     <defs>
                       {chartData.map((item) => (
                         <linearGradient
@@ -899,12 +1096,6 @@ const Report = () => {
                       vertical={false}
                     />
 
-                    <YAxis
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fill: "var(--text-secondary)", fontSize: "1.2rem" }}
-                    />
-
                     <XAxis
                       dataKey="xaxis"
                       interval={0}
@@ -913,8 +1104,12 @@ const Report = () => {
                       tickLine={false}
                     />
 
-                    <Bar dataKey="yaxis" radius={[8, 8, 0, 0]}>
-                      {/* 🔹 Apply gradient per bar */}
+                    <Bar
+                      dataKey="yaxis"
+                      radius={[8, 8, 0, 0]}
+                      barSize={200}
+                      // maxBarSize={60}
+                    >
                       {chartData.map((item) => (
                         <Cell
                           key={item.barberId}
@@ -949,7 +1144,7 @@ const Report = () => {
                 })}
               </div>
             </div>
-          )}
+          )} */}
         </div>
         <div className={style.report_content_container}>
           <p>Select analytics</p>
@@ -974,96 +1169,43 @@ const Report = () => {
       </div>
 
       {/* FILTER MODAL */}
-      <Modal open={openFilter} onClose={() => setOpenFilter(false)}>
+      <Modal
+        open={openStylistMobileDropdown}
+        onClose={() => setOpenStylistMobileDropdown(false)}
+      >
         <div className={style.modal_common_container}>
-          <div className={style.filter_popup}>
-            <div className={style.filter_popup_header}>
-              <p>Select Filter</p>
-              <button
-                onClick={() => setOpenFilter(false)}
-                className={style.filterpopup_close_btn}
-              >
-                <CloseIcon />
-              </button>
-            </div>
+          <div className={style.filter_popup_header}>
+            <p>Select Stylists</p>
+            <button
+              onClick={() => setOpenStylistMobileDropdown(false)}
+              className={style.filterpopup_close_btn}
+            >
+              <CloseIcon />
+            </button>
+          </div>
 
-            <div className={style.filter_popup_body}>
-              <div className={style.filter_section}>
-                <p>Date Range</p>
-                <Calendar
-                  numberOfMonths={1}
-                  value={selectedDates}
-                  onChange={handleDateChange}
-                  range
-                  placeholder="dd/mm/yyyy - dd/mm/yyyy"
-                  dateSeparator=" - "
-                  calendarPosition="bottom-left"
-                  format="DD/MM/YYYY"
-                  className="dark-theme"
-                  maxDate={new Date()}
-                />
-              </div>
+          <div className={style.filter_popup_body}>
+            {copyFilterBarberList?.map((item) => {
+              const isChecked = selectedReportBarber.some(
+                (b) => b.barberId === item.barberId
+              );
 
-              {/* <div className={style.filter_section}>
-                <p>Report Type</p>
-                <div className={style.filter_chip_group}>
-                  {["Daily", "Weekly", "Monthly"].map((item, index) => (
-                    <button
-                      key={item}
-                      onClick={() => {
-                        setSelectedReportType(item);
-                      }}
-                      className={style.filter_chip}
-                      style={{
-                        backgroundColor:
-                          selectedReportType === item
-                            ? "var(--bg-secondary)"
-                            : "transparent",
-                        color:
-                          selectedReportType === item
-                            ? "var(--btn-text-color)"
-                            : "var(--text-primary)",
-                      }}
-                    >
-                      {item}
-                    </button>
-                  ))}
+              return (
+                <div
+                  key={item.barberId}
+                  className={style.barber_item}
+                  onClick={() => toggleBarber(item)}
+                >
+                  <input
+                    type="checkbox"
+                    checked={isChecked}
+                    onChange={() => toggleBarber(item)}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <p>{item.xaxis}</p>
                 </div>
-              </div> */}
-
-              <div className={style.filter_section}>
-                <p>Select Stylist</p>
-                <div className={style.filter_chip_group}>
-                  {copyFilterBarberList?.map((item) => {
-                    const isActive = selectedReportBarber.some(
-                      (b) => b.barberId === item.barberId
-                    );
-
-                    return (
-                      <button
-                        key={item.barberId}
-                        onClick={() => toggleBarber(item)}
-                        className={style.filter_chip}
-                        style={{
-                          backgroundColor: isActive
-                            ? "var(--bg-secondary)"
-                            : "transparent",
-                          color: isActive
-                            ? "var(--btn-text-color)"
-                            : "var(--text-primary)",
-                        }}
-                      >
-                        {item.xaxis}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <button onClick={resetFilter} className={style.filter_apply_btn}>
-                Reset
-              </button>
-            </div>
+              );
+            })}
           </div>
         </div>
       </Modal>

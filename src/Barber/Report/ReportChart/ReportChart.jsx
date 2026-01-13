@@ -74,11 +74,11 @@ const Report = () => {
   // moment().subtract(1, "day").format("DD-MM-YYYY")
 
   const handleDateChange = (dates) => {
-    setSelectedReportValue(null);
     const formatedDates = dates.map((date) => date.format("DD-MM-YYYY"));
     setStartDate(formatedDates[0]);
     setEndDate(formatedDates[1]);
     setSelectedDates(formatedDates);
+    setSelectedReportValue("daily");
   };
 
   const [isMobile, setIsMobile] = useState(false);
@@ -105,7 +105,6 @@ const Report = () => {
   const [selected_attendence_stylist, setSelected_attendence_stylist] =
     useState(null);
 
-
   useEffect(() => {
     if (selectedReportChartType?.reportType === "stylistattendence") {
       if (startDate && endDate) {
@@ -125,6 +124,7 @@ const Report = () => {
   // selectedReportChartType?.reportType === "stylistattendence"
 
   const [chartData, setChartData] = useState([]);
+  const [chartDefaultValue, setChartReportValueData] = useState(null);
 
   const view_report = async () => {
     try {
@@ -143,6 +143,7 @@ const Report = () => {
       );
 
       setChartData(data?.response);
+      setChartReportValueData(data?.dateRange);
     } catch (error) {}
   };
 
@@ -208,8 +209,6 @@ const Report = () => {
       setBarber_attendence_list_loading(false);
     }
   };
-
-  const isSmallScreen = window.innerWidth < 768;
 
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.report_section_attendence}>
@@ -538,17 +537,30 @@ const Report = () => {
           </div>
 
           <div>
-            {selectedReportValue && <button>{selectedReportValue}</button>}
-            {selectedDates?.length === 2 && (
-              <button>
-                {selectedDates.map((item, index) => (
-                  <span key={index}>
-                    {item}
-                    {index === 0 && " - "}
-                  </span>
-                ))}
+            {["daily", "weekly", "monthly"].map((item, index) => (
+              <button
+                key={item}
+                onClick={() => {
+                  setStartDate(null);
+                  setEndDate(null);
+                  setSelectedDates([]);
+                  setSelectedReportValue(item);
+                }}
+                className={style.report_type_chip}
+                style={{
+                  backgroundColor:
+                    selectedReportValue === item
+                      ? "var(--bg-secondary)"
+                      : "transparent",
+                  color:
+                    selectedReportValue === item
+                      ? "var(--btn-text-color)"
+                      : "var(--text-primary)",
+                }}
+              >
+                {item}
               </button>
-            )}
+            ))}
           </div>
         </div>
 
@@ -578,115 +590,18 @@ const Report = () => {
             );
           })}
 
-          <button
-            onClick={() => {
-              setOpenFilterPopup((prev) => !prev);
-            }}
-            className={style.filter_btn}
-          >
-            <FilterIcon />
-            <span>Filter</span>
-          </button>
-
-          {openFilterPopup && (
-            <ClickAwayListener onClickAway={() => setOpenFilterPopup(false)}>
-              <div className={style.filter_popup}>
-                <div className={style.filter_popup_header}>
-                  <p>Select Filter</p>
-                  <button
-                    onClick={() => setOpenFilterPopup(false)}
-                    className={style.filterpopup_close_btn}
-                  >
-                    <CloseIcon />
-                  </button>
-                </div>
-
-                <div className={style.filter_popup_body}>
-                  <div className={style.filter_section}>
-                    <p>Date Range</p>
-                    <Calendar
-                      numberOfMonths={1}
-                      value={selectedDates}
-                      onChange={handleDateChange}
-                      range
-                      placeholder="dd/mm/yyyy - dd/mm/yyyy"
-                      dateSeparator=" - "
-                      calendarPosition="bottom-right"
-                      format="DD/MM/YYYY"
-                      className="dark-theme"
-                    />
-                  </div>
-
-                  <div className={style.filter_section}>
-                    <p>Report Type</p>
-                    <div className={style.filter_chip_group}>
-                      {["daily", "weekly", "monthly"].map((item, index) => (
-                        <button
-                          key={item}
-                          onClick={() => {
-                            setStartDate(null);
-                            setEndDate(null);
-                            setSelectedDates([]);
-                            setSelectedReportValue(item);
-                          }}
-                          className={style.filter_chip}
-                          style={{
-                            backgroundColor:
-                              selectedReportValue === item
-                                ? "var(--bg-secondary)"
-                                : "transparent",
-                            color:
-                              selectedReportValue === item
-                                ? "var(--btn-text-color)"
-                                : "var(--text-primary)",
-                            textTransform: "capitalize",
-                          }}
-                        >
-                          {item}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* <div className={style.filter_section}>
-                    <p>Select Stylist</p>
-                    <div className={style.filter_chip_group}>
-                      {copyFilterBarberList?.map((item) => {
-                        const isActive = selectedReportBarber.some(
-                          (b) => b.barberId === item.barberId
-                        );
-
-                        return (
-                          <button
-                            key={item.barberId}
-                            onClick={() => toggleBarber(item)}
-                            className={style.filter_chip}
-                            style={{
-                              backgroundColor: isActive
-                                ? "var(--bg-secondary)"
-                                : "transparent",
-                              color: isActive
-                                ? "var(--btn-text-color)"
-                                : "var(--text-primary)",
-                            }}
-                          >
-                            {item.xaxis}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div> */}
-
-                  <button
-                    onClick={resetFilter}
-                    className={style.filter_apply_btn}
-                  >
-                    Reset
-                  </button>
-                </div>
-              </div>
-            </ClickAwayListener>
-          )}
+          <Calendar
+            numberOfMonths={1}
+            value={selectedDates}
+            onChange={handleDateChange}
+            range
+            placeholder="dd/mm/yyyy - dd/mm/yyyy"
+            dateSeparator=" - "
+            calendarPosition="bottom-right"
+            format="DD/MM/YYYY"
+            className="dark-theme"
+            maxDate={new Date()}
+          />
         </div>
       </div>
 
@@ -729,7 +644,7 @@ const Report = () => {
               );
             })}
 
-            <button
+            {/* <button
               onClick={() => {
                 setOpenFilter((prev) => !prev);
               }}
@@ -737,23 +652,50 @@ const Report = () => {
             >
               <FilterIcon />
               <span>Filter</span>
-            </button>
+            </button> */}
           </div>
         </div>
 
-        <div>
-          {selectedReportValue && <button>{selectedReportValue}</button>}
+        <Calendar
+          numberOfMonths={1}
+          value={selectedDates}
+          onChange={handleDateChange}
+          range
+          placeholder="dd/mm/yyyy - dd/mm/yyyy"
+          dateSeparator=" - "
+          calendarPosition="bottom-right"
+          format="DD/MM/YYYY"
+          className="dark-theme"
+          maxDate={new Date()}
+        />
 
-          {selectedDates?.length === 2 && (
-            <button>
-              {selectedDates.map((item, index) => (
-                <span key={index}>
-                  {item}
-                  {index === 0 && " - "}
-                </span>
-              ))}
-            </button>
-          )}
+        <div className={style.stylist_calender_report_value}>
+          <div>
+            {["daily", "weekly", "monthly"].map((item, index) => (
+              <button
+                key={item}
+                onClick={() => {
+                  setStartDate(null);
+                  setEndDate(null);
+                  setSelectedDates([]);
+                  setSelectedReportValue(item);
+                }}
+                className={style.report_type_chip}
+                style={{
+                  backgroundColor:
+                    selectedReportValue === item
+                      ? "var(--bg-secondary)"
+                      : "transparent",
+                  color:
+                    selectedReportValue === item
+                      ? "var(--btn-text-color)"
+                      : "var(--text-primary)",
+                }}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -763,18 +705,27 @@ const Report = () => {
             <p style={{ textAlign: "center", width: "100%" }}>
               {selectedReportChartType?.headerTitle}
             </p>
-            {/* <div>
-              <button onClick={decreaseDate}>
-                <LeftIcon color="var(--text-primary)" />
-              </button>
-              <p>{reportDateText}</p>
-              <button onClick={increaseDate}>
-                <RightIcon color="var(--text-primary)" />
-              </button>
-            </div> */}
           </div>
 
-          {selectedReport.text === "Pie" ? (
+          {startDate && endDate ? (
+            <>
+              <div className={style.appointment_date_chip}>
+                {startDate}
+                <span style={{ margin: "0 8px" }}>-</span>
+                {endDate}
+              </div>
+            </>
+          ) : chartDefaultValue ? (
+            <>
+              <div className={style.appointment_date_chip}>
+                {chartDefaultValue?.startDate}
+                <span style={{ margin: "0 8px" }}>-</span>
+                {chartDefaultValue?.endDate}
+              </div>
+            </>
+          ) : null}
+
+          {/* {selectedReport.text === "Pie" ? (
             <div className={style.report_pie_container}>
               <div
                 style={{
@@ -849,7 +800,6 @@ const Report = () => {
               >
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData} barGap={10} margin={{ top: 30 }}>
-                    {/* 🔹 Dynamic gradients */}
                     <defs>
                       {chartData.map((item, index) => (
                         <linearGradient
@@ -872,14 +822,6 @@ const Report = () => {
                       vertical={false}
                     />
 
-                    {/* <XAxis
-                      dataKey="xaxis"
-                      interval={0}
-                      tick={renderXAxisTick}
-                      axisLine={false}
-                      tickLine={false}
-                    /> */}
-
                     <XAxis
                       dataKey="xaxis"
                       interval={0}
@@ -890,7 +832,6 @@ const Report = () => {
                     />
 
                     <Bar dataKey="yaxis" radius={[8, 8, 0, 0]}>
-                      {/* 🔹 Apply gradient per bar */}
                       {chartData.map((item, index) => (
                         <Cell key={index} fill={`url(#grad-${index})`} />
                       ))}
@@ -922,7 +863,141 @@ const Report = () => {
                 })}
               </div>
             </div>
-          )}
+          )} */}
+
+          <div className={style.report_test_wrapper_container}>
+            <div className={style.report_test_container}>
+              {selectedReport.text === "Pie" ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <defs>
+                      {chartData.map((item, index) => (
+                        <linearGradient
+                          key={index}
+                          id={`pieGrad-${index}`}
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop offset="0%" stopColor={item.fill} />
+                          <stop offset="100%" stopColor={item.fill2} />
+                        </linearGradient>
+                      ))}
+                    </defs>
+
+                    <Pie
+                      data={chartData}
+                      dataKey="yaxis"
+                      innerRadius="65%"
+                      outerRadius="100%"
+                      cornerRadius="12%"
+                      paddingAngle={1}
+                    >
+                      {chartData.map((_, index) => (
+                        <Cell key={index} fill={`url(#pieGrad-${index})`} />
+                      ))}
+
+                      <Label content={renderCenterContent(totalServed)} />
+
+                      <LabelList
+                        dataKey="yaxis"
+                        position="inside"
+                        fill="#fff"
+                        fontSize={"1.4rem"}
+                        fontWeight={600}
+                      />
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <ResponsiveContainer
+                  minWidth={
+                    chartData.length *
+                    (selectedReportValue === "weekly" ? 150 : 120)
+                  } // ensures min 80px per bar + gap
+                  height="100%"
+                >
+                  <BarChart
+                    data={chartData}
+                    margin={{
+                      top: 30,
+                    }}
+                    barCategoryGap={50}
+                  >
+                    <defs>
+                      {chartData.map((item, index) => (
+                        <linearGradient
+                          key={index}
+                          id={`grad-${index}`}
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop offset="0%" stopColor={item.fill} />
+                          <stop offset="100%" stopColor={item.fill2} />
+                        </linearGradient>
+                      ))}
+                    </defs>
+
+                    <CartesianGrid
+                      strokeDasharray="4 6"
+                      stroke="rgba(0,0,0,0.08)"
+                      vertical={false}
+                    />
+
+                    <XAxis
+                      dataKey="xaxis"
+                      // interval={0}
+                      // tick={renderXAxisTick}
+                      // axisLine={false}
+                      // tickLine={false}
+                      interval={0}
+                      tick={{ fontSize: 12 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+
+                    {/* <YAxis axisLine={false} tickLine={false} /> */}
+
+                    <Bar
+                      dataKey="yaxis"
+                      radius={[8, 8, 0, 0]}
+                      barSize={80} // ✅ minimum bar width
+                    >
+                      {chartData.map((item, index) => (
+                        <Cell key={index} fill={`url(#grad-${index})`} />
+                      ))}
+
+                      <LabelList
+                        dataKey="yaxis"
+                        position="top"
+                        fill="var(--text-primary)"
+                        fontSize="1.4rem"
+                        fontWeight={600}
+                      />
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
+            </div>
+
+            <div className={style.report_pie_stylist_container}>
+              {chartData?.map((item, index) => {
+                return (
+                  <div key={item?.barberId}>
+                    <div
+                      style={{
+                        backgroundColor: item?.fill,
+                      }}
+                    />
+                    <p>{item?.xaxis}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
         <div className={style.report_content_container}>
           <p>Select analytics</p>
