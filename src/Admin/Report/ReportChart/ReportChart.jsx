@@ -1439,7 +1439,7 @@ import {
 } from "recharts";
 
 const ReportChart = () => {
-  const data = [
+  const displayedData = [
     {
       month: "Jan",
       b1: 18,
@@ -1598,7 +1598,7 @@ const ReportChart = () => {
     },
   ];
 
-  const barbers = [
+  const displayedBarbers = [
     { key: "b1", name: "Alex Johnson", color: "#6366f1" },
     { key: "b2", name: "John Doe", color: "#10b981" },
     { key: "b3", name: "Ravi Kumar", color: "#f59e0b" },
@@ -1610,6 +1610,19 @@ const ReportChart = () => {
     { key: "b9", name: "Mohit Verma", color: "#ef4444" },
     { key: "b10", name: "Lucas Brown", color: "#14b8a6" },
   ];
+
+  // Take only first 5 barbers
+  const barbers = displayedBarbers.slice(0, 5);
+
+  // Map the data to include only first 5 barber keys
+  const data = displayedData.map((item) => {
+    const newItem = { month: item.month };
+    displayedBarbers.forEach((barber) => {
+      newItem[barber.key] = item[barber.key];
+    });
+    return newItem;
+  });
+
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload || payload.length === 0) return null;
