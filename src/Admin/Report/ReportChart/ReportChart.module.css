@@ -82,7 +82,7 @@
 .left_report_container_header {
   display: flex;
   gap: 0.6rem;
-  background: #f8fafc;
+  background: var(--section-bg-color);
   padding: 0.5rem;
   border-radius: 1.2rem;
   width: fit-content;
@@ -94,16 +94,18 @@
   background: transparent;
   font-size: 1.3rem;
   font-weight: 600;
-  color: #64748b;
+  /* color: #64748b; */
   cursor: pointer;
   border-radius: 0.8rem;
   transition: 0.25s;
+  color: var(--text-secondary);
 }
 
 .active_filter {
-  background: #ffffff;
-  color: #1e293b;
+  background: var(--bg-primary) !important;
+  /* color: #1e293b; */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  color: var(--text-primary) !important;
 }
 
 /* ================= CHART ================= */
@@ -111,18 +113,11 @@
 .chart_scroll_wrapper {
   width: 100%;
   height: 80%;
-  /* background-color: red; */
-  /* overflow: hidden; default: desktop, no scroll */
 }
 
 .chart_inner {
   width: 100%;
   height: 99.5%;
-  /* height: min(58vh, 40rem); */
-  /* height: 40rem; */
-  /* min-height: 0; */
-  /* overflow: hidden; */
-  /* height: 42rem; */
 }
 
 /* ================= STYLIST LEGEND ================= */
@@ -150,20 +145,20 @@
   align-items: center;
   gap: 0.8rem;
   padding: 0.9rem 1.4rem;
-  background: #f8fafc;
+  background: var(--section-bg-color);
   border: none;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-secondary);
   border-radius: 1.2rem;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #475569;
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .barberItem_legend:hover {
-  background: #ffffff;
-  border-color: #cbd5e1;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
@@ -198,9 +193,10 @@
 /* ================= TOOLTIP ================= */
 
 .tooltip {
-  background: #ffffff;
+  background: var(--bg-primary);
   border-radius: 1.2rem;
   padding: 1.2rem 1.4rem;
+  border: 0.1rem solid var(--border-secondary);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
@@ -225,12 +221,12 @@
 
 .tooltipName {
   flex: 1;
-  color: #334155;
+  color: var(--text-primary);
 }
 
 .tooltipValue {
   font-weight: 600;
-  color: #0f172a;
+  color: var(--text-primary);
 }
 
 /* ================= MOBILE RESPONSIVE (Max 768px) ================= */

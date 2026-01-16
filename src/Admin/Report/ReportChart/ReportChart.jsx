@@ -1665,52 +1665,6 @@ const ReportChart = () => {
             ))}
           </div>
 
-          {/* <div className={style.chart_wrapper}>
-            <ResponsiveContainer width="100%" height={"100%"}>
-              <LineChart
-                data={data}
-                margin={{ top: 20, right: 20, left: -30, bottom: 0 }}
-              >
-                <CartesianGrid
-                  strokeDasharray="4 4"
-                  vertical={false}
-                  stroke="rgba(148, 163, 184, 0.35)"
-                />
-                <XAxis
-                  dataKey="month"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: "#94a3b8", fontSize: "1.2rem" }}
-                />
-                <YAxis
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: "#94a3b8", fontSize: "1.2rem" }}
-                  domain={["dataMin - 3", "dataMax + 3"]}
-                />
-
-                <Tooltip content={<CustomTooltip />} />
-
-                {barbers.map((barber) => (
-                  <Line
-                    key={barber.key}
-                    type="monotone"
-                    dataKey={barber.key}
-                    stroke={barber.color}
-                    strokeWidth={3}
-                    dot={{
-                      r: 4,
-                      fill: barber.color,
-                      stroke: "#fff",
-                      strokeWidth: 2,
-                    }}
-                    activeDot={{ r: 6 }}
-                  />
-                ))}
-              </LineChart>
-            </ResponsiveContainer>
-          </div> */}
-
           <div className={style.chart_scroll_wrapper}>
             <div className={style.chart_inner}>
               <ResponsiveContainer width="100%" height="100%">
