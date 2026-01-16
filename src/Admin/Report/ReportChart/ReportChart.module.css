@@ -2,11 +2,12 @@
 
 .report_body {
   padding: 2rem;
+  height: calc(100svh - 6rem);
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  height: calc(100svh - 6rem);
   color: #0f172a;
+  overflow: hidden;
 }
 
 /* ================= HEADER ================= */
@@ -15,6 +16,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .header_left {
@@ -43,7 +45,6 @@
 .title {
   font-size: 1.8rem;
   font-weight: 600;
-  letter-spacing: -0.02em;
 }
 
 .header_right {
@@ -56,8 +57,10 @@
 
 .report_main_container {
   display: grid;
-  grid-template-columns: 1fr 32rem;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 30rem);
   gap: 2.4rem;
+  flex: 1;
+  min-height: 0;
 }
 
 /* ================= LEFT PANEL ================= */
@@ -70,99 +73,86 @@
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
+  min-width: 0;
+  overflow: hidden;
 }
 
 /* ================= FILTER BUTTONS ================= */
 
 .left_report_container_header {
   display: flex;
-  gap: 1rem;
+  gap: 0.6rem;
   background: #f8fafc;
-  width: fit-content;
   padding: 0.5rem;
   border-radius: 1.2rem;
+  width: fit-content;
 }
 
 .left_report_container_header button {
-  padding: 0.8rem 1.8rem;
+  padding: 0.8rem 1.6rem;
   border: none;
   background: transparent;
   font-size: 1.3rem;
   font-weight: 600;
   color: #64748b;
-  text-transform: capitalize;
   cursor: pointer;
   border-radius: 0.8rem;
-  transition: 0.3s;
+  transition: 0.25s;
 }
 
 .active_filter {
-  background: #fff !important;
-  color: #1e293b !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  color: #1e293b;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 /* ================= CHART ================= */
 
 .chart_wrapper {
-  /* background-color: red; */
-  /* background-color: #f9fafb; */
-  /* border-radius: 1.6rem; */
-  /* padding: 1.6rem; */
-}
-
-/* ================= STYLIST SCROLL ================= */
-
-.stylist_scroll_container {
-  overflow-x: auto;
-  padding-bottom: 0.6rem;
-}
-
-.stylist_scroll_container::-webkit-scrollbar {
-  height: 0.6rem;
-}
-
-.stylist_scroll_container::-webkit-scrollbar-thumb {
-  background-color: #e2e8f0;
-  border-radius: 1rem;
+  width: 100%;
+  height: 42rem;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* ================= STYLIST LEGEND ================= */
 
-/* Stylist Horizontal Scroll */
 .stylist_scroll_container {
   width: 100%;
   overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
+  overflow-y: hidden;
+  padding-bottom: 0.4rem;
+  scrollbar-width: none;
 }
 
 .stylist_scroll_container::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+  display: none;
 }
 
 .stylist_container {
-  display: flex;
+  display: inline-flex;
   gap: 1.2rem;
-  white-space: nowrap; /* Prevents wrapping */
+  white-space: nowrap;
 }
 
 .barberItem_legend {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.6rem;
+  gap: 0.8rem;
+  padding: 0.9rem 1.4rem;
   background: #f8fafc;
-  border: 1px solid #f1f5f9;
+  border: none;
+  border: 1px solid #e2e8f0;
   border-radius: 1.2rem;
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: #475569;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .barberItem_legend:hover {
-  background: #fff;
+  background: #ffffff;
   border-color: #cbd5e1;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
@@ -180,6 +170,7 @@
   border-radius: 2.4rem;
   padding: 2.4rem;
   box-shadow: 0 1.2rem 3rem rgba(0, 0, 0, 0.08);
+  min-width: 0;
 }
 
 .right_report_container h3 {
@@ -194,32 +185,31 @@
   line-height: 1.6;
 }
 
+/* ================= TOOLTIP ================= */
+
 .tooltip {
   background: #ffffff;
   border-radius: 1.2rem;
   padding: 1.2rem 1.4rem;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-  font-family: Inter, system-ui, -apple-system, sans-serif;
 }
 
 .tooltipMonth {
   font-size: 1.3rem;
   font-weight: 600;
-  margin-bottom: 0.8rem;
-  color: #0f172a;
+  margin-bottom: 0.6rem;
 }
 
 .tooltipRow {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.6rem;
   font-size: 1.2rem;
-  margin-bottom: 0.4rem;
 }
 
 .tooltipDot {
-  width: 0.8rem;
-  height: 0.8rem;
+  width: 0.7rem;
+  height: 0.7rem;
   border-radius: 50%;
 }
 
@@ -231,4 +221,90 @@
 .tooltipValue {
   font-weight: 600;
   color: #0f172a;
+}
+
+/* ================= MOBILE RESPONSIVE (Max 768px) ================= */
+
+@media (max-width: 76.8rem) {
+  .report_body {
+    height: auto; /* Allow scrolling on mobile */
+    overflow-y: auto;
+    padding: 1.6rem;
+    gap: 1.6rem;
+  }
+
+  .report_header {
+    margin-bottom: 0.5rem;
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+
+  /* Stack columns into a single row */
+  .report_main_container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+
+  .left_report_container {
+    border-radius: 1.8rem;
+    padding: 2rem;
+    gap: 2rem;
+  }
+
+  /* Adjust chart height for smaller screens */
+  .chart_wrapper {
+    height: 60rem;
+  }
+
+  /* Make filter buttons slightly larger for touch targets */
+  .left_report_container_header {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .left_report_container_header button {
+    flex: 1;
+    padding: 1rem 0.5rem;
+    font-size: 1.2rem;
+  }
+
+  /* Stylist legend: Ensure visibility of horizontal scroll */
+  .stylist_container {
+    gap: 0.8rem;
+  }
+
+  .barberItem_legend {
+    padding: 0.8rem 1.2rem;
+    font-size: 1.2rem;
+    border-radius: 1rem;
+  }
+
+  /* Right Panel adjustment */
+  .right_report_container {
+    padding: 2rem;
+    border-radius: 1.8rem;
+    box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* ================= SMALL MOBILE (Max 480px) ================= */
+
+@media (max-width: 48rem) {
+  .report_header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.2rem;
+  }
+
+  .header_right {
+    width: 100%;
+    text-align: right;
+  }
+
+  .chart_wrapper {
+    height: 25rem;
+  }
 }
