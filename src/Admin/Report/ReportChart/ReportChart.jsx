@@ -1283,6 +1283,7 @@ import {
   LeftIcon,
   PieChartIcon,
   RightIcon,
+  ResetIcon,
 } from "../../../newicons";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Calendar from "react-multi-date-picker";
@@ -1423,13 +1424,18 @@ const ReportChart = () => {
       // setChartData(data?.response);
       // setChartReportValueData(data?.dateRange);
       if (!copyFilterBarberList?.length) {
-        // setCopyFilterBarberList(data?.response);
+        setCopyFilterBarberList(data?.response?.barbers);
+        setSelectedReportBarber(
+          data?.response?.barbers?.map((item) => {
+            return {
+              barberId: Number(item.key),
+            };
+          })
+        );
         // setSelectedAllBarber(true);
       }
     } catch (error) {}
   };
-
-  console.log(chartData);
 
   const totalServed = chartData.reduce((sum, item) => sum + item.yaxis, 0);
 
@@ -1448,11 +1454,18 @@ const ReportChart = () => {
   };
 
   const resetFilter = () => {
-    setSelectedReportBarber([]);
+    setSelectedReportType("daily")
+    setSelectedReportBarber(
+      copyFilterBarberList?.map((item) => {
+        return {
+          barberId: Number(item.key),
+        };
+      })
+    );
     setSelectedDates([]);
     setSelected_attendence_stylist(null);
-    setStartDate(moment().subtract(31, "day").format("DD-MM-YYYY"));
-    setEndDate(moment().subtract(1, "day").format("DD-MM-YYYY"));
+    setStartDate(null);
+    setEndDate(null);
   };
 
   const upcommingAnalyticsSelectionList =
@@ -1463,12 +1476,6 @@ const ReportChart = () => {
   const [barber_attendence_list, setBarber_attendence_list] = useState([]);
   const [barber_attendence_list_loading, setBarber_attendence_list_loading] =
     useState(false);
-
-  // useEffect(() => {
-  //   if (selected_attendence_stylist?.barberId) {
-  //     fetch_barber_attendence_list();
-  //   }
-  // }, [selected_attendence_stylist?.barberId, startDate, endDate]);
 
   useEffect(() => {
     if (!selected_attendence_stylist?.barberId) return;
@@ -1504,6 +1511,22 @@ const ReportChart = () => {
   const [openStylistDropdown, setOpenStylistDropdown] = useState(false);
   const [openStylistMobileDropdown, setOpenStylistMobileDropdown] =
     useState(false);
+
+  const toggleBarberFromLegend = (barber) => {
+    const barberId = Number(barber.key);
+
+    setSelectedReportBarber((prev) => {
+      const exists = prev.some((b) => b.barberId === barberId);
+
+      if (exists) {
+        // remove
+        return prev.filter((b) => b.barberId !== barberId);
+      }
+
+      // add
+      return [...prev, { barberId }];
+    });
+  };
 
   //End of logic
 
@@ -1691,32 +1714,6 @@ const ReportChart = () => {
     return newItem;
   });
 
-  // const CustomTooltip = ({ active, payload, label }) => {
-  //   if (!active || !payload || payload.length === 0) return null;
-
-  //   // If hovering on a line/dot → payload length === 1
-  //   const isSingle = payload.length === 1;
-
-  //   return (
-  //     <div className={style.tooltip}>
-  //       <p className={style.tooltipMonth}>{label}</p>
-
-  //       {payload.map((item) => (
-  //         <div key={item.dataKey} className={style.tooltipRow}>
-  //           <span
-  //             className={style.tooltipDot}
-  //             style={{ backgroundColor: item.stroke }}
-  //           />
-  //           <span className={style.tooltipName}>
-  //             {chartBarberListData.find((b) => b.key === item.dataKey)?.name}
-  //           </span>
-  //           <span className={style.tooltipValue}>{item.value}</span>
-  //         </div>
-  //       ))}
-  //     </div>
-  //   );
-  // };
-
   const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload || payload.length === 0) return null;
 
@@ -1782,6 +1779,9 @@ const ReportChart = () => {
             className="dark-theme"
             maxDate={new Date()}
           />
+          <button className={style.reset_button} onClick={resetFilter}>
+            <ResetIcon />
+          </button>
         </div>
       </div>
 
@@ -1833,7 +1833,10 @@ const ReportChart = () => {
                     // domain={["dataMin - 3", "dataMax + 3"]}
                   />
 
-                  <Tooltip wrapperStyle={{ pointerEvents: "auto" }} content={<CustomTooltip />} />
+                  <Tooltip
+                    wrapperStyle={{ pointerEvents: "auto" }}
+                    content={<CustomTooltip />}
+                  />
 
                   {chartBarberListData.map((barber) => (
                     <Line
@@ -1859,15 +1862,27 @@ const ReportChart = () => {
           {/* Horizontal Stylist List */}
           <div className={style.stylist_scroll_container}>
             <div className={style.stylist_container}>
-              {chartBarberListData.map((barber) => (
-                <button key={barber.key} className={style.barberItem_legend}>
-                  <span
-                    className={style.dot}
-                    style={{ backgroundColor: barber.color }}
-                  ></span>
-                  {barber.name}
-                </button>
-              ))}
+              {copyFilterBarberList.map((barber) => {
+                const isActive = selectedReportBarber.some(
+                  (b) => b.barberId === Number(barber.key)
+                );
+
+                return (
+                  <button
+                    key={barber.key}
+                    className={`${style.barberItem_legend} ${
+                      isActive ? style.active_barber : style.inactive_barber
+                    }`}
+                    onClick={() => toggleBarberFromLegend(barber)}
+                  >
+                    <span
+                      className={style.dot}
+                      style={{ backgroundColor: barber.color }}
+                    />
+                    {barber.name}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
