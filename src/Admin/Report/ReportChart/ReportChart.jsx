@@ -621,18 +621,18 @@
 //             );
 //           })}
 
-//           <Calendar
-//             numberOfMonths={1}
-//             value={selectedDates}
-//             onChange={handleDateChange}
-//             range
-//             placeholder="dd/mm/yyyy - dd/mm/yyyy"
-//             dateSeparator=" - "
-//             calendarPosition="bottom-right"
-//             format="DD/MM/YYYY"
-//             className="dark-theme"
-//             maxDate={new Date()}
-//           />
+// <Calendar
+//   numberOfMonths={1}
+//   value={selectedDates}
+//   onChange={handleDateChange}
+//   range
+//   placeholder="dd/mm/yyyy - dd/mm/yyyy"
+//   dateSeparator=" - "
+//   calendarPosition="bottom-right"
+//   format="DD/MM/YYYY"
+//   className="dark-theme"
+//   maxDate={new Date()}
+// />
 
 //           <button
 //             onClick={() => setOpenStylistDropdown((prev) => !prev)}
@@ -1261,170 +1261,7 @@
 //   }
 // };
 
-// import React from "react";
-// import style from "./ReportChart.module.css";
-// import { BarIcon, LeftArrow } from "../../../icons";
-// import {
-//   CartesianGrid,
-//   Label,
-//   Line,
-//   LineChart,
-//   ResponsiveContainer,
-//   Tooltip,
-//   XAxis,
-//   YAxis,
-// } from "recharts";
-
-// const ReportChart = () => {
-//   const data = [
-//     { month: "Jan", barber1: 20, barber2: 35, barber3: 15 },
-//     { month: "Feb", barber1: 30, barber2: 25, barber3: 22 },
-//     { month: "Mar", barber1: 18, barber2: 40, barber3: 28 },
-//     { month: "Apr", barber1: 25, barber2: 32, barber3: 30 },
-//     { month: "May", barber1: 40, barber2: 28, barber3: 35 },
-//   ];
-
-//   const barbers = [
-//     { key: "barber1", name: "Alex", color: "#4f46e5" },
-//     { key: "barber2", name: "John", color: "#16a34a" },
-//     { key: "barber3", name: "Ravi", color: "#dc2626" },
-//   ];
-
-//   return (
-//     <div className={style.report_body}>
-//       <div className={style.report_header}>
-//         <div>
-//           <button>
-//             <LeftArrow color="var(--text-primary)" />
-//           </button>
-//           <p>Appointment Reports</p>
-//         </div>
-
-//         <div>
-//           <p>Calender</p>
-//         </div>
-//       </div>
-
-//       <div className={style.report_main_container}>
-//         <div className={style.left_report_container}>
-//           <div className={style.left_report_container_header}>
-//             {["daily", "weekly", "monthly"].map((item) => {
-//               return <button key={item}>{item}</button>;
-//             })}
-//           </div>
-
-// <ResponsiveContainer width="100%" height={400}>
-//   <LineChart
-//     data={data}
-//     margin={{ top: 30, right: 30, left: 30, bottom: 50 }}
-//   >
-//     {/* Grid lines on BOTH axes */}
-//     <CartesianGrid
-//       strokeDasharray="4 4"
-//       stroke="rgba(148, 163, 184, 0.35)"
-//       vertical={true}
-//       horizontal={true}
-//     />
-
-//     {/* X Axis */}
-//     <XAxis
-//       dataKey="month"
-//       tick={{ fill: "#6b7280", fontSize: 12 }}
-//       axisLine={{ stroke: "#d1d5db" }}
-//       tickLine={false}
-//     >
-//       <Label
-//         value="Months"
-//         position="insideBottom"
-//         offset={-35}
-//         style={{
-//           fill: "#374151",
-//           fontSize: 13,
-//           fontWeight: 600,
-//         }}
-//       />
-//     </XAxis>
-
-//     {/* Y Axis */}
-//     <YAxis
-//       tick={{ fill: "#6b7280", fontSize: 12 }}
-//       axisLine={{ stroke: "#d1d5db" }}
-//       tickLine={false}
-//     >
-//       <Label
-//         value="Total Count"
-//         angle={-90}
-//         position="insideLeft"
-//         style={{
-//           fill: "#374151",
-//           fontSize: 13,
-//           fontWeight: 600,
-//           textAnchor: "middle",
-//         }}
-//       />
-//     </YAxis>
-
-//     {/* Premium Tooltip */}
-//     <Tooltip
-//       contentStyle={{
-//         backgroundColor: "#ffffff",
-//         borderRadius: 12,
-//         border: "1px solid #e5e7eb",
-//         boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
-//         fontSize: 12,
-//       }}
-//       labelStyle={{ fontWeight: 600, color: "#111827" }}
-//       itemStyle={{ color: "#374151" }}
-//     />
-
-//     {/* Lines with round points */}
-//     {barbers.map((barber) => (
-//       <Line
-//         key={barber.key}
-//         type="natural"
-//         dataKey={barber.key}
-//         name={barber.name}
-//         stroke={barber.color}
-//         strokeWidth={2.2}
-//         /* 👇 Perfect round points */
-//         dot={{
-//           r: 4,
-//           strokeWidth: 2,
-//           stroke: "#ffffff",
-//           fill: barber.color,
-//         }}
-//         /* 👇 Slight emphasis on hover */
-//         activeDot={{
-//           r: 6,
-//           strokeWidth: 2,
-//           stroke: "#ffffff",
-//           fill: barber.color,
-//         }}
-//       />
-//     ))}
-//   </LineChart>
-// </ResponsiveContainer>
-
-//           <div className={style.stylist_container}>
-//             {barbers.map((barber) => {
-//               return (
-//                 <button key={barber.key} className={style.barberItem_legend}>
-//                   {barber.name}
-//                 </button>
-//               );
-//             })}
-//           </div>
-//         </div>
-
-//         <div className={style.right_report_container}>Right</div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ReportChart;
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import style from "./ReportChart.module.css";
 import { BarIcon, LeftArrow } from "../../../icons";
 import {
@@ -1437,8 +1274,239 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import {
+  CloseIcon,
+  ContactTel,
+  CustomerIcon,
+  EmailIcon,
+  FilterIcon,
+  LeftIcon,
+  PieChartIcon,
+  RightIcon,
+} from "../../../newicons";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Calendar from "react-multi-date-picker";
+import { Box, Modal } from "@mui/material";
+import api from "../../../Redux/api/Api";
+import { useSelector } from "react-redux";
+import moment from "moment/moment";
+import { useLocation, useNavigate } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 
 const ReportChart = () => {
+  const location = useLocation();
+
+  const [selectedReportChartType, setSelectedReportChartType] = useState(
+    location?.state?.reportTypeItem
+  );
+
+  const navigate = useNavigate();
+
+  const salonId = useSelector(
+    (state) => state.AdminLoggedInMiddleware.adminSalonId
+  );
+
+  const reportUIArr = [
+    {
+      id: 1,
+      text: "Pie",
+      icon: BarIcon,
+    },
+    {
+      id: 2,
+      text: "Bar",
+      icon: BarIcon,
+    },
+  ];
+
+  const [selectedReport, setSelectedReport] = useState(reportUIArr[1]);
+  const [openFilterPopup, setOpenFilterPopup] = useState(false);
+
+  const [selectedDates, setSelectedDates] = useState([]);
+
+  const [startDate, setStartDate] = useState(
+    // moment().subtract(31, "day").format("DD-MM-YYYY")
+    null
+  );
+  const [endDate, setEndDate] = useState(
+    // moment().subtract(1, "day").format("DD-MM-YYYY")
+    null
+  );
+
+  const handleDateChange = (dates) => {
+    const formatedDates = dates.map((date) => date.format("DD-MM-YYYY"));
+    setStartDate(formatedDates[0]);
+    setEndDate(formatedDates[1]);
+    setSelectedDates(formatedDates);
+    setSelectedReportType("daily");
+  };
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.matchMedia("(max-width: 600px)").matches);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const [selectedReportType, setSelectedReportType] = useState("daily");
+  const [selectedReportBarber, setSelectedReportBarber] = useState([]);
+  const [openFilter, setOpenFilter] = useState(false);
+
+  const [copyFilterBarberList, setCopyFilterBarberList] = useState([]);
+
+  const [stylistBarberList, setStylistBarberList] = useState([]);
+  const [selected_attendence_stylist, setSelected_attendence_stylist] =
+    useState(null);
+
+  useEffect(() => {
+    if (selectedReportChartType?.reportType === "stylistattendence") {
+      fetch_stylist_barberlist();
+    } else {
+      // if (startDate && endDate) {
+      view_report();
+      // }
+    }
+  }, [
+    startDate,
+    endDate,
+    selectedReportType,
+    selectedReportBarber,
+    selectedReportChartType?.reportType,
+  ]);
+
+  // selectedReportChartType?.reportType === "stylistattendence"
+
+  const fetch_stylist_barberlist = async () => {
+    try {
+      const { data } = await api.post(
+        `api/barber/getAllBarberBySalonId?salonId=${salonId}`
+      );
+
+      setStylistBarberList(data?.getAllBarbers);
+    } catch (error) {}
+  };
+
+  const [chartDefaultValue, setChartReportValueData] = useState(null);
+  const [selectedAllBarber, setSelectedAllBarber] = useState(false);
+
+  const [chartData, setChartData] = useState([]);
+  const [chartBarberListData, setChartBarberListData] = useState([])
+
+  const view_report = async () => {
+    try {
+      const reportData = {
+        salonId,
+        startDate,
+        endDate,
+        reportType: selectedReportChartType?.reportType,
+        barberId: selectedReportBarber.map((item) => item?.barberId),
+        reportValue: selectedReportType,
+      };
+
+      const { data } = await api.post(
+        `/api/reports/getSalonLineGraphReport`,
+        reportData
+      );
+
+      setChartData(data?.response?.data)
+      setChartBarberListData(data?.response?.barbers)
+
+      // setChartData(data?.response);
+      // setChartReportValueData(data?.dateRange);
+      if (!copyFilterBarberList?.length) {
+        // setCopyFilterBarberList(data?.response);
+        // setSelectedAllBarber(true);
+      }
+    } catch (error) {}
+  };
+
+  console.log(chartData)
+
+  const totalServed = chartData.reduce((sum, item) => sum + item.yaxis, 0);
+
+  const toggleBarber = (barber) => {
+    setSelectedReportBarber((prev) => {
+      const exists = prev.some((item) => item.barberId === barber.barberId);
+
+      if (exists) {
+        // remove (re-enter works now)
+        return prev.filter((item) => item.barberId !== barber.barberId);
+      }
+
+      // add
+      return [...prev, barber];
+    });
+  };
+
+  const resetFilter = () => {
+    setSelectedReportBarber([]);
+    setSelectedDates([]);
+    setSelected_attendence_stylist(null);
+    setStartDate(moment().subtract(31, "day").format("DD-MM-YYYY"));
+    setEndDate(moment().subtract(1, "day").format("DD-MM-YYYY"));
+  };
+
+  const upcommingAnalyticsSelectionList =
+    location?.state?.upcommingAnalytics?.filter(
+      (upc) => upc?.id !== selectedReportChartType?.id
+    );
+
+  const [barber_attendence_list, setBarber_attendence_list] = useState([]);
+  const [barber_attendence_list_loading, setBarber_attendence_list_loading] =
+    useState(false);
+
+  // useEffect(() => {
+  //   if (selected_attendence_stylist?.barberId) {
+  //     fetch_barber_attendence_list();
+  //   }
+  // }, [selected_attendence_stylist?.barberId, startDate, endDate]);
+
+  useEffect(() => {
+    if (!selected_attendence_stylist?.barberId) return;
+
+    if ((startDate && endDate) || (!startDate && !endDate)) {
+      fetch_barber_attendence_list();
+    }
+  }, [selected_attendence_stylist?.barberId, startDate, endDate]);
+
+  const fetch_barber_attendence_list = async () => {
+    try {
+      const attendenceData = {
+        salonId,
+        barberId: selected_attendence_stylist?.barberId,
+        startDate,
+        endDate,
+      };
+
+      setBarber_attendence_list_loading(true);
+
+      const { data } = await api.post(
+        `/api/admin/getAttendenceByBarberId`,
+        attendenceData
+      );
+
+      setBarber_attendence_list(data?.response?.attendance);
+    } catch (error) {
+    } finally {
+      setBarber_attendence_list_loading(false);
+    }
+  };
+
+  const [openStylistDropdown, setOpenStylistDropdown] = useState(false);
+  const [openStylistMobileDropdown, setOpenStylistMobileDropdown] =
+    useState(false);
+
+  //End of logic
+
   const displayedData = [
     {
       month: "Jan",
@@ -1623,7 +1691,6 @@ const ReportChart = () => {
     return newItem;
   });
 
-
   const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload || payload.length === 0) return null;
 
@@ -1650,18 +1717,45 @@ const ReportChart = () => {
     );
   };
 
+  const renderIcon = (type) => {
+    switch (type) {
+      case "bar":
+        return <BarIcon color="var(--btn-text-color)" />;
+      case "customer":
+        return <CustomerIcon color="var(--btn-text-color)" />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className={style.report_body}>
       <div className={style.report_header}>
         <div className={style.header_left}>
-          <button className={style.back_button}>
+          <button
+            className={style.back_button}
+            onClick={() => {
+              navigate("/admin-reports");
+            }}
+          >
             <LeftArrow color="var(--text-primary)" />
           </button>
-          <p className={style.title}>Appointment Reports</p>
+          <p className={style.title}>{selectedReportChartType?.headerTitle}</p>
         </div>
 
         <div className={style.header_right}>
-          <p className={style.calendar_text}>Calendar</p>
+          <Calendar
+            numberOfMonths={1}
+            value={selectedDates}
+            onChange={handleDateChange}
+            range
+            placeholder="dd/mm/yyyy - dd/mm/yyyy"
+            dateSeparator=" - "
+            calendarPosition="bottom-right"
+            format="DD/MM/YYYY"
+            className="dark-theme"
+            maxDate={new Date()}
+          />
         </div>
       </div>
 
@@ -1671,7 +1765,15 @@ const ReportChart = () => {
             {["daily", "weekly", "monthly"].map((item) => (
               <button
                 key={item}
-                className={item === "monthly" ? style.active_filter : ""}
+                onClick={() => {
+                  setStartDate(null);
+                  setEndDate(null);
+                  setSelectedDates([]);
+                  setSelectedReportType(item);
+                }}
+                className={`${style.filter_button} ${
+                  selectedReportType === item ? style.active_filter : ""
+                }`}
               >
                 {item}
               </button>
@@ -1743,9 +1845,41 @@ const ReportChart = () => {
         </div>
 
         <div className={style.right_report_container}>
-          {/* Your existing right content */}
-          <h3>Insights</h3>
-          <p>Overall growth is up by 12% this month.</p>
+          {/* Header */}
+          <div className={style.right_header}>
+            <h3>Analytics Overview</h3>
+            <p className={style.right_subtitle}>
+              Track performance insights across your salon
+            </p>
+          </div>
+
+          {/* Analytics List */}
+          <div className={style.analytics_list}>
+            {upcommingAnalyticsSelectionList?.map((item) => {
+              const isActive = selectedReportChartType?.id === item.id;
+
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setSelectedReportChartType(item)}
+                  className={`${style.report_section_item} ${
+                    isActive ? style.active_item : ""
+                  }`}
+                >
+                  <div className={style.icon_wrapper}>
+                    {renderIcon(item.iconType)}
+                  </div>
+
+                  <div className={style.text_wrapper}>
+                    <p className={style.item_title}>{item.title}</p>
+                    <p className={style.item_subtitle}>{item.subTitle}</p>
+                  </div>
+
+                  <div className={style.arrow}>→</div>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
