@@ -1399,7 +1399,7 @@ const ReportChart = () => {
   const [selectedAllBarber, setSelectedAllBarber] = useState(false);
 
   const [chartData, setChartData] = useState([]);
-  const [chartBarberListData, setChartBarberListData] = useState([])
+  const [chartBarberListData, setChartBarberListData] = useState([]);
 
   const view_report = async () => {
     try {
@@ -1417,8 +1417,8 @@ const ReportChart = () => {
         reportData
       );
 
-      setChartData(data?.response?.data)
-      setChartBarberListData(data?.response?.barbers)
+      setChartData(data?.response?.data);
+      setChartBarberListData(data?.response?.barbers);
 
       // setChartData(data?.response);
       // setChartReportValueData(data?.dateRange);
@@ -1429,7 +1429,7 @@ const ReportChart = () => {
     } catch (error) {}
   };
 
-  console.log(chartData)
+  console.log(chartData);
 
   const totalServed = chartData.reduce((sum, item) => sum + item.yaxis, 0);
 
@@ -1691,28 +1691,54 @@ const ReportChart = () => {
     return newItem;
   });
 
+  // const CustomTooltip = ({ active, payload, label }) => {
+  //   if (!active || !payload || payload.length === 0) return null;
+
+  //   // If hovering on a line/dot → payload length === 1
+  //   const isSingle = payload.length === 1;
+
+  //   return (
+  //     <div className={style.tooltip}>
+  //       <p className={style.tooltipMonth}>{label}</p>
+
+  //       {payload.map((item) => (
+  //         <div key={item.dataKey} className={style.tooltipRow}>
+  //           <span
+  //             className={style.tooltipDot}
+  //             style={{ backgroundColor: item.stroke }}
+  //           />
+  //           <span className={style.tooltipName}>
+  //             {chartBarberListData.find((b) => b.key === item.dataKey)?.name}
+  //           </span>
+  //           <span className={style.tooltipValue}>{item.value}</span>
+  //         </div>
+  //       ))}
+  //     </div>
+  //   );
+  // };
+
   const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload || payload.length === 0) return null;
-
-    // If hovering on a line/dot → payload length === 1
-    const isSingle = payload.length === 1;
 
     return (
       <div className={style.tooltip}>
         <p className={style.tooltipMonth}>{label}</p>
 
-        {payload.map((item) => (
-          <div key={item.dataKey} className={style.tooltipRow}>
-            <span
-              className={style.tooltipDot}
-              style={{ backgroundColor: item.stroke }}
-            />
-            <span className={style.tooltipName}>
-              {barbers.find((b) => b.key === item.dataKey)?.name}
-            </span>
-            <span className={style.tooltipValue}>{item.value}</span>
-          </div>
-        ))}
+        {/* Scrollable content */}
+        <div className={style.tooltipScroll}>
+          {payload.map((item) => (
+            <div key={item.dataKey} className={style.tooltipRow}>
+              <span
+                className={style.tooltipDot}
+                style={{ backgroundColor: item.stroke }}
+              />
+              <span className={style.tooltipName}>
+                {chartBarberListData.find((b) => b.key === item.dataKey)?.name}
+              </span>
+              <span className={style.tooltipValue}>{item.value}</span>
+            </div>
+          ))}
+        </div>
       </div>
     );
   };
@@ -1784,8 +1810,8 @@ const ReportChart = () => {
             <div className={style.chart_inner}>
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
-                  data={data}
-                  margin={{ top: 20, right: 20, left: -30, bottom: 0 }}
+                  data={chartData}
+                  margin={{ top: 20, right: 20, left: -20, bottom: 0 }}
                 >
                   <CartesianGrid
                     strokeDasharray="4 4"
@@ -1793,21 +1819,22 @@ const ReportChart = () => {
                     stroke="rgba(148, 163, 184, 0.35)"
                   />
                   <XAxis
-                    dataKey="month"
+                    dataKey="xaxis"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: "#94a3b8", fontSize: "1.2rem" }}
+                    tick={{ fill: "var(--text-secondary)", fontSize: "1.2rem" }}
+                    padding={{ left: 12, right: 12 }}
                   />
                   <YAxis
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: "#94a3b8", fontSize: "1.2rem" }}
-                    domain={["dataMin - 3", "dataMax + 3"]}
+                    tick={{ fill: "var(--text-secondary)", fontSize: "1.2rem" }}
+                    // domain={["dataMin - 3", "dataMax + 3"]}
                   />
 
-                  <Tooltip content={<CustomTooltip />} />
+                  <Tooltip wrapperStyle={{ pointerEvents: "auto" }} content={<CustomTooltip />} />
 
-                  {barbers.map((barber) => (
+                  {chartBarberListData.map((barber) => (
                     <Line
                       key={barber.key}
                       type="monotone"
@@ -1831,7 +1858,7 @@ const ReportChart = () => {
           {/* Horizontal Stylist List */}
           <div className={style.stylist_scroll_container}>
             <div className={style.stylist_container}>
-              {barbers.map((barber) => (
+              {chartBarberListData.map((barber) => (
                 <button key={barber.key} className={style.barberItem_legend}>
                   <span
                     className={style.dot}
