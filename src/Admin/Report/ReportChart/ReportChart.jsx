@@ -1339,7 +1339,7 @@ const ReportChart = () => {
     setStartDate(formatedDates[0]);
     setEndDate(formatedDates[1]);
     setSelectedDates(formatedDates);
-    setSelectedReportType("daily");
+    setSelectedReportType(null);
   };
 
   const [isMobile, setIsMobile] = useState(false);
@@ -1453,8 +1453,20 @@ const ReportChart = () => {
     });
   };
 
+  // useEffect(() => {
+  //   if (selectedReportBarber.length === 0) {
+  //     setSelectedReportBarber(
+  //       copyFilterBarberList?.map((item) => {
+  //         return {
+  //           barberId: Number(item.key),
+  //         };
+  //       })
+  //     );
+  //   }
+  // }, [selectedReportBarber]);
+
   const resetFilter = () => {
-    setSelectedReportType("daily")
+    setSelectedReportType("daily");
     setSelectedReportBarber(
       copyFilterBarberList?.map((item) => {
         return {
@@ -1512,207 +1524,51 @@ const ReportChart = () => {
   const [openStylistMobileDropdown, setOpenStylistMobileDropdown] =
     useState(false);
 
+  // const toggleBarberFromLegend = (barber) => {
+  //   const barberId = Number(barber.key);
+
+  //   setSelectedReportBarber((prev) => {
+  //     const exists = prev.some((b) => b.barberId === barberId);
+
+  //     if (exists) {
+  //       // remove
+  //       return prev.filter((b) => b.barberId !== barberId);
+  //     }
+
+  //     // add
+  //     return [...prev, { barberId }];
+  //   });
+
+  //   if (selectedReportBarber.length === 0) {
+  //     console.log("Array is empty");
+  //   }
+  // };
+
   const toggleBarberFromLegend = (barber) => {
     const barberId = Number(barber.key);
 
     setSelectedReportBarber((prev) => {
       const exists = prev.some((b) => b.barberId === barberId);
 
+      let updated;
+
       if (exists) {
-        // remove
-        return prev.filter((b) => b.barberId !== barberId);
+        updated = prev.filter((b) => b.barberId !== barberId);
+      } else {
+        updated = [...prev, { barberId }];
       }
 
-      // add
-      return [...prev, { barberId }];
+      if (updated.length === 0) {
+        return copyFilterBarberList.map((item) => ({
+          barberId: Number(item.key),
+        }));
+      }
+
+      return updated;
     });
   };
 
   //End of logic
-
-  const displayedData = [
-    {
-      month: "Jan",
-      b1: 18,
-      b2: 35,
-      b3: 14,
-      b4: 22,
-      b5: 17,
-      b6: 26,
-      b7: 30,
-      b8: 12,
-      b9: 24,
-      b10: 19,
-    },
-    {
-      month: "Feb",
-      b1: 24,
-      b2: 30,
-      b3: 18,
-      b4: 20,
-      b5: 21,
-      b6: 29,
-      b7: 28,
-      b8: 16,
-      b9: 22,
-      b10: 23,
-    },
-    {
-      month: "Mar",
-      b1: 20,
-      b2: 38,
-      b3: 25,
-      b4: 26,
-      b5: 20,
-      b6: 31,
-      b7: 35,
-      b8: 18,
-      b9: 28,
-      b10: 21,
-    },
-    {
-      month: "Apr",
-      b1: 26,
-      b2: 34,
-      b3: 22,
-      b4: 29,
-      b5: 24,
-      b6: 36,
-      b7: 33,
-      b8: 20,
-      b9: 31,
-      b10: 26,
-    },
-    {
-      month: "May",
-      b1: 30,
-      b2: 36,
-      b3: 27,
-      b4: 31,
-      b5: 26,
-      b6: 34,
-      b7: 37,
-      b8: 23,
-      b9: 29,
-      b10: 28,
-    },
-    {
-      month: "Jun",
-      b1: 32,
-      b2: 33,
-      b3: 29,
-      b4: 28,
-      b5: 30,
-      b6: 38,
-      b7: 35,
-      b8: 25,
-      b9: 34,
-      b10: 27,
-    },
-    {
-      month: "Jul",
-      b1: 29,
-      b2: 39,
-      b3: 32,
-      b4: 34,
-      b5: 31,
-      b6: 36,
-      b7: 40,
-      b8: 27,
-      b9: 36,
-      b10: 30,
-    },
-    {
-      month: "Aug",
-      b1: 35,
-      b2: 37,
-      b3: 28,
-      b4: 36,
-      b5: 33,
-      b6: 40,
-      b7: 42,
-      b8: 29,
-      b9: 38,
-      b10: 34,
-    },
-    {
-      month: "Sep",
-      b1: 31,
-      b2: 34,
-      b3: 30,
-      b4: 32,
-      b5: 29,
-      b6: 37,
-      b7: 39,
-      b8: 26,
-      b9: 35,
-      b10: 31,
-    },
-    {
-      month: "Oct",
-      b1: 28,
-      b2: 36,
-      b3: 27,
-      b4: 30,
-      b5: 28,
-      b6: 35,
-      b7: 38,
-      b8: 24,
-      b9: 33,
-      b10: 29,
-    },
-    {
-      month: "Nov",
-      b1: 26,
-      b2: 34,
-      b3: 25,
-      b4: 28,
-      b5: 26,
-      b6: 33,
-      b7: 36,
-      b8: 22,
-      b9: 31,
-      b10: 27,
-    },
-    {
-      month: "Dec",
-      b1: 29,
-      b2: 32,
-      b3: 23,
-      b4: 27,
-      b5: 24,
-      b6: 34,
-      b7: 35,
-      b8: 21,
-      b9: 30,
-      b10: 26,
-    },
-  ];
-
-  const displayedBarbers = [
-    { key: "b1", name: "Alex Johnson", color: "#6366f1" },
-    { key: "b2", name: "John Doe", color: "#10b981" },
-    { key: "b3", name: "Ravi Kumar", color: "#f59e0b" },
-    { key: "b4", name: "Steve Smith", color: "#ec4899" },
-    { key: "b5", name: "Marco V", color: "#06b6d4" },
-    { key: "b6", name: "Daniel Lee", color: "#8b5cf6" },
-    { key: "b7", name: "Arjun Mehta", color: "#22c55e" },
-    { key: "b8", name: "Chris Evans", color: "#eab308" },
-    { key: "b9", name: "Mohit Verma", color: "#ef4444" },
-    { key: "b10", name: "Lucas Brown", color: "#14b8a6" },
-  ];
-
-  // Take only first 5 barbers
-  const barbers = displayedBarbers.slice(0, 5);
-
-  // Map the data to include only first 5 barber keys
-  const data = displayedData.map((item) => {
-    const newItem = { month: item.month };
-    displayedBarbers.forEach((barber) => {
-      newItem[barber.key] = item[barber.key];
-    });
-    return newItem;
-  });
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload || payload.length === 0) return null;

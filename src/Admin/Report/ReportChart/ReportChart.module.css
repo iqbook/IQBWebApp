@@ -165,7 +165,7 @@
 .active_barber {
   background: var(--section-bg-color);
   color: var(--text-primary);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); */
   border: 1px solid var(--border-secondary);
 }
 
