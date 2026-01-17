@@ -389,6 +389,9 @@
 
 @media (max-width: 76.8rem) {
   .report_body {
+    background-color: var(--section-bg-color);
+  }
+  .report_body {
     height: auto; /* Allow scrolling on mobile */
     overflow-y: auto;
     padding: 1.6rem;
@@ -428,7 +431,7 @@
   }
 
   .chart_inner {
-    min-width: 72rem; /* enough space for Jan–Dec */
+    min-width: 120rem; /* enough space for Jan–Dec */
     height: 25rem; /* adjust mobile chart height */
   }
 
@@ -474,7 +477,7 @@
 
   .header_right {
     width: 100%;
-    text-align: right;
+    text-align: center;
   }
 
   .chart_wrapper {

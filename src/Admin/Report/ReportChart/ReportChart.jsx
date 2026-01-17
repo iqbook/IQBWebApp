@@ -1822,8 +1822,9 @@ const ReportChart = () => {
                     dataKey="xaxis"
                     axisLine={false}
                     tickLine={false}
+                    interval={0}
                     tick={{ fill: "var(--text-secondary)", fontSize: "1.2rem" }}
-                    padding={{ left: 12, right: 12 }}
+                    padding={{ left: 12, right: 32 }}
                   />
                   <YAxis
                     axisLine={false}
