@@ -241,15 +241,11 @@
 //     useState(false);
 
 //   return selectedReportChartType?.reportType === "stylistattendence" ? (
-//     <div className={style.report_section_attendence}>
-//       <div className={style.report_header}>
+//     <div className={style.stylist_attendence_section}>
+//       <div className={style.stylist_attendence_header}>
 //         <div>
 //           <div>
-//             <button
-//               onClick={() => {
-//                 navigate("/admin-reports");
-//               }}
-//             >
+//             <button onClick={() => navigate("/admin-reports")}>
 //               <LeftArrow color="var(--text-primary)" />
 //             </button>
 //             <h2>Reports</h2>
@@ -257,36 +253,9 @@
 //         </div>
 
 //         <div>
-//           {/* {reportUIArr.map((item, index) => {
-//             return (
-//               <button
-//                 onClick={() => {
-//                   setSelectedReport(item);
-//                 }}
-//                 style={{
-//                   backgroundColor:
-//                     selectedReport.id === item.id
-//                       ? "var(--bg-secondary)"
-//                       : "var(--bg-primary)",
-//                 }}
-//                 key={index}
-//               >
-//                 <item.icon
-//                   color={
-//                     selectedReport.id === item.id
-//                       ? "var(--btn-text-color)"
-//                       : "var(--text-primary)"
-//                   }
-//                 />
-//               </button>
-//             );
-//           })} */}
-
 //           <button
-//             onClick={() => {
-//               setOpenFilterPopup((prev) => !prev);
-//             }}
-//             className={style.filter_btn}
+//             onClick={() => setOpenFilterPopup((prev) => !prev)}
+//             className={style.stylist_attendence_filter_btn}
 //           >
 //             <FilterIcon />
 //             <span>Filter</span>
@@ -294,19 +263,19 @@
 
 //           {openFilterPopup && (
 //             <ClickAwayListener onClickAway={() => setOpenFilterPopup(false)}>
-//               <div className={style.filter_popup}>
-//                 <div className={style.filter_popup_header}>
+//               <div className={style.stylist_attendence_filter_popup}>
+//                 <div className={style.stylist_attendence_filter_popup_header}>
 //                   <p>Select Filter</p>
 //                   <button
 //                     onClick={() => setOpenFilterPopup(false)}
-//                     className={style.filterpopup_close_btn}
+//                     className={style.stylist_attendence_filterpopup_close_btn}
 //                   >
 //                     <CloseIcon />
 //                   </button>
 //                 </div>
 
-//                 <div className={style.filter_popup_body}>
-//                   <div className={style.filter_section}>
+//                 <div className={style.stylist_attendence_filter_popup_body}>
+//                   <div className={style.stylist_attendence_filter_section}>
 //                     <p>Date Range</p>
 //                     <Calendar
 //                       numberOfMonths={1}
@@ -315,16 +284,16 @@
 //                       range
 //                       placeholder="dd/mm/yyyy - dd/mm/yyyy"
 //                       dateSeparator=" - "
-//                       calendarPosition="bottom-right"
+//                       calendarPosition="bottom-left"
 //                       format="DD/MM/YYYY"
 //                       className="dark-theme"
 //                       maxDate={new Date()}
 //                     />
 //                   </div>
 
-//                   <div className={style.filter_section}>
+//                   <div className={style.stylist_attendence_filter_section}>
 //                     <p>Select Stylist</p>
-//                     <div className={style.filter_chip_group}>
+//                     <div className={style.stylist_attendence_filter_chip_group}>
 //                       {stylistBarberList?.map((item) => {
 //                         const isActive =
 //                           selected_attendence_stylist?.barberId ===
@@ -334,7 +303,7 @@
 //                           <button
 //                             key={item.barberId}
 //                             onClick={() => setSelected_attendence_stylist(item)}
-//                             className={style.filter_chip}
+//                             className={style.stylist_attendence_filter_chip}
 //                             style={{
 //                               backgroundColor: isActive
 //                                 ? "var(--bg-secondary)"
@@ -353,7 +322,7 @@
 
 //                   <button
 //                     onClick={resetFilter}
-//                     className={style.filter_apply_btn}
+//                     className={style.stylist_attendence_filter_apply_btn}
 //                   >
 //                     Reset
 //                   </button>
@@ -364,55 +333,40 @@
 //         </div>
 //       </div>
 
-//       <div className={style.report_mobile_header}>
+//       <div className={style.stylist_attendence_mobile_header}>
 //         <div>
 //           <div>
-//             <button
-//               onClick={() => {
-//                 navigate("/admin-reports");
-//               }}
-//             >
+//             <button onClick={() => navigate("/admin-reports")}>
 //               <LeftArrow color="var(--text-primary)" />
 //             </button>
 //             <h2>Reports</h2>
 //           </div>
 
-//           <div>
-//             <button
-//               onClick={() => {
-//                 setOpenFilter((prev) => !prev);
-//               }}
-//               className={style.filter_btn}
-//             >
-//               <FilterIcon />
-//               <span>Filter</span>
-//             </button>
-//           </div>
+//           <button
+//             onClick={() => setOpenFilter((prev) => !prev)}
+//             className={style.stylist_attendence_filter_btn}
+//           >
+//             <FilterIcon />
+//             <span>Filter</span>
+//           </button>
 //         </div>
 //       </div>
 
 //       {selected_attendence_stylist && (
-//         <div className={style.report_section_attendence_header}>
+//         <div className={style.stylist_attendence_profile_header}>
 //           <img
 //             src={selected_attendence_stylist?.profile?.[0]?.url}
 //             alt=""
-//             style={{
-//               border: `0.1rem solid var(--border-secondary)`,
-//             }}
+//             style={{ border: `0.1rem solid var(--border-secondary)` }}
 //           />
 //           <div>
 //             <h2>{selected_attendence_stylist?.name}</h2>
 //             <p>
-//               <span>
-//                 <EmailIcon />
-//               </span>
+//               <EmailIcon />
 //               {selected_attendence_stylist?.email}
 //             </p>
 //             <p>
-//               <span>
-//                 <ContactTel />
-//               </span>
-//               +{selected_attendence_stylist?.mobileCountryCode}{" "}
+//               <ContactTel />+{selected_attendence_stylist?.mobileCountryCode}{" "}
 //               {selected_attendence_stylist?.mobileNumber}
 //             </p>
 //           </div>
@@ -420,13 +374,13 @@
 //       )}
 
 //       {!selected_attendence_stylist?.barberId ? (
-//         <div className={style.report_section_attendence_container_error}>
+//         <div className={style.stylist_attendence_container_error}>
 //           <p>Select a barber to view their attendance records.</p>
 //         </div>
 //       ) : barber_attendence_list_loading ? (
-//         <div className={style.report_section_attendence_container_loading}>
+//         <div className={style.stylist_attendence_container_loading}>
 //           {Array.from({ length: 12 }).map((_, index) => (
-//             <div key={index} className={style.skeleton_item}>
+//             <div key={index} className={style.stylist_attendence_skeleton_item}>
 //               <Skeleton
 //                 width="100%"
 //                 height="15rem"
@@ -437,11 +391,11 @@
 //           ))}
 //         </div>
 //       ) : barber_attendence_list?.length > 0 ? (
-//         <div className={style.report_section_attendence_container}>
-//           {barber_attendence_list.map((item, index) => (
+//         <div className={style.stylist_attendence_container}>
+//           {barber_attendence_list.map((item) => (
 //             <div
 //               key={item?._id}
-//               className={style.attendence_item}
+//               className={style.stylist_attendence_item}
 //               style={{
 //                 backgroundColor: "var(--bg-primary)",
 //                 border: `0.1rem solid var(--border-secondary)`,
@@ -449,18 +403,8 @@
 //             >
 //               <div>
 //                 <p>{item.date}</p>
-//                 <div
-//                   style={{
-//                     backgroundColor: "var(--bg-secondary)",
-//                   }}
-//                 >
-//                   <p
-//                     style={{
-//                       color: "var(--btn-text-color)",
-//                     }}
-//                   >
-//                     {item.day}
-//                   </p>
+//                 <div style={{ backgroundColor: "var(--bg-secondary)" }}>
+//                   <p style={{ color: "var(--btn-text-color)" }}>{item.day}</p>
 //                 </div>
 //               </div>
 
@@ -469,7 +413,6 @@
 //                   <p>Time in</p>
 //                   <p>{item.signInTime || "-"}</p>
 //                 </div>
-
 //                 <div>
 //                   <p>Time out</p>
 //                   <p>{item.signOutTime || "-"}</p>
@@ -479,78 +422,10 @@
 //           ))}
 //         </div>
 //       ) : (
-//         <div className={style.report_section_attendence_container_error}>
-//           <p>
-//             No attendence available for this {selected_attendence_stylist?.name}
-//           </p>
+//         <div className={style.stylist_attendence_container_error}>
+//           <p>No attendance available for {selected_attendence_stylist?.name}</p>
 //         </div>
 //       )}
-
-//       {/* FILTER MODAL */}
-//       <Modal open={openFilter} onClose={() => setOpenFilter(false)}>
-//         <div className={style.modal_common_container}>
-//           <div className={style.filter_popup}>
-//             <div className={style.filter_popup_header}>
-//               <p>Select Filter</p>
-//               <button
-//                 onClick={() => setOpenFilter(false)}
-//                 className={style.filterpopup_close_btn}
-//               >
-//                 <CloseIcon />
-//               </button>
-//             </div>
-
-//             <div className={style.filter_popup_body}>
-//               <div className={style.filter_section}>
-//                 <p>Date Range</p>
-//                 <Calendar
-//                   numberOfMonths={1}
-//                   value={selectedDates}
-//                   onChange={handleDateChange}
-//                   range
-//                   placeholder="dd/mm/yyyy - dd/mm/yyyy"
-//                   dateSeparator=" - "
-//                   calendarPosition="bottom-left"
-//                   format="DD/MM/YYYY"
-//                   className="dark-theme"
-//                 />
-//               </div>
-
-//               <div className={style.filter_section}>
-//                 <p>Select Stylist</p>
-//                 <div className={style.filter_chip_group}>
-//                   {stylistBarberList?.map((item) => {
-//                     const isActive =
-//                       selected_attendence_stylist?.barberId === item.barberId;
-
-//                     return (
-//                       <button
-//                         key={item.barberId}
-//                         onClick={() => setSelected_attendence_stylist(item)}
-//                         className={style.filter_chip}
-//                         style={{
-//                           backgroundColor: isActive
-//                             ? "var(--bg-secondary)"
-//                             : "transparent",
-//                           color: isActive
-//                             ? "var(--btn-text-color)"
-//                             : "var(--text-primary)",
-//                         }}
-//                       >
-//                         {item.name}
-//                       </button>
-//                     );
-//                   })}
-//                 </div>
-//               </div>
-
-//               <button onClick={resetFilter} className={style.filter_apply_btn}>
-//                 Reset
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       </Modal>
 //     </div>
 //   ) : (
 //     <div className={style.report_section}>
@@ -621,18 +496,18 @@
 //             );
 //           })}
 
-// <Calendar
-//   numberOfMonths={1}
-//   value={selectedDates}
-//   onChange={handleDateChange}
-//   range
-//   placeholder="dd/mm/yyyy - dd/mm/yyyy"
-//   dateSeparator=" - "
-//   calendarPosition="bottom-right"
-//   format="DD/MM/YYYY"
-//   className="dark-theme"
-//   maxDate={new Date()}
-// />
+//           <Calendar
+//             numberOfMonths={1}
+//             value={selectedDates}
+//             onChange={handleDateChange}
+//             range
+//             placeholder="dd/mm/yyyy - dd/mm/yyyy"
+//             dateSeparator=" - "
+//             calendarPosition="bottom-right"
+//             format="DD/MM/YYYY"
+//             className="dark-theme"
+//             maxDate={new Date()}
+//           />
 
 //           <button
 //             onClick={() => setOpenStylistDropdown((prev) => !prev)}
@@ -1607,7 +1482,275 @@ const ReportChart = () => {
     }
   };
 
-  return (
+  return selectedReportChartType?.reportType === "stylistattendence" ? (
+    <div className={style.stylist_attendence_section}>
+      <div className={style.stylist_attendence_header}>
+        <div className={style.stylist_attendence_header_left}>
+          <div>
+            <button
+              className={style.back_button}
+              onClick={() => navigate("/admin-reports")}
+            >
+              <LeftArrow color="var(--text-primary)" />
+            </button>
+            <h2>{selectedReportChartType?.headerTitle}</h2>
+          </div>
+        </div>
+
+        <div>
+          <button
+            onClick={() => setOpenFilterPopup((prev) => !prev)}
+            className={style.stylist_attendence_filter_btn}
+          >
+            <FilterIcon />
+            <span>Filter</span>
+          </button>
+
+          {openFilterPopup && (
+            <ClickAwayListener onClickAway={() => setOpenFilterPopup(false)}>
+              <div className={style.stylist_attendence_filter_popup}>
+                <div className={style.stylist_attendence_filter_popup_header}>
+                  <p>Select Filter</p>
+                  <button
+                    onClick={() => setOpenFilterPopup(false)}
+                    className={style.stylist_attendence_filterpopup_close_btn}
+                  >
+                    <CloseIcon />
+                  </button>
+                </div>
+
+                <div className={style.stylist_attendence_filter_popup_body}>
+                  <div className={style.stylist_attendence_filter_section}>
+                    <p>Date Range</p>
+                    <Calendar
+                      numberOfMonths={1}
+                      value={selectedDates}
+                      onChange={handleDateChange}
+                      range
+                      placeholder="dd/mm/yyyy - dd/mm/yyyy"
+                      dateSeparator=" - "
+                      calendarPosition="bottom-left"
+                      format="DD/MM/YYYY"
+                      className="dark-theme"
+                      maxDate={new Date()}
+                    />
+                  </div>
+
+                  <div className={style.stylist_attendence_filter_section}>
+                    <p>Select Stylist</p>
+                    <div className={style.stylist_attendence_filter_chip_group}>
+                      {stylistBarberList?.map((item) => {
+                        const isActive =
+                          selected_attendence_stylist?.barberId ===
+                          item.barberId;
+
+                        return (
+                          <button
+                            key={item.barberId}
+                            onClick={() => setSelected_attendence_stylist(item)}
+                            className={style.stylist_attendence_filter_chip}
+                            style={{
+                              backgroundColor: isActive
+                                ? "var(--bg-secondary)"
+                                : "transparent",
+                              color: isActive
+                                ? "var(--btn-text-color)"
+                                : "var(--text-primary)",
+                            }}
+                          >
+                            {item.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={resetFilter}
+                    className={style.stylist_attendence_filter_apply_btn}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </ClickAwayListener>
+          )}
+        </div>
+      </div>
+
+      <div className={style.stylist_attendence_mobile_header}>
+        <div>
+          <div>
+            <button
+              className={style.back_button}
+              onClick={() => navigate("/admin-reports")}
+            >
+              <LeftArrow color="var(--text-primary)" />
+            </button>
+            <h2>{selectedReportChartType?.headerTitle}</h2>
+          </div>
+
+          <button
+            onClick={() => setOpenFilter((prev) => !prev)}
+            className={style.stylist_attendence_filter_btn}
+          >
+            <FilterIcon />
+            <span>Filter</span>
+          </button>
+        </div>
+      </div>
+
+      {selected_attendence_stylist && (
+        <div className={style.stylist_attendence_profile_header}>
+          <img
+            src={selected_attendence_stylist?.profile?.[0]?.url}
+            alt=""
+            style={{ border: `0.1rem solid var(--border-secondary)` }}
+          />
+          <div>
+            <h2>{selected_attendence_stylist?.name}</h2>
+            <p>
+              <EmailIcon />
+              {selected_attendence_stylist?.email}
+            </p>
+            <p>
+              <ContactTel />+{selected_attendence_stylist?.mobileCountryCode}{" "}
+              {selected_attendence_stylist?.mobileNumber}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {!selected_attendence_stylist?.barberId ? (
+        <div className={style.stylist_attendence_container_error}>
+          <p>Select a barber to view their attendance records.</p>
+        </div>
+      ) : barber_attendence_list_loading ? (
+        <div className={style.stylist_attendence_container_loading}>
+          {Array.from({ length: 12 }).map((_, index) => (
+            <div key={index} className={style.stylist_attendence_skeleton_item}>
+              <Skeleton
+                width="100%"
+                height="15rem"
+                baseColor="var(--loader-bg-color)"
+                highlightColor="var(--loader-highlight-color)"
+              />
+            </div>
+          ))}
+        </div>
+      ) : barber_attendence_list?.length > 0 ? (
+        <div className={style.stylist_attendence_container}>
+          {barber_attendence_list.map((item) => (
+            <div key={item?._id} className={style.stylist_attendence_card}>
+              {/* Date Row */}
+              <div className={style.stylist_attendence_date}>
+                <p>{item.date}</p>
+
+                <span
+                  className={style.stylist_attendence_day}
+                  style={{
+                    backgroundColor: "var(--bg-secondary)",
+                    color: "var(--btn-text-color)",
+                  }}
+                >
+                  {item.day}
+                </span>
+              </div>
+
+              {/* Divider */}
+              <div className={style.stylist_attendence_divider} />
+
+              {/* Time Row */}
+              <div className={style.stylist_attendence_time}>
+                <div className={style.stylist_attendence_time_block}>
+                  <p>Time in</p>
+                  <p>{item.signInTime || "-"}</p>
+                </div>
+
+                <div className={style.stylist_attendence_time_block}>
+                  <p>Time out</p>
+                  <p>{item.signOutTime || "-"}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className={style.stylist_attendence_container_error}>
+          <p>No attendance available for {selected_attendence_stylist?.name}</p>
+        </div>
+      )}
+
+      {/* FILTER MODAL */}
+      <Modal open={openFilter} onClose={() => setOpenFilter(false)}>
+        <div className={style.stylist_attendence_modal_common_container}>
+          <div className={style.stylist_attendence_filter_popup}>
+            <div className={style.stylist_attendence_filter_popup_header}>
+              <p>Select Filter</p>
+              <button
+                onClick={() => setOpenFilter(false)}
+                className={style.stylist_attendence_filterpopup_close_btn}
+              >
+                <CloseIcon />
+              </button>
+            </div>
+
+            <div className={style.stylist_attendence_filter_popup_body}>
+              <div className={style.stylist_attendence_filter_section}>
+                <p>Date Range</p>
+                <Calendar
+                  numberOfMonths={1}
+                  value={selectedDates}
+                  onChange={handleDateChange}
+                  range
+                  placeholder="dd/mm/yyyy - dd/mm/yyyy"
+                  dateSeparator=" - "
+                  calendarPosition="bottom-left"
+                  format="DD/MM/YYYY"
+                  className="dark-theme"
+                />
+              </div>
+
+              <div className={style.stylist_attendence_filter_section}>
+                <p>Select Stylist</p>
+                <div className={style.stylist_attendence_filter_chip_group}>
+                  {stylistBarberList?.map((item) => {
+                    const isActive =
+                      selected_attendence_stylist?.barberId === item.barberId;
+
+                    return (
+                      <button
+                        key={item.barberId}
+                        onClick={() => setSelected_attendence_stylist(item)}
+                        className={style.stylist_attendence_filter_chip}
+                        style={{
+                          backgroundColor: isActive
+                            ? "var(--bg-secondary)"
+                            : "transparent",
+                          color: isActive
+                            ? "var(--btn-text-color)"
+                            : "var(--text-primary)",
+                        }}
+                      >
+                        {item.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <button
+                onClick={resetFilter}
+                className={style.stylist_attendence_filter_apply_btn}
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
+    </div>
+  ) : (
     <div className={style.report_body}>
       <div className={style.report_header}>
         <div className={style.header_left}>
