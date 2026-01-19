@@ -48,7 +48,7 @@
   gap: 1rem;
 }
 
-.reset_button{
+.reset_button {
   height: 3.5rem;
   width: 3.5rem;
   border: 0.1rem solid var(--border-secondary);
@@ -496,3 +496,347 @@
     height: 25rem;
   }
 }
+
+/* Stylish attendence css */
+
+.stylist_attendence_section {
+  padding: 2rem;
+  height: calc(100svh - 6rem);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  overflow: hidden;
+  color: var(--text-primary);
+}
+
+/* ================= HEADER ================= */
+
+.stylist_attendence_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.6rem;
+}
+
+.stylist_attendence_header > div:first-child > div {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.stylist_attendence_header h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.common_stylist_button {
+  background: var(--bg-primary);
+  border: 0.1rem solid var(--border-secondary);
+  color: var(--text-primary);
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 1.2rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.stylist_attendence_reset_button {
+  height: 3.5rem;
+  width: 3.5rem;
+  border: 0.1rem solid var(--border-secondary);
+  background-color: var(--bg-primary);
+  border-radius: 0.6rem;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.stylist_attendence_header > div:last-child {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ================= RESET BUTTON ================= */
+
+.stylist_attendence_reset_button {
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 1rem;
+  border: 0.1rem solid var(--border-secondary);
+  background: var(--bg-primary);
+  cursor: pointer;
+}
+
+/* ================= STYLIST INFO ================= */
+
+.stylist_attendence_profile {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  padding: 1.8rem;
+  background: var(--bg-primary);
+  border-radius: 2rem;
+  border: 0.1rem solid var(--border-secondary);
+}
+
+.stylist_attendence_profile img {
+  width: 6.4rem;
+  height: 6.4rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.stylist_attendence_profile h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.stylist_attendence_profile p {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  margin-top: 0.3rem;
+}
+
+/* ================= EMPTY / ERROR ================= */
+
+.stylist_attendence_empty {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  background: var(--section-bg-color);
+  border-radius: 2.2rem;
+  border: 0.1rem dashed var(--border-secondary);
+}
+
+.stylist_attendence_empty p {
+  font-size: 1.4rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* ================= LOADING ================= */
+
+.stylist_attendence_loading {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(26rem, 1fr));
+  gap: 1.6rem;
+}
+
+.stylist_attendence_skeleton {
+  border-radius: 1.6rem;
+  overflow: hidden;
+}
+
+/* ================= ATTENDENCE GRID ================= */
+
+.stylist_attendence_list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
+  gap: 1.6rem;
+  overflow-y: auto;
+  padding-right: 0.4rem;
+}
+
+/* ================= PROFESSIONAL CARD ================= */
+
+.stylist_attendence_card {
+  background: var(--bg-primary);
+  border: 0.1rem solid var(--border-secondary);
+  border-radius: 1.8rem;
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.stylist_attendence_card:hover {
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.06);
+}
+
+/* ---------- Date Row ---------- */
+
+.stylist_attendence_date {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stylist_attendence_date p {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.stylist_attendence_day {
+  padding: 0.4rem 1.2rem;
+  border-radius: 1.2rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+/* ---------- Divider ---------- */
+
+.stylist_attendence_divider {
+  height: 0.1rem;
+  background: var(--border-secondary);
+  opacity: 0.6;
+}
+
+/* ---------- Time Row ---------- */
+
+.stylist_attendence_time {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+
+.stylist_attendence_time_block {
+  background: var(--section-bg-color);
+  border-radius: 1.2rem;
+  padding: 1.2rem;
+}
+
+.stylist_attendence_time_block p:first-child {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.stylist_attendence_time_block p:last-child {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-top: 0.4rem;
+}
+
+/* ================= FILTER MODAL ================= */
+
+.stylist_attendence_modal_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.stylist_attendence_filter_popup {
+  width: 34rem;
+  background: var(--bg-primary);
+  border-radius: 2rem;
+  border: 0.1rem solid var(--border-secondary);
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.2);
+}
+
+.stylist_attendence_filter_header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.6rem;
+  border-bottom: 0.1rem solid var(--border-secondary);
+}
+
+.stylist_attendence_filter_body {
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.stylist_attendence_filter_apply {
+  padding: 1rem;
+  border-radius: 1rem;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--btn-text-color);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (min-width: 90rem) {
+  .stylist_attendence_section {
+    padding: 2.4rem 3.2rem;
+  }
+
+  .stylist_attendence_list {
+    grid-template-columns: repeat(auto-fill, minmax(32rem, 1fr));
+  }
+
+  .stylist_attendence_card {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 75rem) {
+  .stylist_attendence_list {
+    grid-template-columns: repeat(auto-fill, minmax(26rem, 1fr));
+  }
+
+  .stylist_attendence_profile {
+    padding: 1.4rem;
+  }
+}
+
+@media (max-width: 64rem) {
+  .stylist_attendence_header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.2rem;
+  }
+
+  .stylist_attendence_list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stylist_attendence_empty {
+    min-height: 50vh;
+  }
+}
+
+@media (max-width: 48rem) {
+  .stylist_attendence_section {
+    padding: 1.4rem;
+    height: auto;
+  }
+
+  .stylist_attendence_list {
+    grid-template-columns: 1fr;
+  }
+
+  .stylist_attendence_card {
+    border-radius: 1.4rem;
+  }
+
+  .stylist_attendence_profile {
+    gap: 1.2rem;
+  }
+
+  .stylist_attendence_header h2 {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 30rem) {
+  .stylist_attendence_profile img {
+    width: 5.2rem;
+    height: 5.2rem;
+  }
+
+  .stylist_attendence_profile h2 {
+    font-size: 1.4rem;
+  }
+
+  .stylist_attendence_profile p {
+    font-size: 1.15rem;
+  }
+
+  .stylist_attendence_time_block p:last-child {
+    font-size: 1.3rem;
+  }
+
+  .stylist_attendence_day {
+    font-size: 1.1rem;
+    padding: 0.3rem 0.8rem;
+  }
+}
+

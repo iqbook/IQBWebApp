@@ -1297,7 +1297,133 @@ const ReportChart = () => {
     }
   };
 
-  return (
+  return selectedReportChartType?.reportType === "stylistattendence" ? (
+    <div className={style.stylist_attendence_section}>
+      {/* ================= HEADER ================= */}
+      <div className={style.stylist_attendence_header}>
+        <div>
+          <div>
+            <button
+              className={style.common_stylist_button}
+              onClick={() => navigate("/barber-reports")}
+            >
+              <LeftArrow color="var(--text-primary)" />
+            </button>
+            <h2>Reports</h2>
+          </div>
+        </div>
+
+        <div>
+          <Calendar
+            numberOfMonths={1}
+            value={selectedDates}
+            onChange={handleDateChange}
+            range
+            placeholder="dd/mm/yyyy - dd/mm/yyyy"
+            dateSeparator=" - "
+            calendarPosition="bottom-right"
+            format="DD/MM/YYYY"
+            className="dark-theme"
+          />
+
+          <button
+            className={style.stylist_attendence_reset_button}
+            onClick={resetFilter}
+          >
+            <ResetIcon />
+          </button>
+        </div>
+      </div>
+
+      {/* ================= STYLIST INFO ================= */}
+      {selected_attendence_stylist && (
+        <div className={style.stylist_attendence_profile}>
+          <img
+            src={selected_attendence_stylist?.profile?.[0]?.url}
+            alt={selected_attendence_stylist?.name}
+          />
+
+          <div>
+            <h2>{selected_attendence_stylist?.name}</h2>
+
+            <p>
+              <span>
+                <EmailIcon />
+              </span>
+              {selected_attendence_stylist?.email}
+            </p>
+
+            <p>
+              <span>
+                <ContactTel />
+              </span>
+              +{selected_attendence_stylist?.mobileCountryCode}{" "}
+              {selected_attendence_stylist?.mobileNumber}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ================= EMPTY / LOADING / DATA ================= */}
+      {!startDate && !endDate ? (
+        <div className={style.stylist_attendence_empty}>
+          <p>Select a time range to view your attendance records.</p>
+        </div>
+      ) : barber_attendence_list_loading ? (
+        <div className={style.stylist_attendence_loading}>
+          {Array.from({ length: 12 }).map((_, index) => (
+            <div key={index} className={style.stylist_attendence_skeleton}>
+              <Skeleton
+                width="100%"
+                height="14rem"
+                baseColor="var(--loader-bg-color)"
+                highlightColor="var(--loader-highlight-color)"
+              />
+            </div>
+          ))}
+        </div>
+      ) : barber_attendence_list?.length > 0 ? (
+        <div className={style.stylist_attendence_list}>
+          {barber_attendence_list.map((item) => (
+            <div key={item?._id} className={style.stylist_attendence_card}>
+              {/* Date Row */}
+              <div className={style.stylist_attendence_date}>
+                <p>{item.date}</p>
+                <span
+                  className={style.stylist_attendence_day}
+                  style={{
+                    backgroundColor: "var(--bg-secondary)",
+                    color: "var(--btn-text-color)",
+                  }}
+                >
+                  {item.day}
+                </span>
+              </div>
+
+              <div className={style.stylist_attendence_divider} />
+
+              {/* Time Row */}
+              <div className={style.stylist_attendence_time}>
+                <div className={style.stylist_attendence_time_block}>
+                  <p>Time in</p>
+                  <p>{item.signInTime || "-"}</p>
+                </div>
+
+                <div className={style.stylist_attendence_time_block}>
+                  <p>Time out</p>
+                  <p>{item.signOutTime || "-"}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className={style.stylist_attendence_empty}>
+          <p>No attendance available for {selected_attendence_stylist?.name}</p>
+        </div>
+      )}
+    </div>
+  ) : (
     <div className={style.report_body}>
       {/* Header */}
       <div className={style.report_header}>
