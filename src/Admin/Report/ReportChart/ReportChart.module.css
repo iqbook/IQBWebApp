@@ -755,6 +755,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
   gap: 1.2rem;
+  background-color: var(--section-bg-color);
 }
 
 /* .stylist_attendence_item {
@@ -908,6 +909,7 @@
         font-size: 1.8rem;
       }
     }
+    
   }
 
   .stylist_attendence_container {
