@@ -443,7 +443,7 @@
   }
 
   .chart_inner {
-    min-width: 120rem; /* enough space for Jan–Dec */
+    /* min-width: 120rem;  */
     height: 25rem; /* adjust mobile chart height */
   }
 
@@ -533,11 +533,17 @@
   color: var(--text-primary);
 }
 
-.stylist_attendence_header button {
+.stylist_attendence_header > div:nth-child(2) {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* .stylist_attendence_header button {
   background: transparent;
   border: none;
   cursor: pointer;
-}
+} */
 
 /* =========================
    FILTER BUTTON
@@ -632,6 +638,75 @@
   border-radius: 0.6rem;
   font-weight: 500;
   cursor: pointer;
+}
+
+/* .stylist_attendence_filter_subheader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.4rem;
+  scrollbar-width: none;
+}
+
+.stylist_attendence_subheader_chip{
+  
+} */
+
+/* Container for the chips */
+.stylist_attendence_filter_subheader {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  align-items: center;
+  overflow: auto;
+}
+
+/* Base Chip Style */
+.stylist_attendence_subheader_chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem; /* Space between dot and text */
+  padding: 0.6rem 1.4rem;
+  border-radius: 2rem; /* Fully rounded pill shape */
+  background-color: var(--bg-primary);
+  border: 0.1rem solid var(--border-secondary); /* Optional subtle border */
+  font-size: 1.4rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  white-space: nowrap;
+}
+
+/* Hover Effect for Unselected Chips */
+.stylist_attendence_subheader_chip:hover {
+  background-color: var(--section-bg-color);
+  transform: translateY(-0.1rem);
+}
+
+/* Status Dot inside the Chip */
+.stylist_attendence_subheader_chip_dot_color {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+/* Styling for the Active State */
+/* Note: Since you use inline styles for background, we use !important 
+   or ensure the JS logic handles the dot color too. */
+.stylist_attendence_subheader_chip[style*="background-color: var(--bg-secondary)"] {
+  border-color: transparent;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Change dot color when active */
+.stylist_attendence_subheader_chip[style*="background-color: var(--bg-secondary)"]
+  .stylist_attendence_subheader_chip_dot_color {
+  background-color: #4ade80; /* Success green or your brand color */
 }
 
 /* =========================
@@ -805,11 +880,16 @@
 /* =========================
    RESPONSIVE
 ========================= */
-@media (max-width: 768px) {
-  .stylist_attendence_header {
-    display: none;
-  }
 
+@media (max-width: 540px) {
+  .stylist_attendence_header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
   .stylist_attendence_mobile_header {
     display: block;
   }

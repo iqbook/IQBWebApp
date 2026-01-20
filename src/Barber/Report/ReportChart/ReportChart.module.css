@@ -443,7 +443,6 @@
   }
 
   .chart_inner {
-    min-width: 120rem; /* enough space for Jan–Dec */
     height: 25rem; /* adjust mobile chart height */
   }
 

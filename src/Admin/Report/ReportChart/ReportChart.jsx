@@ -1221,7 +1221,7 @@ const ReportChart = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.matchMedia("(max-width: 600px)").matches);
+      setIsMobile(window.matchMedia("(max-width: 768px)").matches);
     };
 
     handleResize();
@@ -1240,6 +1240,8 @@ const ReportChart = () => {
   const [copyFilterBarberList, setCopyFilterBarberList] = useState([]);
 
   const [stylistBarberList, setStylistBarberList] = useState([]);
+  const [stylistBarberListLoading, setStylistBarberListLoading] =
+    useState(false);
   const [selected_attendence_stylist, setSelected_attendence_stylist] =
     useState(null);
 
@@ -1263,12 +1265,16 @@ const ReportChart = () => {
 
   const fetch_stylist_barberlist = async () => {
     try {
+      setStylistBarberListLoading(true);
       const { data } = await api.post(
         `api/barber/getAllBarberBySalonId?salonId=${salonId}`
       );
 
       setStylistBarberList(data?.getAllBarbers);
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setStylistBarberListLoading(false);
+    }
   };
 
   const [chartDefaultValue, setChartReportValueData] = useState(null);
@@ -1484,7 +1490,7 @@ const ReportChart = () => {
 
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.stylist_attendence_section}>
-      <div className={style.stylist_attendence_header}>
+      {/* <div className={style.stylist_attendence_header}>
         <div className={style.stylist_attendence_header_left}>
           <div>
             <button
@@ -1576,9 +1582,172 @@ const ReportChart = () => {
             </ClickAwayListener>
           )}
         </div>
+      </div> */}
+
+      <div className={style.stylist_attendence_header}>
+        <div className={style.stylist_attendence_header_left}>
+          <div>
+            <button
+              className={style.back_button}
+              onClick={() => navigate("/admin-reports")}
+            >
+              <LeftArrow color="var(--text-primary)" />
+            </button>
+            <h2>{selectedReportChartType?.headerTitle}</h2>
+          </div>
+        </div>
+
+        <div>
+          <Calendar
+            numberOfMonths={1}
+            value={selectedDates}
+            onChange={handleDateChange}
+            range
+            placeholder="dd/mm/yyyy - dd/mm/yyyy"
+            dateSeparator=" - "
+            calendarPosition="bottom-left"
+            format="DD/MM/YYYY"
+            className="dark-theme"
+            maxDate={new Date()}
+          />
+          <button className={style.reset_button} onClick={resetFilter}>
+            <ResetIcon />
+          </button>
+          {/* <button
+            onClick={() => setOpenFilterPopup((prev) => !prev)}
+            className={style.stylist_attendence_filter_btn}
+          >
+            <FilterIcon />
+            <span>Filter</span>
+          </button> */}
+
+          {/* {openFilterPopup && (
+            <ClickAwayListener onClickAway={() => setOpenFilterPopup(false)}>
+              <div className={style.stylist_attendence_filter_popup}>
+                <div className={style.stylist_attendence_filter_popup_header}>
+                  <p>Select Filter</p>
+                  <button
+                    onClick={() => setOpenFilterPopup(false)}
+                    className={style.stylist_attendence_filterpopup_close_btn}
+                  >
+                    <CloseIcon />
+                  </button>
+                </div>
+
+                <div className={style.stylist_attendence_filter_popup_body}>
+                  <div className={style.stylist_attendence_filter_section}>
+                    <p>Date Range</p>
+                    <Calendar
+                      numberOfMonths={1}
+                      value={selectedDates}
+                      onChange={handleDateChange}
+                      range
+                      placeholder="dd/mm/yyyy - dd/mm/yyyy"
+                      dateSeparator=" - "
+                      calendarPosition="bottom-left"
+                      format="DD/MM/YYYY"
+                      className="dark-theme"
+                      maxDate={new Date()}
+                    />
+                  </div>
+
+                  <div className={style.stylist_attendence_filter_section}>
+                    <p>Select Stylist</p>
+                    <div className={style.stylist_attendence_filter_chip_group}>
+                      {stylistBarberList?.map((item) => {
+                        const isActive =
+                          selected_attendence_stylist?.barberId ===
+                          item.barberId;
+
+                        return (
+                          <button
+                            key={item.barberId}
+                            onClick={() => setSelected_attendence_stylist(item)}
+                            className={style.stylist_attendence_filter_chip}
+                            style={{
+                              backgroundColor: isActive
+                                ? "var(--bg-secondary)"
+                                : "transparent",
+                              color: isActive
+                                ? "var(--btn-text-color)"
+                                : "var(--text-primary)",
+                            }}
+                          >
+                            {item.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={resetFilter}
+                    className={style.stylist_attendence_filter_apply_btn}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </ClickAwayListener>
+          )} */}
+        </div>
       </div>
 
-      <div className={style.stylist_attendence_mobile_header}>
+      <div className={style.stylist_attendence_filter_subheader}>
+        {stylistBarberListLoading ? (
+          // Match the length to a reasonable number of chips
+          Array.from({ length: 8 }).map((_, index) => (
+            <div key={index} className={style.stylist_attendence_skeleton_chip}>
+              <Skeleton
+                width="80px" // Approximate width of a chip
+                height="32px" // Matches the vertical padding + font-size of your button
+                borderRadius="20px"
+                baseColor="var(--loader-bg-color)"
+                highlightColor="var(--loader-highlight-color)"
+              />
+            </div>
+          ))
+        ) : stylistBarberList?.length > 0 ? ( // Added the missing colon here
+          stylistBarberList?.map((item) => {
+            const isActive =
+              selected_attendence_stylist?.barberId === item.barberId;
+
+            return (
+              <button
+                key={item.barberId}
+                onClick={() => setSelected_attendence_stylist(item)}
+                className={style.stylist_attendence_subheader_chip}
+                style={{
+                  color: isActive
+                    ? "var(--text-primary)"
+                    : "var(--text-secondary)",
+                  fontWeight: isActive ? "600" : "500",
+                  backgroundColor: isActive
+                    ? "var(--bg-primary)"
+                    : "var(--section-bg-color)",
+                  border: isActive
+                    ? "0.1rem solid var(--border-secondary)"
+                    : "0.1rem solid transparent",
+                }}
+              >
+                <div
+                  className={style.stylist_attendence_subheader_chip_dot_color}
+                  style={{
+                    backgroundColor: isActive
+                      ? "#4ade80"
+                      : "var(--text-secondary)",
+                  }}
+                />
+                {item.name}
+              </button>
+            );
+          })
+        ) : (
+          <p className={style.no_data_text}>No stylist available</p>
+        )}
+      </div>
+
+      {/* <div className={style.stylist_attendence_mobile_header}>
         <div>
           <div>
             <button
@@ -1598,7 +1767,7 @@ const ReportChart = () => {
             <span>Filter</span>
           </button>
         </div>
-      </div>
+      </div> */}
 
       {selected_attendence_stylist && (
         <div className={style.stylist_attendence_profile_header}>
@@ -1806,7 +1975,20 @@ const ReportChart = () => {
           </div>
 
           <div className={style.chart_scroll_wrapper}>
-            <div className={style.chart_inner}>
+            <div
+              className={style.chart_inner}
+              style={{
+                // background: "red",
+                minWidth:
+                  isMobile && selectedReportType === "daily"
+                    ? "60rem"
+                    : isMobile && selectedReportType === "weekly"
+                    ? "45rem"
+                    : isMobile && selectedReportType === "monthly"
+                    ? "100rem"
+                    : "100%",
+              }}
+            >
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
                   data={chartData}
