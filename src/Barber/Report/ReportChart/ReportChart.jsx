@@ -1494,7 +1494,7 @@ const ReportChart = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
                   data={chartData}
-                  margin={{ top: 20, right: 20, left: 0, bottom: 0 }}
+                  margin={{ top: 20, right: 30, left: -10, bottom: 0 }}
                 >
                   <CartesianGrid
                     strokeDasharray="4 4"
@@ -1502,6 +1502,8 @@ const ReportChart = () => {
                     stroke="rgba(148, 163, 184, 0.35)"
                   />
                   <XAxis
+                    interval={0} 
+                    minTickGap={0} 
                     dataKey="xaxis"
                     axisLine={false}
                     tickLine={false}
