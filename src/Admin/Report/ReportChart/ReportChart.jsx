@@ -1221,7 +1221,7 @@ const ReportChart = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.matchMedia("(max-width: 480px)").matches);
+      setIsMobile(window.matchMedia("(max-width: 768px)").matches);
     };
 
     handleResize();

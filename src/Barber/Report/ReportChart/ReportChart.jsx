@@ -1132,7 +1132,7 @@ const ReportChart = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.matchMedia("(max-width: 600px)").matches);
+      setIsMobile(window.matchMedia("(max-width: 768px)").matches);
     };
 
     handleResize();
@@ -1490,7 +1490,20 @@ const ReportChart = () => {
 
           {/* Chart */}
           <div className={style.chart_scroll_wrapper}>
-            <div className={style.chart_inner}>
+            <div
+              className={style.chart_inner}
+              style={{
+                // background: "red",
+                minWidth:
+                  isMobile && selectedReportValue === "daily"
+                    ? "60rem"
+                    : isMobile && selectedReportValue === "weekly"
+                    ? "45rem"
+                    : isMobile && selectedReportValue === "monthly"
+                    ? "100rem"
+                    : "100%",
+              }}
+            >
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
                   data={chartData}
@@ -1502,8 +1515,8 @@ const ReportChart = () => {
                     stroke="rgba(148, 163, 184, 0.35)"
                   />
                   <XAxis
-                    interval={0} 
-                    minTickGap={0} 
+                    interval={0}
+                    minTickGap={0}
                     dataKey="xaxis"
                     axisLine={false}
                     tickLine={false}
