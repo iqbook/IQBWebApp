@@ -501,6 +501,7 @@
 .stylist_attendence_section {
   padding: 2rem;
   height: calc(100svh - 6rem);
+  background-color: var(--section-bg-color);
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -839,4 +840,3 @@
     padding: 0.3rem 0.8rem;
   }
 }
-

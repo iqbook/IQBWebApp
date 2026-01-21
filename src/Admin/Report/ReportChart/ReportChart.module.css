@@ -506,6 +506,8 @@
 ========================= */
 .stylist_attendence_section {
   width: 100%;
+  background-color: var(--section-bg-color);
+  overflow: auto;
   padding: 1.6rem;
   display: flex;
   flex-direction: column;
@@ -857,7 +859,7 @@
 .stylist_attendence_container_error {
   padding: 3rem 1rem;
   text-align: center;
-  min-height: 80vh;
+  min-height: 50vh;
   display: flex;
   align-items: center;
   justify-content: center;
