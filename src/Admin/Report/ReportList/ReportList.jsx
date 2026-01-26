@@ -9,8 +9,8 @@ const TABS = ["All", "Queue", "Appointment", "Staff", "Professional"];
 const REPORT_ITEMS = [
   {
     id: 1,
-    title: "Performance dashboard appt.",
-    headerTitle: "Appointment Performance",
+    title: "Performance dashboard appointment",
+    headerTitle: "Performance Dashboard Appointment",
     subTitle: "Daily total payment received by each barber.",
     tag: "Appointment",
     iconType: "bar",
@@ -18,7 +18,7 @@ const REPORT_ITEMS = [
   },
   {
     id: 2,
-    title: "Working Hours Dashboard",
+    title: "Working hours dashboard",
     headerTitle: "Working Hours",
     subTitle: "Amount of busy time per day (service time)",
     tag: "Professional",
@@ -83,8 +83,8 @@ const REPORT_ITEMS = [
   },
   {
     id: 9,
-    title: "Performance dashboard Queue",
-    headerTitle: "Queue Performance",
+    title: "Performance dashboard queue",
+    headerTitle: "Performance Dashboard Queue",
     subTitle: "Daily total payment received by each barber.",
     tag: "Queue",
     iconType: "bar",

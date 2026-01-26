@@ -81,6 +81,8 @@ const Sidebar = () => {
     (state) => state.BarberLoggedInMiddleware?.entiredata?.user[0]
   );
 
+  console.log(barberProfile)
+
   return (
     <main className={`${style.main_container}`}>
       <aside

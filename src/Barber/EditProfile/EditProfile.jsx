@@ -510,6 +510,8 @@ const EditProfile = () => {
         response: getAllSalonServicesBarberData
     } = getAllSalonServicesBarber
 
+    // console.log(getAllSalonServicesBarberData)
+
     useEffect(() => {
         if (getAllSalonServicesBarberData) {
             setAllSalonServices(getAllSalonServicesBarberData?.response?.services)

@@ -1508,6 +1508,12 @@ const ReportChart = () => {
 
   const [currentReportType, setCurrentReportType] = useState("Bar");
 
+  const adminGetDefaultSalon = useSelector(
+    (state) => state.adminGetDefaultSalon,
+  );
+
+  const { response: adminGetDefaultSalonResponse } = adminGetDefaultSalon;
+
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.stylist_attendence_section}>
       {/* <div className={style.stylist_attendence_header}>
@@ -2050,7 +2056,12 @@ const ReportChart = () => {
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart
                     data={chartData}
-                    margin={{ top: 20, right: 20, left: -10, bottom: 0 }}
+                    margin={{
+                      top: 20,
+                      right: 20,
+                      // left: -10,
+                      bottom: 0,
+                    }}
                   >
                     <CartesianGrid
                       strokeDasharray="4 4"
@@ -2068,14 +2079,32 @@ const ReportChart = () => {
                       }}
                       padding={{ left: 12, right: 32 }}
                     />
-                    <YAxis
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{
-                        fill: "var(--text-secondary)",
-                        fontSize: "1.2rem",
-                      }}
-                    />
+
+                    {selectedReportChartType?.headerTitle ===
+                      "Performance Dashboard Appointment" ||
+                    selectedReportChartType?.headerTitle ===
+                      "Performance Dashboard Queue" ? (
+                      <YAxis
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{
+                          fill: "var(--text-secondary)",
+                          fontSize: "1.2rem",
+                        }}
+                        tickFormatter={(value) =>
+                          `${adminGetDefaultSalonResponse?.currency}${value}`
+                        }
+                      />
+                    ) : (
+                      <YAxis
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{
+                          fill: "var(--text-secondary)",
+                          fontSize: "1.2rem",
+                        }}
+                      />
+                    )}
 
                     <Tooltip
                       wrapperStyle={{ pointerEvents: "auto" }}
@@ -2112,7 +2141,7 @@ const ReportChart = () => {
                     margin={{
                       top: 20,
                       right: 20,
-                      left: -10,
+                      // left: -10,
                       bottom: 0,
                     }}
                   >
@@ -2134,14 +2163,31 @@ const ReportChart = () => {
                       padding={{ left: 0, right: 0 }}
                     />
 
-                    <YAxis
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{
-                        fill: "var(--text-secondary)",
-                        fontSize: "1.2rem",
-                      }}
-                    />
+                    {selectedReportChartType?.headerTitle ===
+                      "Performance Dashboard Appointment" ||
+                    selectedReportChartType?.headerTitle ===
+                      "Performance Dashboard Queue" ? (
+                      <YAxis
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{
+                          fill: "var(--text-secondary)",
+                          fontSize: "1.2rem",
+                        }}
+                        tickFormatter={(value) =>
+                          `${adminGetDefaultSalonResponse?.currency}${value}`
+                        }
+                      />
+                    ) : (
+                      <YAxis
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{
+                          fill: "var(--text-secondary)",
+                          fontSize: "1.2rem",
+                        }}
+                      />
+                    )}
 
                     <Tooltip
                       wrapperStyle={{ pointerEvents: "auto" }}
