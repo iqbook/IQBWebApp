@@ -1506,7 +1506,7 @@ const ReportChart = () => {
     }
   };
 
-  const [currentReportType, setCurrentReportType] = useState("Line");
+  const [currentReportType, setCurrentReportType] = useState("Bar");
 
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.stylist_attendence_section}>

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { BarIcon } from "../../../icons";
 import { CustomerIcon } from "../../../newicons";
 
-const TABS = ["All Reports", "Queue", "Appointment", "Staff", "Professional"];
+const TABS = ["All", "Queue", "Appointment", "Staff", "Professional"];
 
 const REPORT_ITEMS = [
   {
@@ -114,10 +114,10 @@ const renderIcon = (type) => {
 
 const ReportList = () => {
   const navigate = useNavigate();
-  const [selectedTab, setSelectedTab] = useState("All Reports");
+  const [selectedTab, setSelectedTab] = useState("All");
 
   const filteredReports = useMemo(() => {
-    if (selectedTab === "All Reports") return REPORT_ITEMS;
+    if (selectedTab === "All") return REPORT_ITEMS;
     return REPORT_ITEMS.filter((item) => item.tag === selectedTab);
   }, [selectedTab]);
 
