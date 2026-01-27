@@ -1094,6 +1094,10 @@ const ReportChart = () => {
     location?.state?.reportTypeItem,
   );
 
+  const barberProfile = useSelector(
+    (state) => state.BarberLoggedInMiddleware?.entiredata?.user[0],
+  );
+
   const navigate = useNavigate();
 
   const salonId = useSelector(
@@ -1175,6 +1179,7 @@ const ReportChart = () => {
 
   const [chartData, setChartData] = useState([]);
   const [chartBarberListData, setChartBarberListData] = useState([]);
+  const [chartRangeType, setChartRangeType] = useState(null);
 
   const [chartDefaultValue, setChartReportValueData] = useState(null);
 
@@ -1196,6 +1201,7 @@ const ReportChart = () => {
 
       setChartData(data?.response?.data);
       setChartBarberListData(data?.response?.barbers);
+      setChartRangeType(data?.rangetype);
 
       // setChartReportValueData(data?.dateRange);
     } catch (error) {}
@@ -1553,11 +1559,17 @@ const ReportChart = () => {
               style={{
                 // background: "red",
                 minWidth:
-                  isMobile && selectedReportValue === "daily"
-                    ? "60rem"
-                    : isMobile && selectedReportValue === "weekly"
-                      ? "45rem"
-                      : isMobile && selectedReportValue === "monthly"
+                  isMobile &&
+                  (selectedReportValue === "daily" ||
+                    chartRangeType === "rangedaily")
+                    ? "68rem"
+                    : isMobile &&
+                        (selectedReportValue === "weekly" ||
+                          chartRangeType === "rangeweekly")
+                      ? "48rem"
+                      : isMobile &&
+                          (selectedReportValue === "monthly" ||
+                            chartRangeType === "rangemonthly")
                         ? "100rem"
                         : "100%",
               }}
@@ -1600,7 +1612,9 @@ const ReportChart = () => {
                           fill: "var(--text-secondary)",
                           fontSize: "1.2rem",
                         }}
-                        tickFormatter={(value) => `$${value}`}
+                        tickFormatter={(value) =>
+                          `${barberProfile?.currency}${value}`
+                        }
                       />
                     ) : (
                       <YAxis
@@ -1684,7 +1698,9 @@ const ReportChart = () => {
                           fill: "var(--text-secondary)",
                           fontSize: "1.2rem",
                         }}
-                        tickFormatter={(value) => `$${value}`}
+                        tickFormatter={(value) =>
+                          `${barberProfile?.currency}${value}`
+                        }
                       />
                     ) : (
                       <YAxis

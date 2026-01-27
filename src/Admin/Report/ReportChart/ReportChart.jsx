@@ -1287,6 +1287,7 @@ const ReportChart = () => {
 
   const [chartData, setChartData] = useState([]);
   const [chartBarberListData, setChartBarberListData] = useState([]);
+  const [chartRangeType, setChartRangeType] = useState(null);
 
   const view_report = async () => {
     try {
@@ -1306,6 +1307,7 @@ const ReportChart = () => {
 
       setChartData(data?.response?.data);
       setChartBarberListData(data?.response?.barbers);
+      setChartRangeType(data?.rangetype);
 
       // setChartData(data?.response);
       // setChartReportValueData(data?.dateRange);
@@ -1353,6 +1355,7 @@ const ReportChart = () => {
 
   const resetFilter = () => {
     setSelectedReportType("daily");
+    setChartRangeType(null);
     setSelectedReportBarber(
       copyFilterBarberList?.map((item) => {
         return {
@@ -2043,11 +2046,17 @@ const ReportChart = () => {
               className={style.chart_inner}
               style={{
                 minWidth:
-                  isMobile && selectedReportType === "daily"
-                    ? "60rem"
-                    : isMobile && selectedReportType === "weekly"
-                      ? "45rem"
-                      : isMobile && selectedReportType === "monthly"
+                  isMobile &&
+                  (selectedReportType === "daily" ||
+                    chartRangeType === "rangedaily")
+                    ? "68rem"
+                    : isMobile &&
+                        (selectedReportType === "weekly" ||
+                          chartRangeType === "rangeweekly")
+                      ? "48rem"
+                      : isMobile &&
+                          (selectedReportType === "monthly" ||
+                            chartRangeType === "rangemonthly")
                         ? "100rem"
                         : "100%",
               }}
