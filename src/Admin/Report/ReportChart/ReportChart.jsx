@@ -1140,8 +1140,11 @@ import React, { useEffect, useState } from "react";
 import style from "./ReportChart.module.css";
 import { BarIcon, LeftArrow } from "../../../icons";
 import {
+  Bar,
+  BarChart,
   CartesianGrid,
   Label,
+  LabelList,
   Line,
   LineChart,
   ResponsiveContainer,
@@ -1159,6 +1162,8 @@ import {
   PieChartIcon,
   RightIcon,
   ResetIcon,
+  LineIcon,
+  BarberIcon,
 } from "../../../newicons";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Calendar from "react-multi-date-picker";
@@ -1173,13 +1178,13 @@ const ReportChart = () => {
   const location = useLocation();
 
   const [selectedReportChartType, setSelectedReportChartType] = useState(
-    location?.state?.reportTypeItem
+    location?.state?.reportTypeItem,
   );
 
   const navigate = useNavigate();
 
   const salonId = useSelector(
-    (state) => state.AdminLoggedInMiddleware.adminSalonId
+    (state) => state.AdminLoggedInMiddleware.adminSalonId,
   );
 
   const reportUIArr = [
@@ -1202,11 +1207,11 @@ const ReportChart = () => {
 
   const [startDate, setStartDate] = useState(
     // moment().subtract(31, "day").format("DD-MM-YYYY")
-    null
+    null,
   );
   const [endDate, setEndDate] = useState(
     // moment().subtract(1, "day").format("DD-MM-YYYY")
-    null
+    null,
   );
 
   const handleDateChange = (dates) => {
@@ -1267,7 +1272,7 @@ const ReportChart = () => {
     try {
       setStylistBarberListLoading(true);
       const { data } = await api.post(
-        `api/barber/getAllBarberBySalonId?salonId=${salonId}`
+        `api/barber/getAllBarberBySalonId?salonId=${salonId}`,
       );
 
       setStylistBarberList(data?.getAllBarbers);
@@ -1282,6 +1287,7 @@ const ReportChart = () => {
 
   const [chartData, setChartData] = useState([]);
   const [chartBarberListData, setChartBarberListData] = useState([]);
+  const [chartRangeType, setChartRangeType] = useState(null);
 
   const view_report = async () => {
     try {
@@ -1296,11 +1302,12 @@ const ReportChart = () => {
 
       const { data } = await api.post(
         `/api/reports/getSalonLineGraphReport`,
-        reportData
+        reportData,
       );
 
       setChartData(data?.response?.data);
       setChartBarberListData(data?.response?.barbers);
+      setChartRangeType(data?.rangetype);
 
       // setChartData(data?.response);
       // setChartReportValueData(data?.dateRange);
@@ -1311,7 +1318,7 @@ const ReportChart = () => {
             return {
               barberId: Number(item.key),
             };
-          })
+          }),
         );
         // setSelectedAllBarber(true);
       }
@@ -1348,12 +1355,13 @@ const ReportChart = () => {
 
   const resetFilter = () => {
     setSelectedReportType("daily");
+    setChartRangeType(null);
     setSelectedReportBarber(
       copyFilterBarberList?.map((item) => {
         return {
           barberId: Number(item.key),
         };
-      })
+      }),
     );
     setSelectedDates([]);
     setSelected_attendence_stylist(null);
@@ -1363,7 +1371,7 @@ const ReportChart = () => {
 
   const upcommingAnalyticsSelectionList =
     location?.state?.upcommingAnalytics?.filter(
-      (upc) => upc?.id !== selectedReportChartType?.id
+      (upc) => upc?.id !== selectedReportChartType?.id,
     );
 
   const [barber_attendence_list, setBarber_attendence_list] = useState([]);
@@ -1391,7 +1399,7 @@ const ReportChart = () => {
 
       const { data } = await api.post(
         `/api/admin/getAttendenceByBarberId`,
-        attendenceData
+        attendenceData,
       );
 
       setBarber_attendence_list(data?.response?.attendance);
@@ -1449,29 +1457,42 @@ const ReportChart = () => {
     });
   };
 
-  //End of logic
-
-  const CustomTooltip = ({ active, payload, label }) => {
+  const CustomTooltip = ({ active, payload, label, currentReportType }) => {
     if (!active || !payload || payload.length === 0) return null;
 
     return (
       <div className={style.tooltip}>
         <p className={style.tooltipMonth}>{label}</p>
 
-        {/* Scrollable content */}
         <div className={style.tooltipScroll}>
-          {payload.map((item) => (
-            <div key={item.dataKey} className={style.tooltipRow}>
-              <span
-                className={style.tooltipDot}
-                style={{ backgroundColor: item.stroke }}
-              />
-              <span className={style.tooltipName}>
-                {chartBarberListData.find((b) => b.key === item.dataKey)?.name}
-              </span>
-              <span className={style.tooltipValue}>{item.value}</span>
-            </div>
-          ))}
+          {payload.map((item) => {
+            const barberColor = chartBarberListData.find(
+              (b) => b.key === item.dataKey,
+            )?.color;
+
+            const dotColor =
+              currentReportType === "Line"
+                ? item.stroke || barberColor || "#000"
+                : item.fill || barberColor || "#000";
+
+            return (
+              <div key={item.dataKey} className={style.tooltipRow}>
+                <span
+                  className={style.tooltipDot}
+                  style={{
+                    backgroundColor: dotColor,
+                  }}
+                />
+                <span className={style.tooltipName}>
+                  {
+                    chartBarberListData.find((b) => b.key === item.dataKey)
+                      ?.name
+                  }
+                </span>
+                <span className={style.tooltipValue}>{item.value}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
     );
@@ -1487,6 +1508,14 @@ const ReportChart = () => {
         return null;
     }
   };
+
+  const [currentReportType, setCurrentReportType] = useState("Bar");
+
+  const adminGetDefaultSalon = useSelector(
+    (state) => state.adminGetDefaultSalon,
+  );
+
+  const { response: adminGetDefaultSalonResponse } = adminGetDefaultSalon;
 
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.stylist_attendence_section}>
@@ -1935,6 +1964,44 @@ const ReportChart = () => {
         </div>
 
         <div className={style.header_right}>
+          <div>
+            <button
+              className={style.reset_button}
+              style={{
+                backgroundColor:
+                  currentReportType === "Line"
+                    ? "var(--bg-secondary)"
+                    : "var(--bg-primary)",
+                color:
+                  currentReportType === "Line"
+                    ? "var(--btn-text-color)"
+                    : "var(--text-primary)",
+              }}
+              onClick={() => {
+                return setCurrentReportType("Line");
+              }}
+            >
+              <LineIcon />
+            </button>
+            <button
+              className={style.reset_button}
+              style={{
+                backgroundColor:
+                  currentReportType === "Bar"
+                    ? "var(--bg-secondary)"
+                    : "var(--bg-primary)",
+                color:
+                  currentReportType === "Bar"
+                    ? "var(--btn-text-color)"
+                    : "var(--text-primary)",
+              }}
+              onClick={() => {
+                return setCurrentReportType("Bar");
+              }}
+            >
+              <BarIcon />
+            </button>
+          </div>
           <Calendar
             numberOfMonths={1}
             value={selectedDates}
@@ -1978,74 +2045,191 @@ const ReportChart = () => {
             <div
               className={style.chart_inner}
               style={{
-                // background: "red",
                 minWidth:
-                  isMobile && selectedReportType === "daily"
-                    ? "60rem"
-                    : isMobile && selectedReportType === "weekly"
-                    ? "45rem"
-                    : isMobile && selectedReportType === "monthly"
-                    ? "100rem"
-                    : "100%",
+                  isMobile &&
+                  (selectedReportType === "daily" ||
+                    chartRangeType === "rangedaily")
+                    ? "68rem"
+                    : isMobile &&
+                        (selectedReportType === "weekly" ||
+                          chartRangeType === "rangeweekly")
+                      ? "48rem"
+                      : isMobile &&
+                          (selectedReportType === "monthly" ||
+                            chartRangeType === "rangemonthly")
+                        ? "100rem"
+                        : "100%",
               }}
             >
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                  data={chartData}
-                  margin={{ top: 20, right: 20, left: -20, bottom: 0 }}
-                >
-                  <CartesianGrid
-                    strokeDasharray="4 4"
-                    vertical={false}
-                    stroke="rgba(148, 163, 184, 0.35)"
-                  />
-                  <XAxis
-                    dataKey="xaxis"
-                    axisLine={false}
-                    tickLine={false}
-                    interval={0}
-                    tick={{ fill: "var(--text-secondary)", fontSize: "1.2rem" }}
-                    padding={{ left: 12, right: 32 }}
-                  />
-                  <YAxis
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: "var(--text-secondary)", fontSize: "1.2rem" }}
-                    // domain={["dataMin - 3", "dataMax + 3"]}
-                  />
-
-                  <Tooltip
-                    wrapperStyle={{ pointerEvents: "auto" }}
-                    content={<CustomTooltip />}
-                  />
-
-                  {chartBarberListData.map((barber) => (
-                    <Line
-                      key={barber.key}
-                      type="monotone"
-                      dataKey={barber.key}
-                      stroke={barber.color}
-                      strokeWidth={3}
-                      dot={{
-                        r: 4,
-                        fill: barber.color,
-                        stroke: "#fff",
-                        strokeWidth: 2,
-                      }}
-                      activeDot={{ r: 6 }}
+              {currentReportType === "Line" ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart
+                    data={chartData}
+                    margin={{
+                      top: 20,
+                      right: 20,
+                      // left: -10,
+                      bottom: 0,
+                    }}
+                  >
+                    <CartesianGrid
+                      strokeDasharray="4 4"
+                      vertical={false}
+                      stroke="rgba(148, 163, 184, 0.35)"
                     />
-                  ))}
-                </LineChart>
-              </ResponsiveContainer>
+                    <XAxis
+                      dataKey="xaxis"
+                      axisLine={false}
+                      tickLine={false}
+                      interval={0}
+                      tick={{
+                        fill: "var(--text-secondary)",
+                        fontSize: "1.2rem",
+                      }}
+                      padding={{ left: 12, right: 32 }}
+                    />
+
+                    {selectedReportChartType?.headerTitle ===
+                      "Performance Dashboard Appointment" ||
+                    selectedReportChartType?.headerTitle ===
+                      "Performance Dashboard Queue" ? (
+                      <YAxis
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{
+                          fill: "var(--text-secondary)",
+                          fontSize: "1.2rem",
+                        }}
+                        tickFormatter={(value) =>
+                          `${adminGetDefaultSalonResponse?.currency}${value}`
+                        }
+                      />
+                    ) : (
+                      <YAxis
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{
+                          fill: "var(--text-secondary)",
+                          fontSize: "1.2rem",
+                        }}
+                      />
+                    )}
+
+                    <Tooltip
+                      wrapperStyle={{ pointerEvents: "auto" }}
+                      content={(props) => (
+                        <CustomTooltip
+                          {...props}
+                          currentReportType={currentReportType}
+                        />
+                      )}
+                    />
+
+                    {chartBarberListData.map((barber) => (
+                      <Line
+                        key={barber.key}
+                        type="monotone"
+                        dataKey={barber.key}
+                        stroke={barber.color}
+                        strokeWidth={3}
+                        dot={{
+                          r: 4,
+                          fill: barber.color,
+                          stroke: "#fff",
+                          strokeWidth: 2,
+                        }}
+                        activeDot={{ r: 6 }}
+                      />
+                    ))}
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={chartData}
+                    margin={{
+                      top: 20,
+                      right: 20,
+                      // left: -10,
+                      bottom: 0,
+                    }}
+                  >
+                    <CartesianGrid
+                      strokeDasharray="4 4"
+                      vertical={false}
+                      stroke="rgba(148, 163, 184, 0.35)"
+                    />
+
+                    <XAxis
+                      dataKey="xaxis"
+                      axisLine={false}
+                      tickLine={false}
+                      interval={0}
+                      tick={{
+                        fill: "var(--text-secondary)",
+                        fontSize: "1.2rem",
+                      }}
+                      padding={{ left: 0, right: 0 }}
+                    />
+
+                    {selectedReportChartType?.headerTitle ===
+                      "Performance Dashboard Appointment" ||
+                    selectedReportChartType?.headerTitle ===
+                      "Performance Dashboard Queue" ? (
+                      <YAxis
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{
+                          fill: "var(--text-secondary)",
+                          fontSize: "1.2rem",
+                        }}
+                        tickFormatter={(value) =>
+                          `${adminGetDefaultSalonResponse?.currency}${value}`
+                        }
+                      />
+                    ) : (
+                      <YAxis
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{
+                          fill: "var(--text-secondary)",
+                          fontSize: "1.2rem",
+                        }}
+                      />
+                    )}
+
+                    <Tooltip
+                      wrapperStyle={{ pointerEvents: "auto" }}
+                      content={(props) => (
+                        <CustomTooltip
+                          {...props}
+                          currentReportType={currentReportType}
+                        />
+                      )}
+                      cursor={{
+                        fill: "var(--section-bg-color)",
+                      }}
+                    />
+
+                    {chartBarberListData.map((barber) => (
+                      <Bar
+                        key={barber.key}
+                        dataKey={barber.key}
+                        stackId="total"
+                        fill={barber.color}
+                      />
+                    ))}
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </div>
 
-          {/* Horizontal Stylist List */}
           <div className={style.stylist_scroll_container}>
             <div className={style.stylist_container}>
               {copyFilterBarberList.map((barber) => {
                 const isActive = selectedReportBarber.some(
-                  (b) => b.barberId === Number(barber.key)
+                  (b) => b.barberId === Number(barber.key),
                 );
 
                 return (

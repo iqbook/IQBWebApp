@@ -18,7 +18,7 @@ import { GrPowerReset, GrRadialSelected } from "react-icons/gr";
 import { CiShop } from "react-icons/ci";
 import { ImMobile2, ImWarning } from "react-icons/im";
 import { HiOutlineLocationMarker } from "react-icons/hi";
-import { VscWarning } from "react-icons/vsc";
+import { VscGraphLine, VscWarning } from "react-icons/vsc";
 
 export const DashboardIcon = FiPieChart
 export const SalonIcon = TbScissors
@@ -84,3 +84,4 @@ export const WarningIcon = VscWarning
 export const PieChartIcon = TbChartPieFilled
 export const EqualIcon = PiEquals
 export const SettingsIcon = IoIosSettings
+export const LineIcon = VscGraphLine

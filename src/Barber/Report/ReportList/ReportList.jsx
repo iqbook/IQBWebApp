@@ -4,13 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { BarIcon } from "../../../icons";
 import { CustomerIcon } from "../../../newicons";
 
-const TABS = ["All Reports", "Queue", "Appointment", "Staff", "Professional"];
+const TABS = ["All", "Queue", "Appointment", "Staff", "Professional"];
 
 const REPORT_ITEMS = [
   {
     id: 1,
-    title: "Performance dashboard appt.",
-    headerTitle: "Appointment Performance",
+    title: "Performance dashboard appointment",
+    headerTitle: "Performance Dashboard Appointment",
     subTitle: "Daily total payment received by each barber.",
     tag: "Appointment",
     iconType: "bar",
@@ -18,7 +18,7 @@ const REPORT_ITEMS = [
   },
   {
     id: 2,
-    title: "Working Hours Dashboard",
+    title: "Working hours dashboard",
     headerTitle: "Working Hours",
     subTitle: "Amount of busy time per day (service time)",
     tag: "Professional",
@@ -84,7 +84,7 @@ const REPORT_ITEMS = [
   {
     id: 9,
     title: "Performance dashboard Queue",
-    headerTitle: "Queue Performance",
+    headerTitle: "Performance Dashboard Queue",
     subTitle: "Daily total payment received by each barber.",
     tag: "Queue",
     iconType: "bar",
@@ -114,10 +114,10 @@ const renderIcon = (type) => {
 
 const ReportList = () => {
   const navigate = useNavigate();
-  const [selectedTab, setSelectedTab] = useState("All Reports");
+  const [selectedTab, setSelectedTab] = useState("All");
 
   const filteredReports = useMemo(() => {
-    if (selectedTab === "All Reports") return REPORT_ITEMS;
+    if (selectedTab === "All") return REPORT_ITEMS;
     return REPORT_ITEMS.filter((item) => item.tag === selectedTab);
   }, [selectedTab]);
 
