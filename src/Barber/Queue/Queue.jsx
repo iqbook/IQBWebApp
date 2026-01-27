@@ -15,14 +15,22 @@ import {
   getBarberQueueListAction,
 } from "../../Redux/Barber/Actions/BarberQueueAction";
 import toast from "react-hot-toast";
-import { CheckIconOutline, DropdownIcon, WarningIcon } from "../../newicons";
-import { ClickAwayListener, Modal, Pagination } from "@mui/material";
+import {
+  CheckCircleIcon,
+  CheckIconOutline,
+  CloseIcon,
+  DropdownIcon,
+  MessageIcon,
+  NotifyIcon,
+  WarningIcon,
+} from "../../newicons";
+import { ClickAwayListener, Collapse, Modal, Pagination } from "@mui/material";
 import ButtonLoader from "../../components/ButtonLoader/ButtonLoader";
 import { formatMinutesToHrMin } from "../../../utils/formatMinutesToHrMin";
 
 const Queue = () => {
   const [mobileWidth, setMobileWidth] = useState(
-    window.innerWidth <= 430 ? true : false
+    window.innerWidth <= 430 ? true : false,
   );
 
   useEffect(() => {
@@ -41,17 +49,17 @@ const Queue = () => {
   }, []);
 
   const barberProfile = useSelector(
-    (state) => state.BarberLoggedInMiddleware?.entiredata?.user[0]
+    (state) => state.BarberLoggedInMiddleware?.entiredata?.user[0],
   );
 
   const salonId = useSelector(
-    (state) => state.BarberLoggedInMiddleware.barberSalonId
+    (state) => state.BarberLoggedInMiddleware.barberSalonId,
   );
   const barberId = useSelector(
-    (state) => state.BarberLoggedInMiddleware.barberId
+    (state) => state.BarberLoggedInMiddleware.barberId,
   );
   const barberEmail = useSelector(
-    (state) => state.BarberLoggedInMiddleware.barberEmail
+    (state) => state.BarberLoggedInMiddleware.barberEmail,
   );
 
   const dispatch = useDispatch();
@@ -136,8 +144,8 @@ const Queue = () => {
         openConfirmationQueueModal.data.barberId,
         setBarberServeLoading,
         setOpenModal,
-        setOpenConfirmationQueueModal
-      )
+        setOpenConfirmationQueueModal,
+      ),
     );
   };
 
@@ -217,8 +225,8 @@ const Queue = () => {
         openConfirmationCancelQueueModal?.data.barberId,
         setBarberCancelLoading,
         setOpenModal,
-        setOpenConfirmationCancelQueueModal
-      )
+        setOpenConfirmationCancelQueueModal,
+      ),
     );
   };
 
@@ -260,14 +268,14 @@ const Queue = () => {
   const [queuelistData, setqueuelistData] = useState([]);
 
   const [mobileQueueList, setMobileQueueList] = useState([]);
-  const [mobileQueueListCopy, setMobileQueueListCopy] = useState([])
+  const [mobileQueueListCopy, setMobileQueueListCopy] = useState([]);
 
   useEffect(() => {
     if (getBarberQueueListResolve && BarberQueueList?.length > 0) {
       setqueuelistData(BarberQueueList);
       setQueuelistDataCopy(BarberQueueList);
       setMobileQueueList(BarberQueueList);
-      setMobileQueueListCopy(BarberQueueList)
+      setMobileQueueListCopy(BarberQueueList);
     }
   }, [BarberQueueList]);
 
@@ -313,7 +321,7 @@ const Queue = () => {
 
       if (query.trim() !== "") {
         filteredData = mobileQueueListCopy.filter((item) =>
-          item.customerName.toLowerCase().trim().includes(query.toLowerCase())
+          item.customerName.toLowerCase().trim().includes(query.toLowerCase()),
         );
       }
 
@@ -323,7 +331,7 @@ const Queue = () => {
 
       if (query.trim() !== "") {
         filteredData = queuelistDataCopy.filter((item) =>
-          item.customerName.toLowerCase().trim().includes(query.toLowerCase())
+          item.customerName.toLowerCase().trim().includes(query.toLowerCase()),
         );
       }
 
@@ -338,6 +346,11 @@ const Queue = () => {
 
   const [selectServeOrCancelQueueItem, setSelectedServeOrCancelQueueItem] =
     useState(null);
+
+  const [mobileQueueItemOpen, setMobileQueueItemOpen] = useState({
+    open: false,
+    item: null,
+  });
 
   return (
     <section className={`${style.section}`}>
@@ -681,29 +694,75 @@ const Queue = () => {
         </div>
       ) : getBarberQueueListResolve && BarberQueueList?.length > 0 ? (
         <div className={style.list_container_mobile}>
-          {mobileQueueList?.map((item, index) => {
+          {mobileQueueList?.map((item) => {
+            const isOpen =
+              mobileQueueItemOpen?.open &&
+              mobileQueueItemOpen?.item?._id === item?._id;
+
             return (
               <div
-                onClick={() => selectHandler(item)}
-                className={style.list_mobile_item}
                 key={item._id}
+                className={style.queuelist_item_mobile_wrapper}
               >
-                <div>
-                  <img src={item?.customerProfile?.[0]?.url} alt="" />
+                {/* MAIN LIST ITEM */}
+                <div
+                  className={style.list_mobile_item}
+                  onClick={() =>
+                    setMobileQueueItemOpen((prev) =>
+                      prev.item?._id === item?._id && prev.open
+                        ? { open: false, item: null }
+                        : { open: true, item },
+                    )
+                  }
+                >
                   <div>
-                    <p>{item.customerName}</p>
-                    <p>{item.barberName}</p>
+                    <img src={item?.customerProfile?.[0]?.url} alt="" />
+                    <div>
+                      <p>{item.customerName}</p>
+                      <p>{item.barberName}</p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p>{item.qPosition === 1 ? "Next" : item.qPosition}</p>
+                    <p>
+                      {item?.customerEWT === 0
+                        ? "-"
+                        : `Ewt : ${formatMinutesToHrMin(item?.customerEWT)}`}
+                    </p>
                   </div>
                 </div>
 
-                <div>
-                  <p>{item.qPosition === 1 ? "Next" : item.qPosition}</p>
-                  <p>
-                    {item?.customerEWT === 0
-                      ? "-"
-                      : "Ewt : " + formatMinutesToHrMin(item?.customerEWT)}
-                  </p>
-                </div>
+                {/* DROPDOWN ACTIONS */}
+                <Collapse in={isOpen} timeout="auto" unmountOnExit>
+                  <div className={style.list_queue_item_dropdown}>
+                    <button className={style.iconBtn}>
+                      <NotifyIcon aria-hidden="true" />
+                      <span>Notify</span>
+                    </button>
+
+                    <button className={style.iconBtn}>
+                      <MessageIcon aria-hidden="true" />
+                      <span>Message</span>
+                    </button>
+
+                    <button
+                      className={style.iconBtn}
+                      onClick={() => selectHandler(item)}
+                    >
+                      <CheckCircleIcon aria-hidden="true" />
+                      <span>Serve</span>
+                    </button>
+
+                    <button
+                      className={style.iconBtn}
+                      onClick={() => selectHandler(item)}
+                    >
+                      <CloseIcon aria-hidden="true" />
+                      <span>Cancel</span>
+                    </button>
+                  </div>
+                </Collapse>
               </div>
             );
           })}

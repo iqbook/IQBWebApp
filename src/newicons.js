@@ -3,10 +3,10 @@
 import { BsCalendar2X, BsGraphUp, BsInstagram, BsSunFill } from "react-icons/bs";
 import { FaChevronLeft, FaChevronRight, FaFacebookF, FaRegCalendarAlt, FaUsers, FaUsersSlash, FaWifi } from "react-icons/fa";
 import { FaChevronDown, FaChevronUp, FaFilter, FaUser } from "react-icons/fa6";
-import { FiPieChart } from "react-icons/fi";
+import { FiCheckCircle, FiPieChart } from "react-icons/fi";
 import { IoArrowDownSharp, IoArrowUpSharp, IoCheckmarkCircleOutline, IoChevronDownOutline, IoPerson, IoPersonCircleOutline, IoSearch, IoSettingsSharp } from "react-icons/io5";
 import { LuFilter, LuHistory, LuMailWarning, LuPanelLeftOpen, LuPanelRightOpen } from "react-icons/lu";
-import { MdAdd, MdCheckCircleOutline, MdLogout, MdOutlineCameraAlt, MdOutlineMailOutline, MdOutlineMessage, MdOutlinePhoneInTalk, MdOutlinePhotoCamera, MdOutlineQueue, MdOutlineSubscriptions, MdOutlineWifiOff, MdPayment } from "react-icons/md";
+import { MdAdd, MdCheckCircleOutline, MdLogout, MdOutlineCameraAlt, MdOutlineMailOutline, MdOutlineMessage, MdOutlineNotifications, MdOutlinePhoneInTalk, MdOutlinePhotoCamera, MdOutlineQueue, MdOutlineSubscriptions, MdOutlineWifiOff, MdPayment } from "react-icons/md";
 import { RiAdvertisementLine, RiMoonClearFill, RiDeleteBin6Line, RiTwitterXLine, RiMenuFill, RiComputerLine } from "react-icons/ri";
 import { TbChartPieFilled, TbCopyCheck, TbScissors, TbWorldWww } from "react-icons/tb";
 import { PiClockClockwiseBold, PiClockCounterClockwiseBold, PiDotsThreeOutlineFill, PiEquals, PiWarning } from "react-icons/pi";
@@ -85,3 +85,5 @@ export const PieChartIcon = TbChartPieFilled
 export const EqualIcon = PiEquals
 export const SettingsIcon = IoIosSettings
 export const LineIcon = VscGraphLine
+export const CheckCircleIcon = FiCheckCircle
+export const NotifyIcon = MdOutlineNotifications
