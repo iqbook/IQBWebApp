@@ -1,0 +1,183 @@
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              height: "25rem",
+              position: "relative",
+            }}
+          >
+            {/* ================= Sticky Y Axis ================= */}
+            <div
+              style={{
+                position: "sticky",
+                left: 0,
+                zIndex: 20,
+                background: "var(--section-bg-color)",
+                borderRight: "1px solid rgba(148, 163, 184, 0.2)",
+                // pointerEvents: "none",
+                display: "flex",
+                height: "25rem",
+              }}
+            >
+              <ResponsiveContainer width={80} height="100%">
+                <LineChart
+                  data={chartData}
+                  margin={{
+                    top: 20,
+                    bottom: 0,
+                    left: 10, // ✅ required
+                    right: 0,
+                  }}
+                >
+                  <YAxis
+                    width={70} // ✅ force space for ticks
+                    axisLine={false}
+                    tickLine={false}
+                    tickMargin={8} // ✅ pulls text inside
+                    tick={{
+                      fill: "#000", // TEMP hardcode to confirm visibility
+                      fontSize: 12,
+                    }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* ================= Scrollable Chart ================= */}
+            <div
+              style={{
+                flex: 1,
+                overflowX: "auto",
+                overflowY: "hidden",
+                WebkitOverflowScrolling: "touch",
+              }}
+            >
+              <div
+                style={{
+                  height: "25rem",
+                  minWidth:
+                    isMobile &&
+                    (selectedReportValue === "daily" ||
+                      chartRangeType === "rangedaily")
+                      ? "68rem"
+                      : isMobile &&
+                          (selectedReportValue === "weekly" ||
+                            chartRangeType === "rangeweekly")
+                        ? "48rem"
+                        : isMobile &&
+                            (selectedReportValue === "monthly" ||
+                              chartRangeType === "rangemonthly")
+                          ? "100rem"
+                          : "100%",
+                }}
+              >
+                <ResponsiveContainer width="100%" height="100%">
+                  {currentReportType === "Line" ? (
+                    <LineChart
+                      data={chartData}
+                      margin={{
+                        top: 20,
+                        right: 30,
+                        bottom: 0,
+                      }}
+                    >
+                      <CartesianGrid
+                        strokeDasharray="4 4"
+                        vertical={false}
+                        stroke="rgba(148, 163, 184, 0.35)"
+                      />
+
+                      <XAxis
+                        dataKey="xaxis"
+                        interval={0}
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{
+                          fill: "var(--text-secondary)",
+                          fontSize: "1.2rem",
+                        }}
+                      />
+
+                      <Tooltip
+                        wrapperStyle={{ pointerEvents: "auto" }}
+                        content={(props) => (
+                          <CustomTooltip
+                            {...props}
+                            currentReportType={currentReportType}
+                          />
+                        )}
+                        cursor={{
+                          fill: "var(--section-bg-color)",
+                        }}
+                      />
+
+                      {chartBarberListData.map((barber) => (
+                        <Line
+                          key={barber.key}
+                          type="monotone"
+                          dataKey={barber.key}
+                          stroke={barber.color}
+                          strokeWidth={3}
+                          dot={{
+                            r: 4,
+                            fill: barber.color,
+                            stroke: "#fff",
+                            strokeWidth: 2,
+                          }}
+                          activeDot={{ r: 6 }}
+                        />
+                      ))}
+                    </LineChart>
+                  ) : (
+                    <BarChart
+                      data={chartData}
+                      margin={{
+                        top: 20,
+                        right: 20,
+                        bottom: 0,
+                      }}
+                    >
+                      <CartesianGrid
+                        strokeDasharray="4 4"
+                        vertical={false}
+                        stroke="rgba(148, 163, 184, 0.35)"
+                      />
+
+                      <XAxis
+                        dataKey="xaxis"
+                        interval={0}
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{
+                          fill: "var(--text-secondary)",
+                          fontSize: "1.2rem",
+                        }}
+                      />
+
+                      <Tooltip
+                        wrapperStyle={{ pointerEvents: "auto" }}
+                        content={(props) => (
+                          <CustomTooltip
+                            {...props}
+                            currentReportType={currentReportType}
+                          />
+                        )}
+                        cursor={{
+                          fill: "var(--section-bg-color)",
+                        }}
+                      />
+
+                      {chartBarberListData.map((barber) => (
+                        <Bar
+                          key={barber.key}
+                          dataKey={barber.key}
+                          stackId="total"
+                          fill={barber.color}
+                        />
+                      ))}
+                    </BarChart>
+                  )}
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
