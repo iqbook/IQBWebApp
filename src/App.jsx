@@ -5,152 +5,153 @@ import { ErrorBoundary } from "react-error-boundary";
 import "./App.css";
 
 const Public = React.lazy(() => import("./Public/Public"));
-const AdminSignin = React.lazy(() =>
-  import("./Admin/AuthScreens/Signin/Signin")
+const AdminSignin = React.lazy(
+  () => import("./Admin/AuthScreens/Signin/Signin"),
 );
-const AdminSignup = React.lazy(() =>
-  import("./Admin/AuthScreens/Signup/Signup")
+const AdminSignup = React.lazy(
+  () => import("./Admin/AuthScreens/Signup/Signup"),
 );
-const BarberSignin = React.lazy(() =>
-  import("./Barber/AuthScreens/Signin/Signin")
+const BarberSignin = React.lazy(
+  () => import("./Barber/AuthScreens/Signin/Signin"),
 );
-const BarberSignup = React.lazy(() =>
-  import("./Barber/AuthScreens/Signup/Signup")
+const BarberSignup = React.lazy(
+  () => import("./Barber/AuthScreens/Signup/Signup"),
 );
 const AdminDashboard = React.lazy(() => import("./Admin/Dashboard/Dashboard"));
-const AdminSalonList = React.lazy(() =>
-  import("./Admin/Salon/SalonList/SalonList")
+const AdminSalonList = React.lazy(
+  () => import("./Admin/Salon/SalonList/SalonList"),
 );
-const AdminSidebar = React.lazy(() =>
-  import("./components/Admin/Sidebar/Sidebar")
+const AdminSidebar = React.lazy(
+  () => import("./components/Admin/Sidebar/Sidebar"),
 );
-const AdminBarberList = React.lazy(() =>
-  import("./Admin/Barber/BarberList/BarberList")
+const AdminBarberList = React.lazy(
+  () => import("./Admin/Barber/BarberList/BarberList"),
 );
 const AdminSalonAdv = React.lazy(() => import("./Admin/SalonAdv/SalonAdv"));
 const AdminQueue = React.lazy(() => import("./Admin/Queue/Queue"));
-const AdminForgotPassword = React.lazy(() =>
-  import("./Admin/AuthScreens/ForgotPassword/ForgotPassword")
+const AdminForgotPassword = React.lazy(
+  () => import("./Admin/AuthScreens/ForgotPassword/ForgotPassword"),
 );
-const AdminCheckEmail = React.lazy(() =>
-  import("./Admin/AuthScreens/CheckEmail/CheckEmail")
+const AdminCheckEmail = React.lazy(
+  () => import("./Admin/AuthScreens/CheckEmail/CheckEmail"),
 );
-const AdminChangePassword = React.lazy(() =>
-  import("./Admin/AuthScreens/ChangePassword/ChangePassword")
+const AdminChangePassword = React.lazy(
+  () => import("./Admin/AuthScreens/ChangePassword/ChangePassword"),
 );
-const AdminPasswordReset = React.lazy(() =>
-  import("./Admin/AuthScreens/PasswordReset/PasswordReset")
+const AdminPasswordReset = React.lazy(
+  () => import("./Admin/AuthScreens/PasswordReset/PasswordReset"),
 );
-const BarberForgotPassword = React.lazy(() =>
-  import("./Barber/AuthScreens/ForgotPassword/ForgotPassword")
+const BarberForgotPassword = React.lazy(
+  () => import("./Barber/AuthScreens/ForgotPassword/ForgotPassword"),
 );
-const BarberCheckEmail = React.lazy(() =>
-  import("./Barber/AuthScreens/CheckEmail/CheckEmail")
+const BarberCheckEmail = React.lazy(
+  () => import("./Barber/AuthScreens/CheckEmail/CheckEmail"),
 );
-const BarberChangePassword = React.lazy(() =>
-  import("./Barber/AuthScreens/ChangePassword/ChangePassword")
+const BarberChangePassword = React.lazy(
+  () => import("./Barber/AuthScreens/ChangePassword/ChangePassword"),
 );
-const BarberPasswordReset = React.lazy(() =>
-  import("./Barber/AuthScreens/PasswordReset/PasswordReset")
+const BarberPasswordReset = React.lazy(
+  () => import("./Barber/AuthScreens/PasswordReset/PasswordReset"),
 );
-const AdminCreateSalon = React.lazy(() =>
-  import("./Admin/Salon/CreateSalon/CreateSalon")
+const AdminCreateSalon = React.lazy(
+  () => import("./Admin/Salon/CreateSalon/CreateSalon"),
 );
-const AdminCustomerList = React.lazy(() =>
-  import("./Admin/Customer/CustomerList")
+const AdminCustomerList = React.lazy(
+  () => import("./Admin/Customer/CustomerList"),
 );
-const AdminCreateBarber = React.lazy(() =>
-  import("./Admin/Barber/CreateBarber/CreateBarber")
+const AdminCreateBarber = React.lazy(
+  () => import("./Admin/Barber/CreateBarber/CreateBarber"),
 );
-const AdminEditSalon = React.lazy(() =>
-  import("./Admin/Salon/EditSalon/EditSalon")
+const AdminEditSalon = React.lazy(
+  () => import("./Admin/Salon/EditSalon/EditSalon"),
 );
-const AdminEditBarber = React.lazy(() =>
-  import("./Admin/Barber/EditBarber/EditBarber")
+const AdminEditBarber = React.lazy(
+  () => import("./Admin/Barber/EditBarber/EditBarber"),
 );
-const AdminEditProfile = React.lazy(() =>
-  import("./Admin/EditProfile/EditProfile")
+const AdminEditProfile = React.lazy(
+  () => import("./Admin/EditProfile/EditProfile"),
 );
-const BarberDashboard = React.lazy(() =>
-  import("./Barber/Dashboard/Dashboard")
+const BarberDashboard = React.lazy(
+  () => import("./Barber/Dashboard/Dashboard"),
 );
-const AdminSignupEditProfile = React.lazy(() =>
-  import("./Admin/AuthScreens/SignupEditProfile/SignupEditProfile")
+const AdminSignupEditProfile = React.lazy(
+  () => import("./Admin/AuthScreens/SignupEditProfile/SignupEditProfile"),
 );
-const AdminSalonAppointmentSettings = React.lazy(() =>
-  import("./Admin/Salon/SalonAppointmentSettings/SalonAppointmentSettings")
+const AdminSalonAppointmentSettings = React.lazy(
+  () =>
+    import("./Admin/Salon/SalonAppointmentSettings/SalonAppointmentSettings"),
 );
-const AdminMobileSidebar = React.lazy(() =>
-  import("./components/Admin/MobileSidebar/MobileSidebar")
+const AdminMobileSidebar = React.lazy(
+  () => import("./components/Admin/MobileSidebar/MobileSidebar"),
 );
-const BarberSidebar = React.lazy(() =>
-  import("./components/Barber/Sidebar/Sidebar")
+const BarberSidebar = React.lazy(
+  () => import("./components/Barber/Sidebar/Sidebar"),
 );
-const BarberMobileSidebar = React.lazy(() =>
-  import("./components/Barber/MobileSidebar/MobileSidebar")
+const BarberMobileSidebar = React.lazy(
+  () => import("./components/Barber/MobileSidebar/MobileSidebar"),
 );
-const BarberEditProfile = React.lazy(() =>
-  import("./Barber/EditProfile/EditProfile")
+const BarberEditProfile = React.lazy(
+  () => import("./Barber/EditProfile/EditProfile"),
 );
-const BarberSignupEditProfile = React.lazy(() =>
-  import("./Barber/AuthScreens/SignupEditProfile/SignupEditProfile")
+const BarberSignupEditProfile = React.lazy(
+  () => import("./Barber/AuthScreens/SignupEditProfile/SignupEditProfile"),
 );
 const BarberCustomer = React.lazy(() => import("./Barber/Customers/Customers"));
 const BarberQueueList = React.lazy(() => import("./Barber/Queue/Queue"));
-const BarberQueHistory = React.lazy(() =>
-  import("./Barber/QueHistory/QueHistory")
+const BarberQueHistory = React.lazy(
+  () => import("./Barber/QueHistory/QueHistory"),
 );
-const AdminQueHistory = React.lazy(() =>
-  import("./Admin/QueHistory/QueHistory")
+const AdminQueHistory = React.lazy(
+  () => import("./Admin/QueHistory/QueHistory"),
 );
-const AdminAppointmentHistory = React.lazy(() =>
-  import("./Admin/Appointment/AppointmentHistory/AppointmentHistory")
+const AdminAppointmentHistory = React.lazy(
+  () => import("./Admin/Appointment/AppointmentHistory/AppointmentHistory"),
 );
-const AppointmentCalender = React.lazy(() =>
-  import("./Admin/Appointment/AppointCalender/AppointmentCalender")
+const AppointmentCalender = React.lazy(
+  () => import("./Admin/Appointment/AppointCalender/AppointmentCalender"),
 );
-const AppointmentList = React.lazy(() =>
-  import("./Admin/Appointment/AppointmentList/AppointmentList")
+const AppointmentList = React.lazy(
+  () => import("./Admin/Appointment/AppointmentList/AppointmentList"),
 );
-const AdminBookAppointments = React.lazy(() =>
-  import("./Admin/BookAppointment/CreateAppointment/CreateAppointment")
+const AdminBookAppointments = React.lazy(
+  () => import("./Admin/BookAppointment/CreateAppointment/CreateAppointment"),
 );
-const AdminBookEditAppointments = React.lazy(() =>
-  import("./Admin/BookAppointment/EditAppointment/EditAppointment")
+const AdminBookEditAppointments = React.lazy(
+  () => import("./Admin/BookAppointment/EditAppointment/EditAppointment"),
 );
-const AdminSubscription = React.lazy(() =>
-  import("./Admin/Subscription/Subscription")
+const AdminSubscription = React.lazy(
+  () => import("./Admin/Subscription/Subscription"),
 );
-const BarberAppointmentHistory = React.lazy(() =>
-  import("./Barber/AppointmentHistory/AppointmentHistory")
-);
-
-const BarberAppointment = React.lazy(() =>
-  import("./Barber/Appointment/Appointment")
-);
-const PaymentStatus = React.lazy(() =>
-  import("./Admin/Payment/PaymentStatus/PaymentStatus")
+const BarberAppointmentHistory = React.lazy(
+  () => import("./Barber/AppointmentHistory/AppointmentHistory"),
 );
 
-const PaymentSettings = React.lazy(() =>
-  import("./Admin/Payment/PaymentSettings/PaymentSettings")
+const BarberAppointment = React.lazy(
+  () => import("./Barber/Appointment/Appointment"),
+);
+const PaymentStatus = React.lazy(
+  () => import("./Admin/Payment/PaymentStatus/PaymentStatus"),
 );
 
-const BarberAppointmentList = React.lazy(() =>
-  import("./Barber/AppointmentList/AppointmentList")
-);
-const AdminReportChart = React.lazy(() =>
-  import("./Admin/Report/ReportChart/ReportChart")
-);
-const AdminReportList = React.lazy(() =>
-  import("./Admin/Report/ReportList/ReportList")
+const PaymentSettings = React.lazy(
+  () => import("./Admin/Payment/PaymentSettings/PaymentSettings"),
 );
 
-const BarberReportList = React.lazy(() =>
-  import("./Barber/Report/ReportList/ReportList")
+const BarberAppointmentList = React.lazy(
+  () => import("./Barber/AppointmentList/AppointmentList"),
 );
-const BarberReportChart = React.lazy(() =>
-  import("./Barber/Report/ReportChart/ReportChart")
+const AdminReportChart = React.lazy(
+  () => import("./Admin/Report/ReportChart/ReportChart"),
+);
+const AdminReportList = React.lazy(
+  () => import("./Admin/Report/ReportList/ReportList"),
+);
+
+const BarberReportList = React.lazy(
+  () => import("./Barber/Report/ReportList/ReportList"),
+);
+const BarberReportChart = React.lazy(
+  () => import("./Barber/Report/ReportChart/ReportChart"),
 );
 
 import ProtectedAdminRoute from "./Admin/ProtectedRoutes/ProtectedRoute";
@@ -165,11 +166,12 @@ import { ExclamationIcon, WifiIcon } from "./icons";
 import Dummy from "./Admin/Dummy";
 import { SocketProvider } from "./context/SocketContext";
 import { GlobalProvider as BarberGlobalProvider } from "./context/Barber/GlobalContext";
+import RF from "./Barber/RF";
 // import Appointment from './Admin/Appointment/Appointment';
 
 const MobileCus = React.lazy(() => import("../src/mobileCus/MobileCust"));
-const MobileCusSuccess = React.lazy(() =>
-  import("../src/mobileCus/MobileCusSuccess")
+const MobileCusSuccess = React.lazy(
+  () => import("../src/mobileCus/MobileCusSuccess"),
 );
 
 const App = () => {
@@ -616,6 +618,7 @@ const App = () => {
                           </ErrorBoundary>
                         }
                       />
+
                       {/* <Route
                       path="/barber-customer"
                       element={
@@ -688,7 +691,6 @@ const App = () => {
                           </ErrorBoundary>
                         }
                       />
-                      
                     </Route>
                   </Route>
 
