@@ -1519,10 +1519,6 @@ const ReportChart = () => {
 
   const groupWidth = 180;
   const chartWidth = Math.max(1000, chartData.length * groupWidth);
-  const chartHeight = 400;
-
-  const yDomain = [0, (dataMax) => Math.ceil(dataMax * 1.15)];
-  const xAxisHeight = 40; // Explicitly define this
 
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.stylist_attendence_section}>
@@ -2356,7 +2352,7 @@ const ReportChart = () => {
                     margin={{ top: 20, right: 0, left: 0, bottom: 20 }}
                   >
                     <YAxis
-                      domain={["auto", "auto"]}
+                      // domain={["auto", "auto"]}
                       dataKey={chartBarberListData?.[0]?.key}
                       allowDecimals={false}
                       tick={{
@@ -2399,10 +2395,6 @@ const ReportChart = () => {
                     />
 
                     {/* Sync this YAxis with the sticky one, but hide it */}
-                    <YAxis
-                      hide
-                      domain={[0, (dataMax) => Math.ceil(dataMax * 1.15)]}
-                    />
 
                     <Tooltip
                       wrapperStyle={{ pointerEvents: "auto", zIndex: 100 }}
