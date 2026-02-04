@@ -618,7 +618,7 @@ const App = () => {
                           </ErrorBoundary>
                         }
                       />
-                      <Route path="/rf" element={<RF />} />
+
                       {/* <Route
                       path="/barber-customer"
                       element={

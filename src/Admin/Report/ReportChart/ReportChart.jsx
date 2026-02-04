@@ -1517,6 +1517,13 @@ const ReportChart = () => {
 
   const { response: adminGetDefaultSalonResponse } = adminGetDefaultSalon;
 
+  const groupWidth = 180;
+  const chartWidth = Math.max(1000, chartData.length * groupWidth);
+  const chartHeight = 400;
+
+  const yDomain = [0, (dataMax) => Math.ceil(dataMax * 1.15)];
+  const xAxisHeight = 40; // Explicitly define this
+
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.stylist_attendence_section}>
       {/* <div className={style.stylist_attendence_header}>
@@ -2041,7 +2048,7 @@ const ReportChart = () => {
             ))}
           </div>
 
-          <div className={style.chart_scroll_wrapper}>
+          {/* <div className={style.chart_scroll_wrapper}>
             <div
               className={style.chart_inner}
               style={{
@@ -2223,7 +2230,219 @@ const ReportChart = () => {
                 </ResponsiveContainer>
               )}
             </div>
-          </div>
+          </div> */}
+
+          {currentReportType === "Line" ? (
+            <div
+              style={{
+                width: "100%",
+                // height: "90%",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  overflowX: "auto",
+                  position: "relative",
+                }}
+              >
+                {/* 1. STICKY Y-AXIS (This stays fixed on the left) */}
+                <div
+                  style={{
+                    position: "sticky",
+                    left: -5,
+                    zIndex: 10,
+                    backgroundColor: "var(--bg-primary)",
+                    // boxShadow: "2px 0 5px rgba(0,0,0,0.05)",
+                  }}
+                >
+                  <LineChart
+                    width={60}
+                    height={400}
+                    data={chartData}
+                    margin={{ top: 20, right: 0, left: 0, bottom: 20 }}
+                  >
+                    <YAxis
+                      domain={["auto", "auto"]}
+                      dataKey={chartBarberListData?.[0]?.key}
+                      allowDecimals={false}
+                      tick={{
+                        fill: "var(--text-secondary)",
+                        fontSize: "1.2rem",
+                      }}
+                    />
+                    <XAxis dataKey="xaxis" hide />
+                  </LineChart>
+                </div>
+
+                {/* 2. SCROLLABLE CHART (The actual graph) */}
+                <div style={{ minWidth: "1200px" }}>
+                  <LineChart
+                    width={1200}
+                    height={400}
+                    data={chartData}
+                    margin={{ top: 20, right: 50, left: 50, bottom: 0 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                    <XAxis
+                      dataKey="xaxis"
+                      tick={{
+                        fill: "var(--text-secondary)",
+                        fontSize: "1.2rem",
+                      }}
+                      interval={0}
+                    />
+                    {/* We hide the YAxis here, but it must be present for scaling consistency */}
+                    <YAxis hide domain={["auto", "auto"]} />
+
+                    <Tooltip
+                      wrapperStyle={{ pointerEvents: "auto" }}
+                      content={(props) => (
+                        <CustomTooltip
+                          {...props}
+                          currentReportType={currentReportType}
+                        />
+                      )}
+                      cursor={{
+                        fill: "var(--section-bg-color)",
+                      }}
+                    />
+
+                    {/* Dynamic Lines based on your barbers array */}
+                    {chartBarberListData.map((barber) => (
+                      <Line
+                        key={barber.key}
+                        name={barber.name}
+                        dataKey={barber.key} // Matches "1", "2", "87", etc.
+                        stroke={barber.color}
+                        type="monotone"
+                        dot={{ r: 4 }}
+                        strokeWidth={2}
+                      />
+                    ))}
+                  </LineChart>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div
+              style={{
+                width: "100%",
+                backgroundColor: "var(--bg-primary)",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  overflowX: "auto",
+                  position: "relative",
+                  scrollbarWidth: "thin", // Makes scrollbar less chunky in Firefox
+                }}
+              >
+                {/* 1. STICKY Y-AXIS (This stays fixed on the left) */}
+                <div
+                  style={{
+                    position: "sticky",
+                    left: -5,
+                    zIndex: 10,
+                    backgroundColor: "var(--bg-primary)",
+                    // boxShadow: "2px 0 5px rgba(0,0,0,0.05)",
+                  }}
+                >
+                  <LineChart
+                    width={60}
+                    height={400}
+                    data={chartData}
+                    margin={{ top: 20, right: 0, left: 0, bottom: 20 }}
+                  >
+                    <YAxis
+                      domain={["auto", "auto"]}
+                      dataKey={chartBarberListData?.[0]?.key}
+                      allowDecimals={false}
+                      tick={{
+                        fill: "var(--text-secondary)",
+                        fontSize: "1.2rem",
+                      }}
+                    />
+                    <XAxis dataKey="xaxis" hide />
+                  </LineChart>
+                </div>
+
+                {/* 2. SCROLLABLE BAR CONTENT */}
+                <div style={{ width: `${chartWidth}px` }}>
+                  <BarChart
+                    width={chartWidth}
+                    height={400}
+                    data={chartData}
+                    // margin={{ top: 20, right: 0, left: 0, bottom: 20 }}
+                    margin={{ top: 20, right: 10, left: 10, bottom: 0 }}
+                    barGap={3} // Tiny space between bars in a group
+                  >
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      vertical={false}
+                      // strokeOpacity={0.5}
+                    />
+
+                    <XAxis
+                      dataKey="xaxis"
+                      axisLine={{
+                        stroke: "var(--border-color)",
+                        strokeWidth: 1,
+                      }}
+                      tick={{
+                        fill: "var(--text-secondary)",
+                        fontSize: "1.1rem",
+                      }}
+                      interval={0} // Forces every label to show
+                      // height={40}
+                    />
+
+                    {/* Sync this YAxis with the sticky one, but hide it */}
+                    <YAxis
+                      hide
+                      domain={[0, (dataMax) => Math.ceil(dataMax * 1.15)]}
+                    />
+
+                    <Tooltip
+                      wrapperStyle={{ pointerEvents: "auto", zIndex: 100 }}
+                      cursor={{ fill: "rgba(0, 0, 0, 0.04)" }}
+                      content={(props) => (
+                        <CustomTooltip
+                          {...props}
+                          currentReportType={currentReportType}
+                        />
+                      )}
+                    />
+
+                    {chartBarberListData.map((barber) => (
+                      <Bar
+                        key={barber.key}
+                        name={barber.name}
+                        dataKey={barber.key}
+                        fill={barber.color}
+                        radius={[3, 3, 0, 0]}
+                        barSize={20} // Fixed width: prevents bars from getting huge if there's only 1 barber
+                      >
+                        <LabelList
+                          dataKey={barber.key}
+                          position="top"
+                          offset={8}
+                          style={{
+                            fontSize: "1rem",
+                            fill: "var(--text-primary)",
+                            fontWeight: "600",
+                          }}
+                          // Formatter: Don't show "0" to keep the chart clean
+                          formatter={(val) => (val === 0 ? "" : val)}
+                        />
+                      </Bar>
+                    ))}
+                  </BarChart>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className={style.stylist_scroll_container}>
             <div className={style.stylist_container}>
