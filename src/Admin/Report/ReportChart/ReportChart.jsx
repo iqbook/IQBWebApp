@@ -1517,8 +1517,39 @@ const ReportChart = () => {
 
   const { response: adminGetDefaultSalonResponse } = adminGetDefaultSalon;
 
-  const groupWidth = 180;
+  const barWidth = 20;
+  const groupWidth = selectedReportBarber?.length * (barWidth + 10);
   const chartWidth = Math.max(1000, chartData.length * groupWidth);
+
+  const formatValue = (val) => {
+    if (!val || val === 0) return "";
+
+    // Below 1000 → force 3 digits
+    if (val < 1000) {
+      return String(val).padStart(3, "0");
+    }
+
+    // 1000 and above → K format with 3 significant digits
+    const kValue = val / 1000;
+
+    if (kValue < 10) return `${kValue.toFixed(2)}K`; // 1.23K
+    if (kValue < 100) return `${kValue.toFixed(1)}K`; // 12.3K
+    return `${Math.round(kValue)}K`; // 123K
+  };
+
+  const formatYAxisValue = (currency, val) => {
+    if (val === 0) return `${currency}0`;
+
+    if (Math.abs(val) < 1000) {
+      return `${currency}${String(Math.abs(val)).padStart(3, "0")}`;
+    }
+
+    const kValue = Math.abs(val) / 1000;
+
+    if (kValue < 10) return `${currency}${kValue.toFixed(2)}K`;
+    if (kValue < 100) return `${currency}${kValue.toFixed(1)}K`;
+    return `${currency}${Math.round(kValue)}K`;
+  };
 
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.stylist_attendence_section}>
@@ -2266,6 +2297,21 @@ const ReportChart = () => {
                         fill: "var(--text-secondary)",
                         fontSize: "1.2rem",
                       }}
+                      tickFormatter={(val) => {
+                        if (
+                          selectedReportChartType?.headerTitle ===
+                            "Performance Dashboard Appointment" ||
+                          selectedReportChartType?.headerTitle ===
+                            "Performance Dashboard Queue"
+                        ) {
+                          return formatYAxisValue(
+                            adminGetDefaultSalonResponse?.currency,
+                            val,
+                          );
+                        }
+
+                        return val;
+                      }}
                     />
                     <XAxis dataKey="xaxis" hide />
                   </LineChart>
@@ -2359,6 +2405,21 @@ const ReportChart = () => {
                         fill: "var(--text-secondary)",
                         fontSize: "1.2rem",
                       }}
+                      tickFormatter={(val) => {
+                        if (
+                          selectedReportChartType?.headerTitle ===
+                            "Performance Dashboard Appointment" ||
+                          selectedReportChartType?.headerTitle ===
+                            "Performance Dashboard Queue"
+                        ) {
+                          return formatYAxisValue(
+                            adminGetDefaultSalonResponse?.currency,
+                            val,
+                          );
+                        }
+
+                        return val;
+                      }}
                     />
                     <XAxis dataKey="xaxis" hide />
                   </LineChart>
@@ -2372,7 +2433,7 @@ const ReportChart = () => {
                     data={chartData}
                     // margin={{ top: 20, right: 0, left: 0, bottom: 20 }}
                     margin={{ top: 20, right: 10, left: 10, bottom: 0 }}
-                    barGap={3} // Tiny space between bars in a group
+                    barGap={3.2} // Tiny space between bars in a group
                   >
                     <CartesianGrid
                       strokeDasharray="3 3"
@@ -2394,19 +2455,6 @@ const ReportChart = () => {
                       // height={40}
                     />
 
-                    {/* Sync this YAxis with the sticky one, but hide it */}
-
-                    <Tooltip
-                      wrapperStyle={{ pointerEvents: "auto", zIndex: 100 }}
-                      cursor={{ fill: "rgba(0, 0, 0, 0.04)" }}
-                      content={(props) => (
-                        <CustomTooltip
-                          {...props}
-                          currentReportType={currentReportType}
-                        />
-                      )}
-                    />
-
                     {chartBarberListData.map((barber) => (
                       <Bar
                         key={barber.key}
@@ -2421,12 +2469,12 @@ const ReportChart = () => {
                           position="top"
                           offset={8}
                           style={{
-                            fontSize: "1rem",
+                            fontSize: "0.8rem",
                             fill: "var(--text-primary)",
                             fontWeight: "600",
                           }}
                           // Formatter: Don't show "0" to keep the chart clean
-                          formatter={(val) => (val === 0 ? "" : val)}
+                          formatter={formatValue}
                         />
                       </Bar>
                     ))}
