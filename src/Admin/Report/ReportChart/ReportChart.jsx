@@ -1524,9 +1524,8 @@ const ReportChart = () => {
   const formatValue = (val) => {
     if (!val || val === 0) return "";
 
-    // Below 1000 → force 3 digits
     if (val < 1000) {
-      return String(val).padStart(3, "0");
+      return String(val);
     }
 
     // 1000 and above → K format with 3 significant digits
@@ -1538,10 +1537,11 @@ const ReportChart = () => {
   };
 
   const formatYAxisValue = (currency, val) => {
+    
     if (val === 0) return `${currency}0`;
 
     if (Math.abs(val) < 1000) {
-      return `${currency}${String(Math.abs(val)).padStart(3, "0")}`;
+      return `${currency}${String(Math.abs(val))}`;
     }
 
     const kValue = Math.abs(val) / 1000;
