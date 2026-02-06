@@ -1009,6 +1009,7 @@ import {
   ResponsiveContainer,
   BarChart,
   Bar,
+  LabelList,
 } from "recharts";
 import { BarIcon, LeftArrow } from "../../../icons";
 import {
@@ -1322,6 +1323,36 @@ const ReportChart = () => {
   };
 
   const [currentReportType, setCurrentReportType] = useState("Bar");
+
+  const formatValue = (val) => {
+    if (!val || val === 0) return "";
+
+    // Below 1000 → force 3 digits
+    if (val < 1000) {
+      return String(val).padStart(3, "0");
+    }
+
+    // 1000 and above → K format with 3 significant digits
+    const kValue = val / 1000;
+
+    if (kValue < 10) return `${kValue.toFixed(2)}K`; // 1.23K
+    if (kValue < 100) return `${kValue.toFixed(1)}K`; // 12.3K
+    return `${Math.round(kValue)}K`; // 123K
+  };
+
+  const formatYAxisValue = (currency, val) => {
+    if (val === 0) return `${currency}0`;
+
+    if (Math.abs(val) < 1000) {
+      return `${currency}${String(Math.abs(val)).padStart(3, "0")}`;
+    }
+
+    const kValue = Math.abs(val) / 1000;
+
+    if (kValue < 10) return `${currency}${kValue.toFixed(2)}K`;
+    if (kValue < 100) return `${currency}${kValue.toFixed(1)}K`;
+    return `${currency}${Math.round(kValue)}K`;
+  };
 
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.stylist_attendence_section}>
@@ -1771,6 +1802,18 @@ const ReportChart = () => {
                         fill: "var(--text-secondary)",
                         fontSize: "1.2rem",
                       }}
+                      tickFormatter={(val) => {
+                        if (
+                          selectedReportChartType?.headerTitle ===
+                            "Performance Dashboard Appointment" ||
+                          selectedReportChartType?.headerTitle ===
+                            "Performance Dashboard Queue"
+                        ) {
+                          return formatYAxisValue(barberProfile?.currency, val);
+                        }
+
+                        return val;
+                      }}
                     />
                     <XAxis dataKey="xaxis" hide />
                   </LineChart>
@@ -1864,19 +1907,30 @@ const ReportChart = () => {
                       }}
                       allowDecimals={false}
                       dataKey={chartBarberListData?.[0]?.key}
-                      /* Ensure the YAxis has a reference to scale correctly */
+                      tickFormatter={(val) => {
+                        if (
+                          selectedReportChartType?.headerTitle ===
+                            "Performance Dashboard Appointment" ||
+                          selectedReportChartType?.headerTitle ===
+                            "Performance Dashboard Queue"
+                        ) {
+                          return formatYAxisValue(barberProfile?.currency, val);
+                        }
+
+                        return val;
+                      }}
                     />
                     <XAxis dataKey="xaxis" hide />
                   </BarChart>
                 </div>
 
                 {/* 2. SCROLLABLE BAR CHART */}
-                <div style={{ minWidth: "1200px" }}>
+                <div style={{ minWidth: "900px" }}>
                   <BarChart
-                    width={1200}
+                    width={1000}
                     height={450}
                     data={chartData}
-                    margin={{ top: 20, right: 50, left: 10, bottom: 0 }}
+                    margin={{ top: 20, right: 10, left: 10, bottom: 0 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
                     <XAxis
@@ -1890,7 +1944,7 @@ const ReportChart = () => {
                     {/* Sync domain with the sticky axis */}
                     <YAxis hide domain={["auto", "auto"]} />
 
-                    <Tooltip
+                    {/* <Tooltip
                       wrapperStyle={{ pointerEvents: "auto" }}
                       content={(props) => (
                         <CustomTooltip
@@ -1901,7 +1955,7 @@ const ReportChart = () => {
                       cursor={{
                         fill: "rgba(0, 0, 0, 0.05)", // Better visibility for bar highlighting
                       }}
-                    />
+                    /> */}
 
                     {/* Dynamic Bars based on your barbers array */}
                     {chartBarberListData.map((barber) => (
@@ -1909,9 +1963,24 @@ const ReportChart = () => {
                         key={barber.key}
                         name={barber.name}
                         dataKey={barber.key}
+                        barSize={50}
                         fill={barber.color} // Bar uses 'fill' instead of 'stroke'
                         radius={[4, 4, 0, 0]} // Optional: rounds the top corners
-                      />
+                      >
+                        <LabelList
+                          dataKey={barber.key}
+                          position="top"
+                          offset={8}
+                          style={{
+                            fontSize: "1.2rem",
+                            fill: "var(--text-primary)",
+                            fontWeight: "600",
+                          }}
+                          // Formatter: Don't show "0" to keep the chart clean
+                          // formatter={(val) => (val === 0 ? "" : val)}
+                          formatter={formatValue}
+                        />
+                      </Bar>
                     ))}
                   </BarChart>
                 </div>
