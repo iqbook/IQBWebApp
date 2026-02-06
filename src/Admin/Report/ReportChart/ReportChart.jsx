@@ -1505,7 +1505,6 @@ const ReportChart = () => {
   };
 
   const formatYAxisValue = (currency, val) => {
-    
     if (val === 0) return `${currency}0`;
 
     if (Math.abs(val) < 1000) {
@@ -1854,6 +1853,7 @@ const ReportChart = () => {
             <div
               style={{
                 width: "100%",
+                height: "70%",
               }}
             >
               <div
@@ -1861,6 +1861,7 @@ const ReportChart = () => {
                   display: "flex",
                   overflowX: "auto",
                   position: "relative",
+                  height: "100%",
                 }}
               >
                 {/* 1. STICKY Y-AXIS (This stays fixed on the left) */}
@@ -1873,42 +1874,45 @@ const ReportChart = () => {
                     // boxShadow: "2px 0 5px rgba(0,0,0,0.05)",
                   }}
                 >
-                  <LineChart
-                    width={60}
-                    height={400}
-                    data={chartData}
-                    margin={{ top: 20, right: 0, left: 0, bottom: 20 }}
-                  >
-                    <YAxis
-                      domain={["auto", "auto"]}
-                      dataKey={chartBarberListData?.[0]?.key}
-                      allowDecimals={false}
-                      tick={{
-                        fill: "var(--text-secondary)",
-                        fontSize: "1.2rem",
-                      }}
-                      tickFormatter={(val) => {
-                        if (
-                          selectedReportChartType?.headerTitle ===
-                            "Performance Dashboard Appointment" ||
-                          selectedReportChartType?.headerTitle ===
-                            "Performance Dashboard Queue"
-                        ) {
-                          return formatYAxisValue(
-                            adminGetDefaultSalonResponse?.currency,
-                            val,
-                          );
-                        }
+                  <ResponsiveContainer width={60} height={"100%"}>
+                    <LineChart
+                      width={60}
+                      height={400}
+                      data={chartData}
+                      margin={{ top: 20, right: 0, left: 0, bottom: 20 }}
+                    >
+                      <YAxis
+                        domain={["auto", "auto"]}
+                        dataKey={chartBarberListData?.[0]?.key}
+                        allowDecimals={false}
+                        tick={{
+                          fill: "var(--text-secondary)",
+                          fontSize: "1.2rem",
+                        }}
+                        tickFormatter={(val) => {
+                          if (
+                            selectedReportChartType?.headerTitle ===
+                              "Performance Dashboard Appointment" ||
+                            selectedReportChartType?.headerTitle ===
+                              "Performance Dashboard Queue"
+                          ) {
+                            return formatYAxisValue(
+                              adminGetDefaultSalonResponse?.currency,
+                              val,
+                            );
+                          }
 
-                        return val;
-                      }}
-                    />
-                    <XAxis dataKey="xaxis" hide />
-                  </LineChart>
+                          return val;
+                        }}
+                      />
+                      <XAxis dataKey="xaxis" hide />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </div>
 
                 {/* 2. SCROLLABLE CHART (The actual graph) */}
                 <div style={{ minWidth: "1200px" }}>
+                <ResponsiveContainer width={1200} height={"100%"}>
                   <LineChart
                     width={1200}
                     height={400}
@@ -1953,6 +1957,7 @@ const ReportChart = () => {
                       />
                     ))}
                   </LineChart>
+                </ResponsiveContainer>
                 </div>
               </div>
             </div>
@@ -1960,15 +1965,16 @@ const ReportChart = () => {
             <div
               style={{
                 width: "100%",
-                backgroundColor: "var(--bg-primary)",
+                height: "70%",
               }}
             >
               <div
                 style={{
+                  height: "100%",
                   display: "flex",
                   overflowX: "auto",
                   position: "relative",
-                  scrollbarWidth: "thin", // Makes scrollbar less chunky in Firefox
+                  scrollbarWidth: "thin",
                 }}
               >
                 {/* 1. STICKY Y-AXIS (This stays fixed on the left) */}
@@ -1978,97 +1984,93 @@ const ReportChart = () => {
                     left: -5,
                     zIndex: 10,
                     backgroundColor: "var(--bg-primary)",
-                    // boxShadow: "2px 0 5px rgba(0,0,0,0.05)",
                   }}
                 >
-                  <LineChart
-                    width={60}
-                    height={400}
-                    data={chartData}
-                    margin={{ top: 20, right: 0, left: 0, bottom: 20 }}
-                  >
-                    <YAxis
-                      // domain={["auto", "auto"]}
-                      dataKey={chartBarberListData?.[0]?.key}
-                      allowDecimals={false}
-                      tick={{
-                        fill: "var(--text-secondary)",
-                        fontSize: "1.2rem",
-                      }}
-                      tickFormatter={(val) => {
-                        if (
-                          selectedReportChartType?.headerTitle ===
-                            "Performance Dashboard Appointment" ||
-                          selectedReportChartType?.headerTitle ===
-                            "Performance Dashboard Queue"
-                        ) {
-                          return formatYAxisValue(
-                            adminGetDefaultSalonResponse?.currency,
-                            val,
-                          );
-                        }
+                  <ResponsiveContainer width={60} height={"100%"}>
+                    <LineChart
+                      // width={60}
+                      // height={400}
+                      data={chartData}
+                      margin={{ top: 20, right: 0, left: 0, bottom: 20 }}
+                    >
+                      <YAxis
+                        // domain={["auto", "auto"]}
+                        dataKey={chartBarberListData?.[0]?.key}
+                        allowDecimals={false}
+                        tick={{
+                          fill: "var(--text-secondary)",
+                          fontSize: "1.2rem",
+                        }}
+                        tickFormatter={(val) => {
+                          if (
+                            selectedReportChartType?.headerTitle ===
+                              "Performance Dashboard Appointment" ||
+                            selectedReportChartType?.headerTitle ===
+                              "Performance Dashboard Queue"
+                          ) {
+                            return formatYAxisValue(
+                              adminGetDefaultSalonResponse?.currency,
+                              val,
+                            );
+                          }
 
-                        return val;
-                      }}
-                    />
-                    <XAxis dataKey="xaxis" hide />
-                  </LineChart>
+                          return val;
+                        }}
+                      />
+                      <XAxis dataKey="xaxis" hide />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </div>
 
                 {/* 2. SCROLLABLE BAR CONTENT */}
-                <div style={{ width: `${chartWidth}px` }}>
-                  <BarChart
-                    width={chartWidth}
-                    height={400}
-                    data={chartData}
-                    // margin={{ top: 20, right: 0, left: 0, bottom: 20 }}
-                    margin={{ top: 20, right: 10, left: 10, bottom: 0 }}
-                    barGap={3.2} // Tiny space between bars in a group
-                  >
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      vertical={false}
-                      // strokeOpacity={0.5}
-                    />
+                <div>
+                  <ResponsiveContainer width={chartWidth} height={"100%"}>
+                    <BarChart
+                      data={chartData}
+                      margin={{ top: 20, right: 10, left: 10, bottom: 0 }}
+                      barGap={3.2} // Tiny space between bars in a group
+                    >
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} />
 
-                    <XAxis
-                      dataKey="xaxis"
-                      axisLine={{
-                        stroke: "var(--border-color)",
-                        strokeWidth: 1,
-                      }}
-                      tick={{
-                        fill: "var(--text-secondary)",
-                        fontSize: "1.1rem",
-                      }}
-                      interval={0} // Forces every label to show
-                      // height={40}
-                    />
+                      <XAxis
+                        dataKey="xaxis"
+                        axisLine={{
+                          stroke: "var(--border-color)",
+                          strokeWidth: 1,
+                        }}
+                        tick={{
+                          fill: "var(--text-secondary)",
+                          fontSize: "1.1rem",
+                        }}
+                        interval={0} // Forces every label to show
+                        // height={40}
+                      />
 
-                    {chartBarberListData.map((barber) => (
-                      <Bar
-                        key={barber.key}
-                        name={barber.name}
-                        dataKey={barber.key}
-                        fill={barber.color}
-                        radius={[3, 3, 0, 0]}
-                        barSize={20} // Fixed width: prevents bars from getting huge if there's only 1 barber
-                      >
-                        <LabelList
+                      {chartBarberListData.map((barber) => (
+                        <Bar
+                          key={barber.key}
+                          name={barber.name}
                           dataKey={barber.key}
-                          position="top"
-                          offset={8}
-                          style={{
-                            fontSize: "0.8rem",
-                            fill: "var(--text-primary)",
-                            fontWeight: "600",
-                          }}
-                          // Formatter: Don't show "0" to keep the chart clean
-                          formatter={formatValue}
-                        />
-                      </Bar>
-                    ))}
-                  </BarChart>
+                          fill={barber.color}
+                          radius={[3, 3, 0, 0]}
+                          barSize={20} // Fixed width: prevents bars from getting huge if there's only 1 barber
+                        >
+                          <LabelList
+                            dataKey={barber.key}
+                            position="top"
+                            offset={8}
+                            style={{
+                              fontSize: "0.8rem",
+                              fill: "var(--text-primary)",
+                              fontWeight: "600",
+                            }}
+                            // Formatter: Don't show "0" to keep the chart clean
+                            formatter={formatValue}
+                          />
+                        </Bar>
+                      ))}
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </div>

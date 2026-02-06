@@ -438,6 +438,7 @@
     border-radius: 1.8rem;
     /* padding: 2rem; */
     gap: 2rem;
+    height: 53rem;
   }
 
   /* Adjust chart height for smaller screens */
