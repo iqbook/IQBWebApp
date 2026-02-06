@@ -140,12 +140,11 @@
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
-  padding-bottom: 0.4rem;
   scrollbar-width: none;
   /* margin: 2rem; */
   max-width: calc(100% - 4rem);
   margin-left: 2.4rem;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
 }
 
 .stylist_scroll_container::-webkit-scrollbar {
@@ -162,7 +161,8 @@
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  padding: 0.9rem 1.4rem;
+  padding-inline: 1.4rem;
+  height: 3rem;
   /* background: var(--section-bg-color); */
   background-color: transparent;
   border: 1px solid transparent;
@@ -442,6 +442,7 @@
     border-radius: 1.8rem;
     /* padding: 2rem; */
     gap: 2rem;
+    height: 53rem;
   }
 
   /* Adjust chart height for smaller screens */
