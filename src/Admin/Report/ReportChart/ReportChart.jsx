@@ -1341,18 +1341,6 @@ const ReportChart = () => {
     });
   };
 
-  // useEffect(() => {
-  //   if (selectedReportBarber.length === 0) {
-  //     setSelectedReportBarber(
-  //       copyFilterBarberList?.map((item) => {
-  //         return {
-  //           barberId: Number(item.key),
-  //         };
-  //       })
-  //     );
-  //   }
-  // }, [selectedReportBarber]);
-
   const resetFilter = () => {
     setSelectedReportType("daily");
     setChartRangeType(null);
@@ -1412,26 +1400,6 @@ const ReportChart = () => {
   const [openStylistDropdown, setOpenStylistDropdown] = useState(false);
   const [openStylistMobileDropdown, setOpenStylistMobileDropdown] =
     useState(false);
-
-  // const toggleBarberFromLegend = (barber) => {
-  //   const barberId = Number(barber.key);
-
-  //   setSelectedReportBarber((prev) => {
-  //     const exists = prev.some((b) => b.barberId === barberId);
-
-  //     if (exists) {
-  //       // remove
-  //       return prev.filter((b) => b.barberId !== barberId);
-  //     }
-
-  //     // add
-  //     return [...prev, { barberId }];
-  //   });
-
-  //   if (selectedReportBarber.length === 0) {
-  //     console.log("Array is empty");
-  //   }
-  // };
 
   const toggleBarberFromLegend = (barber) => {
     const barberId = Number(barber.key);
@@ -1553,100 +1521,6 @@ const ReportChart = () => {
 
   return selectedReportChartType?.reportType === "stylistattendence" ? (
     <div className={style.stylist_attendence_section}>
-      {/* <div className={style.stylist_attendence_header}>
-        <div className={style.stylist_attendence_header_left}>
-          <div>
-            <button
-              className={style.back_button}
-              onClick={() => navigate("/admin-reports")}
-            >
-              <LeftArrow color="var(--text-primary)" />
-            </button>
-            <h2>{selectedReportChartType?.headerTitle}</h2>
-          </div>
-        </div>
-
-        <div>
-          <button
-            onClick={() => setOpenFilterPopup((prev) => !prev)}
-            className={style.stylist_attendence_filter_btn}
-          >
-            <FilterIcon />
-            <span>Filter</span>
-          </button>
-
-          {openFilterPopup && (
-            <ClickAwayListener onClickAway={() => setOpenFilterPopup(false)}>
-              <div className={style.stylist_attendence_filter_popup}>
-                <div className={style.stylist_attendence_filter_popup_header}>
-                  <p>Select Filter</p>
-                  <button
-                    onClick={() => setOpenFilterPopup(false)}
-                    className={style.stylist_attendence_filterpopup_close_btn}
-                  >
-                    <CloseIcon />
-                  </button>
-                </div>
-
-                <div className={style.stylist_attendence_filter_popup_body}>
-                  <div className={style.stylist_attendence_filter_section}>
-                    <p>Date Range</p>
-                    <Calendar
-                      numberOfMonths={1}
-                      value={selectedDates}
-                      onChange={handleDateChange}
-                      range
-                      placeholder="dd/mm/yyyy - dd/mm/yyyy"
-                      dateSeparator=" - "
-                      calendarPosition="bottom-left"
-                      format="DD/MM/YYYY"
-                      className="dark-theme"
-                      maxDate={new Date()}
-                    />
-                  </div>
-
-                  <div className={style.stylist_attendence_filter_section}>
-                    <p>Select Stylist</p>
-                    <div className={style.stylist_attendence_filter_chip_group}>
-                      {stylistBarberList?.map((item) => {
-                        const isActive =
-                          selected_attendence_stylist?.barberId ===
-                          item.barberId;
-
-                        return (
-                          <button
-                            key={item.barberId}
-                            onClick={() => setSelected_attendence_stylist(item)}
-                            className={style.stylist_attendence_filter_chip}
-                            style={{
-                              backgroundColor: isActive
-                                ? "var(--bg-secondary)"
-                                : "transparent",
-                              color: isActive
-                                ? "var(--btn-text-color)"
-                                : "var(--text-primary)",
-                            }}
-                          >
-                            {item.name}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={resetFilter}
-                    className={style.stylist_attendence_filter_apply_btn}
-                  >
-                    Reset
-                  </button>
-                </div>
-              </div>
-            </ClickAwayListener>
-          )}
-        </div>
-      </div> */}
-
       <div className={style.stylist_attendence_header}>
         <div className={style.stylist_attendence_header_left}>
           <div>
@@ -1676,83 +1550,6 @@ const ReportChart = () => {
           <button className={style.reset_button} onClick={resetFilter}>
             <ResetIcon />
           </button>
-          {/* <button
-            onClick={() => setOpenFilterPopup((prev) => !prev)}
-            className={style.stylist_attendence_filter_btn}
-          >
-            <FilterIcon />
-            <span>Filter</span>
-          </button> */}
-
-          {/* {openFilterPopup && (
-            <ClickAwayListener onClickAway={() => setOpenFilterPopup(false)}>
-              <div className={style.stylist_attendence_filter_popup}>
-                <div className={style.stylist_attendence_filter_popup_header}>
-                  <p>Select Filter</p>
-                  <button
-                    onClick={() => setOpenFilterPopup(false)}
-                    className={style.stylist_attendence_filterpopup_close_btn}
-                  >
-                    <CloseIcon />
-                  </button>
-                </div>
-
-                <div className={style.stylist_attendence_filter_popup_body}>
-                  <div className={style.stylist_attendence_filter_section}>
-                    <p>Date Range</p>
-                    <Calendar
-                      numberOfMonths={1}
-                      value={selectedDates}
-                      onChange={handleDateChange}
-                      range
-                      placeholder="dd/mm/yyyy - dd/mm/yyyy"
-                      dateSeparator=" - "
-                      calendarPosition="bottom-left"
-                      format="DD/MM/YYYY"
-                      className="dark-theme"
-                      maxDate={new Date()}
-                    />
-                  </div>
-
-                  <div className={style.stylist_attendence_filter_section}>
-                    <p>Select Stylist</p>
-                    <div className={style.stylist_attendence_filter_chip_group}>
-                      {stylistBarberList?.map((item) => {
-                        const isActive =
-                          selected_attendence_stylist?.barberId ===
-                          item.barberId;
-
-                        return (
-                          <button
-                            key={item.barberId}
-                            onClick={() => setSelected_attendence_stylist(item)}
-                            className={style.stylist_attendence_filter_chip}
-                            style={{
-                              backgroundColor: isActive
-                                ? "var(--bg-secondary)"
-                                : "transparent",
-                              color: isActive
-                                ? "var(--btn-text-color)"
-                                : "var(--text-primary)",
-                            }}
-                          >
-                            {item.name}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={resetFilter}
-                    className={style.stylist_attendence_filter_apply_btn}
-                  >
-                    Reset
-                  </button>
-                </div>
-              </div>
-            </ClickAwayListener>
-          )} */}
         </div>
       </div>
 
@@ -1809,28 +1606,6 @@ const ReportChart = () => {
           <p className={style.no_data_text}>No stylist available</p>
         )}
       </div>
-
-      {/* <div className={style.stylist_attendence_mobile_header}>
-        <div>
-          <div>
-            <button
-              className={style.back_button}
-              onClick={() => navigate("/admin-reports")}
-            >
-              <LeftArrow color="var(--text-primary)" />
-            </button>
-            <h2>{selectedReportChartType?.headerTitle}</h2>
-          </div>
-
-          <button
-            onClick={() => setOpenFilter((prev) => !prev)}
-            className={style.stylist_attendence_filter_btn}
-          >
-            <FilterIcon />
-            <span>Filter</span>
-          </button>
-        </div>
-      </div> */}
 
       {selected_attendence_stylist && (
         <div className={style.stylist_attendence_profile_header}>
@@ -2075,195 +1850,10 @@ const ReportChart = () => {
             ))}
           </div>
 
-          {/* <div className={style.chart_scroll_wrapper}>
-            <div
-              className={style.chart_inner}
-              style={{
-                minWidth:
-                  isMobile &&
-                  (selectedReportType === "daily" ||
-                    chartRangeType === "rangedaily")
-                    ? "68rem"
-                    : isMobile &&
-                        (selectedReportType === "weekly" ||
-                          chartRangeType === "rangeweekly")
-                      ? "48rem"
-                      : isMobile &&
-                          (selectedReportType === "monthly" ||
-                            chartRangeType === "rangemonthly")
-                        ? "100rem"
-                        : "100%",
-              }}
-            >
-              {currentReportType === "Line" ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart
-                    data={chartData}
-                    margin={{
-                      top: 20,
-                      right: 20,
-                      // left: -10,
-                      bottom: 0,
-                    }}
-                  >
-                    <CartesianGrid
-                      strokeDasharray="4 4"
-                      vertical={false}
-                      stroke="rgba(148, 163, 184, 0.35)"
-                    />
-                    <XAxis
-                      dataKey="xaxis"
-                      axisLine={false}
-                      tickLine={false}
-                      interval={0}
-                      tick={{
-                        fill: "var(--text-secondary)",
-                        fontSize: "1.2rem",
-                      }}
-                      padding={{ left: 12, right: 32 }}
-                    />
-
-                    {selectedReportChartType?.headerTitle ===
-                      "Performance Dashboard Appointment" ||
-                    selectedReportChartType?.headerTitle ===
-                      "Performance Dashboard Queue" ? (
-                      <YAxis
-                        axisLine={false}
-                        tickLine={false}
-                        tick={{
-                          fill: "var(--text-secondary)",
-                          fontSize: "1.2rem",
-                        }}
-                        tickFormatter={(value) =>
-                          `${adminGetDefaultSalonResponse?.currency}${value}`
-                        }
-                      />
-                    ) : (
-                      <YAxis
-                        axisLine={false}
-                        tickLine={false}
-                        tick={{
-                          fill: "var(--text-secondary)",
-                          fontSize: "1.2rem",
-                        }}
-                      />
-                    )}
-
-                    <Tooltip
-                      wrapperStyle={{ pointerEvents: "auto" }}
-                      content={(props) => (
-                        <CustomTooltip
-                          {...props}
-                          currentReportType={currentReportType}
-                        />
-                      )}
-                    />
-
-                    {chartBarberListData.map((barber) => (
-                      <Line
-                        key={barber.key}
-                        type="monotone"
-                        dataKey={barber.key}
-                        stroke={barber.color}
-                        strokeWidth={3}
-                        dot={{
-                          r: 4,
-                          fill: barber.color,
-                          stroke: "#fff",
-                          strokeWidth: 2,
-                        }}
-                        activeDot={{ r: 6 }}
-                      />
-                    ))}
-                  </LineChart>
-                </ResponsiveContainer>
-              ) : (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={chartData}
-                    margin={{
-                      top: 20,
-                      right: 20,
-                      // left: -10,
-                      bottom: 0,
-                    }}
-                  >
-                    <CartesianGrid
-                      strokeDasharray="4 4"
-                      vertical={false}
-                      stroke="rgba(148, 163, 184, 0.35)"
-                    />
-
-                    <XAxis
-                      dataKey="xaxis"
-                      axisLine={false}
-                      tickLine={false}
-                      interval={0}
-                      tick={{
-                        fill: "var(--text-secondary)",
-                        fontSize: "1.2rem",
-                      }}
-                      padding={{ left: 0, right: 0 }}
-                    />
-
-                    {selectedReportChartType?.headerTitle ===
-                      "Performance Dashboard Appointment" ||
-                    selectedReportChartType?.headerTitle ===
-                      "Performance Dashboard Queue" ? (
-                      <YAxis
-                        axisLine={false}
-                        tickLine={false}
-                        tick={{
-                          fill: "var(--text-secondary)",
-                          fontSize: "1.2rem",
-                        }}
-                        tickFormatter={(value) =>
-                          `${adminGetDefaultSalonResponse?.currency}${value}`
-                        }
-                      />
-                    ) : (
-                      <YAxis
-                        axisLine={false}
-                        tickLine={false}
-                        tick={{
-                          fill: "var(--text-secondary)",
-                          fontSize: "1.2rem",
-                        }}
-                      />
-                    )}
-
-                    <Tooltip
-                      wrapperStyle={{ pointerEvents: "auto" }}
-                      content={(props) => (
-                        <CustomTooltip
-                          {...props}
-                          currentReportType={currentReportType}
-                        />
-                      )}
-                      cursor={{
-                        fill: "var(--section-bg-color)",
-                      }}
-                    />
-
-                    {chartBarberListData.map((barber) => (
-                      <Bar
-                        key={barber.key}
-                        dataKey={barber.key}
-                        stackId="total"
-                        fill={barber.color}
-                      />
-                    ))}
-                  </BarChart>
-                </ResponsiveContainer>
-              )}
-            </div>
-          </div> */}
-
           {currentReportType === "Line" ? (
             <div
               style={{
                 width: "100%",
-                // height: "90%",
               }}
             >
               <div
