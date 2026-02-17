@@ -7,6 +7,7 @@ npm run dev
 Build for Production
 npm run build
 
+
 🌐 Deployment
 
 Deployment is managed through the client's Netlify account.
@@ -18,6 +19,8 @@ Log in to the client’s Netlify dashboard.
 Select the respective project.
 
 Deploy the required branch.
+
+
 
 🌿 Branch Structure
 
@@ -54,6 +57,8 @@ Each page folder contains:
 
 *.module.css – Page-specific styling
 
+
+
 🧩 Components
 Admin Components
 
@@ -81,14 +86,20 @@ ButtonLoader – Loader inside buttons during API calls
 
 VersionCheck – Checks current web app version
 
+
+
 ❌ Error Handling
 ErrorPage
 
 Displays a custom error page when a route is not found.
 
+
+
 🌍 Public Folder
 
 Contains the initial landing page of the application.
+
+
 
 🔐 Authentication Flow
 
@@ -97,6 +108,8 @@ Authentication is handled using Redux.
 Auth token is attached to every API request.
 
 Base URL configuration is managed inside the API setup.
+
+
 
 🗂 Redux Structure
 
@@ -114,6 +127,8 @@ actions/ – Action creators for barber logic
 
 reducers/ – Maintains barber state
 
+
+
 🏪 Store Configuration
 
 All reducers (Admin + Barber) are combined inside:
@@ -122,6 +137,8 @@ store.js
 
 
 This file creates the central Redux store for the application.
+
+
 
 🎨 Theme Configuration
 theme.js
