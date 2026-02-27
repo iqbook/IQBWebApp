@@ -144,3 +144,15 @@ This file creates the central Redux store for the application.
 theme.js
 
 Manages and applies the application’s theme settings.
+
+Dependencies of the application
+
+1. @dnd-kit - drag and drop 
+2. @mui/material - certain components are needing mui feature
+3. @react-oauth/google - for google oauth login
+4. @react-google-maps/api - for google map 
+5. @stripe - for handling payments
+6. @axios - for data fetching
+7. @google-libphonenumber - for phone number validation
+8. @recharts - For showing charts in the applications
+9. @socket.io-client - for receiving real time data
