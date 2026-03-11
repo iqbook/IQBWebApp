@@ -1,5 +1,4 @@
 .btn_loader {
-  border: 2px solid var(--btn-text-color);
   border-left-color: transparent;
   border-radius: 50%;
   width: 2.5rem;

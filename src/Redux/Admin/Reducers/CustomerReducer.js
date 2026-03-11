@@ -15,6 +15,7 @@ export const adminGetAllCustomerListReducer = (state = {}, action) => {
                 resolve: true,
                 ...action.payload
             };
+
         case GET_ALL_CUSTOMERLIST_FAIL:
             return {
                 ...state,

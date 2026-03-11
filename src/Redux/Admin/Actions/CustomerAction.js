@@ -1,109 +1,124 @@
-import { ADMIN_SEND_CUSTOMER_NOTIFICATION_FAIL, ADMIN_SEND_CUSTOMER_NOTIFICATION_REQ, ADMIN_SEND_CUSTOMER_NOTIFICATION_SUCCESS, GET_ALL_CUSTOMERLIST_FAIL, GET_ALL_CUSTOMERLIST_REQ, GET_ALL_CUSTOMERLIST_SUCCESS } from "../Constants/constants"
+import {
+  ADMIN_SEND_CUSTOMER_NOTIFICATION_FAIL,
+  ADMIN_SEND_CUSTOMER_NOTIFICATION_REQ,
+  ADMIN_SEND_CUSTOMER_NOTIFICATION_SUCCESS,
+  GET_ALL_CUSTOMERLIST_FAIL,
+  GET_ALL_CUSTOMERLIST_REQ,
+  GET_ALL_CUSTOMERLIST_SUCCESS,
+} from "../Constants/constants";
 import toast from "react-hot-toast";
 import api from "../../api/Api";
 
-export const adminGetAllCustomerListAction = (salonId, signal) => async (dispatch) => {
+export const adminGetAllCustomerListAction =
+  (salonId, page, setPage, rowsPerPage, SetRowsPerPage, query = "", signal) =>
+  async (dispatch) => {
     try {
-        dispatch({ type: GET_ALL_CUSTOMERLIST_REQ })
+      dispatch({ type: GET_ALL_CUSTOMERLIST_REQ });
 
-        const { data } = await api.get(`/api/customers/getAllCustomers?salonId=${salonId}`, { signal })
+      const { data } = await api.get(
+        `/api/customers/getAllCustomers?salonId=${salonId}&page=${page}&limit=${rowsPerPage}&search=${query}`,
+        { signal },
+      );
 
-        dispatch({
-            type: GET_ALL_CUSTOMERLIST_SUCCESS,
-            payload: data
-        })
+      dispatch({
+        type: GET_ALL_CUSTOMERLIST_SUCCESS,
+        payload: data,
+      });
+
+      setPage(data?.pagination?.page);
+      SetRowsPerPage(data?.pagination?.limit);
     } catch (error) {
+      if (error?.response?.status === 500) {
+        dispatch({
+          type: GET_ALL_CUSTOMERLIST_FAIL,
+          payload: "Something went wrong !",
+        });
 
+        toast.error("Something went wrong !", {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
+        });
 
-        if (error?.response?.status === 500) {
-            dispatch({
-                type: GET_ALL_CUSTOMERLIST_FAIL,
-                payload: "Something went wrong !"
-            });
+        return;
+      }
 
-            toast.error("Something went wrong !", {
-                duration: 3000,
-                style: {
-                    fontSize: "var(--font-size-2)",
-                    borderRadius: '0.3rem',
-                    background: '#333',
-                    color: '#fff',
-                },
-            });
-
-            return;
-        }
-
-        if (error.name !== 'CanceledError') {
-            dispatch({
-                type: GET_ALL_CUSTOMERLIST_FAIL,
-                payload: error?.response?.data
-            });
-        }
-
+      if (error.name !== "CanceledError") {
+        dispatch({
+          type: GET_ALL_CUSTOMERLIST_FAIL,
+          payload: error?.response?.data,
+        });
+      }
     }
-}
+  };
 
-export const adminSendCustomerNotificationAction = (notificationData, setBarberTitle, setBarberMessage, setOpenBarberMessage) => async (dispatch) => {
+export const adminSendCustomerNotificationAction =
+  (notificationData, setBarberTitle, setBarberMessage, setOpenBarberMessage) =>
+  async (dispatch) => {
     try {
-        dispatch({ type: ADMIN_SEND_CUSTOMER_NOTIFICATION_REQ })
+      dispatch({ type: ADMIN_SEND_CUSTOMER_NOTIFICATION_REQ });
 
-        const { data } = await api.post(`/api/notifications/send-customer-multiple-notification`, notificationData)
+      const { data } = await api.post(
+        `/api/notifications/send-customer-multiple-notification`,
+        notificationData,
+      );
 
-        dispatch({
-            type: ADMIN_SEND_CUSTOMER_NOTIFICATION_SUCCESS,
-            payload: data
-        })
+      dispatch({
+        type: ADMIN_SEND_CUSTOMER_NOTIFICATION_SUCCESS,
+        payload: data,
+      });
 
-        setBarberTitle("")
-        setBarberMessage("")
+      setBarberTitle("");
+      setBarberMessage("");
 
-        toast.success(data?.message, {
-            duration: 3000,
-            style: {
-                fontSize: "var(--font-size-2)",
-                borderRadius: '0.3rem',
-                background: '#333',
-                color: '#fff',
-            },
-        });
+      toast.success(data?.message, {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
 
-        setOpenBarberMessage(false)
+      setOpenBarberMessage(false);
     } catch (error) {
-
-        if (error?.response?.status === 500) {
-            dispatch({
-                type: ADMIN_SEND_CUSTOMER_NOTIFICATION_FAIL,
-                payload: "Something went wrong !"
-            });
-
-            toast.error("Something went wrong !", {
-                duration: 3000,
-                style: {
-                    fontSize: "var(--font-size-2)",
-                    borderRadius: '0.3rem',
-                    background: '#333',
-                    color: '#fff',
-                },
-            });
-
-            return;
-        }
-
+      if (error?.response?.status === 500) {
         dispatch({
-            type: ADMIN_SEND_CUSTOMER_NOTIFICATION_FAIL,
-            payload: error?.response?.data
+          type: ADMIN_SEND_CUSTOMER_NOTIFICATION_FAIL,
+          payload: "Something went wrong !",
         });
 
-        toast.error(error?.response?.data?.message, {
-            duration: 3000,
-            style: {
-                fontSize: "var(--font-size-2)",
-                borderRadius: '0.3rem',
-                background: '#333',
-                color: '#fff',
-            },
+        toast.error("Something went wrong !", {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
         });
+
+        return;
+      }
+
+      dispatch({
+        type: ADMIN_SEND_CUSTOMER_NOTIFICATION_FAIL,
+        payload: error?.response?.data,
+      });
+
+      toast.error(error?.response?.data?.message, {
+        duration: 3000,
+        style: {
+          fontSize: "var(--font-size-2)",
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     }
-
-}
+  };
