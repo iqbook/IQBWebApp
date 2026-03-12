@@ -54,7 +54,7 @@ const CustomerList = () => {
   const {
     loading: adminGetAllCustomerListLoading,
     resolve: adminGetAllCustomerListResolve,
-    getAllCustomers: AllCustomerList,
+    response: AllCustomerList,
     pagination: PaginationObject,
   } = adminGetAllCustomerList;
 
