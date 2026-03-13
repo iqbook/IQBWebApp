@@ -1,638 +1,801 @@
-import React, { useEffect, useRef, useState } from 'react'
-import style from "./AppointmentHistory.module.css"
-import Skeleton from 'react-loading-skeleton'
-import { useDispatch, useSelector } from 'react-redux'
-import { darkmodeSelector } from '../../../Redux/Admin/Reducers/AdminHeaderReducer'
-import { AppointmentIcon, CheckIcon, CloseIcon, CustomerIcon, DropdownIcon, GroupJoinIcon, KioskIcon, MobileIcon, ResetIcon, SearchIcon } from '../../../newicons';
+import React, { useEffect, useRef, useState } from "react";
+import style from "./AppointmentHistory.module.css";
+import Skeleton from "react-loading-skeleton";
+import { useDispatch, useSelector } from "react-redux";
+import { darkmodeSelector } from "../../../Redux/Admin/Reducers/AdminHeaderReducer";
+import {
+  AppointmentIcon,
+  CheckIcon,
+  CloseIcon,
+  CustomerIcon,
+  DropdownIcon,
+  GroupJoinIcon,
+  KioskIcon,
+  MobileIcon,
+  ResetIcon,
+  SearchIcon,
+} from "../../../newicons";
 
-import { ClickAwayListener, Pagination } from '@mui/material'
-import { Calendar } from 'react-multi-date-picker'
-import toast from 'react-hot-toast'
-import { useLocation } from 'react-router-dom'
-import { getAdminAppointmentHistoryAction } from '../../../Redux/Admin/Actions/AppointmentAction'
-import { ddmmformatDate } from '../../../../utils/ddmmformatDate'
+import { ClickAwayListener, Pagination } from "@mui/material";
+import { Calendar } from "react-multi-date-picker";
+import toast from "react-hot-toast";
+import { useLocation } from "react-router-dom";
+import { getAdminAppointmentHistoryAction } from "../../../Redux/Admin/Actions/AppointmentAction";
+import { ddmmformatDate } from "../../../../utils/ddmmformatDate";
+import ButtonLoader from "../../../components/ButtonLoader/ButtonLoader";
 
 const QueHistory = () => {
+  const [barberData, setBarberData] = useState({
+    barberName: "",
+    barberEmail: "",
+    barberId: "",
+    barber: false,
+  });
 
-    const [barberData, setBarberData] = useState({
-        barberName: "",
-        barberEmail: "",
-        barberId: "",
-        barber: false
-    })
+  const [customerData, setCustomerData] = useState({
+    customerName: "",
+    customerEmail: "",
+    customer: false,
+  });
 
-    const [customerData, setCustomerData] = useState({
-        customerName: "",
-        customerEmail: "",
-        customer: false
-    })
+  useEffect(() => {
+    const AppointmentHistoryBarber = localStorage.getItem(
+      "AppointmentHistoryBarber",
+    )
+      ? JSON.parse(localStorage.getItem("AppointmentHistoryBarber"))
+      : null;
 
-    useEffect(() => {
-        const AppointmentHistoryBarber = localStorage.getItem("AppointmentHistoryBarber")
-            ? JSON.parse(localStorage.getItem("AppointmentHistoryBarber"))
-            : null;
+    const AppointmentHistoryCustomer = localStorage.getItem(
+      "AppointmentHistoryCustomer",
+    )
+      ? JSON.parse(localStorage.getItem("AppointmentHistoryCustomer"))
+      : null;
 
-        const AppointmentHistoryCustomer = localStorage.getItem("AppointmentHistoryCustomer")
-            ? JSON.parse(localStorage.getItem("AppointmentHistoryCustomer"))
-            : null;
+    if (AppointmentHistoryBarber) {
+      setBarberData({
+        barberName: AppointmentHistoryBarber?.name,
+        barberEmail: AppointmentHistoryBarber?.email,
+        barberId: AppointmentHistoryBarber?.barberId,
+        barber: AppointmentHistoryBarber?.barber,
+      });
+    }
 
-        if (AppointmentHistoryBarber) {
-            setBarberData({
-                barberName: AppointmentHistoryBarber?.name,
-                barberEmail: AppointmentHistoryBarber?.email,
-                barberId: AppointmentHistoryBarber?.barberId,
-                barber: AppointmentHistoryBarber?.barber
-            });
-        }
+    if (AppointmentHistoryCustomer) {
+      setCustomerData({
+        customerName: AppointmentHistoryCustomer?.name,
+        customerEmail: AppointmentHistoryCustomer?.email,
+        customer: AppointmentHistoryCustomer?.customer,
+      });
+    }
 
-        if (AppointmentHistoryCustomer) {
-            setCustomerData({
-                customerName: AppointmentHistoryCustomer?.name,
-                customerEmail: AppointmentHistoryCustomer?.email,
-                customer: AppointmentHistoryCustomer?.customer
-            });
-        }
+    return () => {
+      localStorage.removeItem("AppointmentHistoryBarber");
+      localStorage.removeItem("AppointmentHistoryCustomer");
+    };
+  }, []);
 
-        return () => {
-            localStorage.removeItem("AppointmentHistoryBarber")
-            localStorage.removeItem("AppointmentHistoryCustomer")
-        }
-    }, []);
+  const darkMode = useSelector(darkmodeSelector);
 
-    // console.log("Barber Data ", barberData)
-    // console.log("Customer Data ", customerData)
+  const darkmodeOn = darkMode === "On";
 
+  const salonId = useSelector(
+    (state) => state.AdminLoggedInMiddleware.adminSalonId,
+  );
 
-    const darkMode = useSelector(darkmodeSelector)
+  const dispatch = useDispatch();
 
-    const darkmodeOn = darkMode === "On"
+  const [search, setSearch] = useState("");
+  const [rowsPerPage, SetRowsPerPage] = useState(10);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [query, setQuery] = useState("");
 
-    const salonId = useSelector(state => state.AdminLoggedInMiddleware.adminSalonId)
+  const queuelistcontrollerRef = useRef(new AbortController());
 
-    const dispatch = useDispatch()
+  const [selectedDates, setSelectedDates] = useState([]);
 
-    const queuelistcontrollerRef = useRef(new AbortController());
+  useEffect(() => {
+    const controller = new AbortController();
+    queuelistcontrollerRef.current = controller;
 
-    const [selectedDates, setSelectedDates] = useState([])
-
-
-    useEffect(() => {
-        const controller = new AbortController();
-        queuelistcontrollerRef.current = controller;
-
-        const abortIfPending = () => {
-            if (queuelistcontrollerRef.current) {
-                queuelistcontrollerRef.current.abort();
-            }
-        };
-
-        const getTotalDays = (start, end) => {
-            const utcStart = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
-            const utcEnd = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate());
-            return (utcEnd - utcStart) / (1000 * 60 * 60 * 24) + 1;
-        };
-
-        if (selectedDates.length === 2) {
-            const startDate = new Date(selectedDates[0]);
-            const endDate = new Date(selectedDates[1]);
-
-            const totalDays = getTotalDays(startDate, endDate);
-
-            if (totalDays > 30) {
-                setSelectedDates([]);
-                toast.error("Date range cannot exceed 30 days", {
-                    duration: 3000,
-                    style: {
-                        fontSize: "var(--font-size-2)",
-                        borderRadius: '0.3rem',
-                        background: '#333',
-                        color: '#fff',
-                    },
-                });
-            } else {
-                dispatch(getAdminAppointmentHistoryAction(salonId, startDate, endDate, barberData?.barberId, customerData?.customerEmail, controller.signal));
-            }
-
-        } else if (selectedDates.length === 0) {
-            dispatch(getAdminAppointmentHistoryAction(salonId, "", "", barberData?.barberId, customerData?.customerEmail, controller.signal));
-        }
-
-        return abortIfPending;
-    }, [salonId, dispatch, selectedDates, barberData, customerData]);
-
-
-    const getAdminAppointmentHistory = useSelector(state => state.getAdminAppointmentHistory)
-
-    const {
-        loading: getAdminAppointmentHistoryLoading,
-        resolve: getAdminAppointmentHistoryResolve,
-        appointmentHistory: AdminAppointmentHistory
-    } = getAdminAppointmentHistory
-
-    const [copyAdminAppointmentHistory, setcopyAdminAppointmentHistory] = useState([])
-
-    useEffect(() => {
-        if (AdminAppointmentHistory) {
-            setcopyAdminAppointmentHistory(AdminAppointmentHistory)
-        }
-    }, [AdminAppointmentHistory])
-
-    const [search, setSearch] = useState('')
-
-    const searchCustomHandler = (value) => {
-        setSearch(value);
-        const searchValue = value.toLowerCase().trim();
-
-        if (!searchValue) {
-            setcopyAdminAppointmentHistory(AdminAppointmentHistory);
-        } else {
-            const filteredArray = AdminAppointmentHistory?.filter((queue) => {
-                return (
-                    queue.barberName.toLowerCase().includes(searchValue) ||
-                    queue.customerName.toLowerCase().includes(searchValue)
-                )
-            });
-            setcopyAdminAppointmentHistory(filteredArray);
-        }
+    const abortIfPending = () => {
+      if (queuelistcontrollerRef.current) {
+        queuelistcontrollerRef.current.abort();
+      }
     };
 
+    const getTotalDays = (start, end) => {
+      const utcStart = Date.UTC(
+        start.getFullYear(),
+        start.getMonth(),
+        start.getDate(),
+      );
+      const utcEnd = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate());
+      return (utcEnd - utcStart) / (1000 * 60 * 60 * 24) + 1;
+    };
 
-    const adminGetDefaultSalon = useSelector(state => state.adminGetDefaultSalon)
+    if (selectedDates.length === 2) {
+      const startDate = new Date(selectedDates[0]);
+      const endDate = new Date(selectedDates[1]);
 
-    const {
-        response: adminGetDefaultSalonResponse
-    } = adminGetDefaultSalon
+      const totalDays = getTotalDays(startDate, endDate);
 
-
-    const currentSalonType = localStorage.getItem("CurrentSalonType")
-
-    // ==========================================================
-
-    const headRows = [
-        { id: 1, heading: "BarberID", key: "qpos" },
-        { id: 2, heading: "Name", key: "customerName" },
-        { id: 3, heading: `${currentSalonType === "Barber Shop" ? "Barber Name" : currentSalonType === "Hair Dresser" ? "Stylist Name" : "BarberName"}`, key: "barberName" },
-        { id: 4, heading: "Start Time", key: "startTime" },
-        { id: 5, heading: "End Time", key: "endTime" },
-        { id: 6, heading: "Price", key: "price" },
-        { id: 7, heading: "Date", key: "date" },
-        { id: 8, heading: "Status", key: "status" },
-    ];
-
-    const [appointmenthistoryDataCopy, setappointmenthistoryDataCopy] = useState([])
-    const [appointmenthistoryData, setappointmenthistoryData] = useState([])
-    const [appointmentHistoryPaginationData, setappointmentHistoryPaginationData] = useState([])
-    const [mobileQueueList, setMobileQueueList] = useState([])
-
-    useEffect(() => {
-        if (getAdminAppointmentHistoryResolve && AdminAppointmentHistory.length > 0) {
-            setappointmenthistoryData(AdminAppointmentHistory)
-            setappointmenthistoryDataCopy(AdminAppointmentHistory)
-            setMobileQueueList(AdminAppointmentHistory)
-        }
-
-    }, [AdminAppointmentHistory])
-
-
-    const [settingsIndex, setSettingsIndex] = useState("")
-
-    const [rowsPerPage, SetRowsPerPage] = useState(10)
-
-    const [page, setPage] = useState(1)
-    const [totalPages, setTotalPages] = useState(1)
-    const [startIndex, setStartIndex] = useState(0)
-    const [endIndex, setEndIndex] = useState(0)
-    const [sortOrder, setSortOrder] = useState("asc")
-    const [sortColumn, setSortColumn] = useState("")
-    const [query, setQuery] = useState("")
-
-
-    const paginationFunction = () => {
-        const totalPages = Math.ceil(appointmenthistoryDataCopy.length / rowsPerPage);
-        const startIndex = (page - 1) * rowsPerPage;
-        const endIndex = Math.min(startIndex + rowsPerPage, appointmenthistoryDataCopy.length)
-
-        setappointmentHistoryPaginationData(appointmenthistoryDataCopy.slice(startIndex, endIndex));
-        setTotalPages(totalPages);
-        setStartIndex(startIndex);
-        setEndIndex(endIndex);
+      if (totalDays > 30) {
+        setSelectedDates([]);
+        toast.error("Date range cannot exceed 30 days", {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      } else {
+        dispatch(
+          getAdminAppointmentHistoryAction(
+            salonId,
+            startDate,
+            endDate,
+            page,
+            rowsPerPage,
+            query,
+            controller.signal,
+          ),
+        );
+      }
+    } else if (selectedDates.length === 0) {
+      dispatch(
+        getAdminAppointmentHistoryAction(
+          salonId,
+          "",
+          "",
+          page,
+          rowsPerPage,
+          query,
+          controller.signal,
+        ),
+      );
     }
 
-    useEffect(() => {
-        if (appointmenthistoryDataCopy.length > 0) {
-            paginationFunction()
-        }
-    }, [appointmenthistoryDataCopy, page, rowsPerPage])
+    return abortIfPending;
+  }, [salonId, dispatch, selectedDates, rowsPerPage, page, query]);
 
+  const getAdminAppointmentHistory = useSelector(
+    (state) => state.getAdminAppointmentHistory,
+  );
 
-    const handleChange = (event, value) => {
-        setPage(value);
+  const {
+    loading: getAdminAppointmentHistoryLoading,
+    resolve: getAdminAppointmentHistoryResolve,
+    response: AdminAppointmentHistory,
+    pagination: PaginationObject,
+  } = getAdminAppointmentHistory;;
+
+  //   const [copyAdminAppointmentHistory, setcopyAdminAppointmentHistory] =
+  //     useState([]);
+
+  //   useEffect(() => {
+  //     if (AdminAppointmentHistory) {
+  //       setcopyAdminAppointmentHistory(AdminAppointmentHistory);
+  //     }
+  //   }, [AdminAppointmentHistory]);
+
+  //   const searchCustomHandler = (value) => {
+  //     setSearch(value);
+  //     const searchValue = value.toLowerCase().trim();
+
+  //     if (!searchValue) {
+  //       setcopyAdminAppointmentHistory(AdminAppointmentHistory);
+  //     } else {
+  //       const filteredArray = AdminAppointmentHistory?.filter((queue) => {
+  //         return (
+  //           queue.barberName.toLowerCase().includes(searchValue) ||
+  //           queue.customerName.toLowerCase().includes(searchValue)
+  //         );
+  //       });
+  //       setcopyAdminAppointmentHistory(filteredArray);
+  //     }
+  //   };
+
+  const adminGetDefaultSalon = useSelector(
+    (state) => state.adminGetDefaultSalon,
+  );
+
+  const { response: adminGetDefaultSalonResponse } = adminGetDefaultSalon;
+
+  const currentSalonType = localStorage.getItem("CurrentSalonType");
+
+  // ==========================================================
+
+  const headRows = [
+    { id: 1, heading: "BarberID", key: "qpos" },
+    { id: 2, heading: "Name", key: "customerName" },
+    {
+      id: 3,
+      heading: `${currentSalonType === "Barber Shop" ? "Barber Name" : currentSalonType === "Hair Dresser" ? "Stylist Name" : "BarberName"}`,
+      key: "barberName",
+    },
+    { id: 4, heading: "Start Time", key: "startTime" },
+    { id: 5, heading: "End Time", key: "endTime" },
+    { id: 6, heading: "Price", key: "price" },
+    { id: 7, heading: "Date", key: "date" },
+    { id: 8, heading: "Status", key: "status" },
+  ];
+
+  const [mobileQueueList, setMobileQueueList] = useState([]);
+
+  useEffect(() => {
+    if (!getAdminAppointmentHistoryResolve) return;
+
+    if (mobileWidth) {
+      if (page === 1) {
+        setMobileQueueList(AdminAppointmentHistory);
+      } else {
+        setMobileQueueList((prev) => [...prev, ...AdminAppointmentHistory]);
+      }
     }
+  }, [AdminAppointmentHistory]);
 
-    const [mobileWidth, setMobileWidth] = useState(window.innerWidth <= 430 ? true : false)
+  //   const [appointmenthistoryDataCopy, setappointmenthistoryDataCopy] = useState(
+  //     [],
+  //   );
+  //   const [appointmenthistoryData, setappointmenthistoryData] = useState([]);
+  //   const [
+  //     appointmentHistoryPaginationData,
+  //     setappointmentHistoryPaginationData,
+  //   ] = useState([]);
 
-    useEffect(() => {
-        const resizeHandler = () => {
-            if (window.innerWidth <= 430) {
-                setMobileWidth(true)
-            } else {
-                setMobileWidth(false)
-            }
-        }
-        window.addEventListener("resize", resizeHandler)
+//   useEffect(() => {
+//     if (
+//       getAdminAppointmentHistoryResolve &&
+//       AdminAppointmentHistory.length > 0
+//     ) {
+//       setappointmenthistoryData(AdminAppointmentHistory);
+//       setappointmenthistoryDataCopy(AdminAppointmentHistory);
+//       setMobileQueueList(AdminAppointmentHistory);
+//     }
+//   }, [AdminAppointmentHistory]);
 
-        return () => {
-            window.removeEventListener("resize", resizeHandler)
-        }
-    }, [])
+  //   const [settingsIndex, setSettingsIndex] = useState("");
+  //   const [startIndex, setStartIndex] = useState(0);
+  //   const [endIndex, setEndIndex] = useState(0);
+  //   const [sortOrder, setSortOrder] = useState("asc");
+  //   const [sortColumn, setSortColumn] = useState("");
 
+  //   const paginationFunction = () => {
+  //     const totalPages = Math.ceil(
+  //       appointmenthistoryDataCopy.length / rowsPerPage,
+  //     );
+  //     const startIndex = (page - 1) * rowsPerPage;
+  //     const endIndex = Math.min(
+  //       startIndex + rowsPerPage,
+  //       appointmenthistoryDataCopy.length,
+  //     );
 
+  //     setappointmentHistoryPaginationData(
+  //       appointmenthistoryDataCopy.slice(startIndex, endIndex),
+  //     );
+  //     setTotalPages(totalPages);
+  //     setStartIndex(startIndex);
+  //     setEndIndex(endIndex);
+  //   };
 
-    useEffect(() => {
+  //   useEffect(() => {
+  //     if (appointmenthistoryDataCopy.length > 0) {
+  //       paginationFunction();
+  //     }
+  //   }, [appointmenthistoryDataCopy, page, rowsPerPage]);
 
-        if (mobileWidth) {
-            let filteredData = appointmenthistoryDataCopy;
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
 
-            if (query.trim() !== '') {
-                filteredData = appointmenthistoryData.filter((item) =>
-                    item.customerName.toLowerCase().trim().includes(query.toLowerCase()) ||
-                    item.barberName.toLowerCase().trim().includes(query.toLowerCase())
-                );
-            }
+  const [mobileWidth, setMobileWidth] = useState(
+    window.innerWidth <= 430 ? true : false,
+  );
 
-            setMobileQueueList(filteredData)
-        } else {
-            if (query.trim() !== "") {
-                const filterData = appointmenthistoryData.filter((item) =>
-                    item.customerName.toLowerCase().trim().includes(query.toLowerCase()) ||
-                    item.barberName.toLowerCase().trim().includes(query.toLowerCase())
-                );
-                setappointmenthistoryDataCopy(filterData);
-                setPage(1)
-            } else {
-                setappointmenthistoryDataCopy(appointmenthistoryData);
-                setPage(1)
-            }
-        }
+  useEffect(() => {
+    const resizeHandler = () => {
+      if (window.innerWidth <= 430) {
+        setMobileWidth(true);
+      } else {
+        setMobileWidth(false);
+      }
+    };
+    window.addEventListener("resize", resizeHandler);
 
-    }, [query]);
+    return () => {
+      window.removeEventListener("resize", resizeHandler);
+    };
+  }, []);
 
+  const [selectOpen, setSelectOpen] = useState(false);
 
-    const [selectOpen, setSelectOpen] = useState(false)
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [mobileCalendarOpen, setMobileCalendarOpen] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const handleDateChange = (dates) => {
+    setPage(1);
+    const formatedDates = dates.map((date) => date.format("YYYY-MM-DD"));
+    setSelectedDates(formatedDates);
+  };
 
-    const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
-    const [mobileCalendarOpen, setMobileCalendarOpen] = useState(false);
-    const [calendarOpen, setCalendarOpen] = useState(false)
-    const handleDateChange = (dates) => {
-        const formatedDates = dates.map((date) => date.format("YYYY-MM-DD"))
-        setSelectedDates(formatedDates)
-    }
+  const resetHandler = () => {
+    setMobileQueueList([]);
+    setSelectedDates([]);
+    SetRowsPerPage(10);
+    setQuery("");
+    setPage(1);
 
-    const resetHandler = () => {
-        dispatch(getAdminAppointmentHistoryAction(salonId, "", "",));
-        setSelectedDates([])
-        setQuery("")
-        localStorage.removeItem("AppointmentHistoryBarber")
-        localStorage.removeItem("AppointmentHistoryCustomer")
-        setBarberData({
-            barberName: "",
-            barberEmail: "",
-            barberId: ""
-        })
-        setCustomerData({
-            customerName: "",
-            customerEmail: "",
-            customer: false
-        })
+    localStorage.removeItem("AppointmentHistoryBarber");
+    localStorage.removeItem("AppointmentHistoryCustomer");
 
-    }
+    setBarberData({
+      barberName: "",
+      barberEmail: "",
+      barberId: "",
+    });
+    setCustomerData({
+      customerName: "",
+      customerEmail: "",
+      customer: false,
+    });
+  };
 
+  const mobileLoaderRef = useRef("");
 
-    return (
-        <section className={`${style.section}`}>
-            <div>
-                <h2>Appointment History </h2>
-                <div>
+  useEffect(() => {
+    if (!mobileWidth) return;
+    if (!mobileLoaderRef.current) return;
 
-                    <button onClick={resetHandler}><ResetIcon /></button>
+    const observer = new IntersectionObserver((entries) => {
+      const target = entries[0];
 
-                    <div>
-                        <button
-                            title='Calender'
-                            onClick={() => setCalendarOpen(!calendarOpen)}
-                        ><AppointmentIcon /></button>
+      if (
+        target.isIntersecting &&
+        !getAdminAppointmentHistoryLoading &&
+        page < PaginationObject?.totalPages &&
+        mobileQueueList.length > 0
+      ) {
+        setPage((prev) => prev + 1);
+      }
+    });
 
-                        {calendarOpen && (
-                            <div style={{ position: "absolute", top: "4rem", right: "0rem", zIndex: 200 }}>
-                                <ClickAwayListener onClickAway={() => setCalendarOpen(false)}>
-                                    <Calendar
-                                        numberOfMonths={2}
-                                        value={selectedDates}
-                                        onChange={handleDateChange}
-                                        range
-                                        placeholder='yyyy-mm-dd - yyyy-mm-dd'
-                                        dateSeparator={" - "}
-                                        calendarPosition={"bottom-right"}
-                                        className={true ? "dark-theme" : "light-theme"}
-                                        style={{
-                                            // background: true ? "#222" : "#fff"
-                                        }}
-                                    />
-                                </ClickAwayListener>
-                            </div>
-                        )}
-                    </div>
+    const currentRef = mobileLoaderRef.current;
+    observer.observe(currentRef);
 
-                    <input
-                        type='text'
-                        placeholder='Search'
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                    />
-                </div>
-            </div>
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
+  }, [
+    mobileWidth,
+    page,
+    getAdminAppointmentHistoryLoading,
+    PaginationObject?.totalPages,
+    mobileQueueList.length,
+  ]);
 
-            <div className={`${style.mobile_header}`}>
-                <h2>Apointment History</h2>
-                <div>
-                    {
-                        mobileSearchOpen ? (
-                            <ClickAwayListener onClickAway={() => setMobileSearchOpen(false)}>
-                                <div className={`${style.input_type_2}`}>
-                                    <input
-                                        type='text'
-                                        placeholder='Search'
-                                        value={query}
-                                        onChange={(e) => setQuery(e.target.value)}
-                                    />
+  return (
+    <section className={`${style.section}`}>
+      <div>
+        <h2>Appointment History </h2>
+        <div>
+          <button onClick={resetHandler}>
+            <ResetIcon />
+          </button>
 
-                                    <button onClick={() => setMobileSearchOpen(false)}>
-                                        <CloseIcon />
-                                    </button>
+          <div>
+            <button
+              title="Calender"
+              onClick={() => setCalendarOpen(!calendarOpen)}
+            >
+              <AppointmentIcon />
+            </button>
 
-                                </div>
-                            </ClickAwayListener>
-                        ) : (
-                            <div style={{ position: "relative" }}>
-
-                                <button onClick={resetHandler}><ResetIcon /></button>
-
-                                <button
-                                    title='Calender'
-                                    onClick={() => setMobileCalendarOpen(!mobileCalendarOpen)}
-                                ><AppointmentIcon /></button>
-
-                                {mobileCalendarOpen && (
-                                    <div style={{ position: "absolute", top: "4.5rem", right: "0rem", zIndex: 10 }}>
-                                        <ClickAwayListener onClickAway={() => setMobileCalendarOpen(false)}>
-                                            <Calendar
-                                                numberOfMonths={1}
-                                                value={selectedDates}
-                                                onChange={handleDateChange}
-                                                range
-                                                placeholder='yyyy-mm-dd - yyyy-mm-dd'
-                                                // onChange={handleDateChange}
-                                                dateSeparator={" - "}
-                                                calendarPosition={"bottom-right"}
-                                                className={true ? "dark-theme" : "light-theme"}
-                                                style={{
-                                                    // background: true ? "#222" : "#fff"
-                                                }}
-                                            />
-                                        </ClickAwayListener>
-                                    </div>
-                                )}
-
-                                <button onClick={() => setMobileSearchOpen(true)}><SearchIcon /></button>
-
-                            </div>
-                        )
+            {calendarOpen && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "4rem",
+                  right: "0rem",
+                  zIndex: 200,
+                }}
+              >
+                <ClickAwayListener onClickAway={() => setCalendarOpen(false)}>
+                  <Calendar
+                    numberOfMonths={2}
+                    value={selectedDates}
+                    onChange={handleDateChange}
+                    range
+                    placeholder="yyyy-mm-dd - yyyy-mm-dd"
+                    dateSeparator={" - "}
+                    calendarPosition={"bottom-right"}
+                    className={true ? "dark-theme" : "light-theme"}
+                    maxDate={new Date()}
+                    style={
+                      {
+                        // background: true ? "#222" : "#fff"
+                      }
                     }
+                  />
+                </ClickAwayListener>
+              </div>
+            )}
+          </div>
 
+          <input
+            type="text"
+            placeholder="Search"
+            value={query}
+            onChange={(e) => {
+              setPage(1);
+              setQuery(e.target.value);
+            }}
+          />
+        </div>
+      </div>
+
+      <div className={`${style.mobile_header}`}>
+        <h2>Apointment History</h2>
+        <div>
+          {mobileSearchOpen ? (
+            <ClickAwayListener onClickAway={() => setMobileSearchOpen(false)}>
+              <div className={`${style.input_type_2}`}>
+                <input
+                  type="text"
+                  placeholder="Search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+
+                <button onClick={() => setMobileSearchOpen(false)}>
+                  <CloseIcon />
+                </button>
+              </div>
+            </ClickAwayListener>
+          ) : (
+            <div style={{ position: "relative" }}>
+              <button onClick={resetHandler}>
+                <ResetIcon />
+              </button>
+
+              <button
+                title="Calender"
+                onClick={() => setMobileCalendarOpen(!mobileCalendarOpen)}
+              >
+                <AppointmentIcon />
+              </button>
+
+              {mobileCalendarOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "4.5rem",
+                    right: "0rem",
+                    zIndex: 10,
+                  }}
+                >
+                  <ClickAwayListener
+                    onClickAway={() => setMobileCalendarOpen(false)}
+                  >
+                    <Calendar
+                      numberOfMonths={1}
+                      value={selectedDates}
+                      onChange={handleDateChange}
+                      range
+                      placeholder="yyyy-mm-dd - yyyy-mm-dd"
+                      // onChange={handleDateChange}
+                      dateSeparator={" - "}
+                      calendarPosition={"bottom-right"}
+                      className={true ? "dark-theme" : "light-theme"}
+                      maxDate={new Date()}
+                      style={
+                        {
+                          // background: true ? "#222" : "#fff"
+                        }
+                      }
+                    />
+                  </ClickAwayListener>
                 </div>
+              )}
 
+              <button onClick={() => setMobileSearchOpen(true)}>
+                <SearchIcon />
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className={`${style.list_container}`}>
+        {getAdminAppointmentHistoryLoading ? (
+          <div className={`${style.list_body_container_loader}`}>
+            <Skeleton
+              count={6}
+              height={"6.5rem"}
+              baseColor={"var(--loader-bg-color)"}
+              highlightColor={"var(--loader-highlight-color)"}
+              style={{ marginBottom: "1rem" }}
+            />
+          </div>
+        ) : getAdminAppointmentHistoryResolve &&
+          AdminAppointmentHistory.length > 0 ? (
+          <div className={`${style.list_body_container}`}>
+            <div className={`${style.headRow}`}>
+              {headRows.map((item, index) => {
+                return (
+                  <div key={item.id}>
+                    <button
+                      className={`${item.key === "customerName" || item.key === "barberName" ? style.name_head_btn : ""}`}
+                      // onClick={() => sortFunction(item.key)}
+                    >
+                      {item.key === "customerName" ||
+                      item.key === "barberName" ? (
+                        <>
+                          <span></span>
+                          {item.heading}
+                        </>
+                      ) : (
+                        item.heading
+                      )}
+
+                      {/* <span>{item.key && (sortColumn === item.key ? (sortOrder === 'asc' ? <SortUpIcon /> : <SortDownIcon />) : <SortUpDownArrowIcon />)}</span> */}
+                    </button>
+                  </div>
+                );
+              })}
             </div>
 
-            <div className={`${style.list_container}`}>
-
-                {
-                    getAdminAppointmentHistoryLoading ? (
-                        <div className={`${style.list_body_container_loader}`}>
-                            <Skeleton
-                                count={6}
-                                height={"6.5rem"}
-                                baseColor={"var(--loader-bg-color)"}
-                                highlightColor={"var(--loader-highlight-color)"}
-                                style={{ marginBottom: "1rem" }} />
-                        </div>
-                    ) : getAdminAppointmentHistoryResolve && AdminAppointmentHistory.length > 0 ? (
-                        <div className={`${style.list_body_container}`}>
-
-                            <div className={`${style.headRow}`}>
-                                {
-                                    headRows.map((item, index) => {
-                                        return (
-                                            <div key={item.id}>
-                                                <button
-                                                    className={`${item.key === "customerName" || item.key === "barberName" ? style.name_head_btn : ""}`}
-                                                // onClick={() => sortFunction(item.key)}
-                                                >
-                                                    {item.key === "customerName" || item.key === "barberName" ? (
-                                                        <>
-                                                            <span></span>
-                                                            {item.heading}
-                                                        </>
-                                                    ) : (
-                                                        item.heading
-                                                    )}
-
-                                                    {/* <span>{item.key && (sortColumn === item.key ? (sortOrder === 'asc' ? <SortUpIcon /> : <SortDownIcon />) : <SortUpDownArrowIcon />)}</span> */}
-                                                </button>
-                                            </div>
-                                        )
-                                    })
-                                }
-
-                            </div>
-
-                            {
-                                appointmentHistoryPaginationData.map((item, index) => {
-                                    return (
-                                        <div key={item._id} style={{ borderBottom: (index === endIndex - 1) || (index === appointmentHistoryPaginationData.length - 1) ? null : "0.1rem solid var(--border-secondary)" }}>
-                                            <div><p>{item.barberId}</p></div>
-                                            <div>
-                                                <div>
-                                                    <div><img src={item?.customerProfile?.[0]?.url} alt="" /></div>
-                                                    <p>{item.customerName}</p>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div>
-                                                    <div><img src={item?.barberProfile?.[0]?.url} alt="" /></div>
-                                                    <p>{item.barberName}</p>
-                                                </div>
-                                            </div>
-                                            <div><p>{item.startTime}</p></div>
-                                            <div><p>{item.endTime}</p></div>
-                                            {/* <div><p>{adminGetDefaultSalon?.response?.currency}{" "}{item?.services.reduce((sum, service) => sum + service?.servicePrice, 0)}</p></div> */}
-                                            <div><p>{adminGetDefaultSalon?.response?.currency}{" "}{Array.isArray(item?.services)
-                                                ? item.services.reduce((sum, service) => sum + (service.servicePrice || 0), 0)
-                                                : 0}</p></div>
-                                            {/* <div><p>{item.serviceType}</p></div>
+            {AdminAppointmentHistory.map((item, index) => {
+              return (
+                <div
+                  key={item._id}
+                  style={{
+                    borderBottom:
+                      //   index === endIndex - 1 ||
+                      index === AdminAppointmentHistory.length - 1
+                        ? null
+                        : "0.1rem solid var(--border-secondary)",
+                  }}
+                >
+                  <div>
+                    <p>{item.barberId}</p>
+                  </div>
+                  <div>
+                    <div>
+                      <div>
+                        <img src={item?.customerProfile?.[0]?.url} alt="" />
+                      </div>
+                      <p>{item.customerName}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <div>
+                        <img src={item?.barberProfile?.[0]?.url} alt="" />
+                      </div>
+                      <p>{item.barberName}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <p>{item.startTime}</p>
+                  </div>
+                  <div>
+                    <p>{item.endTime}</p>
+                  </div>
+                  {/* <div><p>{adminGetDefaultSalon?.response?.currency}{" "}{item?.services.reduce((sum, service) => sum + service?.servicePrice, 0)}</p></div> */}
+                  <div>
+                    <p>
+                      {adminGetDefaultSalon?.response?.currency}{" "}
+                      {Array.isArray(item?.services)
+                        ? item.services.reduce(
+                            (sum, service) => sum + (service.servicePrice || 0),
+                            0,
+                          )
+                        : 0}
+                    </p>
+                  </div>
+                  {/* <div><p>{item.serviceType}</p></div>
                                             <div><p>{item.serviceEWT} mins</p></div>
                                             <div><span>{item?.isAdmin ? (<CheckIcon color={"green"} />) : (<CloseIcon color={"var(--bg-secondary)"} />)}</span></div> */}
-                                            <div><p>{ddmmformatDate(item.appointmentDate?.split("T")[0])}</p></div>
-                                            <div><p style={{
-                                                color: item.status === "served" ? "green" : "red"
-                                            }}>{item.status}</p></div>
-
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    ) : (
-                        <div className={`${style.list_body_container_error}`}>
-                            <p>No appointment history available</p>
-                        </div>
-                    )
-                }
-
-
-                <div className={`${style.pagination_container}`}>
-                    <div></div>
-                    <div>
-                        <Pagination
-                            count={totalPages}
-                            page={page}
-                            onChange={handleChange}
-                            sx={{
-                                "& .MuiPaginationItem-root": {
-                                    color: "var(--text-primary)",
-                                    fontSize: "1.4rem",
-                                },
-                                "& .Mui-selected": { backgroundColor: "var(--bg-secondary) !important", color: "var(--btn-text-color)" },
-                            }}
-                        />
-                    </div>
-                    <div>
-                        <div>
-                            <p>Rows Per Page</p>
-
-                            <ClickAwayListener onClickAway={() => setSelectOpen(false)}>
-                                <div className={`${style.select_container}`}>
-                                    <div onClick={() => setSelectOpen((prev) => !prev)}>
-                                        <input type="text" value={rowsPerPage} readOnly />
-                                        <div><DropdownIcon /></div>
-                                    </div>
-
-                                    {
-                                        selectOpen ? (<ul>
-                                            {
-                                                [10, 20, 30, 50].map((item, index) => {
-                                                    return (
-                                                        <li key={item} onClick={() => {
-                                                            setPage(1)
-                                                            SetRowsPerPage(item)
-                                                            setSelectOpen(false)
-                                                        }}
-                                                            style={{
-                                                                background: item === rowsPerPage ? "var(--bg-secondary)" : null,
-                                                                color: item === rowsPerPage ? "var(--btn-text-color)" : null,
-                                                                borderBottom: index === [10, 20, 30, 50].length - 1 ? "none" : "0.1rem solid var(--border-secondary)"
-                                                            }}
-                                                        >{item}</li>
-                                                    )
-                                                })
-                                            }
-
-                                        </ul>) : (null)
-                                    }
-                                </div>
-                            </ClickAwayListener>
-
-                        </div>
-                        <div>
-                            <p>{startIndex} - {endIndex}{" "} of {totalPages}</p>
-                        </div>
-                    </div>
+                  <div>
+                    <p>{ddmmformatDate(item.appointmentDate?.split("T")[0])}</p>
+                  </div>
+                  <div>
+                    <p
+                      style={{
+                        color: item.status === "served" ? "green" : "red",
+                      }}
+                    >
+                      {item.status}
+                    </p>
+                  </div>
                 </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className={`${style.list_body_container_error}`}>
+            <p>No appointment history available</p>
+          </div>
+        )}
+
+        <div className={`${style.pagination_container}`}>
+          <div></div>
+          <div>
+            <Pagination
+              count={PaginationObject?.totalPages}
+              page={page}
+              onChange={handleChange}
+              sx={{
+                "& .MuiPaginationItem-root": {
+                  color: "var(--text-primary)",
+                  fontSize: "1.4rem",
+                },
+                "& .Mui-selected": {
+                  backgroundColor: "var(--bg-secondary) !important",
+                  color: "var(--btn-text-color)",
+                },
+              }}
+            />
+          </div>
+          <div>
+            <div>
+              <p>Rows Per Page</p>
+
+              <ClickAwayListener onClickAway={() => setSelectOpen(false)}>
+                <div className={`${style.select_container}`}>
+                  <div onClick={() => setSelectOpen((prev) => !prev)}>
+                    <input type="text" value={rowsPerPage} readOnly />
+                    <div>
+                      <DropdownIcon />
+                    </div>
+                  </div>
+
+                  {selectOpen ? (
+                    <ul>
+                      {[10, 20, 30, 50].map((item, index) => {
+                        return (
+                          <li
+                            key={item}
+                            onClick={() => {
+                              setPage(1);
+                              SetRowsPerPage(item);
+                              setSelectOpen(false);
+                            }}
+                            style={{
+                              background:
+                                item === rowsPerPage
+                                  ? "var(--bg-secondary)"
+                                  : null,
+                              color:
+                                item === rowsPerPage
+                                  ? "var(--btn-text-color)"
+                                  : null,
+                              borderBottom:
+                                index === [10, 20, 30, 50].length - 1
+                                  ? "none"
+                                  : "0.1rem solid var(--border-secondary)",
+                            }}
+                          >
+                            {item}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : null}
+                </div>
+              </ClickAwayListener>
             </div>
+            <div>
+              <p>
+                {/* {startIndex} - {endIndex} of {totalPages} */}
+                {PaginationObject?.pageDataCount} of {PaginationObject?.total}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-
-            {
-                getAdminAppointmentHistoryLoading ? (
-                    <div className={style.list_container_mobile_loader}>
-                        <Skeleton
-                            count={6}
-                            height={"19.5rem"}
-                            baseColor={"var(--loader-bg-color)"}
-                            highlightColor={"var(--loader-highlight-color)"}
-                            style={{ marginBottom: "1rem" }}
-                        />
+      {getAdminAppointmentHistoryLoading ? (
+        <div className={style.list_container_mobile_loader}>
+          <Skeleton
+            count={6}
+            height={"19.5rem"}
+            baseColor={"var(--loader-bg-color)"}
+            highlightColor={"var(--loader-highlight-color)"}
+            style={{ marginBottom: "1rem" }}
+          />
+        </div>
+      ) : getAdminAppointmentHistoryResolve &&
+        AdminAppointmentHistory.length > 0 ? (
+        <div className={style.list_container_mobile}>
+          {barberData?.barber ? (
+            <p style={{ marginBottom: "2rem" }}>
+              Barber - {barberData?.barberName}
+            </p>
+          ) : null}
+          {customerData?.customer ? (
+            <p style={{ marginBottom: "2rem" }}>
+              Customer - {customerData?.customerName}
+            </p>
+          ) : null}
+          {mobileQueueList?.map((item, index) => {
+            return (
+              <div className={style.list_mobile_item} key={item._id}>
+                <div>
+                  <div>
+                    <img
+                      src={item?.customerProfile?.[0]?.url}
+                      alt=""
+                      width={50}
+                      height={50}
+                    />
+                    <div>
+                      <p>{item.customerName}</p>
+                      <p>{item.barberName}</p>
+                      <p>
+                        {item?.services
+                          ?.map((item) => item.serviceName)
+                          .join(", ")}
+                      </p>
                     </div>
-                ) : getAdminAppointmentHistoryResolve && AdminAppointmentHistory.length > 0 ? (
-                    <div className={style.list_container_mobile}>
-                        {barberData?.barber ? <p style={{ marginBottom: "2rem" }}>Barber - {barberData?.barberName}</p> : null}
-                        {customerData?.customer ? <p style={{ marginBottom: "2rem" }}>Customer - {customerData?.customerName}</p> : null}
-                        {
-                            mobileQueueList?.map((item, index) => {
-                                return (
-                                    <div className={style.list_mobile_item} key={item._id}>
-                                        <div>
-                                            <div>
-                                                <img src={item?.customerProfile?.[0]?.url} alt="" width={50} height={50} />
-                                                <div>
-                                                    <p>{item.customerName}</p>
-                                                    <p>{item.barberName}</p>
-                                                    <p>{item?.services?.map((item) => item.serviceName).join(", ")}</p>
-                                                </div>
-                                            </div>
+                  </div>
 
-                                            <div>
-                                                <p>{adminGetDefaultSalon?.response?.currency}{" "}{Array.isArray(item?.services)
-                                                    ? item.services.reduce((sum, service) => sum + (service.servicePrice || 0), 0)
-                                                    : 0}</p>
-                                                <p>{ddmmformatDate(item?.appointmentDate?.split(["T"])[0])}</p>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            {/* <div>
-                                                <div>{item.methodUsed === "App" ? <MobileIcon color={"#1ADB6A"} /> : <KioskIcon color={"#1ADB6A"} />}</div>
-                                                <p>Mode</p>
-                                            </div>
+                  <div>
+                    <p>
+                      {adminGetDefaultSalon?.response?.currency}{" "}
+                      {Array.isArray(item?.services)
+                        ? item.services.reduce(
+                            (sum, service) => sum + (service.servicePrice || 0),
+                            0,
+                          )
+                        : 0}
+                    </p>
+                    <p>
+                      {ddmmformatDate(item?.appointmentDate?.split(["T"])[0])}
+                    </p>
+                  </div>
+                </div>
+                <div>
 
-                                            <div>
-                                                <div>{item.joinedQType === "Single-Join" ? <CustomerIcon color={"#1ADB6A"} /> : <GroupJoinIcon color={"#1ADB6A"} />}</div>
-                                                <p>Type</p>
-                                            </div> */}
-
-                                            <div>
-                                                <div>{item.status === "served" ? <CheckIcon color={"#1ADB6A"} /> : <CloseIcon color={"#FC3232"} />}</div>
-                                                <p> {item.status === "served" ? "Served" : "Cancelled"}</p>
-                                            </div>
-                                        </div>
-
-
-
-                                    </div>
-                                )
-                            })
-                        }
-
+                  <div>
+                    <div>
+                      {item.status === "served" ? (
+                        <CheckIcon color={"#1ADB6A"} />
+                      ) : (
+                        <CloseIcon color={"#FC3232"} />
+                      )}
                     </div>
-                ) : (
-                    <div className={style.list_container_mobile_error}>
-                        <p>No appointment history available</p>
-                    </div>
-                )
-            }
+                    <p> {item.status === "served" ? "Served" : "Cancelled"}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
 
+          {page < PaginationObject?.totalPages && (
+            <div
+              ref={mobileLoaderRef}
+              style={{
+                marginTop: "12rem",
+                display: "flex",
+                justifyContent: "center",
+                display: mobileWidth ? "block" : "none",
+              }}
+            >
+              <ButtonLoader color={"var(--loader-bg-color)"} />
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className={style.list_container_mobile_error}>
+          <p>No appointment history available</p>
+        </div>
+      )}
+    </section>
+  );
+};
 
-
-        </section >
-    )
-}
-
-export default QueHistory
-
+export default QueHistory;
