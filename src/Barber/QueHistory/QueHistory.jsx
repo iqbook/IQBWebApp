@@ -14,9 +14,12 @@ import {
   GroupJoinIcon,
   KioskIcon,
   MobileIcon,
+  ResetIcon,
+  SearchIcon,
 } from "../../newicons";
 import { ClickAwayListener, Pagination } from "@mui/material";
 import { formatMinutesToHrMin } from "../../../utils/formatMinutesToHrMin";
+import ButtonLoader from "../../components/ButtonLoader/ButtonLoader";
 
 const QueHistory = () => {
   const darkMode = useSelector(darkmodeSelector);
@@ -30,7 +33,6 @@ const QueHistory = () => {
   );
 
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [query, setQuery] = useState("");
   const [rowsPerPage, SetRowsPerPage] = useState(10);
 
@@ -92,14 +94,27 @@ const QueHistory = () => {
     { id: 9, heading: "Status", key: "status" },
   ];
 
-  const [endIndex, setEndIndex] = useState(rowsPerPage);
-  const [sortOrder, setSortOrder] = useState("asc");
-  const [sortColumn, setSortColumn] = useState("");
+  const [mobileQueueList, setMobileQueueList] = useState([]);
 
+  useEffect(() => {
+    if (!getBarberQueueListHistoryResolve) return;
+
+    if (mobileWidth) {
+      if (page === 1) {
+        setMobileQueueList(BarberQueueListHistory);
+      } else {
+        setMobileQueueList((prev) => [...prev, ...BarberQueueListHistory]);
+      }
+    }
+  }, [BarberQueueListHistory]);
 
   const handleChange = (event, value) => {
     setPage(value);
   };
+
+  const [endIndex, setEndIndex] = useState(rowsPerPage);
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortColumn, setSortColumn] = useState("");
 
   const [mobileWidth, setMobileWidth] = useState(
     window.innerWidth <= 430 ? true : false,
@@ -122,20 +137,102 @@ const QueHistory = () => {
 
   const [selectOpen, setSelectOpen] = useState(false);
 
+  const mobileLoaderRef = useRef("");
+
+  useEffect(() => {
+    if (!mobileWidth) return;
+    if (!mobileLoaderRef.current) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      const target = entries[0];
+
+      if (
+        target.isIntersecting &&
+        !getBarberQueueListHistoryLoading &&
+        page < PaginationObject?.totalPages &&
+        mobileQueueList.length > 0
+      ) {
+        setPage((prev) => prev + 1);
+      }
+    });
+
+    const currentRef = mobileLoaderRef.current;
+    observer.observe(currentRef);
+
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
+  }, [
+    mobileWidth,
+    page,
+    getBarberQueueListHistoryLoading,
+    PaginationObject?.totalPages,
+    mobileQueueList.length,
+  ]);
+
+  const resetHandler = () => {
+    if (page !== 1) {
+      setMobileQueueList([]);
+      SetRowsPerPage(10);
+      setQuery("");
+      setPage(1);
+    }
+  };
+
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+
   return (
     <section className={`${style.section}`}>
       <div>
         <h2>Queue History</h2>
         <div>
+          <button onClick={resetHandler}>
+            <ResetIcon />
+          </button>
           <input
             type="text"
             placeholder="Search"
             value={query}
             onChange={(e) => {
-                setPage(1)
-                setQuery(e.target.value)
+              setPage(1);
+              setQuery(e.target.value);
             }}
           />
+        </div>
+      </div>
+
+      <div className={`${style.mobile_header}`}>
+        <h2>Queue History</h2>
+        <div>
+          {mobileSearchOpen ? (
+            <ClickAwayListener onClickAway={() => setMobileSearchOpen(false)}>
+              <div className={`${style.input_type_2}`}>
+                <input
+                  type="text"
+                  placeholder="Search"
+                  value={query}
+                  onChange={(e) => {
+                    setPage(1);
+                    setQuery(e.target.value);
+                  }}
+                />
+
+                <button onClick={() => setMobileSearchOpen(false)}>
+                  <CloseIcon />
+                </button>
+              </div>
+            </ClickAwayListener>
+          ) : (
+            <div style={{ position: "relative" }}>
+              <button onClick={resetHandler}>
+                <ResetIcon />
+              </button>
+
+              <button onClick={() => setMobileSearchOpen(true)}>
+                <SearchIcon />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -339,7 +436,7 @@ const QueHistory = () => {
       ) : getBarberQueueListHistoryResolve &&
         BarberQueueListHistory?.length > 0 ? (
         <div className={style.list_container_mobile}>
-          {/* {mobileQueueList?.map((item, index) => {
+          {mobileQueueList?.map((item, index) => {
             return (
               <div className={style.list_mobile_item} key={item._id}>
                 <div>
@@ -410,7 +507,21 @@ const QueHistory = () => {
                 </div>
               </div>
             );
-          })} */}
+          })}
+
+          {page < PaginationObject?.totalPages && (
+            <div
+              ref={mobileLoaderRef}
+              style={{
+                marginTop: "12rem",
+                display: "flex",
+                justifyContent: "center",
+                display: mobileWidth ? "block" : "none",
+              }}
+            >
+              <ButtonLoader color={"var(--loader-bg-color)"} />
+            </div>
+          )}
         </div>
       ) : (
         <div className={style.list_container_mobile_error}>

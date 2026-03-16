@@ -172,31 +172,6 @@ const QueHistory = () => {
     pagination: PaginationObject,
   } = getAdminAppointmentHistory;;
 
-  //   const [copyAdminAppointmentHistory, setcopyAdminAppointmentHistory] =
-  //     useState([]);
-
-  //   useEffect(() => {
-  //     if (AdminAppointmentHistory) {
-  //       setcopyAdminAppointmentHistory(AdminAppointmentHistory);
-  //     }
-  //   }, [AdminAppointmentHistory]);
-
-  //   const searchCustomHandler = (value) => {
-  //     setSearch(value);
-  //     const searchValue = value.toLowerCase().trim();
-
-  //     if (!searchValue) {
-  //       setcopyAdminAppointmentHistory(AdminAppointmentHistory);
-  //     } else {
-  //       const filteredArray = AdminAppointmentHistory?.filter((queue) => {
-  //         return (
-  //           queue.barberName.toLowerCase().includes(searchValue) ||
-  //           queue.customerName.toLowerCase().includes(searchValue)
-  //         );
-  //       });
-  //       setcopyAdminAppointmentHistory(filteredArray);
-  //     }
-  //   };
 
   const adminGetDefaultSalon = useSelector(
     (state) => state.adminGetDefaultSalon,
@@ -236,56 +211,6 @@ const QueHistory = () => {
       }
     }
   }, [AdminAppointmentHistory]);
-
-  //   const [appointmenthistoryDataCopy, setappointmenthistoryDataCopy] = useState(
-  //     [],
-  //   );
-  //   const [appointmenthistoryData, setappointmenthistoryData] = useState([]);
-  //   const [
-  //     appointmentHistoryPaginationData,
-  //     setappointmentHistoryPaginationData,
-  //   ] = useState([]);
-
-//   useEffect(() => {
-//     if (
-//       getAdminAppointmentHistoryResolve &&
-//       AdminAppointmentHistory.length > 0
-//     ) {
-//       setappointmenthistoryData(AdminAppointmentHistory);
-//       setappointmenthistoryDataCopy(AdminAppointmentHistory);
-//       setMobileQueueList(AdminAppointmentHistory);
-//     }
-//   }, [AdminAppointmentHistory]);
-
-  //   const [settingsIndex, setSettingsIndex] = useState("");
-  //   const [startIndex, setStartIndex] = useState(0);
-  //   const [endIndex, setEndIndex] = useState(0);
-  //   const [sortOrder, setSortOrder] = useState("asc");
-  //   const [sortColumn, setSortColumn] = useState("");
-
-  //   const paginationFunction = () => {
-  //     const totalPages = Math.ceil(
-  //       appointmenthistoryDataCopy.length / rowsPerPage,
-  //     );
-  //     const startIndex = (page - 1) * rowsPerPage;
-  //     const endIndex = Math.min(
-  //       startIndex + rowsPerPage,
-  //       appointmenthistoryDataCopy.length,
-  //     );
-
-  //     setappointmentHistoryPaginationData(
-  //       appointmenthistoryDataCopy.slice(startIndex, endIndex),
-  //     );
-  //     setTotalPages(totalPages);
-  //     setStartIndex(startIndex);
-  //     setEndIndex(endIndex);
-  //   };
-
-  //   useEffect(() => {
-  //     if (appointmenthistoryDataCopy.length > 0) {
-  //       paginationFunction();
-  //     }
-  //   }, [appointmenthistoryDataCopy, page, rowsPerPage]);
 
   const handleChange = (event, value) => {
     setPage(value);
@@ -446,7 +371,10 @@ const QueHistory = () => {
                   type="text"
                   placeholder="Search"
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) => {
+                    setPage(1)
+                    setQuery(e.target.value)
+                  }}
                 />
 
                 <button onClick={() => setMobileSearchOpen(false)}>
