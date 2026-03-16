@@ -50,7 +50,8 @@ export const getBarberQueueListHistoryReducer = (state = {}, action) => {
                 ...state,
                 loading: false,
                 resolve: true,
-                queueListHistory: action.payload.response
+                // queueListHistory: action.payload.response
+                ...action.payload
             };
         case GET_QUEUE_HISTORY_FAIL:
             return {

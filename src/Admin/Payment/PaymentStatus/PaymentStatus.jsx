@@ -43,7 +43,7 @@ const PaymentStatus = () => {
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [rowsPerPage, SetRowsPerPage] = useState(4);
+  const [rowsPerPage, SetRowsPerPage] = useState(10);
 
   const PaymentistControllerRef = useRef(new AbortController());
 

@@ -80,7 +80,7 @@ const QueHistory = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [query, setQuery] = useState("");
-  const [rowsPerPage, SetRowsPerPage] = useState(4);
+  const [rowsPerPage, SetRowsPerPage] = useState(10);
 
   const dispatch = useDispatch();
 
@@ -244,7 +244,7 @@ const QueHistory = () => {
   const resetHandler = () => {
     setMobileQueueList([]);
     setSelectedDates([]);
-    SetRowsPerPage(4);
+    SetRowsPerPage(10);
     setQuery("");
     setPage(1);
 

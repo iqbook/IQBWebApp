@@ -25,7 +25,7 @@ export const getBarberQueueListAction =
 
       const { data } = await api.get(
         `/api/queue/getQlistByBarberId?salonId=${salonId}&barberId=${barberId}`,
-        { signal }
+        { signal },
       );
 
       dispatch({
@@ -68,7 +68,7 @@ export const barberServeQueueAction =
     barberId,
     setBarberServeLoading,
     setOpenModal,
-    setOpenConfirmationQueueModal
+    setOpenConfirmationQueueModal,
   ) =>
   async (dispatch) => {
     try {
@@ -77,7 +77,7 @@ export const barberServeQueueAction =
 
       const { data } = await api.post(
         "/api/queue/barberServedQueue",
-        barberqueuedata
+        barberqueuedata,
       );
 
       dispatch({
@@ -102,7 +102,7 @@ export const barberServeQueueAction =
       });
 
       const { data: queuelistdata } = await api.get(
-        `/api/queue/getQlistByBarberId?salonId=${salonId}&barberId=${barberId}`
+        `/api/queue/getQlistByBarberId?salonId=${salonId}&barberId=${barberId}`,
       );
 
       dispatch({
@@ -154,7 +154,14 @@ export const barberServeQueueAction =
   };
 
 export const barberCancelQueueAction =
-  (canceldata, salonId, barberId, setBarberCancelLoading, setOpenModal, setOpenConfirmationCancelQueueModal) =>
+  (
+    canceldata,
+    salonId,
+    barberId,
+    setBarberCancelLoading,
+    setOpenModal,
+    setOpenConfirmationCancelQueueModal,
+  ) =>
   async (dispatch) => {
     try {
       dispatch({ type: BARBER_CANCEL_QUEUE_REQ });
@@ -184,7 +191,7 @@ export const barberCancelQueueAction =
       });
 
       const { data: queuelistdata } = await api.get(
-        `/api/queue/getQlistByBarberId?salonId=${salonId}&barberId=${barberId}`
+        `/api/queue/getQlistByBarberId?salonId=${salonId}&barberId=${barberId}`,
       );
 
       dispatch({
@@ -194,8 +201,8 @@ export const barberCancelQueueAction =
 
       setOpenConfirmationCancelQueueModal({
         data: null,
-        open: false
-      })
+        open: false,
+      });
     } catch (error) {
       setBarberCancelLoading(false);
 
@@ -236,7 +243,7 @@ export const barberCancelQueueAction =
   };
 
 export const getBarberQueueListHistoryAction =
-  (salonId, barberId, signal) => async (dispatch) => {
+  (salonId, barberId, rowsPerPage, page, query, signal) => async (dispatch) => {
     try {
       dispatch({ type: GET_QUEUE_HISTORY_REQ });
 
@@ -245,8 +252,11 @@ export const getBarberQueueListHistoryAction =
         {
           salonId,
           barberId,
+          page,
+          limit: rowsPerPage,
+          search: query
         },
-        { signal }
+        { signal },
       );
 
       dispatch({
@@ -288,7 +298,7 @@ export const getAllSalonServicesBarberAction =
       dispatch({ type: GET_ALL_SALON_SERVICES_REQ });
 
       const { data } = await api.get(
-        `/api/barber/getAllSalonServicesForBarber?salonId=${salonId}`
+        `/api/barber/getAllSalonServicesForBarber?salonId=${salonId}`,
       );
 
       dispatch({
