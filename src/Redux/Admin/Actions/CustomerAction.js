@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import api from "../../api/Api";
 
 export const adminGetAllCustomerListAction =
-  (salonId, page, setPage, rowsPerPage, SetRowsPerPage, query = "", signal) =>
+  (salonId, page, rowsPerPage, query = "", signal) =>
   async (dispatch) => {
     try {
       dispatch({ type: GET_ALL_CUSTOMERLIST_REQ });
@@ -24,9 +24,6 @@ export const adminGetAllCustomerListAction =
         type: GET_ALL_CUSTOMERLIST_SUCCESS,
         payload: data,
       });
-
-      setPage(data?.pagination?.page);
-      SetRowsPerPage(data?.pagination?.limit);
     } catch (error) {
       if (error?.response?.status === 500) {
         dispatch({
