@@ -143,42 +143,12 @@ const CustomerList = () => {
 
   const [checkAllEmail, setCheckAllEmail] = useState(false);
 
-  // const checkAllCustomersHandler = (e) => {
-  //   setCheckedCustomers({});
-  //   setCheckAllEmail((prev) => !prev);
-  //   // setCheckAllCustomers((prev) => {
-  //   //   if (!prev) {
-  //   //     const customerEmails = AllCustomerList.map((c) => c.email);
-  //   //     const customerMobileNumbers = AllCustomerList.map((c) =>
-  //   //       Number(`${c.mobileCountryCode}${c.mobileNumber}`),
-  //   //     );
-  //   //     const customerNames = AllCustomerList.map((c) => c.name);
-  //   //     const allCheckedCustomers = AllCustomerList.reduce((acc, customer) => {
-  //   //       acc[customer._id] = true;
-  //   //       return acc;
-  //   //     }, {});
-  //   //     setCheckedEmails(customerEmails);
-  //   //     setCheckMobileNumber(customerMobileNumbers);
-  //   //     setCheckCustomerNames(customerNames);
-  //   //     setCheckedCustomers(allCheckedCustomers);
-  //   //   } else {
-  //   //     setCheckedEmails([]);
-  //   //     setCheckMobileNumber([]);
-  //   //     setCheckCustomerNames([]);
-  //   //     setCheckedCustomers({});
-  //   //   }
-
-  //   //   return !prev;
-  //   // });
-  // };
-
   const checkAllCustomersHandler = () => {
     const newValue = !checkAllEmail;
 
     setCheckAllEmail(newValue);
 
     if (!newValue) {
-      // deselect all
       setCheckedCustomers({});
       setCheckedEmails([]);
       setCheckMobileNumber([]);
@@ -275,15 +245,6 @@ const CustomerList = () => {
     }
   };
 
-  // const sendMessageHandler = () => {
-  //   const smsdata = {
-  //     smsBody: barberMessage,
-  //     numbers: checkMobileNumbers
-  //   }
-  //   // console.log(smsdata)
-  //   dispatch(adminSendBarberMessageAction(smsdata, setMessage, setOpenBarberMessage))
-  // }
-
   const sendMessageHandler = () => {
     if (barbertitle.trim() === "" || barberMessage.trim() === "") {
       toast.error("Please fill in all fields", {
@@ -366,37 +327,6 @@ const CustomerList = () => {
   const handleChange = (event, value) => {
     setPage(value);
   };
-
-  useEffect(() => {
-    if (mobileWidth) {
-      let filteredData = customerlistDataCopy;
-
-      if (query.trim() !== "") {
-        filteredData = customerlistDataCopy.filter((item) => {
-          return (
-            item.name.toLowerCase().trim().includes(query.toLowerCase()) ||
-            item.email.toLowerCase().trim().includes(query.toLowerCase())
-          );
-        });
-      }
-
-      setMobileCustomerList(filteredData);
-    } else {
-      let filteredData = customerlistDataCopy;
-
-      if (query.trim() !== "") {
-        filteredData = customerlistDataCopy.filter((item) => {
-          return (
-            item.name.toLowerCase().trim().includes(query.toLowerCase()) ||
-            item.email.toLowerCase().trim().includes(query.toLowerCase())
-          );
-        });
-      }
-
-      setCustomerlistData(filteredData);
-      setPage(1);
-    }
-  }, [query]);
 
   const [selectOpen, setSelectOpen] = useState(false);
 
