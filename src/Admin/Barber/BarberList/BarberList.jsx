@@ -753,7 +753,7 @@ const BarberList = () => {
               style={{ marginBottom: "1rem" }}
             />
           </div>
-        ) : getAdminBarberListResolve && BarberList.length > 0 ? (
+        ) : getAdminBarberListResolve && BarberList?.length > 0 ? (
           <div className={`${style.list_body_container}`}>
             <div className={`${style.headRow}`}>
               {headRows.map((item, index) => {
@@ -1063,7 +1063,7 @@ const BarberList = () => {
             style={{ marginBottom: "1rem" }}
           />
         </div>
-      ) : getAdminBarberListResolve && BarberList.length > 0 ? (
+      ) : getAdminBarberListResolve && BarberList?.length > 0 ? (
         <div className={style.list_mobile_container}>
           {BarberList?.map((item, index) => {
             return (

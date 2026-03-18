@@ -347,6 +347,7 @@ const CustomerList = () => {
   // Mobile View
 
   const [mobileListItems, setMobileListItems] = useState([]);
+  const [mobilePaginationObject, setMobilePaginationObject] = useState({})
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
@@ -381,6 +382,7 @@ const CustomerList = () => {
       );
 
       setMobileListItems((prev) => [...prev, ...data?.response]);
+      setMobilePaginationObject(data?.pagination)
       setHasMore(data?.response?.length > 0);
     } catch (error) {
       if (error.name === "CanceledError" || error.name === "AbortError") {
@@ -418,14 +420,13 @@ const CustomerList = () => {
           style={{
             maxWidth: "400px",
             margin: "0 auto",
-            fontFamily: "sans-serif",
           }}
         >
           <div className={`${style.mobile_header}`}>
             <h2>
               Customer List
               <span className={style.count_badge}>
-                {PaginationObject?.total ?? 0}
+                {" "}{mobilePaginationObject?.total ?? 0}
               </span>
             </h2>
             <div>

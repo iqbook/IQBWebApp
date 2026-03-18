@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import style from "./AppointmentHistory.module.css";
 import {
   AppointmentIcon,
@@ -16,8 +16,29 @@ import { getBarberAppointmentHistoryAction } from "../../Redux/Barber/Actions/Ap
 import toast from "react-hot-toast";
 import { ddmmformatDate } from "../../../utils/ddmmformatDate";
 import ButtonLoader from "../../components/ButtonLoader/ButtonLoader";
+import ClipLoader from "react-spinners/ClipLoader";
+import api from "../../Redux/api/Api";
 
 const AppointmentHistory = () => {
+  const [mobileWidth, setMobileWidth] = useState(
+    window.innerWidth <= 430 ? true : false,
+  );
+
+  useEffect(() => {
+    const resizeHandler = () => {
+      if (window.innerWidth <= 430) {
+        setMobileWidth(true);
+      } else {
+        setMobileWidth(false);
+      }
+    };
+    window.addEventListener("resize", resizeHandler);
+
+    return () => {
+      window.removeEventListener("resize", resizeHandler);
+    };
+  }, []);
+
   const salonId = useSelector(
     (state) => state.BarberLoggedInMiddleware?.barberSalonId,
   );
@@ -70,6 +91,8 @@ const AppointmentHistory = () => {
   const queuelistcontrollerRef = useRef(new AbortController());
 
   useEffect(() => {
+    if (mobileWidth) return;
+
     const controller = new AbortController();
     queuelistcontrollerRef.current = controller;
 
@@ -136,7 +159,7 @@ const AppointmentHistory = () => {
     }
 
     return abortIfPending;
-  }, [dispatch, selectedDates, salonId, page, rowsPerPage, query]);
+  }, [dispatch, selectedDates, salonId, page, rowsPerPage, query, mobileWidth]);
 
   const getBarberAppointmentHistory = useSelector(
     (state) => state.getBarberAppointmentHistory,
@@ -149,20 +172,6 @@ const AppointmentHistory = () => {
     pagination: PaginationObject,
   } = getBarberAppointmentHistory;
 
-  const [mobileQueueList, setMobileQueueList] = useState([]);
-
-  useEffect(() => {
-    if (!getBarberAppointmentHistoryResolve) return;
-
-    if (mobileWidth) {
-      if (page === 1) {
-        setMobileQueueList(BarberAppointmentHistory);
-      } else {
-        setMobileQueueList((prev) => [...prev, ...BarberAppointmentHistory]);
-      }
-    }
-  }, [BarberAppointmentHistory]);
-
   const [startIndex, setStartIndex] = useState(0);
   const [endIndex, setEndIndex] = useState(0);
   const [sortOrder, setSortOrder] = useState("asc");
@@ -172,27 +181,7 @@ const AppointmentHistory = () => {
     setPage(value);
   };
 
-  const [mobileWidth, setMobileWidth] = useState(
-    window.innerWidth <= 430 ? true : false,
-  );
-
-  useEffect(() => {
-    const resizeHandler = () => {
-      if (window.innerWidth <= 430) {
-        setMobileWidth(true);
-      } else {
-        setMobileWidth(false);
-      }
-    };
-    window.addEventListener("resize", resizeHandler);
-
-    return () => {
-      window.removeEventListener("resize", resizeHandler);
-    };
-  }, []);
-
   const resetHandler = () => {
-    setMobileQueueList([]);
     setSelectedDates([]);
     SetRowsPerPage(10);
     setQuery("");
@@ -201,99 +190,118 @@ const AppointmentHistory = () => {
     // dispatch(getBarberAppointmentHistoryAction(salonId, "", "", barberId));
   };
 
-  const mobileLoaderRef = useRef("");
+  // Mobile View
 
-  // useEffect(() => {
-  //   if (!mobileWidth) return;
-  //   if (!mobileLoaderRef.current) return;
+  const [mobileListItems, setMobileListItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
-  //   const observer = new IntersectionObserver((entries) => {
-  //     const target = entries[0];
+  // Create a ref for the observer
+  const observer = useRef();
 
-  //     if (
-  //       target.isIntersecting &&
-  //       !getBarberAppointmentHistoryLoading &&
-  //       page < PaginationObject?.totalPages &&
-  //       mobileQueueList.length > 0
-  //     ) {
-  //       setPage((prev) => prev + 1);
-  //     }
-  //   });
+  // The "Last Element" ref: attaches to the last item in the list
+  const lastItemElementRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
 
-  //   const currentRef = mobileLoaderRef.current;
-  //   observer.observe(currentRef);
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
 
-  //   return () => {
-  //     if (currentRef) observer.unobserve(currentRef);
-  //   };
-  // }, [
-  //   mobileWidth,
-  //   page,
-  //   getBarberAppointmentHistoryLoading,
-  //   PaginationObject?.totalPages,
-  //   mobileQueueList.length,
-  // ]);
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore],
+  );
 
-  return (
-    <section className={`${style.section}`}>
-      <div>
-        <h2>Appointment History </h2>
-        <div>
-          <button onClick={resetHandler}>
-            <ResetIcon />
-          </button>
+  const mobileControllerRef = useRef(null);
 
-          <div>
-            <button
-              title="Calender"
-              onClick={() => setCalendarOpen(!calendarOpen)}
-            >
-              <AppointmentIcon />
-            </button>
+  const fetchData = async (signal) => {
+    setLoading(true);
 
-            {calendarOpen && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "4rem",
-                  right: "0rem",
-                  zIndex: 200,
-                }}
-              >
-                <ClickAwayListener onClickAway={() => setCalendarOpen(false)}>
-                  <Calendar
-                    numberOfMonths={2}
-                    value={selectedDates}
-                    onChange={handleDateChange}
-                    range
-                    placeholder="yyyy-mm-dd - yyyy-mm-dd"
-                    dateSeparator={" - "}
-                    calendarPosition={"bottom-right"}
-                    className={true ? "dark-theme" : "light-theme"}
-                    maxDate={new Date()}
-                    style={
-                      {
-                        // background: true ? "#222" : "#fff"
-                      }
-                    }
-                  />
-                </ClickAwayListener>
-              </div>
-            )}
-          </div>
+    try {
+      let startDate = "";
+      let endDate = "";
 
-          <input
-            type="text"
-            placeholder="Search Customer"
-            value={query}
-            onChange={(e) => {
-              setPage(1);
-              setQuery(e.target.value);
-            }}
-          />
-        </div>
-      </div>
+      // ❌ STOP if only one date selected
+      if (selectedDates.length === 1) {
+        setLoading(false);
+        return;
+      }
 
+      // ✅ If 2 dates → validate like desktop
+      if (selectedDates.length === 2) {
+        const start = new Date(selectedDates[0]);
+        const end = new Date(selectedDates[1]);
+
+        const totalDays =
+          (Date.UTC(end.getFullYear(), end.getMonth(), end.getDate()) -
+            Date.UTC(start.getFullYear(), start.getMonth(), start.getDate())) /
+            (1000 * 60 * 60 * 24) +
+          1;
+
+        if (totalDays > 30) {
+          setSelectedDates([]);
+          toast.error("Date range cannot exceed 30 days");
+          setLoading(false);
+          return;
+        }
+
+        startDate = selectedDates[0];
+        endDate = selectedDates[1];
+      }
+
+      // ✅ API CALL only for 0 or 2 dates
+      const { data } = await api.post(
+        `/api/appointmentHistory/getAppointmentHistoryByBarberIdSalonId`,
+        {
+          salonId,
+          barberId,
+          from: startDate,
+          to: endDate,
+          page,
+          limit: rowsPerPage,
+          search: query,
+        },
+        { signal },
+      );
+
+      setMobileListItems((prev) =>
+        page === 1 ? data?.response : [...prev, ...data?.response],
+      );
+
+      setHasMore(data?.response?.length > 0);
+    } catch (error) {
+      if (error.name === "CanceledError" || error.name === "AbortError") return;
+
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!mobileWidth) return;
+
+    // ❌ stop if only 1 date selected
+    if (selectedDates.length === 1) return;
+
+    if (mobileControllerRef.current) {
+      mobileControllerRef.current.abort();
+    }
+
+    const controller = new AbortController();
+    mobileControllerRef.current = controller;
+
+    fetchData(controller.signal);
+
+    return () => controller.abort();
+  }, [page, query, selectedDates, rowsPerPage, salonId, mobileWidth]);
+
+  return mobileWidth ? (
+    <>
       <div className={`${style.mobile_header}`}>
         <h2>Apointment History</h2>
         <div>
@@ -305,8 +313,8 @@ const AppointmentHistory = () => {
                   placeholder="Search Customer"
                   value={query}
                   onChange={(e) => {
-                    setPage(1)
-                    setQuery(e.target.value)
+                    setPage(1);
+                    setQuery(e.target.value);
                   }}
                 />
 
@@ -365,6 +373,175 @@ const AppointmentHistory = () => {
               </button>
             </div>
           )}
+        </div>
+      </div>
+
+      <div
+        style={{
+          maxWidth: "400px",
+          margin: "0 auto",
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: "var(--section-bg-color)",
+            padding: "10px",
+          }}
+        >
+          {mobileListItems.length > 0 ? (
+            <>
+              {mobileListItems.map((item, index) => {
+                const isLast = mobileListItems.length === index + 1;
+
+                return (
+                  <div
+                    ref={isLast ? lastItemElementRef : null}
+                    className={style.list_mobile_item}
+                    key={item._id}
+                  >
+                    <div>
+                      <div>
+                        <img
+                          src={item?.customerProfile?.[0]?.url}
+                          alt=""
+                          width={50}
+                          height={50}
+                        />
+                        <div>
+                          <p>{item.customerName}</p>
+                          <p>{item.barberName}</p>
+                          <p>
+                            {item?.services
+                              ?.map((item) => item.serviceName)
+                              .join(", ")}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p>
+                          {adminGetDefaultSalon?.response?.currency}{" "}
+                          {Array.isArray(item?.services)
+                            ? item.services.reduce(
+                                (sum, service) =>
+                                  sum + (service.servicePrice || 0),
+                                0,
+                              )
+                            : 0}
+                        </p>
+                        <p>{item?.appointmentDate?.split(["T"])[0]}</p>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <div>
+                          {item.status === "served" ? (
+                            <CheckIcon color={"#1ADB6A"} />
+                          ) : (
+                            <CloseIcon color={"#FC3232"} />
+                          )}
+                        </div>
+                        <p>
+                          {" "}
+                          {item.status === "served" ? "Served" : "Cancelled"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* ✅ loader INSIDE list */}
+              {loading && (
+                <div style={{ textAlign: "center", padding: "20px" }}>
+                  <ClipLoader size={35} color="var(--text-primary)" />
+                </div>
+              )}
+            </>
+          ) : (
+            <div
+              style={{
+                height: "70vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <p>No payments history available</p>
+            </div>
+          )}
+        </div>
+
+        {/* {!hasMore && (
+        <div
+          style={{
+            backgroundColor: "var(--section-bg-color)",
+          }}
+        >
+          <p style={{ textAlign: "center", marginBottom: "2rem" }}>
+            No more customers to show.
+          </p>
+        </div>
+      )} */}
+      </div>
+    </>
+  ) : (
+    <section className={`${style.section}`}>
+      <div>
+        <h2>Appointment History </h2>
+        <div>
+          <button onClick={resetHandler}>
+            <ResetIcon />
+          </button>
+
+          <div>
+            <button
+              title="Calender"
+              onClick={() => setCalendarOpen(!calendarOpen)}
+            >
+              <AppointmentIcon />
+            </button>
+
+            {calendarOpen && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "4rem",
+                  right: "0rem",
+                  zIndex: 200,
+                }}
+              >
+                <ClickAwayListener onClickAway={() => setCalendarOpen(false)}>
+                  <Calendar
+                    numberOfMonths={2}
+                    value={selectedDates}
+                    onChange={handleDateChange}
+                    range
+                    placeholder="yyyy-mm-dd - yyyy-mm-dd"
+                    dateSeparator={" - "}
+                    calendarPosition={"bottom-right"}
+                    className={true ? "dark-theme" : "light-theme"}
+                    maxDate={new Date()}
+                    style={
+                      {
+                        // background: true ? "#222" : "#fff"
+                      }
+                    }
+                  />
+                </ClickAwayListener>
+              </div>
+            )}
+          </div>
+
+          <input
+            type="text"
+            placeholder="Search Customer"
+            value={query}
+            onChange={(e) => {
+              setPage(1);
+              setQuery(e.target.value);
+            }}
+          />
         </div>
       </div>
 
@@ -553,7 +730,7 @@ const AppointmentHistory = () => {
         </div>
       </div>
 
-      {getBarberAppointmentHistoryLoading ? (
+      {/* {getBarberAppointmentHistoryLoading ? (
         <div className={style.list_container_mobile_loader}>
           <Skeleton
             count={6}
@@ -635,7 +812,7 @@ const AppointmentHistory = () => {
         <div className={style.list_container_mobile_error}>
           <p>No appointment history available</p>
         </div>
-      )}
+      )} */}
     </section>
   );
 };
