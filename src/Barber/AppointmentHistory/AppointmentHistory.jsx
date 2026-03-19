@@ -325,7 +325,15 @@ const AppointmentHistory = () => {
             </ClickAwayListener>
           ) : (
             <div style={{ position: "relative" }}>
-              <button onClick={resetHandler}>
+              <button
+                onClick={() => {
+                  setMobileListItems([]);
+                  setSelectedDates([]);
+                  SetRowsPerPage(10);
+                  setQuery("");
+                  setPage(1);
+                }}
+              >
                 <ResetIcon />
               </button>
 
