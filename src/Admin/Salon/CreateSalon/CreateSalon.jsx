@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import style from "./CreateSalon.module.css";
 import "react-multi-carousel/lib/styles.css";
 import {
@@ -116,70 +122,70 @@ const CreateSalon = () => {
   const [longitude, setLongitude] = useState(null);
   const [error, setError] = useState(null);
 
-  const geoLocationHandler = () => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
-          setLatitude(latitude);
-          setLongitude(longitude);
-          setCenter({ lat: latitude, lng: longitude });
-          const existingData =
-            JSON.parse(localStorage.getItem("salondata")) || {};
+  // const geoLocationHandler = () => {
+  //   if ("geolocation" in navigator) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => {
+  //         const latitude = position.coords.latitude;
+  //         const longitude = position.coords.longitude;
+  //         setLatitude(latitude);
+  //         setLongitude(longitude);
+  //         setCenter({ lat: latitude, lng: longitude });
+  //         const existingData =
+  //           JSON.parse(localStorage.getItem("salondata")) || {};
 
-          localStorage.setItem(
-            "salondata",
-            JSON.stringify({
-              ...existingData,
-              latitude: latitude,
-              longitude: longitude,
-            }),
-          );
+  //         localStorage.setItem(
+  //           "salondata",
+  //           JSON.stringify({
+  //             ...existingData,
+  //             latitude: latitude,
+  //             longitude: longitude,
+  //           }),
+  //         );
 
-          setSalonCoordinateError("");
-        },
-        (error) => {
-          if (error.code === error.PERMISSION_DENIED) {
-            setError(
-              "You denied access to your geolocation. Please enable it in your browser settings.",
-            );
-          } else {
-            setError("Error accessing geolocation: " + error.message);
-          }
-        },
-      );
-    } else {
-      setError("Geolocation is not available in your browser.");
-    }
-  };
+  //         setSalonCoordinateError("");
+  //       },
+  //       (error) => {
+  //         if (error.code === error.PERMISSION_DENIED) {
+  //           setError(
+  //             "You denied access to your geolocation. Please enable it in your browser settings.",
+  //           );
+  //         } else {
+  //           setError("Error accessing geolocation: " + error.message);
+  //         }
+  //       },
+  //     );
+  //   } else {
+  //     setError("Geolocation is not available in your browser.");
+  //   }
+  // };
 
-  useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
+  // useEffect(() => {
+  //   if ("geolocation" in navigator) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => {
+  //         const latitude = position.coords.latitude;
+  //         const longitude = position.coords.longitude;
 
-          setCenter({
-            lat: latitude,
-            lng: longitude,
-          });
-        },
-        (error) => {
-          if (error.code === error.PERMISSION_DENIED) {
-            setError(
-              "You denied access to your geolocation. Please enable it in your browser settings.",
-            );
-          } else {
-            setError("Error accessing geolocation: " + error.message);
-          }
-        },
-      );
-    } else {
-      setError("Geolocation is not available in your browser.");
-    }
-  }, []);
+  //         setCenter({
+  //           lat: latitude,
+  //           lng: longitude,
+  //         });
+  //       },
+  //       (error) => {
+  //         if (error.code === error.PERMISSION_DENIED) {
+  //           setError(
+  //             "You denied access to your geolocation. Please enable it in your browser settings.",
+  //           );
+  //         } else {
+  //           setError("Error accessing geolocation: " + error.message);
+  //         }
+  //       },
+  //     );
+  //   } else {
+  //     setError("Geolocation is not available in your browser.");
+  //   }
+  // }, []);
 
   const [salonEmail, setSalonEmail] = useState("");
   const [salonName, setSalonName] = useState("");
@@ -1140,67 +1146,67 @@ const CreateSalon = () => {
           value: salonType,
           error: salonTypeError,
         },
-        {
-          name: "address",
-          label: "Salon Address",
-          type: "text",
-          dropdown: false,
-          placeholder: "Enter salon address",
-          onChange: setHandler,
-          value: address,
-          setState: setAddress,
-          setError: setSalonAddressError,
-          error: salonAddressError,
-        },
-        {
-          name: "postcode",
-          label: "Salon Post Code",
-          type: "text",
-          dropdown: false,
-          placeholder: "Enter salon postcode",
-          onChange: setHandler,
-          value: postCode,
-          setState: setPostCode,
-          setError: setPostCodeError,
-          error: postCodeError,
-        },
-        {
-          name: "lattitude",
-          label: "Latitude",
-          type: "text",
-          dropdown: false,
-          placeholder: "Lattiude",
-          value: latitude,
-        },
-        {
-          name: "longitude",
-          label: "Salon Longitude",
-          type: "text",
-          dropdown: false,
-          placeholder: "Longitude",
-          value: longitude,
-        },
-        {
-          name: "country",
-          label: "Country",
-          type: "text",
-          dropdown: true,
-          placeholder: "Select country",
-        },
-        {
-          name: "city",
-          label: "City",
-          type: "text",
-          dropdown: true,
-          placeholder: "Select city",
-        },
-        {
-          name: "timezone",
-          label: "Timezone",
-          type: "text",
-          dropdown: true,
-          placeholder: "Select timezone",
-        },
+        // {
+        //   name: "address",
+        //   label: "Salon Address",
+        //   type: "text",
+        //   dropdown: false,
+        //   placeholder: "Enter salon address",
+        //   onChange: setHandler,
+        //   value: address,
+        //   setState: setAddress,
+        //   setError: setSalonAddressError,
+        //   error: salonAddressError,
+        // },
+        // {
+        //   name: "postcode",
+        //   label: "Salon Post Code",
+        //   type: "text",
+        //   dropdown: false,
+        //   placeholder: "Enter salon postcode",
+        //   onChange: setHandler,
+        //   value: postCode,
+        //   setState: setPostCode,
+        //   setError: setPostCodeError,
+        //   error: postCodeError,
+        // },
+        // {
+        //   name: "lattitude",
+        //   label: "Latitude",
+        //   type: "text",
+        //   dropdown: false,
+        //   placeholder: "Lattiude",
+        //   value: latitude,
+        // },
+        // {
+        //   name: "longitude",
+        //   label: "Salon Longitude",
+        //   type: "text",
+        //   dropdown: false,
+        //   placeholder: "Longitude",
+        //   value: longitude,
+        // },
+        // {
+        //   name: "country",
+        //   label: "Country",
+        //   type: "text",
+        //   dropdown: true,
+        //   placeholder: "Select country",
+        // },
+        // {
+        //   name: "city",
+        //   label: "City",
+        //   type: "text",
+        //   dropdown: true,
+        //   placeholder: "Select city",
+        // },
+        // {
+        //   name: "timezone",
+        //   label: "Timezone",
+        //   type: "text",
+        //   dropdown: true,
+        //   placeholder: "Select timezone",
+        // },
       ],
     },
     {
@@ -1621,57 +1627,224 @@ const CreateSalon = () => {
   const [serviceTypeOpen, setServiceTypeOpen] = useState(false);
   const [serviceCategoryOpen, setServiceCategoryOpen] = useState(false);
 
-  const [mapModalOpen, setMapModalOpen] = useState(false)
-
   // React Map logic
+
+  // const { isLoaded } = useJsApiLoader({
+  //   id: "google-map-script",
+  //   googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+  // });
+
+  // const [map, setMap] = React.useState(null);
+  // const [markerPosition, setMarkerPosition] = React.useState(null);
+
+  // const [center, setCenter] = useState({
+  //   lat: 37.7749,
+  //   lng: -122.4194,
+  // });
+
+  // const onLoad = React.useCallback(
+  //   function callback(map) {
+  //     // This is just an example of getting and using the map instance!!! don't just blindly copy!
+  //     const bounds = new window.google.maps.LatLngBounds(center);
+  //     map.fitBounds(bounds);
+
+  //     setMap(map);
+  //   },
+  //   [center],
+  // );
+
+  // const onUnmount = React.useCallback(function callback(map) {
+  //   setMap(null);
+  // }, []);
+
+  // const handleMapClick = (event) => {
+  //   const lat = event.latLng.lat();
+  //   const lng = event.latLng.lng();
+
+  //   // Set marker position to clicked location
+  //   setMarkerPosition({ lat, lng });
+  //   setLatitude(lat);
+  //   setLongitude(lng);
+
+  //   const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
+  //   localStorage.setItem(
+  //     "salondata",
+  //     JSON.stringify({
+  //       ...existingData,
+  //       ["latitude"]: lat,
+  //       ["longitude"]: lng,
+  //     }),
+  //   );
+  // };
+
+  // React Map
+  const defaultCenter = {
+    lat: 51.5074,
+    lng: -0.1278,
+  };
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    libraries: ["places"],
   });
 
-  const [map, setMap] = React.useState(null);
-  const [markerPosition, setMarkerPosition] = React.useState(null);
+  const [center, setCenter] = useState(defaultCenter);
+  const [markerPosition, setMarkerPosition] = useState(null);
+  // const [mapReset, setMapReset] = useState(false)
 
-  const [center, setCenter] = useState({
-    lat: 37.7749,
-    lng: -122.4194,
-  });
+  const mapRef = useRef(null);
+  const inputRef = useRef(null);
+  const autocompleteRef = useRef(null);
 
-  const onLoad = React.useCallback(
-    function callback(map) {
-      // This is just an example of getting and using the map instance!!! don't just blindly copy!
-      const bounds = new window.google.maps.LatLngBounds(center);
-      map.fitBounds(bounds);
-
-      setMap(map);
-    },
-    [center],
-  );
-
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null);
+  // 📍 Map Load
+  const onLoad = useCallback((map) => {
+    mapRef.current = map;
   }, []);
 
-  const handleMapClick = (event) => {
-    const lat = event.latLng.lat();
-    const lng = event.latLng.lng();
+  const onUnmount = useCallback(() => {
+    mapRef.current = null;
+  }, []);
 
-    // Set marker position to clicked location
-    setMarkerPosition({ lat, lng });
-    setLatitude(lat);
-    setLongitude(lng);
+  // 📍 Reverse Geocoding
+  const getAddressFromLatLng = (lat, lng) => {
+    if (!window.google) return;
 
-    const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
-    localStorage.setItem(
-      "salondata",
-      JSON.stringify({
-        ...existingData,
-        ["latitude"]: lat,
-        ["longitude"]: lng,
-      }),
-    );
+    const geocoder = new window.google.maps.Geocoder();
+
+    geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        const result = results[0];
+        const components = result.address_components;
+
+        const getComp = (type) =>
+          components.find((c) => c.types.includes(type));
+
+        setAddress(result.formatted_address);
+
+        const postal = getComp("postal_code");
+        const cityComp = getComp("locality");
+        const fallbackCity = getComp("administrative_area_level_2");
+        const countryComp = getComp("country");
+
+        setPostCode(postal?.long_name || "N/A");
+        setCity(cityComp?.long_name || fallbackCity?.long_name || "N/A");
+        setCountry(countryComp?.long_name || "N/A");
+      }
+    });
   };
+
+  // 🌍 Timezone → UTC format
+  const getTimezoneFromLatLng = async (lat, lng) => {
+    try {
+      const timestamp = Math.floor(Date.now() / 1000);
+
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${timestamp}&key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`,
+      );
+
+      const data = await res.json();
+
+      if (data.status === "OK") {
+        const offset = data.rawOffset + data.dstOffset;
+
+        const sign = offset >= 0 ? "+" : "-";
+        const abs = Math.abs(offset);
+
+        const hours = Math.floor(abs / 3600);
+        const minutes = (abs % 3600) / 60;
+
+        const formatted = `UTC${sign}${String(hours).padStart(
+          2,
+          "0",
+        )}:${String(minutes).padStart(2, "0")}`;
+
+        setTimezone(formatted);
+      }
+    } catch (err) {
+      console.error("Timezone error:", err);
+    }
+  };
+
+  const fetchLocationDetails = (lat, lng) => {
+    getAddressFromLatLng(lat, lng);
+    getTimezoneFromLatLng(lat, lng);
+  };
+
+  // 🖱️ Map Click
+  const handleMapClick = (e) => {
+    const newPos = {
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng(),
+    };
+
+    setMarkerPosition(newPos);
+    setLatitude(e.latLng.lat());
+    setLongitude(e.latLng.lng());
+    mapRef.current?.panTo(newPos);
+
+    fetchLocationDetails(newPos.lat, newPos.lng);
+  };
+
+  // 🔍 Global Autocomplete
+  useEffect(() => {
+    if (!isLoaded || !inputRef.current || !window.google || !activeStep === 1)
+      return;
+
+    autocompleteRef.current = new window.google.maps.places.Autocomplete(
+      inputRef.current,
+      {
+        types: ["geocode"], // 🌍 global
+      },
+    );
+
+    // 🌍 Bias near user (not restriction)
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        const circle = new window.google.maps.Circle({
+          center: {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+          },
+          radius: 50000,
+        });
+
+        autocompleteRef.current.setBounds(circle.getBounds());
+      });
+    }
+
+    autocompleteRef.current.addListener("place_changed", () => {
+      const place = autocompleteRef.current.getPlace();
+
+      if (!place.geometry) return;
+
+      const location = place.geometry.location;
+
+      const newPos = {
+        lat: location.lat(),
+        lng: location.lng(),
+      };
+
+      setMarkerPosition(newPos);
+
+      mapRef.current?.panTo(newPos);
+      mapRef.current?.setZoom(16);
+
+      fetchLocationDetails(newPos.lat, newPos.lng);
+    });
+
+    return () => {
+      if (autocompleteRef.current) {
+        window.google.maps.event.clearInstanceListeners(
+          autocompleteRef.current,
+        );
+      }
+    };
+  }, [isLoaded, activeStep === 1]);
+
+  console.log(activeStep);
+
+  if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <section className={`${style.section}`}>
@@ -1779,16 +1952,243 @@ const CreateSalon = () => {
                   <main className={`${style.form_container}`}>
                     {step.fields.map((field) => (
                       <div key={field.name} className={`${style.form_group}`}>
-                        {field.label === "City" ||
+                        {/* {field.label === "City" ||
                         field.label === "Timezone" ? (
                           countryCodePresent ? (
                             <label>{field.label}</label>
                           ) : null
                         ) : (
                           <label>{field.label}</label>
+                        )} */}
+                        {field.label === "Salon Business Type" && (
+                          <label>{field.label}</label>
                         )}
 
-                        {field.dropdown ? (
+                        {field.dropdown && field.name === "businesstype" && (
+                          <>
+                            <div
+                              className={`${style.select_container}`}
+                              onClick={() =>
+                                setBusinessTypeOpen((prev) => !prev)
+                              }
+                            >
+                              <input
+                                type={field.type}
+                                name={field.name}
+                                value={field.value}
+                                placeholder={field.placeholder}
+                                readOnly
+                              />
+                              <div>
+                                <DropdownIcon />
+                              </div>
+
+                              {businessTypeOpen ? (
+                                <ClickAwayListener
+                                  onClickAway={() => setBusinessTypeOpen(false)}
+                                >
+                                  <div
+                                    className={`${style.select_dropdown_container}`}
+                                    onClick={(event) => event.stopPropagation()}
+                                  >
+                                    <button
+                                      onClick={() =>
+                                        field.salonTypeHandler("Barber Shop")
+                                      }
+                                    >
+                                      Barber Shop
+                                    </button>
+                                    <button
+                                      onClick={() =>
+                                        field.salonTypeHandler("Hair Dresser")
+                                      }
+                                    >
+                                      Hair Dresser
+                                    </button>
+                                  </div>
+                                </ClickAwayListener>
+                              ) : null}
+                            </div>
+                            {salonTypeError ? (
+                              <p style={{ color: "red", fontSize: "1.4rem" }}>
+                                {salonTypeError}
+                              </p>
+                            ) : null}
+                          </>
+                        )}
+
+                        <div
+                          style={{
+                            maxWidth: "900px",
+                            padding: "15px",
+                            background: "#fff",
+                            borderRadius: "10px",
+                            boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+                            fontFamily: "system-ui",
+                          }}
+                        >
+                          {/* Search */}
+                          <input
+                            ref={inputRef}
+                            placeholder="Search city, address, or place..."
+                            style={{
+                              width: "100%",
+                              padding: "12px",
+                              marginBottom: "14px",
+                              borderRadius: "10px",
+                              border: "1px solid #ddd",
+                            }}
+                          />
+
+                          {/* Map */}
+                          <div
+                            style={{
+                              borderRadius: "12px",
+                              overflow: "hidden",
+                            }}
+                          >
+                            <GoogleMap
+                              mapContainerStyle={{
+                                width: "100%",
+                                height: "400px",
+                              }}
+                              center={center}
+                              zoom={12}
+                              onLoad={onLoad}
+                              onUnmount={onUnmount}
+                              onClick={handleMapClick}
+                              options={{
+                                streetViewControl: false,
+                                mapTypeControl: false,
+                              }}
+                            >
+                              {markerPosition && (
+                                <Marker
+                                  position={markerPosition}
+                                  draggable
+                                  onDragEnd={(e) => {
+                                    const newPos = {
+                                      lat: e.latLng.lat(),
+                                      lng: e.latLng.lng(),
+                                    };
+
+                                    setMarkerPosition(newPos);
+                                    fetchLocationDetails(
+                                      newPos.lat,
+                                      newPos.lng,
+                                    );
+                                  }}
+                                />
+                              )}
+                            </GoogleMap>
+                          </div>
+
+                          {/* Info */}
+                          {markerPosition && (
+                            <div
+                              style={{
+                                marginTop: "20px",
+                                padding: "14px",
+                                borderRadius: "10px",
+                                background: "#f5f5f5",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "10px",
+                              }}
+                            >
+                              <div>
+                                <strong>Lat:</strong>{" "}
+                                {latitude && latitude.toFixed(6)}
+                              </div>
+                              <div>
+                                <strong>Lng:</strong>{" "}
+                                {longitude && longitude.toFixed(6)}
+                              </div>
+                              <div>
+                                <strong>Address:</strong> {address || "—"}
+                              </div>
+                              <div>
+                                <strong>City:</strong> {city || "—"}
+                              </div>
+                              <div>
+                                <strong>Country:</strong> {country || "—"}
+                              </div>
+
+                              {postCode && (
+                                <div>
+                                  <strong>PostCode:</strong> {postCode}
+                                </div>
+                              )}
+
+                              <div>
+                                <strong>Timezone:</strong> {timezone || "—"}
+                              </div>
+                            </div>
+                          )}
+
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              marginTop: "1.5rem",
+                              gap: "12px",
+                            }}
+                          >
+                            <button
+                              onClick={() => {
+                                setLongitude("");
+                                setLatitude("");
+                                setTimezone("");
+                                setAddress("");
+                                setCountry("");
+                                setCity("");
+                                setPostCode("");
+                                setMarkerPosition(null);
+
+                                if (inputRef.current) {
+                                  inputRef.current.value = "";
+                                }
+
+                                if (mapRef.current) {
+                                  mapRef.current.panTo(defaultCenter);
+                                  mapRef.current.setZoom(12);
+                                }
+                              }}
+                              style={{
+                                flex: 1,
+                                padding: "10px 16px",
+                                borderRadius: "8px",
+                                border: "1px solid #ddd",
+                                backgroundColor: "#f5f5f5",
+                                color: "#333",
+                                fontSize: "15px",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Reset
+                            </button>
+
+                            <button
+                              onClick={handleNext}
+                              style={{
+                                flex: 1,
+                                padding: "10px 16px",
+                                borderRadius: "8px",
+                                border: "none",
+                                backgroundColor: "#000",
+                                color: "#fff",
+                                fontSize: "15px",
+                                fontWeight: "500",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Continue
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* {field.dropdown ? (
                           field.name === "businesstype" ? (
                             <>
                               <div
@@ -1844,7 +2244,9 @@ const CreateSalon = () => {
                                 </p>
                               ) : null}
                             </>
-                          ) : field.name === "country" ? (
+                          ) 
+                          
+                          : field.name === "country" ? (
                             <>
                               <div
                                 className={`${style.select_container}`}
@@ -2302,18 +2704,18 @@ const CreateSalon = () => {
                               )}
                             </div>
                           </>
-                        )}
+                        )} */}
                       </div>
                     ))}
-                    <div className={`${style.button_container}`}>
-                      {/* <button onClick={handleBack} disabled={index === 0}>
-                        Back
-                      </button> */}
-                      <div></div>
-                      <button onClick={handleNext}>
-                        {index === steps.length - 1 ? "Finish" : "Continue"}
-                      </button>
-                    </div>
+
+                    {activeStep !== 1 && (
+                      <div className={`${style.button_container}`}>
+                        <div></div>
+                        <button onClick={handleNext}>
+                          {index === steps.length - 1 ? "Finish" : "Continue"}
+                        </button>
+                      </div>
+                    )}
 
                     <button onClick={handleBack} disabled={index === 0}>
                       Back
@@ -2822,7 +3224,6 @@ const CreateSalon = () => {
 };
 
 export default CreateSalon;
-
 
 // import React, { useCallback, useRef, useState, useEffect } from "react";
 // import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
