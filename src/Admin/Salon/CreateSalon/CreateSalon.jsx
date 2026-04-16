@@ -1820,12 +1820,18 @@ const CreateSalon = () => {
 
       const location = place.geometry.location;
 
+      const lat = location.lat();
+      const lng = location.lng();
+
       const newPos = {
         lat: location.lat(),
         lng: location.lng(),
       };
 
       setMarkerPosition(newPos);
+
+      setLatitude(lat);
+      setLongitude(lng);
 
       mapRef.current?.panTo(newPos);
       mapRef.current?.setZoom(16);
@@ -1841,8 +1847,6 @@ const CreateSalon = () => {
       }
     };
   }, [isLoaded, activeStep === 1]);
-
-  console.log(activeStep);
 
   if (!isLoaded) return <div>Loading...</div>;
 
