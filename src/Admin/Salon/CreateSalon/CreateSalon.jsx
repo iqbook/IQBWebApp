@@ -1794,7 +1794,7 @@ const CreateSalon = () => {
     autocompleteRef.current = new window.google.maps.places.Autocomplete(
       inputRef.current,
       {
-        types: ["geocode"], // 🌍 global
+        // types: ["geocode"], // 🌍 global
       },
     );
 
