@@ -207,8 +207,6 @@ const CreateSalon = () => {
   const [servicePrice, setServicePrice] = useState("");
   const [serviceEWT, setServiceEWT] = useState("");
 
-  console.log(postCode);
-
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -294,9 +292,9 @@ const CreateSalon = () => {
     (state) => state.getAdminAllCountries,
   );
 
-  useEffect(() => {
-    dispatch(getAdminAllCountriesAction(""));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getAdminAllCountriesAction(""));
+  // }, []);
 
   const {
     loading: getAdminAllCountriesLoading,
@@ -806,7 +804,7 @@ const CreateSalon = () => {
       code: countrycode,
     };
 
-    // console.log("Create Salon ", salondata)
+    // console.log("Create Salon ", salondata);
 
     const files = await Promise.all(
       salonImages?.map(async (imgObject) => {
@@ -1848,6 +1846,27 @@ const CreateSalon = () => {
     };
   }, [isLoaded, activeStep === 1]);
 
+  useEffect(() => {
+    if (country) {
+      const fetchSpecificCountryDetails = async () => {
+        try {
+          const { data } = await api.post(
+            `/api/country/getAllCountries?name=${country}`,
+          );
+
+          let value = data?.response?.[0];
+          setCountryCode(value?.countryCode);
+          setCountryCurrency(value?.currency);
+        } catch (error) {
+          alert("Not able to fetch the country details");
+          console.log("Failed to fetch the country ", error);
+        }
+      };
+
+      fetchSpecificCountryDetails();
+    }
+  }, [country]);
+
   if (!isLoaded) return <div>Loading...</div>;
 
   return (
@@ -2023,10 +2042,10 @@ const CreateSalon = () => {
 
                         <div
                           style={{
-                            maxWidth: "900px",
-                            padding: "15px",
-                            background: "#fff",
-                            borderRadius: "10px",
+                            maxWidth: "90rem",
+                            padding: "1.5rem",
+                            background: "var(--bg-primary)",
+                            borderRadius: "1rem",
                             boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
                             fontFamily: "system-ui",
                           }}
@@ -2037,24 +2056,25 @@ const CreateSalon = () => {
                             placeholder="Search city, address, or place..."
                             style={{
                               width: "100%",
-                              padding: "12px",
-                              marginBottom: "14px",
-                              borderRadius: "10px",
-                              border: "1px solid #ddd",
+                              padding: "1.2rem",
+                              marginBottom: "1.4rem",
+                              borderRadius: "1rem",
+                              border: "0.1rem solid var(--border-secondary)",
+                              backgroundColor: "var(--section-bg-color)",
                             }}
                           />
 
                           {/* Map */}
                           <div
                             style={{
-                              borderRadius: "12px",
+                              borderRadius: "1.2rem",
                               overflow: "hidden",
                             }}
                           >
                             <GoogleMap
                               mapContainerStyle={{
                                 width: "100%",
-                                height: "400px",
+                                height: "40rem",
                               }}
                               center={center}
                               zoom={12}
@@ -2091,24 +2111,24 @@ const CreateSalon = () => {
                           {markerPosition && (
                             <div
                               style={{
-                                marginTop: "20px",
-                                padding: "14px",
-                                borderRadius: "10px",
-                                background: "#f5f5f5",
+                                marginTop: "1.5rem",
+                                // padding: "14px",
+                                borderRadius: "1rem",
+                                background: "var(--bg-primary)",
                                 display: "flex",
                                 flexDirection: "column",
-                                gap: "10px",
+                                gap: "1rem",
                               }}
                             >
-                              <div>
+                              {/* <div>
                                 <strong>Lat:</strong>{" "}
                                 {latitude && latitude.toFixed(6)}
                               </div>
                               <div>
                                 <strong>Lng:</strong>{" "}
                                 {longitude && longitude.toFixed(6)}
-                              </div>
-                              <div>
+                              </div> */}
+                              {/* <div>
                                 <strong>Address:</strong> {address || "—"}
                               </div>
                               <div>
@@ -2126,7 +2146,17 @@ const CreateSalon = () => {
 
                               <div>
                                 <strong>Timezone:</strong> {timezone || "—"}
-                              </div>
+                              </div> */}
+
+                              <p>
+                                <span style={{ fontWeight: 700 }}>
+                                  Location:
+                                </span>{" "}
+                                {[address, city, country]
+                                  .filter(Boolean)
+                                  .join(", ")}
+                                {postCode ? ` - ${postCode}` : ""}
+                              </p>
                             </div>
                           )}
 
@@ -2136,7 +2166,7 @@ const CreateSalon = () => {
                               alignItems: "center",
                               justifyContent: "space-between",
                               marginTop: "1.5rem",
-                              gap: "12px",
+                              gap: "1.2rem",
                             }}
                           >
                             <button
@@ -2161,12 +2191,13 @@ const CreateSalon = () => {
                               }}
                               style={{
                                 flex: 1,
-                                padding: "10px 16px",
-                                borderRadius: "8px",
-                                border: "1px solid #ddd",
-                                backgroundColor: "#f5f5f5",
-                                color: "#333",
-                                fontSize: "15px",
+                                padding: "1rem 1.6rem",
+                                borderRadius: "0.8rem",
+                                border: "0.1rem solid var(--border-secondary)",
+                                backgroundColor: "var(--section-bg-color)",
+                                // color: "#333",
+                                color: "var(--text-primary)",
+                                fontSize: "1.5rem",
                                 cursor: "pointer",
                               }}
                             >
@@ -2177,12 +2208,12 @@ const CreateSalon = () => {
                               onClick={handleNext}
                               style={{
                                 flex: 1,
-                                padding: "10px 16px",
-                                borderRadius: "8px",
+                                padding: "1rem 1.6rem",
+                                borderRadius: "0.8rem",
                                 border: "none",
-                                backgroundColor: "#000",
-                                color: "#fff",
-                                fontSize: "15px",
+                                backgroundColor: "var(--bg-secondary)",
+                                color: "var(--btn-text-color)",
+                                fontSize: "1.5rem",
                                 fontWeight: "500",
                                 cursor: "pointer",
                               }}
