@@ -101,6 +101,7 @@ const EditSalon = () => {
     }
   }, [AdminSalonLogo]);
 
+
   const email = useSelector(
     (state) => state.AdminLoggedInMiddleware.adminEmail,
   );
@@ -2448,6 +2449,32 @@ const EditSalon = () => {
                                 gap: "1rem",
                               }}
                             >
+                              {/* <div>
+                                <strong>Lat:</strong> {latitude}
+                              </div>
+                              <div>
+                                <strong>Lng:</strong> {longitude}
+                              </div>
+                              <div>
+                                <strong>Address:</strong> {address || "—"}
+                              </div>
+                              <div>
+                                <strong>City:</strong> {city || "—"}
+                              </div>
+                              <div>
+                                <strong>Country:</strong> {country || "—"}
+                              </div>
+
+                              {postCode && (
+                                <div>
+                                  <strong>PostCode:</strong> {postCode}
+                                </div>
+                              )}
+
+                              <div>
+                                <strong>Timezone:</strong> {timezone || "—"}
+                              </div> */}
+
                               <p>
                                 <span style={{ fontWeight: 700 }}>
                                   Location:
@@ -2532,12 +2559,15 @@ const EditSalon = () => {
                         </div>
                       </div>
                     ))}
-                    <div className={`${style.button_container}`}>
-                      <div></div>
-                      <button onClick={handleNext}>
-                        {index === steps.length - 1 ? "Finish" : "Continue"}
-                      </button>
-                    </div>
+
+                    {activeStep !== 1 && (
+                      <div className={`${style.button_container}`}>
+                        <div></div>
+                        <button onClick={handleNext}>
+                          {index === steps.length - 1 ? "Finish" : "Continue"}
+                        </button>
+                      </div>
+                    )}
 
                     <button onClick={handleBack} disabled={index === 0}>
                       Back

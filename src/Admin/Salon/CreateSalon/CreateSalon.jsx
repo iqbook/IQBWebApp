@@ -2187,7 +2187,7 @@ const CreateSalon = () => {
                                 gap: "1rem",
                               }}
                             >
-                              <div>
+                              {/* <div>
                                 <strong>Lat:</strong>{" "}
                                 {latitude}
                               </div>
@@ -2213,9 +2213,9 @@ const CreateSalon = () => {
 
                               <div>
                                 <strong>Timezone:</strong> {timezone || "—"}
-                              </div>
+                              </div> */}
 
-                              {/* <p>
+                              <p>
                                 <span style={{ fontWeight: 700 }}>
                                   Location:
                                 </span>{" "}
@@ -2223,8 +2223,7 @@ const CreateSalon = () => {
                                   .filter(Boolean)
                                   .join(", ")}
                                 {postCode ? ` - ${postCode}` : ""}
-                                {" "}{timezone}
-                              </p> */}
+                              </p>
                             </div>
                           )}
 
