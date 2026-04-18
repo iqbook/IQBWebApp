@@ -1,29 +1,74 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import style from "./CreateSalon.module.css"
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import style from "./CreateSalon.module.css";
 import "react-multi-carousel/lib/styles.css";
-import { CameraIcon, CloseIcon, DeleteIcon, DropdownIcon, EmailIcon, FacebookIcon, InstagramIcon, ScissorIcon, SearchIcon, TiktokIcon, WebsiteIcon, XIcon } from '../../../newicons';
-import { CrownIcon, EditIcon } from '../../../icons';
-import Skeleton from 'react-loading-skeleton'
-import { useDispatch, useSelector } from 'react-redux';
-import { adminCreateSalonAction, getAdminAllCitiesAction, getAdminAllCountriesAction, getAdminAllSalonIconAction, getAdminAllTimezoneAction, getAllSalonCategoriesAction } from '../../../Redux/Admin/Actions/SalonAction';
-import api from '../../../Redux/api/Api';
-import { useNavigate } from 'react-router-dom';
-import ButtonLoader from '../../../components/ButtonLoader/ButtonLoader';
-import { ADMIN_GET_ALL_CITIES_SUCCESS, ADMIN_GET_ALL_TIMEZONES_SUCCESS, GET_ADMIN_SALONLIST_SUCCESS } from '../../../Redux/Admin/Constants/constants';
-import toast from 'react-hot-toast';
-import { PhoneInput } from 'react-international-phone';
-import { darkmodeSelector } from '../../../Redux/Admin/Reducers/AdminHeaderReducer';
+import {
+  CameraIcon,
+  CloseIcon,
+  DeleteIcon,
+  DropdownIcon,
+  EmailIcon,
+  FacebookIcon,
+  InstagramIcon,
+  ScissorIcon,
+  SearchIcon,
+  TiktokIcon,
+  WebsiteIcon,
+  XIcon,
+} from "../../../newicons";
+import { CrownIcon, EditIcon } from "../../../icons";
+import Skeleton from "react-loading-skeleton";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  adminCreateSalonAction,
+  getAdminAllCitiesAction,
+  getAdminAllCountriesAction,
+  getAdminAllSalonIconAction,
+  getAdminAllTimezoneAction,
+  getAllSalonCategoriesAction,
+} from "../../../Redux/Admin/Actions/SalonAction";
+import api from "../../../Redux/api/Api";
+import { useNavigate } from "react-router-dom";
+import ButtonLoader from "../../../components/ButtonLoader/ButtonLoader";
+import {
+  ADMIN_GET_ALL_CITIES_SUCCESS,
+  ADMIN_GET_ALL_TIMEZONES_SUCCESS,
+  GET_ADMIN_SALONLIST_SUCCESS,
+} from "../../../Redux/Admin/Constants/constants";
+import toast from "react-hot-toast";
+import { PhoneInput } from "react-international-phone";
+import { darkmodeSelector } from "../../../Redux/Admin/Reducers/AdminHeaderReducer";
 
-import { PhoneNumberUtil } from 'google-libphonenumber';
-import { ClickAwayListener, Modal, Step, StepContent, StepLabel, Stepper } from '@mui/material';
-import { adminGetDefaultSalonAction } from '../../../Redux/Admin/Actions/AdminHeaderAction';
-import Carousel from 'react-multi-carousel';
-import { GoogleMap, useJsApiLoader, Marker, OverlayView } from '@react-google-maps/api'
+import { PhoneNumberUtil } from "google-libphonenumber";
+import {
+  ClickAwayListener,
+  Modal,
+  Step,
+  StepContent,
+  StepLabel,
+  Stepper,
+} from "@mui/material";
+import { adminGetDefaultSalonAction } from "../../../Redux/Admin/Actions/AdminHeaderAction";
+import Carousel from "react-multi-carousel";
+import {
+  GoogleMap,
+  useJsApiLoader,
+  Marker,
+  OverlayView,
+} from "@react-google-maps/api";
 
 const CreateSalon = () => {
+  const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
 
-  const email = useSelector(state => state.AdminLoggedInMiddleware.adminEmail)
-  const dispatch = useDispatch()
+  const email = useSelector(
+    (state) => state.AdminLoggedInMiddleware.adminEmail,
+  );
+  const dispatch = useDispatch();
 
   const SalonIconControllerRef = useRef(new AbortController());
 
@@ -40,14 +85,15 @@ const CreateSalon = () => {
     };
   }, [dispatch]);
 
-  const getAdminAllSalonIcon = useSelector(state => state.getAdminAllSalonIcon)
+  const getAdminAllSalonIcon = useSelector(
+    (state) => state.getAdminAllSalonIcon,
+  );
 
   const {
     loading: getAdminAllSalonIconLoading,
     resolve: getAdminAllSalonIconResolve,
-    response: SalonIcons
-  } = getAdminAllSalonIcon
-
+    response: SalonIcons,
+  } = getAdminAllSalonIcon;
 
   const SalonCategoriesRef = useRef(new AbortController());
 
@@ -64,246 +110,252 @@ const CreateSalon = () => {
     };
   }, [dispatch]);
 
-  const getAllSalonCategories = useSelector(state => state.getAllSalonCategories)
+  const getAllSalonCategories = useSelector(
+    (state) => state.getAllSalonCategories,
+  );
 
   const {
     loading: getAllSalonCategoriesLoading,
     resolve: getAllSalonCategoriesResolve,
-    response: salonCategories
-  } = getAllSalonCategories
-
+    response: salonCategories,
+  } = getAllSalonCategories;
 
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [error, setError] = useState(null);
 
-  const geoLocationHandler = () => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
-          setLatitude(latitude);
-          setLongitude(longitude);
-          setCenter({ lat: latitude, lng: longitude })
-          const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
+  // const geoLocationHandler = () => {
+  //   if ("geolocation" in navigator) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => {
+  //         const latitude = position.coords.latitude;
+  //         const longitude = position.coords.longitude;
+  //         setLatitude(latitude);
+  //         setLongitude(longitude);
+  //         setCenter({ lat: latitude, lng: longitude });
+  //         const existingData =
+  //           JSON.parse(localStorage.getItem("salondata")) || {};
 
-          localStorage.setItem("salondata", JSON.stringify({
-            ...existingData,
-            latitude: latitude,
-            longitude: longitude
-          }));
+  //         localStorage.setItem(
+  //           "salondata",
+  //           JSON.stringify({
+  //             ...existingData,
+  //             latitude: latitude,
+  //             longitude: longitude,
+  //           }),
+  //         );
 
-          setSalonCoordinateError("")
-        },
-        (error) => {
-          if (error.code === error.PERMISSION_DENIED) {
-            setError("You denied access to your geolocation. Please enable it in your browser settings.");
-          } else {
-            setError("Error accessing geolocation: " + error.message);
-          }
-        }
-      );
-    } else {
-      setError("Geolocation is not available in your browser.");
-    }
-  }
+  //         setSalonCoordinateError("");
+  //       },
+  //       (error) => {
+  //         if (error.code === error.PERMISSION_DENIED) {
+  //           setError(
+  //             "You denied access to your geolocation. Please enable it in your browser settings.",
+  //           );
+  //         } else {
+  //           setError("Error accessing geolocation: " + error.message);
+  //         }
+  //       },
+  //     );
+  //   } else {
+  //     setError("Geolocation is not available in your browser.");
+  //   }
+  // };
 
+  // useEffect(() => {
+  //   if ("geolocation" in navigator) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => {
+  //         const latitude = position.coords.latitude;
+  //         const longitude = position.coords.longitude;
 
-  useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
+  //         setCenter({
+  //           lat: latitude,
+  //           lng: longitude,
+  //         });
+  //       },
+  //       (error) => {
+  //         if (error.code === error.PERMISSION_DENIED) {
+  //           setError(
+  //             "You denied access to your geolocation. Please enable it in your browser settings.",
+  //           );
+  //         } else {
+  //           setError("Error accessing geolocation: " + error.message);
+  //         }
+  //       },
+  //     );
+  //   } else {
+  //     setError("Geolocation is not available in your browser.");
+  //   }
+  // }, []);
 
-          setCenter({
-            lat: latitude,
-            lng: longitude
-          })
-        },
-        (error) => {
-          if (error.code === error.PERMISSION_DENIED) {
-            setError("You denied access to your geolocation. Please enable it in your browser settings.");
-          } else {
-            setError("Error accessing geolocation: " + error.message);
-          }
-        }
-      );
-    } else {
-      setError("Geolocation is not available in your browser.");
-    }
-  }, [])
+  const [salonEmail, setSalonEmail] = useState("");
+  const [salonName, setSalonName] = useState("");
+  const [salonDesc, setSalonDesc] = useState("");
+  const [address, setAddress] = useState("");
 
-  const [salonEmail, setSalonEmail] = useState("")
-  const [salonName, setSalonName] = useState("")
-  const [salonDesc, setSalonDesc] = useState("")
-  const [address, setAddress] = useState("")
+  const [postCode, setPostCode] = useState("");
+  const [contactTel, setContactTel] = useState("");
+  const [dialCode, setDialCode] = useState("");
 
-  const [postCode, setPostCode] = useState("")
-  const [contactTel, setContactTel] = useState("")
-  const [dialCode, setDialCode] = useState("")
+  const [webLink, setWebLink] = useState("");
+  const [fbLink, setFbLink] = useState("");
+  const [twitterLink, setTwitterLink] = useState("");
+  const [instraLink, setInstraLink] = useState("");
+  const [tiktokLink, setTiktokLink] = useState("");
 
-  const [webLink, setWebLink] = useState("")
-  const [fbLink, setFbLink] = useState("")
-  const [twitterLink, setTwitterLink] = useState("")
-  const [instraLink, setInstraLink] = useState("")
-  const [tiktokLink, setTiktokLink] = useState("")
-
-  const [serviceName, setServiceName] = useState("")
-  const [serviceDesc, setServiceDesc] = useState("")
-  const [servicePrice, setServicePrice] = useState("")
-  const [serviceEWT, setServiceEWT] = useState("")
+  const [serviceName, setServiceName] = useState("");
+  const [serviceDesc, setServiceDesc] = useState("");
+  const [servicePrice, setServicePrice] = useState("");
+  const [serviceEWT, setServiceEWT] = useState("");
 
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
-      items: 8
+      items: 8,
     },
     desktop: {
       breakpoint: { max: 3000, min: 1250 },
-      items: 7
+      items: 7,
     },
     laptop: {
       breakpoint: { max: 1250, min: 768 },
-      items: 6
+      items: 6,
     },
     tablet: {
       breakpoint: { max: 768, min: 430 },
-      items: 5
+      items: 5,
     },
     mobile: {
       breakpoint: { max: 430, min: 0 },
-      items: 3
-    }
+      items: 3,
+    },
   };
 
+  const [salonType, setSalonType] = useState("");
 
-  const [salonType, setSalonType] = useState("")
+  const [salonNameError, setSalonNameError] = useState("");
+  const [salonEmailError, setSalonEmailError] = useState("");
+  const [salonDescError, setSalonDescError] = useState("");
+  const [salonAddressError, setSalonAddressError] = useState("");
+  const [salonCoordinateError, setSalonCoordinateError] = useState("");
+  const [countryError, setCountryError] = useState("");
+  const [cityError, setCityError] = useState("");
+  const [timezoneError, setTimezoneError] = useState("");
+  const [postCodeError, setPostCodeError] = useState("");
+  const [salonTypeError, setSalonTypeError] = useState("");
+  const [invalidNumberError, setInvalidNumberError] = useState("");
 
-  const [salonNameError, setSalonNameError] = useState("")
-  const [salonEmailError, setSalonEmailError] = useState("")
-  const [salonDescError, setSalonDescError] = useState("")
-  const [salonAddressError, setSalonAddressError] = useState("")
-  const [salonCoordinateError, setSalonCoordinateError] = useState("")
-  const [countryError, setCountryError] = useState("")
-  const [cityError, setCityError] = useState("")
-  const [timezoneError, setTimezoneError] = useState("")
-  const [postCodeError, setPostCodeError] = useState("")
-  const [salonTypeError, setSalonTypeError] = useState("")
-  const [invalidNumberError, setInvalidNumberError] = useState("")
+  const [serviceIconError, setServiceIconError] = useState("");
+  const [serviceNameError, setServiceNameError] = useState("");
+  const [serviceDescError, setServiceDescError] = useState("");
+  const [servicePriceError, setServicePriceError] = useState("");
+  const [serviceEwtError, setServiceEwtError] = useState("");
+  const [serviceCategoryNameError, setServiceCategoryNameError] = useState("");
 
-  const [serviceIconError, setServiceIconError] = useState("")
-  const [serviceNameError, setServiceNameError] = useState("")
-  const [serviceDescError, setServiceDescError] = useState("")
-  const [servicePriceError, setServicePriceError] = useState("")
-  const [serviceEwtError, setServiceEwtError] = useState("")
-  const [serviceCategoryNameError, setServiceCategoryNameError] = useState("")
-
-  const [fblinkError, setFbLinkError] = useState("")
-  const [weblinkError, setWebLinkError] = useState("")
-  const [instalinkError, setInstaLinkError] = useState("")
-  const [twitterlinkError, setTwitterLinkError] = useState("")
-  const [tiktoklinkError, setTiktokLinkError] = useState("")
-
+  const [fblinkError, setFbLinkError] = useState("");
+  const [weblinkError, setWebLinkError] = useState("");
+  const [instalinkError, setInstaLinkError] = useState("");
+  const [twitterlinkError, setTwitterLinkError] = useState("");
+  const [tiktoklinkError, setTiktokLinkError] = useState("");
 
   const salonTypeHandler = (value) => {
     setSalonType(value);
 
     const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
 
-    localStorage.setItem("salondata", JSON.stringify({
-      ...existingData,
-      salonType: value
-    }));
-    setSalonTypeError("")
-    setBusinessTypeOpen(false)
-  }
+    localStorage.setItem(
+      "salondata",
+      JSON.stringify({
+        ...existingData,
+        salonType: value,
+      }),
+    );
+    setSalonTypeError("");
+    setBusinessTypeOpen(false);
+  };
 
-  const [localsalondata, setLocalSalondata] = useState({})
+  const [localsalondata, setLocalSalondata] = useState({});
 
-  const [countryCurrency, setCountryCurrency] = useState("")
+  const [countryCurrency, setCountryCurrency] = useState("");
 
-  const [country, setCountry] = useState("")
-  const [countrycode, setCountryCode] = useState("")
+  const [country, setCountry] = useState("");
+  const [countrycode, setCountryCode] = useState("");
 
   const setCountryHandler = (value) => {
+    setCountryCode(value.countryCode);
+    setCountry(value.name);
+    setCountryCurrency(value.currency);
+    setCountryOpen(false);
+    setCountryError("");
+  };
 
-    setCountryCode(value.countryCode)
-    setCountry(value.name)
-    setCountryCurrency(value.currency)
-    setCountryOpen(false)
-    setCountryError("")
-  }
+  const getAdminAllCountries = useSelector(
+    (state) => state.getAdminAllCountries,
+  );
 
-
-  const getAdminAllCountries = useSelector(state => state.getAdminAllCountries)
-
-  useEffect(() => {
-    dispatch(getAdminAllCountriesAction(""));
-  }, [])
+  // useEffect(() => {
+  //   dispatch(getAdminAllCountriesAction(""));
+  // }, []);
 
   const {
     loading: getAdminAllCountriesLoading,
     resolve: getAdminAllCountriesResolve,
     error: getAdminAllCountriesError,
-    response: AllCountries
-  } = getAdminAllCountries
+    response: AllCountries,
+  } = getAdminAllCountries;
 
-  const [copyCountriesdata, setCopyCountriesdata] = useState([])
+  const [copyCountriesdata, setCopyCountriesdata] = useState([]);
 
   useEffect(() => {
     if (AllCountries) {
-      setCopyCountriesdata(AllCountries)
+      setCopyCountriesdata(AllCountries);
     }
-  }, [AllCountries])
+  }, [AllCountries]);
 
-  const [searchCountry, setSearchCountry] = useState("")
+  const [searchCountry, setSearchCountry] = useState("");
 
   const searchCountryHandler = (value) => {
-    setSearchCountry(value)
-    const searchValue = value.toLowerCase().trim()
+    setSearchCountry(value);
+    const searchValue = value.toLowerCase().trim();
 
     if (!searchCountry) {
-      setCopyCountriesdata(AllCountries)
+      setCopyCountriesdata(AllCountries);
     } else {
       const filteredCountries = AllCountries.filter((country) => {
-        return country.name.toLowerCase().includes(searchValue)
-      })
+        return country.name.toLowerCase().includes(searchValue);
+      });
 
-      setCopyCountriesdata(filteredCountries)
+      setCopyCountriesdata(filteredCountries);
     }
-  }
+  };
 
-
-  const [city, setCity] = useState("")
+  const [city, setCity] = useState("");
 
   const setCityHandler = (value) => {
-    setCity(value.name)
-    setCityOpen(false)
-    setCityError("")
-  }
+    setCity(value.name);
+    setCityOpen(false);
+    setCityError("");
+  };
 
-  const [countryCodePresent, setCountryCodePresent] = useState(false)
+  const [countryCodePresent, setCountryCodePresent] = useState(false);
 
   useEffect(() => {
     if (countrycode) {
       dispatch(getAdminAllCitiesAction("", countrycode));
-      dispatch(getAdminAllTimezoneAction(countrycode))
-      setCountryCodePresent(true)
+      dispatch(getAdminAllTimezoneAction(countrycode));
+      setCountryCodePresent(true);
     }
-  }, [countrycode, dispatch])
+  }, [countrycode, dispatch]);
 
-  const getAdminAllCities = useSelector(state => state.getAdminAllCities)
+  const getAdminAllCities = useSelector((state) => state.getAdminAllCities);
 
   const {
     loading: getAdminAllCitiesLoading,
     resolve: getAdminAllCitiesResolve,
     response: AllCities,
     error: getAdminAllCitiesError,
-  } = getAdminAllCities
-
-
+  } = getAdminAllCities;
 
   const [copyCitiesData, setCopyCitiesData] = useState([]);
   const [searchCity, setSearchCity] = useState("");
@@ -322,51 +374,44 @@ const CreateSalon = () => {
       setCopyCitiesData(AllCities);
     } else {
       const filteredCities = AllCities.filter((city) =>
-        city.name.toLowerCase().includes(searchValue)
+        city.name.toLowerCase().includes(searchValue),
       );
       setCopyCitiesData(filteredCities);
     }
   };
 
-
-  const [timezone, setTimezone] = useState("")
-
+  const [timezone, setTimezone] = useState("");
 
   const setTimezoneHandler = (value) => {
+    setTimezone(value);
+    setTimezoneOpen(false);
+    setTimezoneError("");
+  };
 
-    setTimezone(value)
-    setTimezoneOpen(false)
-    setTimezoneError("")
-  }
-
-
-  const getAdminAllTimezone = useSelector(state => state.getAdminAllTimezone)
+  const getAdminAllTimezone = useSelector((state) => state.getAdminAllTimezone);
 
   const {
     loading: getAdminAllTimezoneLoading,
     resolve: getAdminAllTimezoneResolve,
-    response: AllTimezones
-  } = getAdminAllTimezone
+    response: AllTimezones,
+  } = getAdminAllTimezone;
 
-
-  const [vipService, setVipService] = useState(false)
-
+  const [vipService, setVipService] = useState(false);
 
   const vipServiceHandler = (value) => {
-    setVipService(value)
-    setServiceTypeOpen(false)
-  }
+    setVipService(value);
+    setServiceTypeOpen(false);
+  };
 
-
-  const [serviceCategoryName, setServiceCategoryName] = useState("")
+  const [serviceCategoryName, setServiceCategoryName] = useState("");
 
   const serviceCategoryNameHandler = (value) => {
-    setServiceCategoryNameError("")
-    setServiceCategoryName(value?.serviceCategoryName)
-    setServiceCategoryOpen(false)
-  }
+    setServiceCategoryNameError("");
+    setServiceCategoryName(value?.serviceCategoryName);
+    setServiceCategoryOpen(false);
+  };
 
-  const [salonLogo, setSalonLogo] = useState("")
+  const [salonLogo, setSalonLogo] = useState("");
 
   const fileInputRef = useRef(null);
 
@@ -374,7 +419,7 @@ const CreateSalon = () => {
     fileInputRef.current.click();
   };
 
-  const [uploadSalonLogo, setUploadSalonLogo] = useState("")
+  const [uploadSalonLogo, setUploadSalonLogo] = useState("");
 
   const handleSalonFileInputChange = async (e) => {
     const uploadImage = e.target.files[0];
@@ -385,9 +430,9 @@ const CreateSalon = () => {
         duration: 3000,
         style: {
           fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
         },
       });
       return;
@@ -400,9 +445,9 @@ const CreateSalon = () => {
         duration: 3000,
         style: {
           fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
         },
       });
       return;
@@ -414,8 +459,7 @@ const CreateSalon = () => {
     setUploadSalonLogo(uploadImage);
   };
 
-
-  const [salonImages, setSalonImages] = useState([])
+  const [salonImages, setSalonImages] = useState([]);
 
   const salonImagefileInputRef = useRef(null);
 
@@ -427,22 +471,26 @@ const CreateSalon = () => {
     const uploadedFiles = e.target.files;
     const allowedTypes = ["image/jpeg", "image/webp", "image/png"];
     const maxSizeInBytes = 2 * 1024 * 1024; // 2MB
-    const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const generateUniqueId = () =>
+      `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-    const invalidFiles = Array.from(uploadedFiles).filter(file =>
-      !allowedTypes.includes(file.type) || file.size > maxSizeInBytes
+    const invalidFiles = Array.from(uploadedFiles).filter(
+      (file) => !allowedTypes.includes(file.type) || file.size > maxSizeInBytes,
     );
 
     if (invalidFiles.length > 0) {
-      toast.error("Please upload only valid image files (JPEG, WebP, PNG) under 2MB.", {
-        duration: 3000,
-        style: {
-          fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
+      toast.error(
+        "Please upload only valid image files (JPEG, WebP, PNG) under 2MB.",
+        {
+          duration: 3000,
+          style: {
+            fontSize: "var(--font-size-2)",
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
+          },
         },
-      });
+      );
       return;
     }
 
@@ -455,36 +503,33 @@ const CreateSalon = () => {
     setSalonImages([...salonImages, ...urls]);
   };
 
-
   const [selectedLogo, setSelectedLogo] = useState({
     url: "",
-    public_id: ""
-  })
+    public_id: "",
+  });
 
   const logoselectHandler = (serviceImg) => {
-    setServiceIconError("")
+    setServiceIconError("");
     setSelectedLogo({
       url: serviceImg.url,
-      public_id: serviceImg.public_id
+      public_id: serviceImg.public_id,
     });
-  }
+  };
 
-  const [selectedServices, setSelectedServices] = useState([])
-
+  const [selectedServices, setSelectedServices] = useState([]);
 
   const addServiceHandler = () => {
-
     if (!selectedLogo.url) {
       toast.error("Please select service icon", {
         duration: 3000,
         style: {
           fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
         },
       });
-      return setServiceIconError("Please select service icon")
+      return setServiceIconError("Please select service icon");
     }
 
     if (!serviceName) {
@@ -492,12 +537,12 @@ const CreateSalon = () => {
         duration: 3000,
         style: {
           fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
         },
       });
-      return setServiceNameError("Please enter service name")
+      return setServiceNameError("Please enter service name");
     }
 
     if (serviceName.length < 1 || serviceName.length > 40) {
@@ -505,13 +550,15 @@ const CreateSalon = () => {
         duration: 3000,
         style: {
           fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
         },
       });
 
-      return setServiceNameError("Service Name must be between 1 to 40 charecters")
+      return setServiceNameError(
+        "Service Name must be between 1 to 40 charecters",
+      );
     }
 
     if (!serviceDesc) {
@@ -519,12 +566,12 @@ const CreateSalon = () => {
         duration: 3000,
         style: {
           fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
         },
       });
-      return setServiceDescError("Please enter service description")
+      return setServiceDescError("Please enter service description");
     }
 
     if (serviceDesc.length < 1 || serviceDesc.length > 50) {
@@ -532,12 +579,14 @@ const CreateSalon = () => {
         duration: 3000,
         style: {
           fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
         },
       });
-      return setServiceDescError("Service description must be between 1 to 50 charecters")
+      return setServiceDescError(
+        "Service description must be between 1 to 50 charecters",
+      );
     }
 
     if (!serviceCategoryName) {
@@ -545,12 +594,12 @@ const CreateSalon = () => {
         duration: 3000,
         style: {
           fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
         },
       });
-      return setServiceCategoryNameError("Please enter service category")
+      return setServiceCategoryNameError("Please enter service category");
     }
 
     if (!servicePrice) {
@@ -558,12 +607,12 @@ const CreateSalon = () => {
         duration: 3000,
         style: {
           fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
         },
       });
-      return setServicePriceError("Please enter service price")
+      return setServicePriceError("Please enter service price");
     }
 
     if (!serviceEWT) {
@@ -571,46 +620,51 @@ const CreateSalon = () => {
         duration: 3000,
         style: {
           fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
         },
       });
-      return setServiceEwtError("Please enter service EWT")
+      return setServiceEwtError("Please enter service EWT");
     }
 
     const service = {
       serviceIcon: {
         url: selectedLogo.url,
-        public_id: selectedLogo.public_id
+        public_id: selectedLogo.public_id,
       },
       serviceName,
       servicePrice: Number(servicePrice),
       vipService,
       serviceDesc,
       serviceEWT: Number(serviceEWT),
-      serviceCategoryName
-    }
+      serviceCategoryName,
+    };
 
-    setSelectedServices([...selectedServices, service])
+    setSelectedServices([...selectedServices, service]);
 
     const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
 
-    localStorage.setItem("salondata", JSON.stringify({
-      ...existingData,
-      selectedServices: [
-        ...(localsalondata?.selectedServices ? localsalondata.selectedServices : selectedServices),
-        service
-      ]
-    }));
-    setSelectedLogo({ url: "", public_id: "" })
-    setServiceName("")
-    setServicePrice("")
-    setVipService(false)
-    setServiceDesc("")
-    setServiceEWT("")
-    setServiceCategoryName("")
-  }
+    localStorage.setItem(
+      "salondata",
+      JSON.stringify({
+        ...existingData,
+        selectedServices: [
+          ...(localsalondata?.selectedServices
+            ? localsalondata.selectedServices
+            : selectedServices),
+          service,
+        ],
+      }),
+    );
+    setSelectedLogo({ url: "", public_id: "" });
+    setServiceName("");
+    setServicePrice("");
+    setVipService(false);
+    setServiceDesc("");
+    setServiceEWT("");
+    setServiceCategoryName("");
+  };
 
   const handleKeyPressAddServices = (e) => {
     if (e.key === "Enter") {
@@ -623,14 +677,14 @@ const CreateSalon = () => {
 
     setSelectedLogo({
       url: currentService.serviceIcon.url,
-      public_id: currentService.serviceIcon.public_id
+      public_id: currentService.serviceIcon.public_id,
     });
     setServiceName(currentService.serviceName);
     setServicePrice(currentService.servicePrice);
     setVipService(currentService.vipService);
     setServiceDesc(currentService.serviceDesc);
     setServiceEWT(currentService.serviceEWT);
-    setServiceCategoryName(currentService.serviceCategoryName)
+    setServiceCategoryName(currentService.serviceCategoryName);
 
     const updatedServices = [...localsalondata.selectedServices];
     updatedServices.splice(index, 1);
@@ -639,32 +693,32 @@ const CreateSalon = () => {
 
     // Update localStorage
     const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
-    localStorage.setItem("salondata", JSON.stringify({
-      ...existingData,
-      selectedServices: updatedServices
-    }));
+    localStorage.setItem(
+      "salondata",
+      JSON.stringify({
+        ...existingData,
+        selectedServices: updatedServices,
+      }),
+    );
   };
 
-
-  const [openModal, setOpenModal] = useState(false)
-  const [openBlobSalonImage, setOpenBlobSalonImage] = useState({})
+  const [openModal, setOpenModal] = useState(false);
+  const [openBlobSalonImage, setOpenBlobSalonImage] = useState({});
 
   const selectedSalonImageClicked = async (imgObject) => {
     try {
-      setOpenBlobSalonImage(imgObject)
-      setOpenModal(true)
+      setOpenBlobSalonImage(imgObject);
+      setOpenModal(true);
     } catch (error) {
       console.error("Error fetching and converting blob URL to file:", error);
     }
   };
-
 
   const currentEditSalonImageInputRef = useRef(null);
 
   const handleCurrentEditSalonImageButtonClick = () => {
     currentEditSalonImageInputRef.current.click();
   };
-
 
   const handleEditSelectedImageFileInputChange = (e) => {
     const uploadImage = e.target.files[0];
@@ -676,9 +730,9 @@ const CreateSalon = () => {
         duration: 3000,
         style: {
           fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
         },
       });
       return;
@@ -689,9 +743,9 @@ const CreateSalon = () => {
         duration: 3000,
         style: {
           fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
         },
       });
       return;
@@ -702,28 +756,27 @@ const CreateSalon = () => {
     setOpenBlobSalonImage({
       ...openBlobSalonImage,
       blobUrl: imageUrl,
-      name: uploadImage.name
+      name: uploadImage.name,
     });
 
     setSalonImages((images) =>
       images.map((image) =>
-        image._id === openBlobSalonImage?._id ? { ...image, blobUrl: imageUrl, name: uploadImage.name } : image
-      )
+        image._id === openBlobSalonImage?._id
+          ? { ...image, blobUrl: imageUrl, name: uploadImage.name }
+          : image,
+      ),
     );
   };
 
+  const navigate = useNavigate();
 
+  const [uploadSalonImages, setUploadSalonImages] = useState("");
 
-  const navigate = useNavigate()
-
-  const [uploadSalonImages, setUploadSalonImages] = useState("")
-
-  const [invalidnumber, setInvalidNumber] = useState(false)
+  const [invalidnumber, setInvalidNumber] = useState(false);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const createSalonHandler = async () => {
-
     const salondata = {
       adminEmail: email,
       salonEmail: salonEmail,
@@ -734,8 +787,8 @@ const CreateSalon = () => {
         type: "Point",
         coordinates: {
           longitude: Number(longitude),
-          latitude: Number(latitude)
-        }
+          latitude: Number(latitude),
+        },
       },
       country: country,
       city: city,
@@ -750,10 +803,10 @@ const CreateSalon = () => {
       twitterLink: twitterLink,
       tiktokLink: tiktokLink,
       services: localsalondata.selectedServices,
-      code: countrycode
-    }
+      code: countrycode,
+    };
 
-    // console.log("Create Salon ", salondata)
+    // console.log("Create Salon ", salondata);
 
     const files = await Promise.all(
       salonImages?.map(async (imgObject) => {
@@ -768,14 +821,13 @@ const CreateSalon = () => {
           console.error("Error converting blob URL to file:", error);
           return null;
         }
-      })
+      }),
     );
 
-    setUploadSalonImages(files)
+    setUploadSalonImages(files);
 
-    dispatch(adminCreateSalonAction(salondata, navigate))
-
-  }
+    dispatch(adminCreateSalonAction(salondata, navigate));
+  };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -783,14 +835,10 @@ const CreateSalon = () => {
     }
   };
 
+  const adminCreateSalon = useSelector((state) => state.adminCreateSalon);
 
-  const adminCreateSalon = useSelector(state => state.adminCreateSalon)
-
-  const {
-    loading: createSalonLoading,
-    response: createSalonResponse
-  } = adminCreateSalon
-
+  const { loading: createSalonLoading, response: createSalonResponse } =
+    adminCreateSalon;
 
   useEffect(() => {
     if (createSalonResponse?.salonId && uploadSalonImages != "") {
@@ -799,35 +847,35 @@ const CreateSalon = () => {
           const formData = new FormData();
 
           const SalonId = createSalonResponse?.salonId;
-          formData.append('salonId', SalonId);
+          formData.append("salonId", SalonId);
 
           for (const file of uploadSalonImages) {
-            formData.append('gallery', file);
+            formData.append("gallery", file);
           }
 
           try {
-            await api.post('/api/salon/uploadSalonImage', formData, {
+            await api.post("/api/salon/uploadSalonImage", formData, {
               headers: {
-                'Content-Type': 'multipart/form-data',
+                "Content-Type": "multipart/form-data",
               },
             });
 
             const { data } = await api.post(`/api/admin/getAllSalonsByAdmin`, {
-              adminEmail: email
-            })
+              adminEmail: email,
+            });
 
             dispatch({
               type: GET_ADMIN_SALONLIST_SUCCESS,
-              payload: data
-            })
+              payload: data,
+            });
 
             toast.success("Salon images uploaded successfully", {
               duration: 3000,
               style: {
                 fontSize: "1.4rem",
-                borderRadius: '10px',
-                background: '#333',
-                color: '#fff',
+                borderRadius: "10px",
+                background: "#333",
+                color: "#fff",
               },
             });
           } catch (error) {
@@ -835,13 +883,13 @@ const CreateSalon = () => {
               duration: 3000,
               style: {
                 fontSize: "1.4rem",
-                borderRadius: '10px',
-                background: '#333',
-                color: '#fff',
+                borderRadius: "10px",
+                background: "#333",
+                color: "#fff",
               },
             });
             setSalonImages([]);
-            setUploadSalonImages([])
+            setUploadSalonImages([]);
           }
         }
       };
@@ -858,34 +906,37 @@ const CreateSalon = () => {
           const SalonId = createSalonResponse?.salonId;
 
           if (SalonId) {
-            formData.append('salonId', SalonId);
-            formData.append('salonLogo', uploadSalonLogo);
+            formData.append("salonId", SalonId);
+            formData.append("salonLogo", uploadSalonLogo);
 
             try {
-              await api.post('/api/salon/uploadSalonLogo', formData, {
+              await api.post("/api/salon/uploadSalonLogo", formData, {
                 headers: {
-                  'Content-Type': 'multipart/form-data',
+                  "Content-Type": "multipart/form-data",
                 },
               });
 
-              const { data } = await api.post(`/api/admin/getAllSalonsByAdmin`, {
-                adminEmail: email
-              })
+              const { data } = await api.post(
+                `/api/admin/getAllSalonsByAdmin`,
+                {
+                  adminEmail: email,
+                },
+              );
 
               dispatch({
                 type: GET_ADMIN_SALONLIST_SUCCESS,
-                payload: data
-              })
+                payload: data,
+              });
 
-              dispatch(adminGetDefaultSalonAction(email))
+              dispatch(adminGetDefaultSalonAction(email));
 
               toast.success("Salon logo uploaded successfully", {
                 duration: 3000,
                 style: {
                   fontSize: "var(--font-size-2)",
-                  borderRadius: '0.3rem',
-                  background: '#333',
-                  color: '#fff',
+                  borderRadius: "0.3rem",
+                  background: "#333",
+                  color: "#fff",
                 },
               });
             } catch (error) {
@@ -893,35 +944,34 @@ const CreateSalon = () => {
                 duration: 3000,
                 style: {
                   fontSize: "var(--font-size-2)",
-                  borderRadius: '0.3rem',
-                  background: '#333',
-                  color: '#fff',
+                  borderRadius: "0.3rem",
+                  background: "#333",
+                  color: "#fff",
                 },
               });
-              setSalonLogo("")
-              setUploadSalonLogo("")
+              setSalonLogo("");
+              setUploadSalonLogo("");
             }
           }
-
         }
       };
 
       uploadImageHandler();
     }
-
   }, [createSalonResponse?.salonId]);
 
   const deleteSalonImageHandler = (imgObject) => {
-    setSalonImages((images) => images.filter((image) => image._id !== imgObject._id))
-    setOpenModal(false)
-  }
+    setSalonImages((images) =>
+      images.filter((image) => image._id !== imgObject._id),
+    );
+    setOpenModal(false);
+  };
 
-  const [openServices, setOpenServices] = useState(false)
+  const [openServices, setOpenServices] = useState(false);
 
-  const darkMode = useSelector(darkmodeSelector)
+  const darkMode = useSelector(darkmodeSelector);
 
-  const darkmodeOn = darkMode === "On"
-
+  const darkmodeOn = darkMode === "On";
 
   const addservicedropHandler = () => {
     if (!countrycode) {
@@ -929,25 +979,23 @@ const CreateSalon = () => {
         duration: 3000,
         style: {
           fontSize: "var(--font-size-2)",
-          borderRadius: '0.3rem',
-          background: '#333',
-          color: '#fff',
+          borderRadius: "0.3rem",
+          background: "#333",
+          color: "#fff",
         },
       });
     } else {
-      setOpenServices((prev) => !prev)
+      setOpenServices((prev) => !prev);
     }
-
-  }
+  };
 
   useEffect(() => {
     if (countrycode) {
-      setOpenServices(true)
+      setOpenServices(true);
     } else {
-      setOpenServices(false)
+      setOpenServices(false);
     }
-  }, [countrycode])
-
+  }, [countrycode]);
 
   const phoneUtil = PhoneNumberUtil.getInstance();
 
@@ -959,163 +1007,372 @@ const CreateSalon = () => {
     }
   };
 
-  const [countryflag, setCountryFlag] = useState("gb")
-
+  const [countryflag, setCountryFlag] = useState("gb");
 
   const handlePhoneChange = (phone, meta) => {
-    setInvalidNumberError("")
+    setInvalidNumberError("");
     const { country, inputValue } = meta;
 
     const isValid = isPhoneValid(phone);
 
     if (isValid) {
-      setContactTel(phone)
-      setDialCode(country?.dialCode)
-      setCountryFlag(country?.iso2)
-      setInvalidNumber(false)
+      setContactTel(phone);
+      setDialCode(country?.dialCode);
+      setCountryFlag(country?.iso2);
+      setInvalidNumber(false);
 
       const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
 
-      localStorage.setItem("salondata", JSON.stringify({
-        ...existingData,
-        ["contactTel"]: phone,
-        ["dialCode"]: country?.dialCode,
-        ["countryflag"]: country?.iso2
-      }));
-
+      localStorage.setItem(
+        "salondata",
+        JSON.stringify({
+          ...existingData,
+          ["contactTel"]: phone,
+          ["dialCode"]: country?.dialCode,
+          ["countryflag"]: country?.iso2,
+        }),
+      );
     } else {
-      setInvalidNumber(true)
+      setInvalidNumber(true);
     }
-
   };
 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("salondata")) || {};
     setLocalSalondata(storedData);
-    setSalonName(storedData.salonName)
-    setSalonEmail(storedData.salonEmail)
-    setSalonDesc(storedData.salonDesc)
-    setAddress(storedData.address)
-    setWebLink(storedData.webLink)
-    setFbLink(storedData.fbLink)
-    setInstraLink(storedData.instraLink)
-    setTwitterLink(storedData.twitterLink)
-    setTiktokLink(storedData.tiktokLink)
-    setPostCode(storedData.postCode)
-    setSalonType(storedData.salonType)
-    setLatitude(storedData.latitude)
-    setLongitude(storedData.longitude)
+    setSalonName(storedData.salonName);
+    setSalonEmail(storedData.salonEmail);
+    setSalonDesc(storedData.salonDesc);
+    setWebLink(storedData.webLink);
+    setFbLink(storedData.fbLink);
+    setInstraLink(storedData.instraLink);
+    setTwitterLink(storedData.twitterLink);
+    setTiktokLink(storedData.tiktokLink);
+    setPostCode(storedData.postCode);
+    setSalonType(storedData.salonType);
 
-    setContactTel(storedData.contactTel)
-    setDialCode(storedData.dialCode)
-    setCountryFlag(storedData.countryflag)
+    // Business Info step
+    setLatitude(storedData.latitude);
+    setLongitude(storedData.longitude);
+    setAddress(storedData.address);
+    setCountry(storedData.country);
+    setCity(storedData.city);
+    setTimezone(storedData.timezone);
+    setCountryCode(storedData.countryCode);
+    setCountryCurrency(storedData.countryCurrency);
+    setPostCode(storedData.postCode);
+
+    setContactTel(storedData.contactTel);
+    setDialCode(storedData.dialCode);
+    setCountryFlag(storedData.countryflag);
   }, [selectedServices]);
 
   const setHandler = (setState, value, localname, setError) => {
-    setError("")
+    setError("");
     setState(value);
 
     const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
 
-    localStorage.setItem("salondata", JSON.stringify({
-      ...existingData,
-      [localname]: value
-    }));
-  }
+    localStorage.setItem(
+      "salondata",
+      JSON.stringify({
+        ...existingData,
+        [localname]: value,
+      }),
+    );
+  };
 
   useEffect(() => {
     return () => {
       dispatch({
         type: ADMIN_GET_ALL_CITIES_SUCCESS,
-        payload: []
-      })
+        payload: [],
+      });
 
       dispatch({
         type: ADMIN_GET_ALL_TIMEZONES_SUCCESS,
-        payload: []
-      })
+        payload: [],
+      });
     };
   }, [dispatch]);
 
   const steps = [
     {
-      label: 'Account Information',
+      label: "Account Information",
       fields: [
-        { name: 'salonName', label: 'Salon Name', type: 'text', placeholder: 'Enter salon name', onChange: setHandler, value: salonName, setState: setSalonName, setError: setSalonNameError, error: salonNameError },
-        { name: 'salonDesc', label: 'Salon Description', type: 'text', placeholder: 'Enter salon description', onChange: setHandler, value: salonDesc, setState: setSalonDesc, setError: setSalonDescError, error: salonDescError },
-        { name: 'salonEmail', label: 'Salon Email', type: 'text', placeholder: 'Enter salon email', onChange: setHandler, value: salonEmail, setState: setSalonEmail, setError: setSalonEmailError, error: salonEmailError },
-        { name: 'contactTel', label: 'Salon Mobile Number', type: 'text', placeholder: 'Enter salon mobile number' },
+        {
+          name: "salonName",
+          label: "Salon Name",
+          type: "text",
+          placeholder: "Enter salon name",
+          onChange: setHandler,
+          value: salonName,
+          setState: setSalonName,
+          setError: setSalonNameError,
+          error: salonNameError,
+        },
+        {
+          name: "salonDesc",
+          label: "Salon Description",
+          type: "text",
+          placeholder: "Enter salon description",
+          onChange: setHandler,
+          value: salonDesc,
+          setState: setSalonDesc,
+          setError: setSalonDescError,
+          error: salonDescError,
+        },
+        {
+          name: "salonEmail",
+          label: "Salon Email",
+          type: "text",
+          placeholder: "Enter salon email",
+          onChange: setHandler,
+          value: salonEmail,
+          setState: setSalonEmail,
+          setError: setSalonEmailError,
+          error: salonEmailError,
+        },
+        {
+          name: "contactTel",
+          label: "Salon Mobile Number",
+          type: "text",
+          placeholder: "Enter salon mobile number",
+        },
       ],
     },
     {
-      label: 'Business Information',
+      label: "Business Information",
       fields: [
-        { name: 'businesstype', label: 'Salon Business Type', type: 'text', dropdown: true, placeholder: 'Select business type', salonTypeHandler: salonTypeHandler, value: salonType, error: salonTypeError },
-        { name: 'address', label: 'Salon Address', type: 'text', dropdown: false, placeholder: 'Enter salon address', onChange: setHandler, value: address, setState: setAddress, setError: setSalonAddressError, error: salonAddressError },
-        { name: 'postcode', label: 'Salon Post Code', type: 'text', dropdown: false, placeholder: 'Enter salon postcode', onChange: setHandler, value: postCode, setState: setPostCode, setError: setPostCodeError, error: postCodeError },
-        { name: 'lattitude', label: 'Latitude', type: 'text', dropdown: false, placeholder: 'Lattiude', value: latitude },
-        { name: 'longitude', label: 'Salon Longitude', type: 'text', dropdown: false, placeholder: 'Longitude', value: longitude },
-        { name: 'country', label: 'Country', type: 'text', dropdown: true, placeholder: 'Select country' },
-        { name: 'city', label: 'City', type: 'text', dropdown: true, placeholder: 'Select city' },
-        { name: 'timezone', label: 'Timezone', type: 'text', dropdown: true, placeholder: 'Select timezone' },
+        {
+          name: "businesstype",
+          label: "Salon Business Type",
+          type: "text",
+          dropdown: true,
+          placeholder: "Select business type",
+          salonTypeHandler: salonTypeHandler,
+          value: salonType,
+          error: salonTypeError,
+        },
+        // {
+        //   name: "address",
+        //   label: "Salon Address",
+        //   type: "text",
+        //   dropdown: false,
+        //   placeholder: "Enter salon address",
+        //   onChange: setHandler,
+        //   value: address,
+        //   setState: setAddress,
+        //   setError: setSalonAddressError,
+        //   error: salonAddressError,
+        // },
+        // {
+        //   name: "postcode",
+        //   label: "Salon Post Code",
+        //   type: "text",
+        //   dropdown: false,
+        //   placeholder: "Enter salon postcode",
+        //   onChange: setHandler,
+        //   value: postCode,
+        //   setState: setPostCode,
+        //   setError: setPostCodeError,
+        //   error: postCodeError,
+        // },
+        // {
+        //   name: "lattitude",
+        //   label: "Latitude",
+        //   type: "text",
+        //   dropdown: false,
+        //   placeholder: "Lattiude",
+        //   value: latitude,
+        // },
+        // {
+        //   name: "longitude",
+        //   label: "Salon Longitude",
+        //   type: "text",
+        //   dropdown: false,
+        //   placeholder: "Longitude",
+        //   value: longitude,
+        // },
+        // {
+        //   name: "country",
+        //   label: "Country",
+        //   type: "text",
+        //   dropdown: true,
+        //   placeholder: "Select country",
+        // },
+        // {
+        //   name: "city",
+        //   label: "City",
+        //   type: "text",
+        //   dropdown: true,
+        //   placeholder: "Select city",
+        // },
+        // {
+        //   name: "timezone",
+        //   label: "Timezone",
+        //   type: "text",
+        //   dropdown: true,
+        //   placeholder: "Select timezone",
+        // },
       ],
     },
     {
-      label: 'Select Services',
+      label: "Select Services",
       fields: [
-        { name: 'serviceicon', label: 'Select Service Icon', error: serviceIconError },
         {
-          name: 'servicename', label: 'Service Name', type: 'text', placeholder: "Enter your service name", dropdown: false, value: serviceName, onChange: (e) => {
-            setServiceNameError("")
-            setServiceName(e.target.value)
-          }, error: serviceNameError
+          name: "serviceicon",
+          label: "Select Service Icon",
+          error: serviceIconError,
         },
         {
-          name: 'servicedescription', label: 'Service Description', type: 'text', placeholder: "Enter your service description", dropdown: false, value: serviceDesc, onChange: (e) => {
-            setServiceDescError("")
-            setServiceDesc(e.target.value)
-          }, error: serviceDescError
+          name: "servicename",
+          label: "Service Name",
+          type: "text",
+          placeholder: "Enter your service name",
+          dropdown: false,
+          value: serviceName,
+          onChange: (e) => {
+            setServiceNameError("");
+            setServiceName(e.target.value);
+          },
+          error: serviceNameError,
         },
-        { name: 'servicetype', label: 'Service Type (*VIP services have top priority in queue)', type: 'text', placeholder: "Select Service Type", dropdown: true, value: `${vipService ? 'VIP' : 'Regular'}` },
-        { name: 'serviceCategory', label: 'Service Category', type: 'text', placeholder: "Select Service Category", dropdown: true, value: serviceCategoryName, error: serviceCategoryNameError },
+        {
+          name: "servicedescription",
+          label: "Service Description",
+          type: "text",
+          placeholder: "Enter your service description",
+          dropdown: false,
+          value: serviceDesc,
+          onChange: (e) => {
+            setServiceDescError("");
+            setServiceDesc(e.target.value);
+          },
+          error: serviceDescError,
+        },
+        {
+          name: "servicetype",
+          label: "Service Type (*VIP services have top priority in queue)",
+          type: "text",
+          placeholder: "Select Service Type",
+          dropdown: true,
+          value: `${vipService ? "VIP" : "Regular"}`,
+        },
+        {
+          name: "serviceCategory",
+          label: "Service Category",
+          type: "text",
+          placeholder: "Select Service Category",
+          dropdown: true,
+          value: serviceCategoryName,
+          error: serviceCategoryNameError,
+        },
 
         {
-          name: 'serviceprice', label: 'Service Price', type: 'text', placeholder: "Enter your service price", dropdown: false, value: servicePrice, onChange: (e) => {
-            setServicePriceError("")
+          name: "serviceprice",
+          label: "Service Price",
+          type: "text",
+          placeholder: "Enter your service price",
+          dropdown: false,
+          value: servicePrice,
+          onChange: (e) => {
+            setServicePriceError("");
             const value = e.target.value;
             if (/^\d*$/.test(value)) {
               setServicePrice(value);
             }
-          }, error: servicePriceError
+          },
+          error: servicePriceError,
         },
         {
-          name: 'serviceewt', label: 'Service Estimated Time (mins)', type: 'text', placeholder: "Enter your service estimated time", dropdown: false, value: serviceEWT, onChange: (e) => {
-            setServiceEwtError("")
+          name: "serviceewt",
+          label: "Service Estimated Time (mins)",
+          type: "text",
+          placeholder: "Enter your service estimated time",
+          dropdown: false,
+          value: serviceEWT,
+          onChange: (e) => {
+            setServiceEwtError("");
             const value = e.target.value;
             if (/^\d*$/.test(value)) {
               setServiceEWT(value);
             }
-          }, error: serviceEwtError
+          },
+          error: serviceEwtError,
         },
       ],
     },
     {
-      label: 'Gallery',
-      fields: [
-      ],
+      label: "Gallery",
+      fields: [],
     },
     {
-      label: 'Social Links',
+      label: "Social Links",
       fields: [
-        { name: "website", type: 'text', placeholder: 'Website URL', icon: <WebsiteIcon />, value: webLink, onChange: (e) => setHandler(setWebLink, e.target.value, "webLink", setWebLinkError) },
-        { name: "facebook", type: 'text', placeholder: 'Facebook URL', icon: <FacebookIcon />, value: fbLink, onChange: (e) => setHandler(setFbLink, e.target.value, "fbLink", setFbLinkError) },
-        { name: "instagram", type: 'text', placeholder: 'Instagram URL', icon: <InstagramIcon />, value: instraLink, onChange: (e) => setHandler(setInstraLink, e.target.value, "instraLink", setInstaLinkError) },
-        { name: "x", type: 'text', placeholder: 'X URL', icon: <XIcon />, value: twitterLink, onChange: (e) => setHandler(setTwitterLink, e.target.value, "twitterLink", setTwitterLinkError) },
-        { name: "titkok", type: 'text', placeholder: 'Tiktok URL', icon: <TiktokIcon />, value: tiktokLink, onChange: (e) => setHandler(setTiktokLink, e.target.value, "tiktokLink", setTiktokLinkError) },
+        {
+          name: "website",
+          type: "text",
+          placeholder: "Website URL",
+          icon: <WebsiteIcon />,
+          value: webLink,
+          onChange: (e) =>
+            setHandler(setWebLink, e.target.value, "webLink", setWebLinkError),
+        },
+        {
+          name: "facebook",
+          type: "text",
+          placeholder: "Facebook URL",
+          icon: <FacebookIcon />,
+          value: fbLink,
+          onChange: (e) =>
+            setHandler(setFbLink, e.target.value, "fbLink", setFbLinkError),
+        },
+        {
+          name: "instagram",
+          type: "text",
+          placeholder: "Instagram URL",
+          icon: <InstagramIcon />,
+          value: instraLink,
+          onChange: (e) =>
+            setHandler(
+              setInstraLink,
+              e.target.value,
+              "instraLink",
+              setInstaLinkError,
+            ),
+        },
+        {
+          name: "x",
+          type: "text",
+          placeholder: "X URL",
+          icon: <XIcon />,
+          value: twitterLink,
+          onChange: (e) =>
+            setHandler(
+              setTwitterLink,
+              e.target.value,
+              "twitterLink",
+              setTwitterLinkError,
+            ),
+        },
+        {
+          name: "titkok",
+          type: "text",
+          placeholder: "Tiktok URL",
+          icon: <TiktokIcon />,
+          value: tiktokLink,
+          onChange: (e) =>
+            setHandler(
+              setTiktokLink,
+              e.target.value,
+              "tiktokLink",
+              setTiktokLinkError,
+            ),
+        },
       ],
     },
   ];
-
 
   const [activeStep, setActiveStep] = useState(0);
 
@@ -1125,22 +1382,21 @@ const CreateSalon = () => {
     step3: false,
     step4: false,
     step5: false,
-  })
+  });
 
   const handleNext = () => {
-
     if (activeStep === 0) {
       if (!salonName) {
         toast.error("Please enter salon name", {
           duration: 3000,
           style: {
             fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
           },
         });
-        return setSalonNameError("Please enter salon name")
+        return setSalonNameError("Please enter salon name");
       }
 
       if (salonName.length === 0 || salonName.length > 20) {
@@ -1148,12 +1404,14 @@ const CreateSalon = () => {
           duration: 3000,
           style: {
             fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
           },
         });
-        return setSalonNameError("Salon Name must be between 1 to 20 characters");
+        return setSalonNameError(
+          "Salon Name must be between 1 to 20 characters",
+        );
       }
 
       if (!salonDesc) {
@@ -1161,12 +1419,12 @@ const CreateSalon = () => {
           duration: 3000,
           style: {
             fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
           },
         });
-        return setSalonDescError("Please enter salon description")
+        return setSalonDescError("Please enter salon description");
       }
 
       if (salonDesc.length === 0 || salonDesc.length > 35) {
@@ -1174,12 +1432,14 @@ const CreateSalon = () => {
           duration: 3000,
           style: {
             fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
           },
         });
-        return setSalonDescError("Salon Description must be between 1 to 35 characters");
+        return setSalonDescError(
+          "Salon Description must be between 1 to 35 characters",
+        );
       }
 
       if (!salonEmail) {
@@ -1187,12 +1447,12 @@ const CreateSalon = () => {
           duration: 3000,
           style: {
             fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
           },
         });
-        return setSalonEmailError("Please enter salon email")
+        return setSalonEmailError("Please enter salon email");
       }
 
       if (!emailRegex.test(salonEmail)) {
@@ -1213,33 +1473,32 @@ const CreateSalon = () => {
           duration: 3000,
           style: {
             fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
           },
         });
 
-        return setInvalidNumberError("Invalid Number")
+        return setInvalidNumberError("Invalid Number");
       }
 
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
       setAllSteps((prev) => {
-        return { ...prev, step1: true }
-      })
+        return { ...prev, step1: true };
+      });
     } else if (activeStep === 1) {
-
       if (!salonType) {
         toast.error("Please select salon type", {
           duration: 3000,
           style: {
             fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
           },
         });
-        return setSalonTypeError("Please select salon type")
+        return setSalonTypeError("Please select salon type");
       }
 
       if (!address) {
@@ -1247,12 +1506,12 @@ const CreateSalon = () => {
           duration: 3000,
           style: {
             fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
           },
         });
-        return setSalonAddressError("Please enter salon address")
+        return setSalonAddressError("Please enter salon address");
       }
 
       if (!postCode) {
@@ -1260,26 +1519,25 @@ const CreateSalon = () => {
           duration: 3000,
           style: {
             fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
           },
         });
-        return setPostCodeError("Please enter postcode")
+        return setPostCodeError("Please enter postcode");
       }
-
 
       if (!longitude && !latitude) {
         toast.error("Coordinates is not present", {
           duration: 3000,
           style: {
             fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
           },
         });
-        return setSalonCoordinateError("Coordinates is not present")
+        return setSalonCoordinateError("Coordinates is not present");
       }
 
       if (postCode.length === 0 || postCode.length > 10) {
@@ -1287,12 +1545,12 @@ const CreateSalon = () => {
           duration: 3000,
           style: {
             fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
           },
         });
-        return setPostCodeError("Postcode must be between 0 to 10 charecters")
+        return setPostCodeError("Postcode must be between 0 to 10 charecters");
       }
 
       if (!country) {
@@ -1300,12 +1558,12 @@ const CreateSalon = () => {
           duration: 3000,
           style: {
             fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
           },
         });
-        return setCountryError("Please select country")
+        return setCountryError("Please select country");
       }
 
       if (!city) {
@@ -1313,12 +1571,12 @@ const CreateSalon = () => {
           duration: 3000,
           style: {
             fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
           },
         });
-        return setCityError("Please select city")
+        return setCityError("Please select city");
       }
 
       if (!timezone) {
@@ -1326,41 +1584,37 @@ const CreateSalon = () => {
           duration: 3000,
           style: {
             fontSize: "var(--font-size-2)",
-            borderRadius: '0.3rem',
-            background: '#333',
-            color: '#fff',
+            borderRadius: "0.3rem",
+            background: "#333",
+            color: "#fff",
           },
         });
-        return setTimezoneError("Please select timezone")
+        return setTimezoneError("Please select timezone");
       }
 
-
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
       setAllSteps((prev) => {
-        return { ...prev, step2: true }
-      })
+        return { ...prev, step2: true };
+      });
     } else if (activeStep === 2) {
-
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
       setAllSteps((prev) => {
-        return { ...prev, step3: true }
-      })
+        return { ...prev, step3: true };
+      });
     } else if (activeStep === 3) {
-
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
       setAllSteps((prev) => {
-        return { ...prev, step4: true }
-      })
+        return { ...prev, step4: true };
+      });
     } else if (activeStep === 4) {
-
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
       setAllSteps((prev) => {
-        return { ...prev, step5: true }
-      })
+        return { ...prev, step5: true };
+      });
     }
   };
 
@@ -1369,143 +1623,324 @@ const CreateSalon = () => {
   };
 
   const handleStepClicked = (index) => {
-
     if (AllSteps[`step${index + 1}`]) {
       setActiveStep(index);
     }
-  }
+  };
 
-
-
-  const [businessTypeOpen, setBusinessTypeOpen] = useState(false)
-  const [countryOpen, setCountryOpen] = useState(false)
-  const [cityOpen, setCityOpen] = useState(false)
-  const [timezoneOpen, setTimezoneOpen] = useState(false)
-  const [serviceTypeOpen, setServiceTypeOpen] = useState(false)
-  const [serviceCategoryOpen, setServiceCategoryOpen] = useState(false)
-
+  const [businessTypeOpen, setBusinessTypeOpen] = useState(false);
+  const [countryOpen, setCountryOpen] = useState(false);
+  const [cityOpen, setCityOpen] = useState(false);
+  const [timezoneOpen, setTimezoneOpen] = useState(false);
+  const [serviceTypeOpen, setServiceTypeOpen] = useState(false);
+  const [serviceCategoryOpen, setServiceCategoryOpen] = useState(false);
 
   // React Map logic
 
+  // const { isLoaded } = useJsApiLoader({
+  //   id: "google-map-script",
+  //   googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+  // });
+
+  // const [map, setMap] = React.useState(null);
+  // const [markerPosition, setMarkerPosition] = React.useState(null);
+
+  // const [center, setCenter] = useState({
+  //   lat: 37.7749,
+  //   lng: -122.4194,
+  // });
+
+  // const onLoad = React.useCallback(
+  //   function callback(map) {
+  //     // This is just an example of getting and using the map instance!!! don't just blindly copy!
+  //     const bounds = new window.google.maps.LatLngBounds(center);
+  //     map.fitBounds(bounds);
+
+  //     setMap(map);
+  //   },
+  //   [center],
+  // );
+
+  // const onUnmount = React.useCallback(function callback(map) {
+  //   setMap(null);
+  // }, []);
+
+  // const handleMapClick = (event) => {
+  //   const lat = event.latLng.lat();
+  //   const lng = event.latLng.lng();
+
+  //   // Set marker position to clicked location
+  //   setMarkerPosition({ lat, lng });
+  //   setLatitude(lat);
+  //   setLongitude(lng);
+
+  //   const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
+  //   localStorage.setItem(
+  //     "salondata",
+  //     JSON.stringify({
+  //       ...existingData,
+  //       ["latitude"]: lat,
+  //       ["longitude"]: lng,
+  //     }),
+  //   );
+  // };
+
+  // React Map
+
+  useEffect(() => {
+    if (latitude && longitude) {
+      const pos = { lat: Number(latitude), lng: Number(longitude) };
+
+      setMarkerPosition(pos);
+      setCenter(pos);
+
+      if (mapRef.current) {
+        mapRef.current.panTo(pos);
+        mapRef.current.setZoom(16);
+      }
+    }
+  }, [latitude, longitude]);
+
+  const defaultCenter = {
+    lat: 51.5074,
+    lng: -0.1278,
+  };
+
   const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
+    id: "google-map-script",
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-  })
-
-  const [map, setMap] = React.useState(null)
-  const [markerPosition, setMarkerPosition] = React.useState(null);
-
-
-  const [center, setCenter] = useState({
-    lat: 37.7749,
-    lng: -122.4194
+    libraries: ["places"],
   });
 
+  const [center, setCenter] = useState(defaultCenter);
+  const [markerPosition, setMarkerPosition] = useState(null);
 
-  const onLoad = React.useCallback(function callback(map) {
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
-    const bounds = new window.google.maps.LatLngBounds(center)
-    map.fitBounds(bounds)
+  const mapRef = useRef(null);
+  const inputRef = useRef(null);
+  const autocompleteRef = useRef(null);
 
-    setMap(map)
-  }, [center])
+  // 📍 Map Load
+  const onLoad = useCallback((map) => {
+    mapRef.current = map;
+  }, []);
 
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null)
-  }, [])
+  const onUnmount = useCallback(() => {
+    mapRef.current = null;
+  }, []);
 
-  const handleMapClick = (event) => {
-    const lat = event.latLng.lat();
-    const lng = event.latLng.lng();
+  // 📍 Reverse Geocoding
+  const getAddressFromLatLng = (lat, lng) => {
+    if (!window.google) return;
 
-    // Set marker position to clicked location
-    setMarkerPosition({ lat, lng });
-    setLatitude(lat);
-    setLongitude(lng);
+    const geocoder = new window.google.maps.Geocoder();
 
-    const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
-    localStorage.setItem("salondata", JSON.stringify({
-      ...existingData,
-      ["latitude"]: lat,
-      ["longitude"]: lng
-    }));
+    geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        const result = results[0];
+        const components = result.address_components;
+
+        const getComp = (type) =>
+          components.find((c) => c.types.includes(type));
+
+        setAddress(result.formatted_address);
+
+        const postal = getComp("postal_code");
+        const cityComp = getComp("locality");
+        const fallbackCity = getComp("administrative_area_level_2");
+        const countryComp = getComp("country");
+
+        setPostCode(postal?.long_name || "N/A");
+        setCity(cityComp?.long_name || fallbackCity?.long_name || "N/A");
+        setCountry(countryComp?.long_name || "N/A");
+
+        updateSalonData({
+          address: result.formatted_address,
+          postCode: postal?.long_name || "N/A",
+          city: cityComp?.long_name || fallbackCity?.long_name || "N/A",
+          country: countryComp?.long_name || "N/A",
+        });
+      } else {
+        console.log("Not working getAddressFromLatLng");
+      }
+    });
   };
+
+  // 🌍 Timezone → UTC format
+  const getTimezoneFromLatLng = async (lat, lng) => {
+    try {
+      const timestamp = Math.floor(Date.now() / 1000);
+
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${timestamp}&key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`,
+      );
+
+      const data = await res.json();
+
+      if (data.status === "OK") {
+        const offset = data.rawOffset + data.dstOffset;
+
+        const sign = offset >= 0 ? "+" : "-";
+        const abs = Math.abs(offset);
+
+        const hours = Math.floor(abs / 3600);
+        const minutes = (abs % 3600) / 60;
+
+        const formatted = `UTC${sign}${String(hours).padStart(
+          2,
+          "0",
+        )}:${String(minutes).padStart(2, "0")}`;
+
+        setTimezone(formatted);
+
+        updateSalonData({
+          timezone: formatted,
+        });
+      } else {
+        console.log("Not working getTimezone");
+      }
+    } catch (err) {
+      console.error("Timezone error:", err);
+    }
+  };
+
+  const fetchLocationDetails = (lat, lng) => {
+    getAddressFromLatLng(lat, lng);
+    getTimezoneFromLatLng(lat, lng);
+  };
+
+  // 🖱️ Map Click
+  const handleMapClick = (e) => {
+    const newPos = {
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng(),
+    };
+
+    setMarkerPosition(newPos);
+    setLatitude(e.latLng.lat());
+    setLongitude(e.latLng.lng());
+    // console.log(existingData);
+    localStorage.setItem(
+      "salondata",
+      JSON.stringify({
+        ...existingData,
+        ["latitude"]: e.latLng.lat(),
+        ["longitude"]: e.latLng.lng(),
+      }),
+    );
+    mapRef.current?.panTo(newPos);
+
+    fetchLocationDetails(newPos.lat, newPos.lng);
+  };
+
+  // 🔍 Global Autocomplete
+  useEffect(() => {
+    if (!isLoaded || !inputRef.current || !window.google || activeStep !== 1)
+      return;
+
+    autocompleteRef.current = new window.google.maps.places.Autocomplete(
+      inputRef.current,
+      {
+        // types: ["geocode"], // 🌍 global
+      },
+    );
+
+    // 🌍 Bias near user (not restriction)
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        const circle = new window.google.maps.Circle({
+          center: {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+          },
+          radius: 50000,
+        });
+
+        autocompleteRef.current.setBounds(circle.getBounds());
+      });
+    }
+
+    autocompleteRef.current.addListener("place_changed", () => {
+      const place = autocompleteRef.current.getPlace();
+
+      if (!place.geometry) return;
+
+      const lat = place.geometry.location.lat();
+      const lng = place.geometry.location.lng();
+
+      const newPos = { lat, lng };
+
+      // ✅ Update states
+      setMarkerPosition(newPos);
+      setLatitude(lat);
+      setLongitude(lng);
+
+      // ✅ FIXED (use correct lat/lng)
+      updateSalonData({
+        latitude: lat,
+        longitude: lng,
+      });
+
+      // ✅ Move map
+      mapRef.current?.panTo(newPos);
+      mapRef.current?.setZoom(16);
+
+      // ✅ Fetch all details
+      fetchLocationDetails(lat, lng);
+    });
+
+    return () => {
+      if (autocompleteRef.current) {
+        window.google.maps.event.clearInstanceListeners(
+          autocompleteRef.current,
+        );
+      }
+    };
+  }, [isLoaded, activeStep]);
+
+  useEffect(() => {
+    if (country) {
+      const fetchSpecificCountryDetails = async () => {
+        try {
+          const { data } = await api.post(
+            `/api/country/getAllCountries?name=${country}`,
+          );
+
+          let value = data?.response?.[0];
+          setCountryCode(value?.countryCode);
+          setCountryCurrency(value?.currency);
+          updateSalonData({
+            countryCode: value?.countryCode,
+            countryCurrency: value?.currency,
+          });
+        } catch (error) {
+          alert("Not able to fetch the country details");
+          console.log("Failed to fetch the country ", error);
+        }
+      };
+
+      fetchSpecificCountryDetails();
+    }
+  }, [country]);
+
+  const updateSalonData = (newData) => {
+    const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
+
+    localStorage.setItem(
+      "salondata",
+      JSON.stringify({
+        ...existingData,
+        ...newData,
+      }),
+    );
+  };
+
+  if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <section className={`${style.section}`}>
       <div>
         <h2>Create Salon</h2>
       </div>
-
-
-      {/* <div style={{ height: "30rem", backgroundColor: "#efefef" }}>
-        {
-          isLoaded ? (
-            <GoogleMap
-              mapContainerStyle={{
-                width: '100%',
-                height: '30rem',
-              }}
-              center={center}
-              zoom={10}
-              onLoad={onLoad}
-              onUnmount={onUnmount}
-              onClick={handleMapClick}
-            >
-              {markerPosition && (
-                <OverlayView
-                  position={markerPosition}
-                  mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      transform: "translate(-50%, -100%)",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "5rem",
-                        height: "5rem",
-                        borderRadius: "0.6rem",
-                        backgroundColor: "#ffffff",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
-                        border: "1px solid #000",
-                      }}
-                    >
-                      <ScissorIcon size={"2.4rem"} />
-                    </div>
-
-                    <div
-                      style={{
-                        marginTop: "0.8rem",
-                        backgroundColor: "#fff",
-                        padding: "0.4rem 0.8rem",
-                        borderRadius: "0.4rem",
-                        boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                        fontSize: "1.4rem",
-                        fontWeight: "bold",
-                        color: "#333",
-                        whiteSpace: "nowrap",
-                        border: "0.1rem solid #ccc",
-                      }}
-                    >
-                      {salonName}
-                    </div>
-                  </div>
-                </OverlayView>
-              )}
-            </GoogleMap>
-          ) : (
-            <></>
-          )
-        }
-      </div> */}
 
       <div className={`${style.form_main_container}`}>
         <Stepper
@@ -1514,7 +1949,7 @@ const CreateSalon = () => {
           sx={{
             "& .MuiStepContent-root": {
               borderLeft: "1px solid #bdbdbd",
-              paddingRight: "0px"
+              paddingRight: "0px",
             },
 
             "& .MuiStepIcon-root": {
@@ -1534,284 +1969,99 @@ const CreateSalon = () => {
               background: "green",
               borderRadius: "50%",
               color: "#fff",
-              padding: "0.5rem"
+              padding: "0.5rem",
             },
           }}
-
         >
           {steps.map((step, index) => (
             <Step key={step.label}>
-              <StepLabel
-                onClick={() => handleStepClicked(index)}
-              >
+              <StepLabel onClick={() => handleStepClicked(index)}>
                 <span className={`${style.stepper_heading}`}>{step.label}</span>
               </StepLabel>
 
-              {
-                step.label === "Account Information" && (<StepContent>
+              {step.label === "Account Information" && (
+                <StepContent>
                   <main className={`${style.form_container}`}>
                     {step.fields.map((field) => (
                       <div key={field.name} className={`${style.form_group}`}>
                         <label>{field.label}</label>
 
-                        {
-                          field.name === "contactTel" ?
-                            (<>
-                              <PhoneInput
-                                forceDialCode={true}
-                                defaultCountry={countryflag}
-                                value={contactTel}
-                                onChange={(phone, meta) => handlePhoneChange(phone, meta)}
-                              />
-                              {invalidNumberError ? <p style={{ color: "red", fontSize: "1.4rem" }}>{invalidNumberError}</p> : null}
-                            </>) :
-                            (
-                              <>
-                                <input
-                                  type={field.type}
-                                  name={field.name}
-                                  value={field.value}
-                                  placeholder={field.placeholder}
-                                  onChange={(e) => field.onChange(field.setState, e.target.value, field.name, field.setError)}
-                                />
-                                {field.error ? <p style={{ color: "red", fontSize: "1.4rem" }}>{field.error}</p> : null}
-                              </>
-                            )
-                        }
-
+                        {field.name === "contactTel" ? (
+                          <>
+                            <PhoneInput
+                              forceDialCode={true}
+                              defaultCountry={countryflag}
+                              value={contactTel}
+                              onChange={(phone, meta) =>
+                                handlePhoneChange(phone, meta)
+                              }
+                            />
+                            {invalidNumberError ? (
+                              <p style={{ color: "red", fontSize: "1.4rem" }}>
+                                {invalidNumberError}
+                              </p>
+                            ) : null}
+                          </>
+                        ) : (
+                          <>
+                            <input
+                              type={field.type}
+                              name={field.name}
+                              value={field.value}
+                              placeholder={field.placeholder}
+                              onChange={(e) =>
+                                field.onChange(
+                                  field.setState,
+                                  e.target.value,
+                                  field.name,
+                                  field.setError,
+                                )
+                              }
+                            />
+                            {field.error ? (
+                              <p style={{ color: "red", fontSize: "1.4rem" }}>
+                                {field.error}
+                              </p>
+                            ) : null}
+                          </>
+                        )}
                       </div>
                     ))}
                     <div className={`${style.button_container}`}>
                       <div></div>
                       <button onClick={handleNext}>
-                        {index === steps.length - 1 ? 'Finish' : 'Continue'}
+                        {index === steps.length - 1 ? "Finish" : "Continue"}
                       </button>
                     </div>
                   </main>
-                </StepContent>)
-              }
+                </StepContent>
+              )}
 
-              {
-                step.label === "Business Information" && (<StepContent>
+              {step.label === "Business Information" && (
+                <StepContent>
                   <main className={`${style.form_container}`}>
                     {step.fields.map((field) => (
                       <div key={field.name} className={`${style.form_group}`}>
-                        {
-                          field.label === "City" || field.label === "Timezone" ? (
-                            countryCodePresent ? (<label>{field.label}</label>) : (null)
-                          ) : (<label>{field.label}</label>)
-                        }
+                        {/* {field.label === "City" ||
+                        field.label === "Timezone" ? (
+                          countryCodePresent ? (
+                            <label>{field.label}</label>
+                          ) : null
+                        ) : (
+                          <label>{field.label}</label>
+                        )} */}
+                        {field.label === "Salon Business Type" && (
+                          <label>{field.label}</label>
+                        )}
 
-                        {
-                          field.dropdown ? (
-                            field.name === "businesstype" ? (
-                              <>
-                                <div className={`${style.select_container}`} onClick={() => setBusinessTypeOpen((prev) => !prev)}>
-                                  <input
-                                    type={field.type}
-                                    name={field.name}
-                                    value={field.value}
-                                    placeholder={field.placeholder}
-                                    readOnly
-                                  />
-                                  <div><DropdownIcon /></div>
-
-                                  {
-                                    businessTypeOpen ? (
-                                      <ClickAwayListener onClickAway={() => setBusinessTypeOpen(false)}>
-                                        <div className={`${style.select_dropdown_container}`} onClick={(event) => event.stopPropagation()} >
-                                          <button onClick={() => field.salonTypeHandler("Barber Shop")}>Barber Shop</button>
-                                          <button onClick={() => field.salonTypeHandler("Hair Dresser")}>Hair Dresser</button>
-                                        </div></ClickAwayListener>) : null
-                                  }
-                                </div>
-                                {salonTypeError ? <p style={{ color: "red", fontSize: "1.4rem" }}>{salonTypeError}</p> : null}
-                              </>
-                            ) : field.name === "country" ? (
-                              <>
-                                <div className={`${style.select_container}`} onClick={() => setCountryOpen((prev) => !prev)}>
-                                  <input
-                                    type={field.type}
-                                    name={field.name}
-                                    value={country}
-                                    placeholder={field.placeholder}
-                                    readOnly
-                                  />
-                                  <div><DropdownIcon /></div>
-
-                                  {
-                                    countryOpen ? (
-                                      <ClickAwayListener onClickAway={() => setCountryOpen(false)}>
-                                        <div className={`${style.select_search_dropdown_container}`} onClick={(event) => event.stopPropagation()} >
-                                          <div className={`${style.search_box} ${darkmodeOn && style.dark}`}>
-                                            <input
-                                              type="text"
-                                              placeholder='Search Country'
-                                              value={searchCountry}
-                                              onChange={(e) => searchCountryHandler(e.target.value)}
-                                            />
-
-                                            <div><SearchIcon /></div>
-                                          </div>
-                                          {
-                                            getAdminAllCountriesLoading ?
-                                              <Skeleton count={2}
-                                                height={"4rem"}
-                                                width={"100%"}
-                                                baseColor={"var(--loader-bg-color)"}
-                                                highlightColor={"var(--loader-highlight-color)"}
-                                                style={{
-                                                  borderRadius: "0.3rem",
-                                                  marginBottom: "1rem"
-                                                }}
-                                              /> :
-                                              getAdminAllCountriesResolve && copyCountriesdata?.length > 0 ?
-
-                                                copyCountriesdata?.map((c) => (
-                                                  <button key={c._id} onClick={() => setCountryHandler(c)}>{c.name}</button>
-                                                ))
-                                                :
-                                                <div>
-                                                  <p style={{ position: "absolute", top: "60%", left: "50%", transform: "translate(-50%, -50%)", fontSize: "1.4rem" }}>No countries available</p>
-                                                </div>
-                                          }
-                                        </div></ClickAwayListener>) : null
-                                  }
-
-                                </div>
-                                {countryError ? <p style={{ color: "red", fontSize: "1.4rem" }}>{countryError}</p> : null}
-                              </>
-                            ) : field.name === "city" ? (
-
-                              countryCodePresent ? (<>
-                                <div className={`${style.select_container}`} onClick={() => setCityOpen((prev) => !prev)}>
-                                  <input
-                                    type={field.type}
-                                    name={field.name}
-                                    value={city}
-                                    placeholder={field.placeholder}
-                                    readOnly
-                                  />
-                                  <div><DropdownIcon /></div>
-
-                                  {
-                                    cityOpen ? (
-                                      <ClickAwayListener onClickAway={() => setCityOpen(false)}>
-                                        <div className={`${style.select_search_dropdown_container}`} onClick={(event) => event.stopPropagation()} >
-                                          <div className={`${style.search_box} ${darkmodeOn && style.dark}`}>
-                                            <input
-                                              type="text"
-                                              placeholder='Search City'
-                                              value={searchCity}
-                                              onChange={(e) => searchCityHandler(e.target.value)}
-                                            />
-
-                                            <div><SearchIcon /></div>
-                                          </div>
-
-                                          {
-                                            getAdminAllCitiesLoading ?
-                                              <Skeleton count={2}
-                                                height={"4rem"}
-                                                width={"100%"}
-                                                baseColor={"var(--loader-bg-color)"}
-                                                highlightColor={"var(--loader-highlight-color)"}
-                                                style={{
-                                                  borderRadius: "0.3rem",
-                                                  marginBottom: "1rem"
-                                                }}
-                                              /> :
-                                              getAdminAllCitiesResolve && copyCitiesData?.length > 0 ?
-
-                                                copyCitiesData.map((c, index) => (
-                                                  <button key={index} onClick={() => setCityHandler(c)}>{c.name}</button>
-                                                ))
-                                                :
-                                                <div>
-                                                  <p style={{ position: "absolute", top: "60%", left: "50%", transform: "translate(-50%, -50%)", fontSize: "1.4rem" }}>No cities available</p>
-                                                </div>
-                                          }
-                                        </div></ClickAwayListener>) : null
-                                  }
-
-
-                                </div>
-                                {
-                                  !countryCodePresent ? <p style={{ color: "red", fontSize: "1.4rem" }}>Please select country</p> : cityError && <p style={{ color: "red", fontSize: "1.4rem" }}>{cityError}</p>
-                                }
-                              </>) : (null)
-
-                            ) : field.name === "timezone" && (
-                              countryCodePresent ? (<>
-                                <div className={`${style.select_container}`} onClick={() => setTimezoneOpen((prev) => !prev)}>
-                                  <input
-                                    type={field.type}
-                                    name={field.name}
-                                    value={timezone}
-                                    placeholder={field.placeholder}
-                                    readOnly
-                                  />
-                                  <div><DropdownIcon /></div>
-
-                                  {
-                                    timezoneOpen ? (
-                                      <ClickAwayListener onClickAway={() => setTimezoneOpen(false)}>
-                                        <div className={`${style.select_dropdown_container}`} onClick={(event) => event.stopPropagation()} >
-                                          {
-                                            getAdminAllTimezoneLoading ?
-                                              <div style={{ height: "100%", width: "100%", display: "grid", placeItems: "center" }}><ButtonLoader color={"#000"} /></div> :
-                                              getAdminAllTimezoneResolve && AllTimezones?.length > 0 ?
-
-                                                AllTimezones.map((c, index) => (
-                                                  <button key={index} onClick={() => setTimezoneHandler(c)}>{c}</button>
-                                                ))
-
-                                                :
-                                                <div style={{ display: "grid", placeItems: "center", width: "100%", height: "100%" }}>
-                                                  <p style={{ fontSize: "1.4rem" }}>No timezone available</p>
-                                                </div>
-                                          }
-                                        </div></ClickAwayListener>) : null
-                                  }
-
-                                </div>
-                                {
-                                  !countryCodePresent ? <p style={{ color: "red", fontSize: "1.4rem" }}>Please select country</p> : timezoneError && <p style={{ color: "red", fontSize: "1.4rem" }}>{timezoneError}</p>
-                                }
-                              </>) : (null)
-                            )
-
-                          ) : (
-                            field.name === "address" ? (
-                              <>
-                                <input
-                                  type={field.type}
-                                  name={field.name}
-                                  value={field.value}
-                                  placeholder={field.placeholder}
-                                  onChange={(e) => field.onChange(field.setState, e.target.value, field.name, field.setError)}
-                                />
-                                {field.error ? <p style={{ color: "red", fontSize: "1.4rem" }}>{field.error}</p> : null}
-                              </>
-                            ) : field.name === "postcode" ? (
-                              <>
-                                <input
-                                  type={field.type}
-                                  name={field.name}
-                                  value={field.value}
-                                  placeholder={field.placeholder}
-                                  onChange={(e) => {
-                                    const value = e.target.value;
-                                    if (!/^[a-zA-Z0-9]*$/.test(value)) {
-                                      setPostCodeError("Postcode must only contain letters and numbers");
-                                      return
-                                    }
-                                    setHandler(setPostCode, value, "postCode", setPostCodeError)
-                                  }}
-                                />
-                                {field.error ? <p style={{ color: "red", fontSize: "1.4rem" }}>{field.error}</p> : null}
-                              </>
-                            ) : (<>
+                        {field.dropdown && field.name === "businesstype" && (
+                          <>
+                            <div
+                              className={`${style.select_container}`}
+                              onClick={() =>
+                                setBusinessTypeOpen((prev) => !prev)
+                              }
+                            >
                               <input
                                 type={field.type}
                                 name={field.name}
@@ -1819,122 +2069,773 @@ const CreateSalon = () => {
                                 placeholder={field.placeholder}
                                 readOnly
                               />
-                              {salonCoordinateError ? <p style={{ color: "red", fontSize: "1.4rem" }}>{salonCoordinateError}</p> : null}
-                            </>)
+                              <div>
+                                <DropdownIcon />
+                              </div>
 
-                          )
-                        }
-
-                        {field.name === "longitude" && (
-                          <>
-                            {/* <button className={`${style.geolocation_btn}`} onClick={geoLocationHandler}>
-                              Get geolocation
-                            </button> */}
-                            <p style={{ fontWeight: 700 }}>* Select your salon's exact location on the map to automatically set its latitude and longitude.</p>
-                            <div style={{ height: "30rem", backgroundColor: "#efefef", borderRadius: "0.6rem", overflow: "hidden" }}>
-                              {
-                                isLoaded ? (
-                                  <GoogleMap
-                                    mapContainerStyle={{
-                                      width: '100%',
-                                      height: '30rem',
-                                    }}
-                                    center={center}
-                                    zoom={10}
-                                    onLoad={onLoad}
-                                    onUnmount={onUnmount}
-                                    onClick={handleMapClick}
-                                    options={{
-                                      disableDefaultUI: false, // Keep basic controls like zoom
-                                      streetViewControl: false, // 🚫 Remove Pegman / Street View
-                                      mapTypeControl: false, // 🚫 Remove Satellite / Terrain switcher
-                                      fullscreenControl: true, // ✅ Keep fullscreen option if needed
-                                      zoomControl: true, // ✅ Keep zoom buttons
-                                    }}
+                              {businessTypeOpen ? (
+                                <ClickAwayListener
+                                  onClickAway={() => setBusinessTypeOpen(false)}
+                                >
+                                  <div
+                                    className={`${style.select_dropdown_container}`}
+                                    onClick={(event) => event.stopPropagation()}
                                   >
-                                    {markerPosition && (
-                                      <OverlayView
-                                        position={markerPosition}
-                                        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-                                      >
-                                        <div
-                                          style={{
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            alignItems: "center",
-                                            transform: "translate(-50%, -100%)",
-                                          }}
-                                        >
-                                          <div
-                                            style={{
-                                              width: "5rem",
-                                              height: "5rem",
-                                              borderRadius: "0.6rem",
-                                              display: "flex",
-                                              justifyContent: "center",
-                                              alignItems: "center",
-                                            }}
-                                          >
-                                            <img src="/mapPointer.png" alt="" style={{
-                                              width: "100%", height: "100%", objectFit: "contain"
-                                            }} />
-                                          </div>
-
-                                          <div
-                                            style={{
-                                              marginTop: "0.8rem",
-                                              backgroundColor: "#fff",
-                                              padding: "0.4rem 0.8rem",
-                                              borderRadius: "0.4rem",
-                                              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                                              fontSize: "1.4rem",
-                                              fontWeight: "bold",
-                                              color: "#333",
-                                              whiteSpace: "nowrap",
-                                              border: "0.1rem solid #ccc",
-                                            }}
-                                          >
-                                            {salonName}
-                                          </div>
-                                        </div>
-                                      </OverlayView>
-                                    )}
-                                  </GoogleMap>
-                                ) : (
-                                  <></>
-                                )
-                              }
+                                    <button
+                                      onClick={() =>
+                                        field.salonTypeHandler("Barber Shop")
+                                      }
+                                    >
+                                      Barber Shop
+                                    </button>
+                                    <button
+                                      onClick={() =>
+                                        field.salonTypeHandler("Hair Dresser")
+                                      }
+                                    >
+                                      Hair Dresser
+                                    </button>
+                                  </div>
+                                </ClickAwayListener>
+                              ) : null}
                             </div>
+                            {salonTypeError ? (
+                              <p style={{ color: "red", fontSize: "1.4rem" }}>
+                                {salonTypeError}
+                              </p>
+                            ) : null}
                           </>
                         )}
 
+                        <div
+                          style={{
+                            maxWidth: "90rem",
+                            padding: "1.5rem",
+                            background: "var(--bg-primary)",
+                            borderRadius: "1rem",
+                            boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+                            fontFamily: "system-ui",
+                          }}
+                        >
+                          {/* Search */}
+                          <input
+                            ref={inputRef}
+                            placeholder="Search city, address, or place..."
+                            style={{
+                              width: "100%",
+                              padding: "1.2rem",
+                              marginBottom: "1.4rem",
+                              borderRadius: "1rem",
+                              border: "0.1rem solid var(--border-secondary)",
+                              backgroundColor: "var(--section-bg-color)",
+                            }}
+                          />
+
+                          {/* Map */}
+                          <div
+                            style={{
+                              borderRadius: "1.2rem",
+                              overflow: "hidden",
+                            }}
+                          >
+                            <GoogleMap
+                              mapContainerStyle={{
+                                width: "100%",
+                                height: "40rem",
+                              }}
+                              center={center}
+                              zoom={12}
+                              onLoad={onLoad}
+                              onUnmount={onUnmount}
+                              onClick={handleMapClick}
+                              options={{
+                                streetViewControl: false,
+                                mapTypeControl: false,
+                              }}
+                            >
+                              {markerPosition && (
+                                <Marker
+                                  position={markerPosition}
+                                  draggable
+                                  onDragEnd={(e) => {
+                                    const newPos = {
+                                      lat: e.latLng.lat(),
+                                      lng: e.latLng.lng(),
+                                    };
+
+                                    setMarkerPosition(newPos);
+                                    fetchLocationDetails(
+                                      newPos.lat,
+                                      newPos.lng,
+                                    );
+                                  }}
+                                />
+                              )}
+                            </GoogleMap>
+                          </div>
+
+                          {/* Info */}
+                          {markerPosition && (
+                            <div
+                              style={{
+                                marginTop: "1.5rem",
+                                // padding: "14px",
+                                borderRadius: "1rem",
+                                background: "var(--bg-primary)",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "1rem",
+                              }}
+                            >
+                              {/* <div>
+                                <strong>Lat:</strong>{" "}
+                                {latitude}
+                              </div>
+                              <div>
+                                <strong>Lng:</strong>{" "}
+                                {longitude}
+                              </div>
+                              <div>
+                                <strong>Address:</strong> {address || "—"}
+                              </div>
+                              <div>
+                                <strong>City:</strong> {city || "—"}
+                              </div>
+                              <div>
+                                <strong>Country:</strong> {country || "—"}
+                              </div>
+
+                              {postCode && (
+                                <div>
+                                  <strong>PostCode:</strong> {postCode}
+                                </div>
+                              )}
+
+                              <div>
+                                <strong>Timezone:</strong> {timezone || "—"}
+                              </div> */}
+
+                              <p>
+                                <span style={{ fontWeight: 700 }}>
+                                  Location:
+                                </span>{" "}
+                                {[address, city, country]
+                                  .filter(Boolean)
+                                  .join(", ")}
+                                {postCode ? ` - ${postCode}` : ""}
+                              </p>
+                            </div>
+                          )}
+
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              marginTop: "1.5rem",
+                              gap: "1.2rem",
+                            }}
+                          >
+                            <button
+                              onClick={() => {
+                                setLongitude("");
+                                setLatitude("");
+                                setTimezone("");
+                                setAddress("");
+                                setCountry("");
+                                setCity("");
+                                setPostCode("");
+                                setMarkerPosition(null);
+
+                                if (inputRef.current) {
+                                  inputRef.current.value = "";
+                                }
+
+                                if (mapRef.current) {
+                                  mapRef.current.panTo(defaultCenter);
+                                  mapRef.current.setZoom(12);
+                                }
+                              }}
+                              style={{
+                                flex: 1,
+                                padding: "1rem 1.6rem",
+                                borderRadius: "0.8rem",
+                                border: "0.1rem solid var(--border-secondary)",
+                                backgroundColor: "var(--section-bg-color)",
+                                // color: "#333",
+                                color: "var(--text-primary)",
+                                fontSize: "1.5rem",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Reset
+                            </button>
+
+                            <button
+                              onClick={handleNext}
+                              style={{
+                                flex: 1,
+                                padding: "1rem 1.6rem",
+                                borderRadius: "0.8rem",
+                                border: "none",
+                                backgroundColor: "var(--bg-secondary)",
+                                color: "var(--btn-text-color)",
+                                fontSize: "1.5rem",
+                                fontWeight: "500",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Continue
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* {field.dropdown ? (
+                          field.name === "businesstype" ? (
+                            <>
+                              <div
+                                className={`${style.select_container}`}
+                                onClick={() =>
+                                  setBusinessTypeOpen((prev) => !prev)
+                                }
+                              >
+                                <input
+                                  type={field.type}
+                                  name={field.name}
+                                  value={field.value}
+                                  placeholder={field.placeholder}
+                                  readOnly
+                                />
+                                <div>
+                                  <DropdownIcon />
+                                </div>
+
+                                {businessTypeOpen ? (
+                                  <ClickAwayListener
+                                    onClickAway={() =>
+                                      setBusinessTypeOpen(false)
+                                    }
+                                  >
+                                    <div
+                                      className={`${style.select_dropdown_container}`}
+                                      onClick={(event) =>
+                                        event.stopPropagation()
+                                      }
+                                    >
+                                      <button
+                                        onClick={() =>
+                                          field.salonTypeHandler("Barber Shop")
+                                        }
+                                      >
+                                        Barber Shop
+                                      </button>
+                                      <button
+                                        onClick={() =>
+                                          field.salonTypeHandler("Hair Dresser")
+                                        }
+                                      >
+                                        Hair Dresser
+                                      </button>
+                                    </div>
+                                  </ClickAwayListener>
+                                ) : null}
+                              </div>
+                              {salonTypeError ? (
+                                <p style={{ color: "red", fontSize: "1.4rem" }}>
+                                  {salonTypeError}
+                                </p>
+                              ) : null}
+                            </>
+                          ) 
+                          
+                          : field.name === "country" ? (
+                            <>
+                              <div
+                                className={`${style.select_container}`}
+                                onClick={() => setCountryOpen((prev) => !prev)}
+                              >
+                                <input
+                                  type={field.type}
+                                  name={field.name}
+                                  value={country}
+                                  placeholder={field.placeholder}
+                                  readOnly
+                                />
+                                <div>
+                                  <DropdownIcon />
+                                </div>
+
+                                {countryOpen ? (
+                                  <ClickAwayListener
+                                    onClickAway={() => setCountryOpen(false)}
+                                  >
+                                    <div
+                                      className={`${style.select_search_dropdown_container}`}
+                                      onClick={(event) =>
+                                        event.stopPropagation()
+                                      }
+                                    >
+                                      <div
+                                        className={`${style.search_box} ${darkmodeOn && style.dark}`}
+                                      >
+                                        <input
+                                          type="text"
+                                          placeholder="Search Country"
+                                          value={searchCountry}
+                                          onChange={(e) =>
+                                            searchCountryHandler(e.target.value)
+                                          }
+                                        />
+
+                                        <div>
+                                          <SearchIcon />
+                                        </div>
+                                      </div>
+                                      {getAdminAllCountriesLoading ? (
+                                        <Skeleton
+                                          count={2}
+                                          height={"4rem"}
+                                          width={"100%"}
+                                          baseColor={"var(--loader-bg-color)"}
+                                          highlightColor={
+                                            "var(--loader-highlight-color)"
+                                          }
+                                          style={{
+                                            borderRadius: "0.3rem",
+                                            marginBottom: "1rem",
+                                          }}
+                                        />
+                                      ) : getAdminAllCountriesResolve &&
+                                        copyCountriesdata?.length > 0 ? (
+                                        copyCountriesdata?.map((c) => (
+                                          <button
+                                            key={c._id}
+                                            onClick={() => setCountryHandler(c)}
+                                          >
+                                            {c.name}
+                                          </button>
+                                        ))
+                                      ) : (
+                                        <div>
+                                          <p
+                                            style={{
+                                              position: "absolute",
+                                              top: "60%",
+                                              left: "50%",
+                                              transform:
+                                                "translate(-50%, -50%)",
+                                              fontSize: "1.4rem",
+                                            }}
+                                          >
+                                            No countries available
+                                          </p>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </ClickAwayListener>
+                                ) : null}
+                              </div>
+                              {countryError ? (
+                                <p style={{ color: "red", fontSize: "1.4rem" }}>
+                                  {countryError}
+                                </p>
+                              ) : null}
+                            </>
+                          ) : field.name === "city" ? (
+                            countryCodePresent ? (
+                              <>
+                                <div
+                                  className={`${style.select_container}`}
+                                  onClick={() => setCityOpen((prev) => !prev)}
+                                >
+                                  <input
+                                    type={field.type}
+                                    name={field.name}
+                                    value={city}
+                                    placeholder={field.placeholder}
+                                    readOnly
+                                  />
+                                  <div>
+                                    <DropdownIcon />
+                                  </div>
+
+                                  {cityOpen ? (
+                                    <ClickAwayListener
+                                      onClickAway={() => setCityOpen(false)}
+                                    >
+                                      <div
+                                        className={`${style.select_search_dropdown_container}`}
+                                        onClick={(event) =>
+                                          event.stopPropagation()
+                                        }
+                                      >
+                                        <div
+                                          className={`${style.search_box} ${darkmodeOn && style.dark}`}
+                                        >
+                                          <input
+                                            type="text"
+                                            placeholder="Search City"
+                                            value={searchCity}
+                                            onChange={(e) =>
+                                              searchCityHandler(e.target.value)
+                                            }
+                                          />
+
+                                          <div>
+                                            <SearchIcon />
+                                          </div>
+                                        </div>
+
+                                        {getAdminAllCitiesLoading ? (
+                                          <Skeleton
+                                            count={2}
+                                            height={"4rem"}
+                                            width={"100%"}
+                                            baseColor={"var(--loader-bg-color)"}
+                                            highlightColor={
+                                              "var(--loader-highlight-color)"
+                                            }
+                                            style={{
+                                              borderRadius: "0.3rem",
+                                              marginBottom: "1rem",
+                                            }}
+                                          />
+                                        ) : getAdminAllCitiesResolve &&
+                                          copyCitiesData?.length > 0 ? (
+                                          copyCitiesData.map((c, index) => (
+                                            <button
+                                              key={index}
+                                              onClick={() => setCityHandler(c)}
+                                            >
+                                              {c.name}
+                                            </button>
+                                          ))
+                                        ) : (
+                                          <div>
+                                            <p
+                                              style={{
+                                                position: "absolute",
+                                                top: "60%",
+                                                left: "50%",
+                                                transform:
+                                                  "translate(-50%, -50%)",
+                                                fontSize: "1.4rem",
+                                              }}
+                                            >
+                                              No cities available
+                                            </p>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </ClickAwayListener>
+                                  ) : null}
+                                </div>
+                                {!countryCodePresent ? (
+                                  <p
+                                    style={{ color: "red", fontSize: "1.4rem" }}
+                                  >
+                                    Please select country
+                                  </p>
+                                ) : (
+                                  cityError && (
+                                    <p
+                                      style={{
+                                        color: "red",
+                                        fontSize: "1.4rem",
+                                      }}
+                                    >
+                                      {cityError}
+                                    </p>
+                                  )
+                                )}
+                              </>
+                            ) : null
+                          ) : (
+                            field.name === "timezone" &&
+                            (countryCodePresent ? (
+                              <>
+                                <div
+                                  className={`${style.select_container}`}
+                                  onClick={() =>
+                                    setTimezoneOpen((prev) => !prev)
+                                  }
+                                >
+                                  <input
+                                    type={field.type}
+                                    name={field.name}
+                                    value={timezone}
+                                    placeholder={field.placeholder}
+                                    readOnly
+                                  />
+                                  <div>
+                                    <DropdownIcon />
+                                  </div>
+
+                                  {timezoneOpen ? (
+                                    <ClickAwayListener
+                                      onClickAway={() => setTimezoneOpen(false)}
+                                    >
+                                      <div
+                                        className={`${style.select_dropdown_container}`}
+                                        onClick={(event) =>
+                                          event.stopPropagation()
+                                        }
+                                      >
+                                        {getAdminAllTimezoneLoading ? (
+                                          <div
+                                            style={{
+                                              height: "100%",
+                                              width: "100%",
+                                              display: "grid",
+                                              placeItems: "center",
+                                            }}
+                                          >
+                                            <ButtonLoader color={"#000"} />
+                                          </div>
+                                        ) : getAdminAllTimezoneResolve &&
+                                          AllTimezones?.length > 0 ? (
+                                          AllTimezones.map((c, index) => (
+                                            <button
+                                              key={index}
+                                              onClick={() =>
+                                                setTimezoneHandler(c)
+                                              }
+                                            >
+                                              {c}
+                                            </button>
+                                          ))
+                                        ) : (
+                                          <div
+                                            style={{
+                                              display: "grid",
+                                              placeItems: "center",
+                                              width: "100%",
+                                              height: "100%",
+                                            }}
+                                          >
+                                            <p style={{ fontSize: "1.4rem" }}>
+                                              No timezone available
+                                            </p>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </ClickAwayListener>
+                                  ) : null}
+                                </div>
+                                {!countryCodePresent ? (
+                                  <p
+                                    style={{ color: "red", fontSize: "1.4rem" }}
+                                  >
+                                    Please select country
+                                  </p>
+                                ) : (
+                                  timezoneError && (
+                                    <p
+                                      style={{
+                                        color: "red",
+                                        fontSize: "1.4rem",
+                                      }}
+                                    >
+                                      {timezoneError}
+                                    </p>
+                                  )
+                                )}
+                              </>
+                            ) : null)
+                          )
+                        ) : field.name === "address" ? (
+                          <>
+                            <input
+                              type={field.type}
+                              name={field.name}
+                              value={field.value}
+                              placeholder={field.placeholder}
+                              onChange={(e) =>
+                                field.onChange(
+                                  field.setState,
+                                  e.target.value,
+                                  field.name,
+                                  field.setError,
+                                )
+                              }
+                            />
+                            {field.error ? (
+                              <p style={{ color: "red", fontSize: "1.4rem" }}>
+                                {field.error}
+                              </p>
+                            ) : null}
+                          </>
+                        ) : field.name === "postcode" ? (
+                          <>
+                            <input
+                              type={field.type}
+                              name={field.name}
+                              value={field.value}
+                              placeholder={field.placeholder}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (!/^[a-zA-Z0-9]*$/.test(value)) {
+                                  setPostCodeError(
+                                    "Postcode must only contain letters and numbers",
+                                  );
+                                  return;
+                                }
+                                setHandler(
+                                  setPostCode,
+                                  value,
+                                  "postCode",
+                                  setPostCodeError,
+                                );
+                              }}
+                            />
+                            {field.error ? (
+                              <p style={{ color: "red", fontSize: "1.4rem" }}>
+                                {field.error}
+                              </p>
+                            ) : null}
+                          </>
+                        ) : (
+                          <>
+                            <input
+                              type={field.type}
+                              name={field.name}
+                              value={field.value}
+                              placeholder={field.placeholder}
+                              readOnly
+                            />
+                            {salonCoordinateError ? (
+                              <p style={{ color: "red", fontSize: "1.4rem" }}>
+                                {salonCoordinateError}
+                              </p>
+                            ) : null}
+                          </>
+                        )}
+
+                        {field.name === "longitude" && (
+                          <>
+                            <p style={{ fontWeight: 700 }}>
+                              * Select your salon's exact location on the map to
+                              automatically set its latitude and longitude.
+                            </p>
+                            <div
+                              style={{
+                                height: "30rem",
+                                backgroundColor: "#efefef",
+                                borderRadius: "0.6rem",
+                                overflow: "hidden",
+                              }}
+                            >
+                              {isLoaded ? (
+                                <GoogleMap
+                                  mapContainerStyle={{
+                                    width: "100%",
+                                    height: "30rem",
+                                  }}
+                                  center={center}
+                                  zoom={10}
+                                  onLoad={onLoad}
+                                  onUnmount={onUnmount}
+                                  onClick={handleMapClick}
+                                  options={{
+                                    disableDefaultUI: false, // Keep basic controls like zoom
+                                    streetViewControl: false, // 🚫 Remove Pegman / Street View
+                                    mapTypeControl: false, // 🚫 Remove Satellite / Terrain switcher
+                                    fullscreenControl: true, // ✅ Keep fullscreen option if needed
+                                    zoomControl: true, // ✅ Keep zoom buttons
+                                  }}
+                                >
+                                  {markerPosition && (
+                                    <OverlayView
+                                      position={markerPosition}
+                                      mapPaneName={
+                                        OverlayView.OVERLAY_MOUSE_TARGET
+                                      }
+                                    >
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          flexDirection: "column",
+                                          alignItems: "center",
+                                          transform: "translate(-50%, -100%)",
+                                        }}
+                                      >
+                                        <div
+                                          style={{
+                                            width: "5rem",
+                                            height: "5rem",
+                                            borderRadius: "0.6rem",
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                          }}
+                                        >
+                                          <img
+                                            src="/mapPointer.png"
+                                            alt=""
+                                            style={{
+                                              width: "100%",
+                                              height: "100%",
+                                              objectFit: "contain",
+                                            }}
+                                          />
+                                        </div>
+
+                                        <div
+                                          style={{
+                                            marginTop: "0.8rem",
+                                            backgroundColor: "#fff",
+                                            padding: "0.4rem 0.8rem",
+                                            borderRadius: "0.4rem",
+                                            boxShadow:
+                                              "0 2px 6px rgba(0,0,0,0.2)",
+                                            fontSize: "1.4rem",
+                                            fontWeight: "bold",
+                                            color: "#333",
+                                            whiteSpace: "nowrap",
+                                            border: "0.1rem solid #ccc",
+                                          }}
+                                        >
+                                          {salonName}
+                                        </div>
+                                      </div>
+                                    </OverlayView>
+                                  )}
+                                </GoogleMap>
+                              ) : (
+                                <></>
+                              )}
+                            </div>
+                          </>
+                        )} */}
                       </div>
                     ))}
-                    <div className={`${style.button_container}`}>
-                      {/* <button onClick={handleBack} disabled={index === 0}>
-                        Back
-                      </button> */}
-                      <div></div>
-                      <button onClick={handleNext}>
-                        {index === steps.length - 1 ? 'Finish' : 'Continue'}
-                      </button>
-                    </div>
+
+                    {activeStep !== 1 && (
+                      <div className={`${style.button_container}`}>
+                        <div></div>
+                        <button onClick={handleNext}>
+                          {index === steps.length - 1 ? "Finish" : "Continue"}
+                        </button>
+                      </div>
+                    )}
 
                     <button onClick={handleBack} disabled={index === 0}>
                       Back
                     </button>
                   </main>
-                </StepContent>)
-              }
+                </StepContent>
+              )}
 
-
-              {
-                step.label === "Select Services" && (<StepContent>
+              {step.label === "Select Services" && (
+                <StepContent>
                   <main className={`${style.service_container}`}>
                     <div>
                       <div>
                         {step.fields.map((field) => (
-                          <div key={field.name} className={`${style.form_group}`}>
+                          <div
+                            key={field.name}
+                            className={`${style.form_group}`}
+                          >
                             <label>{field.label}</label>
 
                             {field.name === "serviceicon" ? (
@@ -1945,27 +2846,35 @@ const CreateSalon = () => {
                                     draggable={false}
                                     swipeable={false}
                                   >
-                                    {
-                                      SalonIcons?.map((s) => (
-                                        <div key={s._id}
-                                          className={`${style.slider_item} ${selectedLogo?.url === s.url && style.icon_selected} ${darkmodeOn && style.dark}`}
-                                          onClick={() => logoselectHandler(s)}
-                                          style={{
-                                            border: field.error && "0.1rem solid red"
-                                          }}
-                                        >
-                                          <img src={s.url} alt="" />
-                                        </div>
-                                      ))
-                                    }
+                                    {SalonIcons?.map((s) => (
+                                      <div
+                                        key={s._id}
+                                        className={`${style.slider_item} ${selectedLogo?.url === s.url && style.icon_selected} ${darkmodeOn && style.dark}`}
+                                        onClick={() => logoselectHandler(s)}
+                                        style={{
+                                          border:
+                                            field.error && "0.1rem solid red",
+                                        }}
+                                      >
+                                        <img src={s.url} alt="" />
+                                      </div>
+                                    ))}
                                   </Carousel>
                                 </div>
-                                {field.error ? <p style={{ color: "red", fontSize: "1.4rem" }}>{field.error}</p> : null}
+                                {field.error ? (
+                                  <p
+                                    style={{ color: "red", fontSize: "1.4rem" }}
+                                  >
+                                    {field.error}
+                                  </p>
+                                ) : null}
                               </>
                             ) : field.name === "servicetype" ? (
                               <div
                                 className={`${style.select_container}`}
-                                onClick={() => setServiceTypeOpen((prev) => !prev)}
+                                onClick={() =>
+                                  setServiceTypeOpen((prev) => !prev)
+                                }
                               >
                                 <input
                                   type={field.type}
@@ -1974,16 +2883,32 @@ const CreateSalon = () => {
                                   placeholder={field.placeholder}
                                   readOnly
                                 />
-                                <div><DropdownIcon /></div>
+                                <div>
+                                  <DropdownIcon />
+                                </div>
 
                                 {serviceTypeOpen && (
-                                  <ClickAwayListener onClickAway={() => setServiceTypeOpen(false)}>
+                                  <ClickAwayListener
+                                    onClickAway={() =>
+                                      setServiceTypeOpen(false)
+                                    }
+                                  >
                                     <div
                                       className={`${style.select_dropdown_container}`}
-                                      onClick={(event) => event.stopPropagation()}
+                                      onClick={(event) =>
+                                        event.stopPropagation()
+                                      }
                                     >
-                                      <button onClick={() => vipServiceHandler(false)}>Regular</button>
-                                      <button onClick={() => vipServiceHandler(true)}>VIP</button>
+                                      <button
+                                        onClick={() => vipServiceHandler(false)}
+                                      >
+                                        Regular
+                                      </button>
+                                      <button
+                                        onClick={() => vipServiceHandler(true)}
+                                      >
+                                        VIP
+                                      </button>
                                     </div>
                                   </ClickAwayListener>
                                 )}
@@ -1992,7 +2917,9 @@ const CreateSalon = () => {
                               <>
                                 <div
                                   className={`${style.select_container}`}
-                                  onClick={() => setServiceCategoryOpen((prev) => !prev)}
+                                  onClick={() =>
+                                    setServiceCategoryOpen((prev) => !prev)
+                                  }
                                 >
                                   <input
                                     type={field.type}
@@ -2001,224 +2928,298 @@ const CreateSalon = () => {
                                     placeholder={field.placeholder}
                                     readOnly
                                   />
-                                  <div><DropdownIcon /></div>
+                                  <div>
+                                    <DropdownIcon />
+                                  </div>
 
                                   {serviceCategoryOpen && (
-                                    <ClickAwayListener onClickAway={() => setServiceCategoryOpen(false)}>
+                                    <ClickAwayListener
+                                      onClickAway={() =>
+                                        setServiceCategoryOpen(false)
+                                      }
+                                    >
                                       <div
                                         className={`${style.select_dropdown_container}`}
-                                        onClick={(event) => event.stopPropagation()}
+                                        onClick={(event) =>
+                                          event.stopPropagation()
+                                        }
                                       >
                                         {/* <button onClick={() => vipServiceHandler(false)}>Regular</button>
                                       <button onClick={() => vipServiceHandler(true)}>VIP</button> */}
-                                        {
-                                          salonCategories?.map((item) => {
-                                            return (
-                                              <button
-                                                onClick={() => serviceCategoryNameHandler(item)}
-                                                key={item?._id}
-                                                style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
-                                              >
-                                                <img
-                                                  src={item?.serviceCategoryImage?.url}
-                                                  alt={item?.serviceCategoryName}
-                                                  style={{ width: "2.4rem", height: "2.4rem", objectFit: "cover", borderRadius: "50%", border: "0.1rem solid #efefef" }}
-                                                />
-                                                {item?.serviceCategoryName}
-                                              </button>
-
-                                            )
-                                          })
-                                        }
+                                        {salonCategories?.map((item) => {
+                                          return (
+                                            <button
+                                              onClick={() =>
+                                                serviceCategoryNameHandler(item)
+                                              }
+                                              key={item?._id}
+                                              style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: "0.5rem",
+                                              }}
+                                            >
+                                              <img
+                                                src={
+                                                  item?.serviceCategoryImage
+                                                    ?.url
+                                                }
+                                                alt={item?.serviceCategoryName}
+                                                style={{
+                                                  width: "2.4rem",
+                                                  height: "2.4rem",
+                                                  objectFit: "cover",
+                                                  borderRadius: "50%",
+                                                  border:
+                                                    "0.1rem solid #efefef",
+                                                }}
+                                              />
+                                              {item?.serviceCategoryName}
+                                            </button>
+                                          );
+                                        })}
                                       </div>
                                     </ClickAwayListener>
                                   )}
-
                                 </div>
-                                {field.error ? <p style={{ color: "red", fontSize: "1.4rem" }}>{field.error}</p> : null}
+                                {field.error ? (
+                                  <p
+                                    style={{ color: "red", fontSize: "1.4rem" }}
+                                  >
+                                    {field.error}
+                                  </p>
+                                ) : null}
                               </>
-                            )
-                              :
-                              (
-                                <>
-                                  <input
-                                    type={field.type}
-                                    name={field.name}
-                                    value={field.value}
-                                    placeholder={field.placeholder}
-                                    onChange={field.onChange}
-                                  />
-                                  {field.error ? <p style={{ color: "red", fontSize: "1.4rem" }}>{field.error}</p> : null}
-                                </>
-                              )}
+                            ) : (
+                              <>
+                                <input
+                                  type={field.type}
+                                  name={field.name}
+                                  value={field.value}
+                                  placeholder={field.placeholder}
+                                  onChange={field.onChange}
+                                />
+                                {field.error ? (
+                                  <p
+                                    style={{ color: "red", fontSize: "1.4rem" }}
+                                  >
+                                    {field.error}
+                                  </p>
+                                ) : null}
+                              </>
+                            )}
                           </div>
                         ))}
-
 
                         <div className={`${style.button_container}`}>
                           <button onClick={addServiceHandler}>
                             Add Service
                           </button>
-                          <button onClick={handleNext} disabled={localsalondata?.selectedServices?.length === 0 || !localsalondata?.selectedServices} style={{
-                            cursor: localsalondata?.selectedServices?.length === 0 || !localsalondata?.selectedServices ? "not-allowed" : "pointer"
-                          }}>
-                            {index === steps.length - 1 ? 'Finish' : 'Continue'}
+                          <button
+                            onClick={handleNext}
+                            disabled={
+                              localsalondata?.selectedServices?.length === 0 ||
+                              !localsalondata?.selectedServices
+                            }
+                            style={{
+                              cursor:
+                                localsalondata?.selectedServices?.length ===
+                                  0 || !localsalondata?.selectedServices
+                                  ? "not-allowed"
+                                  : "pointer",
+                            }}
+                          >
+                            {index === steps.length - 1 ? "Finish" : "Continue"}
                           </button>
                         </div>
 
                         <button onClick={handleBack} disabled={index === 0}>
                           Back
                         </button>
-
                       </div>
 
                       <div
                         style={{
-                          display: localsalondata?.selectedServices?.length ? "block" : "none",
-                          padding: localsalondata?.selectedServices?.length ? "1rem" : "0rem"
+                          display: localsalondata?.selectedServices?.length
+                            ? "block"
+                            : "none",
+                          padding: localsalondata?.selectedServices?.length
+                            ? "1rem"
+                            : "0rem",
                         }}
                       >
-
-                        {
-                          localsalondata?.selectedServices?.map((ser, index) => {
-                            return (
-                              <div className={`${style.mobile_service_item}`} key={index}>
+                        {localsalondata?.selectedServices?.map((ser, index) => {
+                          return (
+                            <div
+                              className={`${style.mobile_service_item}`}
+                              key={index}
+                            >
+                              <div>
                                 <div>
                                   <div>
-                                    <div>
-                                      <img src={ser?.serviceIcon.url || ""} alt="" />
-                                      {ser.vipService ? <span><CrownIcon /></span> : null}
-                                    </div>
+                                    <img
+                                      src={ser?.serviceIcon.url || ""}
+                                      alt=""
+                                    />
+                                    {ser.vipService ? (
+                                      <span>
+                                        <CrownIcon />
+                                      </span>
+                                    ) : null}
+                                  </div>
+                                  <p>{ser.serviceName}</p>
+                                  <p>{ser.serviceDesc}</p>
+                                  <p>{ser.serviceCategory}</p>
+                                  <p>{ser.serviceCategoryName}</p>
+                                </div>
+                                <button
+                                  onClick={() => deleteServiceHandler(index)}
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                              <div>
+                                <div>
+                                  <p>Price</p>
+                                  <p>
+                                    {countryCurrency} {ser.servicePrice}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  <p>Estimated Time</p>
+                                  <p>{ser.serviceEWT} mins</p>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+
+                        {localsalondata?.selectedServices?.map((ser, index) => {
+                          return (
+                            <div
+                              className={`${style.service_item}`}
+                              key={index}
+                            >
+                              <div>
+                                <div>
+                                  <div>
+                                    <img
+                                      src={ser?.serviceIcon.url || ""}
+                                      alt=""
+                                    />
+                                  </div>
+                                  <div>
                                     <p>{ser.serviceName}</p>
+                                    <p>{ser.vipService ? "VIP" : "Regular"}</p>
                                     <p>{ser.serviceDesc}</p>
-                                    <p>{ser.serviceCategory}</p>
                                     <p>{ser.serviceCategoryName}</p>
                                   </div>
-                                  <button onClick={() => deleteServiceHandler(index)}>Delete</button>
                                 </div>
+                                <button
+                                  onClick={() => deleteServiceHandler(index)}
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                              <div>
                                 <div>
-                                  <div>
-                                    <p>Price</p>
-                                    <p>{countryCurrency}{" "} {ser.servicePrice}</p>
-                                  </div>
+                                  <p>Price</p>
+                                  <p>
+                                    {countryCurrency} {ser.servicePrice}
+                                  </p>
+                                </div>
 
-                                  <div>
-                                    <p>Estimated Time</p>
-                                    <p>{ser.serviceEWT} mins</p>
-                                  </div>
+                                <div>
+                                  <p>Estimated Time</p>
+                                  <p>{ser.serviceEWT} mins</p>
                                 </div>
                               </div>
-                            )
-                          })
-                        }
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </main>
+                </StepContent>
+              )}
 
-                        {
-                          localsalondata?.selectedServices?.map((ser, index) => {
-                            return (
-                              <div className={`${style.service_item}`} key={index}>
-                                <div>
-                                  <div>
-                                    <div><img src={ser?.serviceIcon.url || ""} alt="" /></div>
-                                    <div>
-                                      <p>{ser.serviceName}</p>
-                                      <p>{ser.vipService ? "VIP" : "Regular"}</p>
-                                      <p>{ser.serviceDesc}</p>
-                                      <p>{ser.serviceCategoryName}</p>
-                                    </div>
-                                  </div>
-                                  <button onClick={() => deleteServiceHandler(index)}>Delete</button>
-                                </div>
-                                <div>
-                                  <div>
-                                    <p>Price</p>
-                                    <p>{countryCurrency}{" "} {ser.servicePrice}</p>
-                                  </div>
-
-                                  <div>
-                                    <p>Estimated Time</p>
-                                    <p>{ser.serviceEWT} mins</p>
-                                  </div>
-                                </div>
-                              </div>
-                            )
-                          })
-                        }
-
+              {step.label === "Gallery" && (
+                <StepContent>
+                  <main className={`${style.gallery_container}`}>
+                    <div>
+                      <div>
+                        <p>Upload your salon's logo</p>
+                        <button onClick={() => handleSalonLogoButtonClick()}>
+                          Upload
+                        </button>
+                        <input
+                          type="file"
+                          ref={fileInputRef}
+                          style={{ display: "none" }}
+                          onChange={handleSalonFileInputChange}
+                        />
                       </div>
 
+                      <div>
+                        <img
+                          src={salonLogo ? salonLogo : "/salonDefaultLogo.png"}
+                          alt=""
+                        />
+                      </div>
                     </div>
 
+                    <div>
+                      <div>
+                        <p>
+                          Please select high-quality images to showcase your
+                          salon.
+                        </p>
+                        <button onClick={() => handleSalonImageButtonClick()}>
+                          upload
+                        </button>
+                        <input
+                          type="file"
+                          ref={salonImagefileInputRef}
+                          style={{ display: "none" }}
+                          multiple
+                          onChange={handleSalonImageFileInputChange}
+                        />
+                      </div>
+
+                      <div
+                        style={{
+                          display: salonImages?.length ? "block" : "none",
+                          padding: salonImages?.length ? "1.5rem" : "0rem",
+                        }}
+                      >
+                        {salonImages.map((item, index) => {
+                          return (
+                            <div
+                              key={index}
+                              onClick={() => selectedSalonImageClicked(item)}
+                            >
+                              <img src={item?.blobUrl} />
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className={`${style.button_container}`}>
+                      <button onClick={handleBack} disabled={index === 0}>
+                        Back
+                      </button>
+                      <button onClick={handleNext}>
+                        {index === steps.length - 1 ? "Finish" : "Continue"}
+                      </button>
+                    </div>
                   </main>
-                </StepContent>)
-              }
+                </StepContent>
+              )}
 
-              {
-                step.label === "Gallery" && (
-                  <StepContent>
-                    <main className={`${style.gallery_container}`}>
-                      <div>
-                        <div>
-                          <p>Upload your salon's logo</p>
-                          <button onClick={() => handleSalonLogoButtonClick()}>Upload</button>
-                          <input
-                            type="file"
-                            ref={fileInputRef}
-                            style={{ display: 'none' }}
-                            onChange={handleSalonFileInputChange}
-                          />
-                        </div>
-
-                        <div>
-                          <img
-                            src={salonLogo ? salonLogo : "/salonDefaultLogo.png"} alt="" />
-                        </div>
-                      </div>
-
-                      <div>
-                        <div>
-                          <p>Please select high-quality images to showcase your salon.</p>
-                          <button onClick={() => handleSalonImageButtonClick()}>upload</button>
-                          <input
-                            type="file"
-                            ref={salonImagefileInputRef}
-                            style={{ display: 'none' }}
-                            multiple
-                            onChange={handleSalonImageFileInputChange}
-                          />
-                        </div>
-
-                        <div
-                          style={{
-                            display: salonImages?.length ? "block" : "none",
-                            padding: salonImages?.length ? "1.5rem" : "0rem",
-                          }}
-                        >
-                          {
-                            salonImages.map((item, index) => {
-                              return (
-                                <div key={index} onClick={() => selectedSalonImageClicked(item)}><img src={item?.blobUrl} /></div>
-                              )
-                            })
-                          }
-                        </div>
-                      </div>
-
-
-                      <div className={`${style.button_container}`}>
-                        <button onClick={handleBack} disabled={index === 0}>
-                          Back
-                        </button>
-                        <button onClick={handleNext}>
-                          {index === steps.length - 1 ? 'Finish' : 'Continue'}
-                        </button>
-                      </div>
-                    </main>
-                  </StepContent>
-                )
-              }
-
-              {
-                step.label === "Social Links" && (<StepContent>
+              {step.label === "Social Links" && (
+                <StepContent>
                   <main className={`${style.social_link_container}`}>
                     {step.fields.map((field) => (
                       <div key={field.name} className={`${style.form_group}`}>
@@ -2239,32 +3240,45 @@ const CreateSalon = () => {
                         Back
                       </button>
                       <button onClick={handleNext}>
-                        {index === steps.length - 1 ? 'Finish' : 'Continue'}
+                        {index === steps.length - 1 ? "Finish" : "Continue"}
                       </button>
                     </div>
                   </main>
-                </StepContent>)
-              }
-
+                </StepContent>
+              )}
             </Step>
           ))}
         </Stepper>
 
         {activeStep === steps.length && (
           <div className={`${style.complete}`}>
-            <p>All steps have been successfully completed! Click the <span style={{ color: "var(--bg-secondary)", fontWeight: "bold" }}>Create</span> button to set up your new salon.</p>
+            <p>
+              All steps have been successfully completed! Click the{" "}
+              <span
+                style={{ color: "var(--bg-secondary)", fontWeight: "bold" }}
+              >
+                Create
+              </span>{" "}
+              button to set up your new salon.
+            </p>
             <div>
-              <button onClick={handleBack}>
-                Back
-              </button>
-              {
-                createSalonLoading ? <button><ButtonLoader /></button> : <button onClick={createSalonHandler} className={style.create_salon_btn}>Create</button>
-              }
+              <button onClick={handleBack}>Back</button>
+              {createSalonLoading ? (
+                <button>
+                  <ButtonLoader />
+                </button>
+              ) : (
+                <button
+                  onClick={createSalonHandler}
+                  className={style.create_salon_btn}
+                >
+                  Create
+                </button>
+              )}
             </div>
           </div>
         )}
       </div>
-
 
       <Modal
         open={openModal}
@@ -2275,25 +3289,30 @@ const CreateSalon = () => {
         <div className={`${style.modal_container} ${darkmodeOn && style.dark}`}>
           <div>
             <p>Selected Image</p>
-            <button onClick={() => setOpenModal(false)}><CloseIcon /></button>
+            <button onClick={() => setOpenModal(false)}>
+              <CloseIcon />
+            </button>
           </div>
 
           <div className={style.modal_content_container}>
-            <div><img src={openBlobSalonImage?.blobUrl} alt="salon image" /></div>
+            <div>
+              <img src={openBlobSalonImage?.blobUrl} alt="salon image" />
+            </div>
             <div>
               <div>
                 <button onClick={handleCurrentEditSalonImageButtonClick}>
                   {/* <div><EditIcon /></div> */}
                   Reselect
-
                   <input
                     type="file"
                     ref={currentEditSalonImageInputRef}
-                    style={{ display: 'none' }}
+                    style={{ display: "none" }}
                     onChange={handleEditSelectedImageFileInputChange}
                   />
                 </button>
-                <button onClick={() => deleteSalonImageHandler(openBlobSalonImage)}>
+                <button
+                  onClick={() => deleteSalonImageHandler(openBlobSalonImage)}
+                >
                   {/* <div><DeleteIcon /></div> */}
                   Delete
                 </button>
@@ -2302,10 +3321,285 @@ const CreateSalon = () => {
           </div>
         </div>
       </Modal>
+    </section>
+  );
+};
 
+export default CreateSalon;
 
-    </section >
-  )
-}
+// import React, { useCallback, useRef, useState, useEffect } from "react";
+// import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 
-export default CreateSalon
+// const containerStyle = { width: "100%", height: "400px" };
+
+// const defaultCenter = {
+//   lat: 22.5726,
+//   lng: 88.3639,
+// };
+
+// const CreateSalon = () => {
+//   const { isLoaded } = useJsApiLoader({
+//     id: "google-map-script",
+//     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+//     libraries: ["places"],
+//   });
+
+//   const [center] = useState(defaultCenter);
+//   const [markerPosition, setMarkerPosition] = useState(null);
+
+//   const [address, setAddress] = useState("");
+//   const [city, setCity] = useState("");
+//   const [country, setCountry] = useState("");
+//   const [pincode, setPincode] = useState("");
+//   const [timezone, setTimezone] = useState("");
+
+//   const mapRef = useRef(null);
+//   const inputRef = useRef(null);
+//   const autocompleteRef = useRef(null);
+
+//   // 📍 Map Load
+//   const onLoad = useCallback((map) => {
+//     mapRef.current = map;
+//   }, []);
+
+//   const onUnmount = useCallback(() => {
+//     mapRef.current = null;
+//   }, []);
+
+//   // 📍 Reverse Geocoding
+//   const getAddressFromLatLng = (lat, lng) => {
+//     if (!window.google) return;
+
+//     const geocoder = new window.google.maps.Geocoder();
+
+//     geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+//       if (status === "OK" && results[0]) {
+//         const result = results[0];
+//         const components = result.address_components;
+
+//         const getComp = (type) =>
+//           components.find((c) => c.types.includes(type));
+
+//         setAddress(result.formatted_address);
+
+//         const postal = getComp("postal_code");
+//         const cityComp = getComp("locality");
+//         const fallbackCity = getComp("administrative_area_level_2");
+//         const countryComp = getComp("country");
+
+//         setPincode(postal?.long_name || "N/A");
+//         setCity(cityComp?.long_name || fallbackCity?.long_name || "N/A");
+//         setCountry(countryComp?.long_name || "N/A");
+//       }
+//     });
+//   };
+
+//   // 🌍 Timezone → UTC format
+//   const getTimezoneFromLatLng = async (lat, lng) => {
+//     try {
+//       const timestamp = Math.floor(Date.now() / 1000);
+
+//       const res = await fetch(
+//         `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${timestamp}&key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`,
+//       );
+
+//       const data = await res.json();
+
+//       if (data.status === "OK") {
+//         const offset = data.rawOffset + data.dstOffset;
+
+//         const sign = offset >= 0 ? "+" : "-";
+//         const abs = Math.abs(offset);
+
+//         const hours = Math.floor(abs / 3600);
+//         const minutes = (abs % 3600) / 60;
+
+//         const formatted = `UTC${sign}${String(hours).padStart(
+//           2,
+//           "0",
+//         )}:${String(minutes).padStart(2, "0")}`;
+
+//         setTimezone(formatted);
+//       }
+//     } catch (err) {
+//       console.error("Timezone error:", err);
+//     }
+//   };
+
+//   const fetchLocationDetails = (lat, lng) => {
+//     getAddressFromLatLng(lat, lng);
+//     getTimezoneFromLatLng(lat, lng);
+//   };
+
+//   // 🖱️ Map Click
+//   const handleMapClick = (e) => {
+//     const newPos = {
+//       lat: e.latLng.lat(),
+//       lng: e.latLng.lng(),
+//     };
+
+//     setMarkerPosition(newPos);
+//     mapRef.current?.panTo(newPos);
+
+//     fetchLocationDetails(newPos.lat, newPos.lng);
+//   };
+
+//   // 🔍 Global Autocomplete
+//   useEffect(() => {
+//     if (!isLoaded || !inputRef.current || !window.google) return;
+
+//     autocompleteRef.current = new window.google.maps.places.Autocomplete(
+//       inputRef.current,
+//       {
+//         types: ["geocode"], // 🌍 global
+//       },
+//     );
+
+//     // 🌍 Bias near user (not restriction)
+//     if (navigator.geolocation) {
+//       navigator.geolocation.getCurrentPosition((pos) => {
+//         const circle = new window.google.maps.Circle({
+//           center: {
+//             lat: pos.coords.latitude,
+//             lng: pos.coords.longitude,
+//           },
+//           radius: 50000,
+//         });
+
+//         autocompleteRef.current.setBounds(circle.getBounds());
+//       });
+//     }
+
+//     autocompleteRef.current.addListener("place_changed", () => {
+//       const place = autocompleteRef.current.getPlace();
+
+//       if (!place.geometry) return;
+
+//       const location = place.geometry.location;
+
+//       const newPos = {
+//         lat: location.lat(),
+//         lng: location.lng(),
+//       };
+
+//       setMarkerPosition(newPos);
+
+//       mapRef.current?.panTo(newPos);
+//       mapRef.current?.setZoom(16);
+
+//       fetchLocationDetails(newPos.lat, newPos.lng);
+//     });
+
+//     return () => {
+//       if (autocompleteRef.current) {
+//         window.google.maps.event.clearInstanceListeners(
+//           autocompleteRef.current,
+//         );
+//       }
+//     };
+//   }, [isLoaded]);
+
+//   if (!isLoaded) return <div>Loading...</div>;
+
+//   return (
+//     <div
+//       style={{
+//         maxWidth: "900px",
+//         margin: "20px auto",
+//         padding: "20px",
+//         background: "#fff",
+//         borderRadius: "10px",
+//         boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+//         fontFamily: "system-ui",
+//       }}
+//     >
+//       {/* Search */}
+//       <input
+//         ref={inputRef}
+//         placeholder="Search city, address, or place..."
+//         style={{
+//           width: "100%",
+//           padding: "12px",
+//           marginBottom: "14px",
+//           borderRadius: "10px",
+//           border: "1px solid #ddd",
+//         }}
+//       />
+
+//       {/* Map */}
+//       <div style={{ borderRadius: "12px", overflow: "hidden" }}>
+//         <GoogleMap
+//           mapContainerStyle={containerStyle}
+//           center={center}
+//           zoom={12}
+//           onLoad={onLoad}
+//           onUnmount={onUnmount}
+//           onClick={handleMapClick}
+//           options={{
+//             streetViewControl: false,
+//             mapTypeControl: false,
+//           }}
+//         >
+//           {markerPosition && (
+//             <Marker
+//               position={markerPosition}
+//               draggable
+//               onDragEnd={(e) => {
+//                 const newPos = {
+//                   lat: e.latLng.lat(),
+//                   lng: e.latLng.lng(),
+//                 };
+
+//                 setMarkerPosition(newPos);
+//                 fetchLocationDetails(newPos.lat, newPos.lng);
+//               }}
+//             />
+//           )}
+//         </GoogleMap>
+//       </div>
+
+//       {/* Info */}
+//       {markerPosition && (
+//         <div
+//           style={{
+//             marginTop: "20px",
+//             padding: "14px",
+//             borderRadius: "10px",
+//             background: "#f5f5f5",
+//             display: "flex",
+//             flexDirection: "column",
+//             gap: "6px",
+//           }}
+//         >
+//           <div>
+//             <strong>Lat:</strong> {markerPosition.lat.toFixed(6)}
+//           </div>
+//           <div>
+//             <strong>Lng:</strong> {markerPosition.lng.toFixed(6)}
+//           </div>
+//           <div>
+//             <strong>Address:</strong> {address || "—"}
+//           </div>
+//           <div>
+//             <strong>City:</strong> {city || "—"}
+//           </div>
+//           <div>
+//             <strong>Country:</strong> {country || "—"}
+//           </div>
+
+//           {pincode && (
+//             <div>
+//               <strong>Pincode:</strong> {pincode}
+//             </div>
+//           )}
+
+//           <div>
+//             <strong>Timezone:</strong> {timezone || "—"}
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default CreateSalon;

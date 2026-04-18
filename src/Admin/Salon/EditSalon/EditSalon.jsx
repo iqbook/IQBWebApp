@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import style from "./EditSalon.module.css";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -89,9 +89,6 @@ const EditSalon = () => {
     }
   }, [currentSalon]);
 
-  // console.log("Hurrayy  ", AdminSalonImages)
-  // console.log("Salon logo ", AdminSalonLogo)
-
   useEffect(() => {
     if (AdminSalonImages) {
       setSalonImages(AdminSalonImages);
@@ -104,8 +101,9 @@ const EditSalon = () => {
     }
   }, [AdminSalonLogo]);
 
+
   const email = useSelector(
-    (state) => state.AdminLoggedInMiddleware.adminEmail
+    (state) => state.AdminLoggedInMiddleware.adminEmail,
   );
   // const currentsalonId = useSelector(state => state.AdminLoggedInMiddleware.adminSalonId)
 
@@ -125,7 +123,7 @@ const EditSalon = () => {
   }, [dispatch]);
 
   const getAdminAllSalonIcon = useSelector(
-    (state) => state.getAdminAllSalonIcon
+    (state) => state.getAdminAllSalonIcon,
   );
 
   const {
@@ -152,7 +150,7 @@ const EditSalon = () => {
   }, [dispatch]);
 
   const getAllSalonCategories = useSelector(
-    (state) => state.getAllSalonCategories
+    (state) => state.getAllSalonCategories,
   );
 
   const {
@@ -164,11 +162,12 @@ const EditSalon = () => {
   // console.log("Edit Salon ", salonCategories)
 
   const [latitude, setLatitude] = useState(
-    currentSalon?.location.coordinates.latitude
+    currentSalon?.location.coordinates.latitude,
   );
   const [longitude, setLongitude] = useState(
-    currentSalon?.location.coordinates.longitude
+    currentSalon?.location.coordinates.longitude,
   );
+
   const [error, setError] = useState(null);
 
   // const geoLocationHandler = () => {
@@ -202,7 +201,7 @@ const EditSalon = () => {
 
   const [postCode, setPostCode] = useState(currentSalon?.postCode);
   const [contactTel, setContactTel] = useState(
-    `${currentSalon?.mobileCountryCode}${currentSalon?.contactTel?.toString()}`
+    `${currentSalon?.mobileCountryCode}${currentSalon?.contactTel?.toString()}`,
   );
   const [dialCode, setDialCode] = useState(currentSalon?.mobileCountryCode);
   // currentSalon?.contactTel
@@ -275,7 +274,7 @@ const EditSalon = () => {
   };
 
   const [countryCurrency, setCountryCurrency] = useState(
-    currentSalon?.currency
+    currentSalon?.currency,
   );
 
   const [country, setCountry] = useState(currentSalon?.country);
@@ -300,7 +299,7 @@ const EditSalon = () => {
     setCountryTimeout(
       setTimeout(() => {
         dispatch(getAdminAllCountriesAction(value));
-      }, 500)
+      }, 500),
     );
   };
 
@@ -311,7 +310,7 @@ const EditSalon = () => {
   };
 
   const getAdminAllCountries = useSelector(
-    (state) => state.getAdminAllCountries
+    (state) => state.getAdminAllCountries,
   );
 
   const {
@@ -339,7 +338,7 @@ const EditSalon = () => {
     setCityTimeout(
       setTimeout(() => {
         dispatch(getAdminAllCitiesAction(value, countrycode));
-      }, 500)
+      }, 500),
     );
   };
 
@@ -453,7 +452,7 @@ const EditSalon = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       toast.success("Salon logo uploaded successfully", {
@@ -499,7 +498,7 @@ const EditSalon = () => {
     const allowedTypes = ["image/jpeg", "image/webp", "image/png"];
 
     const invalidFiles = Array.from(uploadedFiles).filter(
-      (file) => !allowedTypes.includes(file.type)
+      (file) => !allowedTypes.includes(file.type),
     );
     if (invalidFiles.length > 0) {
       toast.error("Please upload only valid image files (JPEG, WebP, PNG).", {
@@ -592,7 +591,7 @@ const EditSalon = () => {
     try {
       set_get_services_loading(true);
       const { data } = await api.get(
-        `/api/salon/getAllSalonServices?salonId=${currentSalon?.salonId}`
+        `/api/salon/getAllSalonServices?salonId=${currentSalon?.salonId}`,
       );
       setSelectedServices(data?.response);
     } catch (error) {
@@ -665,7 +664,7 @@ const EditSalon = () => {
       });
 
       return setServiceNameError(
-        "Service Name must be between 1 to 40 charecters"
+        "Service Name must be between 1 to 40 charecters",
       );
     }
 
@@ -693,7 +692,7 @@ const EditSalon = () => {
         },
       });
       return setServiceDescError(
-        "Service description must be between 1 to 50 charecters"
+        "Service description must be between 1 to 50 charecters",
       );
     }
 
@@ -814,7 +813,7 @@ const EditSalon = () => {
       });
       const { data } = await api.post(
         "/api/salon/deleteSalonServices",
-        delete_data
+        delete_data,
       );
 
       toast.success(data?.message, {
@@ -902,7 +901,7 @@ const EditSalon = () => {
         },
       });
       return setSalonDescError(
-        "Salon Description must be between 1 to 35 characters"
+        "Salon Description must be between 1 to 35 characters",
       );
     }
 
@@ -1042,7 +1041,7 @@ const EditSalon = () => {
             headers: {
               "Content-Type": "multipart/form-data",
             },
-          }
+          },
         );
 
         if (responseimage) {
@@ -1054,7 +1053,7 @@ const EditSalon = () => {
                   url: responseimage?.response?.url,
                   _id: responseimage?.response?._id,
                 }
-              : image
+              : image,
           );
           setSalonImages(updatedImages);
           setOpenModal(false);
@@ -1109,11 +1108,11 @@ const EditSalon = () => {
               public_id: imgObj?.public_id,
               img_id: imgObj?._id,
             },
-          }
+          },
         );
 
         setSalonImages((images) =>
-          images.filter((image) => image._id !== responseimage?.response?._id)
+          images.filter((image) => image._id !== responseimage?.response?._id),
         );
         setOpenModal(false);
 
@@ -1172,11 +1171,11 @@ const EditSalon = () => {
               public_id: imgObj?.public_id,
               img_id: imgObj?._id,
             },
-          }
+          },
         );
 
         setSalonImages((images) =>
-          images.filter((image) => image._id !== responseimage?.response?._id)
+          images.filter((image) => image._id !== responseimage?.response?._id),
         );
 
         toast.success("Image deleted successfully", {
@@ -1271,7 +1270,7 @@ const EditSalon = () => {
             headers: {
               "Content-Type": "multipart/form-data",
             },
-          }
+          },
         );
 
         if (responseimage) {
@@ -1283,7 +1282,7 @@ const EditSalon = () => {
                   url: responseimage?.response?.url,
                   _id: responseimage?.response?._id,
                 }
-              : image
+              : image,
           );
           setSalonImages(updatedImages);
         }
@@ -1435,73 +1434,73 @@ const EditSalon = () => {
           value: salonType,
           readOnly: true,
         },
-        {
-          name: "address",
-          label: "Salon Address",
-          type: "text",
-          dropdown: false,
-          placeholder: "Enter salon address",
-          value: address,
-          onChange: (e) => {
-            setSalonAddressError("");
-            setAddress(e.target.value);
-          },
-          error: salonAddressError,
-        },
-        {
-          name: "postcode",
-          label: "Salon Post Code",
-          type: "text",
-          dropdown: false,
-          placeholder: "Enter salon postcode",
-          value: postCode,
-          readOnly: true,
-        },
-        {
-          name: "lattitude",
-          label: "Latitude",
-          type: "text",
-          dropdown: false,
-          placeholder: "Lattiude",
-          value: latitude,
-          readOnly: true,
-        },
-        {
-          name: "longitude",
-          label: "Longitude",
-          type: "text",
-          dropdown: false,
-          placeholder: "Longitude",
-          value: longitude,
-          readOnly: true,
-        },
-        {
-          name: "country",
-          label: "Country",
-          type: "text",
-          dropdown: false,
-          placeholder: "Select country",
-          value: country,
-          readOnly: true,
-        },
-        {
-          name: "city",
-          label: "City",
-          type: "text",
-          dropdown: false,
-          placeholder: "Select city",
-          value: city,
-          readOnly: true,
-        },
-        {
-          name: "timezone",
-          label: "Timezone",
-          type: "text",
-          dropdown: false,
-          placeholder: "Select timezone",
-          value: timezone,
-          readOnly: true,
-        },
+        // {
+        //   name: "address",
+        //   label: "Salon Address",
+        //   type: "text",
+        //   dropdown: false,
+        //   placeholder: "Enter salon address",
+        //   value: address,
+        //   onChange: (e) => {
+        //     setSalonAddressError("");
+        //     setAddress(e.target.value);
+        //   },
+        //   error: salonAddressError,
+        // },
+        // {
+        //   name: "postcode",
+        //   label: "Salon Post Code",
+        //   type: "text",
+        //   dropdown: false,
+        //   placeholder: "Enter salon postcode",
+        //   value: postCode,
+        //   readOnly: true,
+        // },
+        // {
+        //   name: "lattitude",
+        //   label: "Latitude",
+        //   type: "text",
+        //   dropdown: false,
+        //   placeholder: "Lattiude",
+        //   value: latitude,
+        //   readOnly: true,
+        // },
+        // {
+        //   name: "longitude",
+        //   label: "Longitude",
+        //   type: "text",
+        //   dropdown: false,
+        //   placeholder: "Longitude",
+        //   value: longitude,
+        //   readOnly: true,
+        // },
+        // {
+        //   name: "country",
+        //   label: "Country",
+        //   type: "text",
+        //   dropdown: false,
+        //   placeholder: "Select country",
+        //   value: country,
+        //   readOnly: true,
+        // },
+        // {
+        //   name: "city",
+        //   label: "City",
+        //   type: "text",
+        //   dropdown: false,
+        //   placeholder: "Select city",
+        //   value: city,
+        //   readOnly: true,
+        // },
+        // {
+        //   name: "timezone",
+        //   label: "Timezone",
+        //   type: "text",
+        //   dropdown: false,
+        //   placeholder: "Select timezone",
+        //   value: timezone,
+        //   readOnly: true,
+        // },
       ],
     },
     {
@@ -1685,7 +1684,7 @@ const EditSalon = () => {
           },
         });
         return setSalonNameError(
-          "Salon Name must be between 1 to 20 characters"
+          "Salon Name must be between 1 to 20 characters",
         );
       }
 
@@ -1713,7 +1712,7 @@ const EditSalon = () => {
           },
         });
         return setSalonDescError(
-          "Salon Description must be between 1 to 35 characters"
+          "Salon Description must be between 1 to 35 characters",
         );
       }
 
@@ -1817,50 +1816,248 @@ const EditSalon = () => {
 
   // React Map logic
 
+  // const { isLoaded } = useJsApiLoader({
+  //   id: "google-map-script",
+  //   googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+  // });
+
+  // const [map, setMap] = React.useState(null);
+  // const [markerPosition, setMarkerPosition] = React.useState(null);
+
+  // const [center, setCenter] = useState({
+  //   lat: currentSalon?.location.coordinates.latitude,
+  //   lng: currentSalon?.location.coordinates.longitude,
+  // });
+
+  // const onLoad = React.useCallback(
+  //   function callback(map) {
+  //     // This is just an example of getting and using the map instance!!! don't just blindly copy!
+  //     const bounds = new window.google.maps.LatLngBounds(center);
+  //     map.fitBounds(bounds);
+
+  //     setMap(map);
+  //   },
+  //   [center]
+  // );
+
+  // const onUnmount = React.useCallback(function callback(map) {
+  //   setMap(null);
+  // }, []);
+
+  // const handleMapClick = (event) => {
+  //   const lat = event.latLng.lat();
+  //   const lng = event.latLng.lng();
+
+  //   // Set marker position to clicked location
+  //   setMarkerPosition({ lat, lng });
+  //   setLatitude(lat);
+  //   setLongitude(lng);
+  // };
+
+  // React Map
+
+  useEffect(() => {
+    if (latitude && longitude) {
+      const pos = { lat: Number(latitude), lng: Number(longitude) };
+
+      setMarkerPosition(pos);
+      setCenter(pos);
+
+      if (mapRef.current) {
+        mapRef.current.panTo(pos);
+        mapRef.current.setZoom(16);
+      }
+    }
+  }, [latitude, longitude]);
+
+  const defaultCenter = {
+    lat: 51.5074,
+    lng: -0.1278,
+  };
+
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    libraries: ["places"],
   });
 
-  const [map, setMap] = React.useState(null);
-  const [markerPosition, setMarkerPosition] = React.useState(null);
+  const [center, setCenter] = useState(defaultCenter);
+  const [markerPosition, setMarkerPosition] = useState(null);
 
-  const [center, setCenter] = useState({
-    lat: currentSalon?.location.coordinates.latitude,
-    lng: currentSalon?.location.coordinates.longitude,
-  });
+  const mapRef = useRef(null);
+  const inputRef = useRef(null);
+  const autocompleteRef = useRef(null);
 
-  const onLoad = React.useCallback(
-    function callback(map) {
-      // This is just an example of getting and using the map instance!!! don't just blindly copy!
-      const bounds = new window.google.maps.LatLngBounds(center);
-      map.fitBounds(bounds);
-
-      setMap(map);
-    },
-    [center]
-  );
-
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null);
+  // 📍 Map Load
+  const onLoad = useCallback((map) => {
+    mapRef.current = map;
   }, []);
 
-  const handleMapClick = (event) => {
-    const lat = event.latLng.lat();
-    const lng = event.latLng.lng();
+  const onUnmount = useCallback(() => {
+    mapRef.current = null;
+  }, []);
 
-    // Set marker position to clicked location
-    setMarkerPosition({ lat, lng });
-    setLatitude(lat);
-    setLongitude(lng);
+  // 📍 Reverse Geocoding
+  const getAddressFromLatLng = (lat, lng) => {
+    if (!window.google) return;
 
-    // const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
-    // localStorage.setItem("salondata", JSON.stringify({
-    //   ...existingData,
-    //   ["latitude"]: lat,
-    //   ["longitude"]: lng
-    // }));
+    const geocoder = new window.google.maps.Geocoder();
+
+    geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        const result = results[0];
+        const components = result.address_components;
+
+        const getComp = (type) =>
+          components.find((c) => c.types.includes(type));
+
+        setAddress(result.formatted_address);
+
+        const postal = getComp("postal_code");
+        const cityComp = getComp("locality");
+        const fallbackCity = getComp("administrative_area_level_2");
+        const countryComp = getComp("country");
+
+        setPostCode(postal?.long_name || "N/A");
+        setCity(cityComp?.long_name || fallbackCity?.long_name || "N/A");
+        setCountry(countryComp?.long_name || "N/A");
+      }
+    });
   };
+
+  // 🌍 Timezone → UTC format
+  const getTimezoneFromLatLng = async (lat, lng) => {
+    try {
+      const timestamp = Math.floor(Date.now() / 1000);
+
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${timestamp}&key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`,
+      );
+
+      const data = await res.json();
+
+      if (data.status === "OK") {
+        const offset = data.rawOffset + data.dstOffset;
+
+        const sign = offset >= 0 ? "+" : "-";
+        const abs = Math.abs(offset);
+
+        const hours = Math.floor(abs / 3600);
+        const minutes = (abs % 3600) / 60;
+
+        const formatted = `UTC${sign}${String(hours).padStart(
+          2,
+          "0",
+        )}:${String(minutes).padStart(2, "0")}`;
+
+        setTimezone(formatted);
+      }
+    } catch (err) {
+      console.error("Timezone error:", err);
+    }
+  };
+
+  const fetchLocationDetails = (lat, lng) => {
+    getAddressFromLatLng(lat, lng);
+    getTimezoneFromLatLng(lat, lng);
+  };
+
+  // 🖱️ Map Click
+  const handleMapClick = (e) => {
+    const newPos = {
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng(),
+    };
+
+    setMarkerPosition(newPos);
+    setLatitude(e.latLng.lat());
+    setLongitude(e.latLng.lng());
+    mapRef.current?.panTo(newPos);
+
+    fetchLocationDetails(newPos.lat, newPos.lng);
+  };
+
+  // 🔍 Global Autocomplete
+  useEffect(() => {
+    if (!isLoaded || !inputRef.current || !window.google || activeStep !== 1)
+      return;
+
+    autocompleteRef.current = new window.google.maps.places.Autocomplete(
+      inputRef.current,
+      {
+        // types: ["geocode"], // 🌍 global
+      },
+    );
+
+    // 🌍 Bias near user (not restriction)
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        const circle = new window.google.maps.Circle({
+          center: {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+          },
+          radius: 50000,
+        });
+
+        autocompleteRef.current.setBounds(circle.getBounds());
+      });
+    }
+
+    autocompleteRef.current.addListener("place_changed", () => {
+      const place = autocompleteRef.current.getPlace();
+
+      if (!place.geometry) return;
+
+      const lat = place.geometry.location.lat();
+      const lng = place.geometry.location.lng();
+
+      const newPos = { lat, lng };
+
+      // ✅ Update states
+      setMarkerPosition(newPos);
+      setLatitude(lat);
+      setLongitude(lng);
+
+      // ✅ Move map
+      mapRef.current?.panTo(newPos);
+      mapRef.current?.setZoom(16);
+
+      // ✅ Fetch all details
+      fetchLocationDetails(lat, lng);
+    });
+
+    return () => {
+      if (autocompleteRef.current) {
+        window.google.maps.event.clearInstanceListeners(
+          autocompleteRef.current,
+        );
+      }
+    };
+  }, [isLoaded, activeStep]);
+
+  useEffect(() => {
+    if (country) {
+      const fetchSpecificCountryDetails = async () => {
+        try {
+          const { data } = await api.post(
+            `/api/country/getAllCountries?name=${country}`,
+          );
+
+          let value = data?.response?.[0];
+          setCountryCode(value?.countryCode);
+          setCountryCurrency(value?.currency);
+        } catch (error) {
+          alert("Not able to fetch the country details");
+          console.log("Failed to fetch the country ", error);
+        }
+      };
+
+      fetchSpecificCountryDetails();
+    }
+  }, [country]);
+
+  if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <section className={`${style.section}`}>
@@ -1965,7 +2162,7 @@ const EditSalon = () => {
                   <main className={`${style.form_container}`}>
                     {step.fields.map((field) => (
                       <div key={field.name} className={`${style.form_group}`}>
-                        <label>{field.label}</label>
+                        {/* <label>{field.label}</label>
 
                         {field.dropdown ? (
                           <div
@@ -2122,15 +2319,255 @@ const EditSalon = () => {
                               )}
                             </div>
                           </>
+                        )} */}
+
+                        {field.label === "Salon Business Type" && (
+                          <label>{field.label}</label>
                         )}
+
+                        {field.dropdown && (
+                          <div
+                            className={`${style.select_container}`}
+                            onClick={() => setBusinessTypeOpen((prev) => !prev)}
+                          >
+                            <input
+                              type={field.type}
+                              name={field.name}
+                              value={field.value}
+                              placeholder={field.placeholder}
+                              readOnly={field?.readOnly}
+                            />
+                            <div>
+                              <DropdownIcon />
+                            </div>
+
+                            {businessTypeOpen ? (
+                              <ClickAwayListener
+                                onClickAway={() => setBusinessTypeOpen(false)}
+                              >
+                                <div
+                                  className={`${style.select_dropdown_container}`}
+                                  onClick={(event) => event.stopPropagation()}
+                                >
+                                  <button
+                                    onClick={() =>
+                                      salonTypeHandler("Barber Shop")
+                                    }
+                                  >
+                                    Barber Shop
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      salonTypeHandler("Hair Dresser")
+                                    }
+                                  >
+                                    Hair Dresser
+                                  </button>
+                                </div>
+                              </ClickAwayListener>
+                            ) : null}
+                          </div>
+                        )}
+
+                        <div
+                          style={{
+                            maxWidth: "90rem",
+                            padding: "1.5rem",
+                            background: "var(--bg-primary)",
+                            borderRadius: "1rem",
+                            boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+                            fontFamily: "system-ui",
+                          }}
+                        >
+                          {/* Search */}
+                          <input
+                            ref={inputRef}
+                            placeholder="Search city, address, or place..."
+                            style={{
+                              width: "100%",
+                              padding: "1.2rem",
+                              marginBottom: "1.4rem",
+                              borderRadius: "1rem",
+                              border: "0.1rem solid var(--border-secondary)",
+                              backgroundColor: "var(--section-bg-color)",
+                            }}
+                          />
+
+                          {/* Map */}
+                          <div
+                            style={{
+                              borderRadius: "1.2rem",
+                              overflow: "hidden",
+                            }}
+                          >
+                            <GoogleMap
+                              mapContainerStyle={{
+                                width: "100%",
+                                height: "40rem",
+                              }}
+                              center={center}
+                              zoom={12}
+                              onLoad={onLoad}
+                              onUnmount={onUnmount}
+                              onClick={handleMapClick}
+                              options={{
+                                streetViewControl: false,
+                                mapTypeControl: false,
+                              }}
+                            >
+                              {markerPosition && (
+                                <Marker
+                                  position={markerPosition}
+                                  draggable
+                                  onDragEnd={(e) => {
+                                    const newPos = {
+                                      lat: e.latLng.lat(),
+                                      lng: e.latLng.lng(),
+                                    };
+
+                                    setMarkerPosition(newPos);
+                                    fetchLocationDetails(
+                                      newPos.lat,
+                                      newPos.lng,
+                                    );
+                                  }}
+                                />
+                              )}
+                            </GoogleMap>
+                          </div>
+
+                          {/* Info */}
+                          {markerPosition && (
+                            <div
+                              style={{
+                                marginTop: "1.5rem",
+                                // padding: "14px",
+                                borderRadius: "1rem",
+                                background: "var(--bg-primary)",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "1rem",
+                              }}
+                            >
+                              {/* <div>
+                                <strong>Lat:</strong> {latitude}
+                              </div>
+                              <div>
+                                <strong>Lng:</strong> {longitude}
+                              </div>
+                              <div>
+                                <strong>Address:</strong> {address || "—"}
+                              </div>
+                              <div>
+                                <strong>City:</strong> {city || "—"}
+                              </div>
+                              <div>
+                                <strong>Country:</strong> {country || "—"}
+                              </div>
+
+                              {postCode && (
+                                <div>
+                                  <strong>PostCode:</strong> {postCode}
+                                </div>
+                              )}
+
+                              <div>
+                                <strong>Timezone:</strong> {timezone || "—"}
+                              </div> */}
+
+                              <p>
+                                <span style={{ fontWeight: 700 }}>
+                                  Location:
+                                </span>{" "}
+                                {[address, city, country]
+                                  .filter(Boolean)
+                                  .join(", ")}
+                                {postCode ? ` - ${postCode}` : ""}
+                              </p>
+                            </div>
+                          )}
+
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              marginTop: "1.5rem",
+                              gap: "1.2rem",
+                            }}
+                          >
+                            <button
+                              onClick={() => {
+                                setLongitude(
+                                  currentSalon?.location.coordinates.longitude,
+                                );
+                                setLatitude(
+                                  currentSalon?.location.coordinates.latitude,
+                                );
+                                setTimezone(currentSalon?.timeZone);
+                                setAddress(currentSalon?.address);
+                                setCountry(currentSalon?.country);
+                                setCity(currentSalon?.city);
+                                setPostCode(currentSalon?.postCode);
+                                setMarkerPosition({
+                                  lat: currentSalon?.location.coordinates
+                                    .latitude,
+                                  lng: currentSalon?.location.coordinates
+                                    .longitude,
+                                });
+
+                                if (inputRef.current) {
+                                  inputRef.current.value = "";
+                                }
+
+                                if (mapRef.current) {
+                                  mapRef.current.setZoom(12);
+                                }
+                              }}
+                              style={{
+                                flex: 1,
+                                padding: "1rem 1.6rem",
+                                borderRadius: "0.8rem",
+                                border: "0.1rem solid var(--border-secondary)",
+                                backgroundColor: "var(--section-bg-color)",
+                                // color: "#333",
+                                color: "var(--text-primary)",
+                                fontSize: "1.5rem",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Reset
+                            </button>
+
+                            <button
+                              onClick={handleNext}
+                              style={{
+                                flex: 1,
+                                padding: "1rem 1.6rem",
+                                borderRadius: "0.8rem",
+                                border: "none",
+                                backgroundColor: "var(--bg-secondary)",
+                                color: "var(--btn-text-color)",
+                                fontSize: "1.5rem",
+                                fontWeight: "500",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Continue
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     ))}
-                    <div className={`${style.button_container}`}>
-                      <div></div>
-                      <button onClick={handleNext}>
-                        {index === steps.length - 1 ? "Finish" : "Continue"}
-                      </button>
-                    </div>
+
+                    {activeStep !== 1 && (
+                      <div className={`${style.button_container}`}>
+                        <div></div>
+                        <button onClick={handleNext}>
+                          {index === steps.length - 1 ? "Finish" : "Continue"}
+                        </button>
+                      </div>
+                    )}
 
                     <button onClick={handleBack} disabled={index === 0}>
                       Back
@@ -2483,8 +2920,8 @@ const EditSalon = () => {
                                                     ...item,
                                                     servicePrice: value,
                                                   }
-                                                : item
-                                            )
+                                                : item,
+                                            ),
                                           );
                                         }}
                                         placeholder="0.00"
@@ -2513,7 +2950,7 @@ const EditSalon = () => {
                                       onChange={(e) => {
                                         const newValue = e.target.value.replace(
                                           /[^0-9]/g,
-                                          ""
+                                          "",
                                         );
 
                                         const numericValue =
@@ -2528,8 +2965,8 @@ const EditSalon = () => {
                                                   ...item,
                                                   serviceEWT: numericValue,
                                                 }
-                                              : item
-                                          )
+                                              : item,
+                                          ),
                                         );
                                       }}
                                     />
@@ -2639,8 +3076,8 @@ const EditSalon = () => {
                                                     ...item,
                                                     servicePrice: value,
                                                   }
-                                                : item
-                                            )
+                                                : item,
+                                            ),
                                           );
                                         }}
                                         placeholder="0.00"
@@ -2676,7 +3113,7 @@ const EditSalon = () => {
                                           const newValue =
                                             e.target.value.replace(
                                               /[^0-9]/g,
-                                              ""
+                                              "",
                                             );
 
                                           const numericValue =
@@ -2691,8 +3128,8 @@ const EditSalon = () => {
                                                     ...item,
                                                     serviceEWT: numericValue,
                                                   }
-                                                : item
-                                            )
+                                                : item,
+                                            ),
                                           );
                                         }}
                                       />

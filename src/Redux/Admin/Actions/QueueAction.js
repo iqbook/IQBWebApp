@@ -15,13 +15,19 @@ import api from "../../api/Api";
 import { getAllQueueListAction } from "./DashboardAction";
 
 export const adminServeQueueAction =
-  (barberqueuedata, salonId, setChoosebarbermodalopen, setOpenConfirmationQueueModal) => async (dispatch) => {
+  (
+    barberqueuedata,
+    salonId,
+    setChoosebarbermodalopen,
+    setOpenConfirmationQueueModal,
+  ) =>
+  async (dispatch) => {
     try {
       dispatch({ type: ADMIN_BARBER_SERVED_QUEUE_REQ });
 
       const { data } = await api.post(
         "/api/queue/barberServedQueue",
-        barberqueuedata
+        barberqueuedata,
       );
 
       dispatch({
@@ -46,11 +52,11 @@ export const adminServeQueueAction =
 
       setOpenConfirmationQueueModal({
         open: false,
-        data: null
-      })
+        data: null,
+      });
 
       const { data: queuelistdata } = await api.get(
-        `/api/queue/getQListBySalonId?salonId=${salonId}`
+        `/api/queue/getQListBySalonId?salonId=${salonId}`,
       );
 
       dispatch({
@@ -102,7 +108,7 @@ export const adminCancelQueueAction =
     setQueueItem,
     setChoosebarber,
     setChoosebarberemail,
-    setOpenConfirmationCancelQueueModal
+    setOpenConfirmationCancelQueueModal,
   ) =>
   async (dispatch) => {
     try {
@@ -139,7 +145,7 @@ export const adminCancelQueueAction =
       });
 
       const { data: queuelistdata } = await api.get(
-        `/api/queue/getQListBySalonId?salonId=${salonId}`
+        `/api/queue/getQListBySalonId?salonId=${salonId}`,
       );
 
       dispatch({
@@ -184,7 +190,17 @@ export const adminCancelQueueAction =
   };
 
 export const getAdminQueueListHistoryAction =
-  (salonId, startDate, endDate, barberId, customerEmail, signal) =>
+  (
+    salonId,
+    startDate,
+    endDate,
+    // barberId,
+    // customerEmail,
+    rowsPerPage,
+    page,
+    query,
+    signal,
+  ) =>
   async (dispatch) => {
     try {
       dispatch({ type: GET_QUEUE_HISTORY_REQ });
@@ -195,10 +211,13 @@ export const getAdminQueueListHistoryAction =
           salonId,
           from: startDate,
           to: endDate,
-          barberId: barberId,
-          customerEmail: customerEmail,
+          // barberId: barberId,
+          // customerEmail: customerEmail,
+          page,
+          limit: rowsPerPage,
+          search: query,
         },
-        { signal }
+        { signal },
       );
 
       dispatch({

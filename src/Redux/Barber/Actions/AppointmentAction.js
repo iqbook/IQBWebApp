@@ -24,7 +24,7 @@ export const AppointmentAction = (appointdata) => async (dispatch) => {
 
     const { data } = await api.post(
       "/api/appointments/getAllAppointmentsByBarberIdAndDate",
-      appointdata
+      appointdata,
     );
 
     dispatch({
@@ -65,7 +65,7 @@ export const CancelAppointmentAction =
     setOpenModal,
     appointmentBarberListData,
     setOpenMobileModal,
-    setOpenConfirmationCancelModal
+    setOpenConfirmationCancelModal,
   ) =>
   async (dispatch) => {
     try {
@@ -73,7 +73,7 @@ export const CancelAppointmentAction =
 
       const { data } = await api.post(
         "/api/appointments/barberCancelAppointment",
-        canceldata
+        canceldata,
       );
 
       dispatch({
@@ -86,7 +86,7 @@ export const CancelAppointmentAction =
         {
           salonId: canceldata.salonId,
           barberId: canceldata.barberId,
-        }
+        },
       );
 
       dispatch({
@@ -96,7 +96,7 @@ export const CancelAppointmentAction =
 
       const { data: appointmentBarberList } = await api.post(
         "/api/appointments/getAppointmentListByBarberIdAppointmentDate",
-        appointmentBarberListData
+        appointmentBarberListData,
       );
 
       dispatch({
@@ -122,8 +122,8 @@ export const CancelAppointmentAction =
       });
       setOpenConfirmationCancelModal({
         data: false,
-        open: false
-      })
+        open: false,
+      });
     } catch (error) {
       if (error?.response?.status === 500) {
         dispatch({
@@ -162,14 +162,21 @@ export const CancelAppointmentAction =
   };
 
 export const ServeAppointmentAction =
-  (servedata, appointmentBarberListData, setOpenMobileModal, setModalData, setOpenModal, setOpenConfirmationModal) =>
+  (
+    servedata,
+    appointmentBarberListData,
+    setOpenMobileModal,
+    setModalData,
+    setOpenModal,
+    setOpenConfirmationModal,
+  ) =>
   async (dispatch) => {
     try {
       dispatch({ type: SERVE_APPOINT_REQ });
 
       const { data } = await api.post(
         "/api/appointments/barberServedAppointment",
-        servedata
+        servedata,
       );
 
       dispatch({
@@ -182,7 +189,7 @@ export const ServeAppointmentAction =
         {
           salonId: servedata.salonId,
           barberId: servedata.barberId,
-        }
+        },
       );
 
       dispatch({
@@ -192,7 +199,7 @@ export const ServeAppointmentAction =
 
       const { data: appointmentBarberList } = await api.post(
         "/api/appointments/getAppointmentListByBarberIdAppointmentDate",
-        appointmentBarberListData
+        appointmentBarberListData,
       );
 
       dispatch({
@@ -214,13 +221,12 @@ export const ServeAppointmentAction =
         open: false,
         data: {},
       });
-      setModalData({})
-      setOpenModal(false)
+      setModalData({});
+      setOpenModal(false);
       setOpenConfirmationModal({
         data: null,
-        open: false
-      })
-
+        open: false,
+      });
     } catch (error) {
       if (error?.response?.status === 500) {
         dispatch({
@@ -259,7 +265,8 @@ export const ServeAppointmentAction =
   };
 
 export const getBarberAppointmentHistoryAction =
-  (salonId, startDate, endDate, barberId, signal) => async (dispatch) => {
+  (salonId, startDate, endDate, barberId, page, rowsPerPage, query, signal) =>
+  async (dispatch) => {
     try {
       dispatch({ type: GET_APPOINTMENT_HISTORY_REQ });
 
@@ -270,8 +277,11 @@ export const getBarberAppointmentHistoryAction =
           barberId,
           from: startDate,
           to: endDate,
+          page,
+          limit: rowsPerPage,
+          search: query
         },
-        { signal }
+        { signal },
       );
 
       dispatch({
@@ -314,7 +324,7 @@ export const AppointmentListBarberAction =
 
       const { data } = await api.post(
         "/api/appointments/getAppointmentListByBarberIdAppointmentDate",
-        appointdata
+        appointdata,
       );
 
       dispatch({

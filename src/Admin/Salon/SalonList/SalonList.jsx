@@ -516,7 +516,7 @@ const SalonList = () => {
                           <p>{item.salonName}</p>
                         </div>
                       </div>
-                      <div><p>{item.address}</p></div>
+                      <div><p>{item.address.slice(0,30)}...</p></div>
                       <div><p>{item.city}</p></div>
                       <div><p>{item.salonType}</p></div>
                       {/* <div><p>{item.subscription}</p></div> */}
@@ -556,6 +556,7 @@ const SalonList = () => {
                                     onClick={(e) => {
                                       e.preventDefault()
                                       editButtonClicked(item)
+                                      console.log(item)
                                     }}
                                   >Edit Salon</Link></p>
                                 </div>
@@ -886,4 +887,3 @@ const SalonList = () => {
 }
 
 export default SalonList
-

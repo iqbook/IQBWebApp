@@ -43,7 +43,11 @@
 
 body {
   /* font-family: 'AirbnbCereal_Semibold', sans-serif; */
-  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 p {
@@ -735,4 +739,13 @@ body {
   .react-international-phone-input-container .react-international-phone-input {
     font-size: 1.6rem;
   }
+}
+
+.pac-container {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important; /* softer */
+  border-radius: 10px !important;
+  border: 1px solid #eee !important;
+  padding: 6px 0;
+  font-family: system-ui, sans-serif;
+  margin-top: 10px;
 }

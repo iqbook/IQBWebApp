@@ -1,5 +1,4 @@
 import axios from 'axios';
-import toast from 'react-hot-toast';
 
 // const BASE_URL = 'http://localhost:8001';
 
@@ -14,7 +13,6 @@ export const api = axios.create({
     // withCredentials:true
 });
 
-// Add a request interceptor to dynamically set the Authorization header
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('userAdminLoggedIn') || localStorage.getItem('userBarberLoggedIn');

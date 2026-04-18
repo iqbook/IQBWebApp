@@ -53,7 +53,7 @@ export const getBarberAppointmentHistoryReducer = (state = {}, action) => {
                 ...state,
                 loading: false,
                 resolve: true,
-                appointmentHistory: action.payload.response
+                ...action.payload
             };
         case GET_APPOINTMENT_HISTORY_FAIL:
             return {

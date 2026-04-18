@@ -101,6 +101,8 @@ export const getAdminAllCountriesAction = (countryname) => async (dispatch) => {
         dispatch({ type: ADMIN_GET_ALL_COUNTRIES_REQ })
 
         const { data } = await api.post(`/api/country/getAllCountries?name=${countryname}`)
+        
+        console.log(data)
 
         dispatch({
             type: ADMIN_GET_ALL_COUNTRIES_SUCCESS,

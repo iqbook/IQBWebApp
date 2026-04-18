@@ -1,219 +1,101 @@
-// import React, { useEffect, useRef, useState } from 'react'
-// import style from './PaymentStatus.module.css'
-// import { useSelector } from 'react-redux'
-// import { darkmodeSelector } from '../../../Redux/Admin/Reducers/AdminHeaderReducer'
-// import api from '../../../Redux/api/Api'
-// import Skeleton from 'react-loading-skeleton'
-
-// const PaymentStatus = () => {
-
-//     const [paymentStatusdata, setPaymentStatusdata] = useState([])
-//     const [paymentStatusLoading, setPaymentStatusLoading] = useState(false)
-
-//     const salonId = useSelector(state => state.AdminLoggedInMiddleware.adminSalonId)
-
-//     const adminGetDefaultSalon = useSelector(state => state.adminGetDefaultSalon)
-
-//     const {
-//         loading: adminGetDefaultSalonLoading,
-//         resolve: adminGetDefaultSalonResolve,
-//         response: adminGetDefaultSalonResponse
-//     } = adminGetDefaultSalon
-
-//     const PaymentistControllerRef = useRef(new AbortController());
-
-//     useEffect(() => {
-//         if (salonId !== 0) {
-//             try {
-//                 const controller = new AbortController();
-//                 PaymentistControllerRef.current = controller;
-
-//                 const fetchpayments = async () => {
-//                     setPaymentStatusLoading(true)
-//                     const { data } = await api.post("/api/salon/getSalonPaymentsBySalonId", {
-//                         salonId
-//                     }, { signal: controller.signal })
-
-//                     setPaymentStatusdata(data.response)
-//                     setPaymentStatusLoading(false)
-//                 }
-
-//                 fetchpayments()
-//             } catch (error) {
-//                 setPaymentStatusLoading(false)
-//             }
-//         }
-
-//         return () => {
-//             if (PaymentistControllerRef.current) {
-//                 PaymentistControllerRef.current.abort();
-//             }
-//         };
-//     }, [salonId])
-
-//     console.log(paymentStatusdata)
-
-//     const darkMode = useSelector(darkmodeSelector)
-
-//     const darkmodeOn = darkMode === "On"
-
-//     // const paymentStatusdata = [
-//     //     {
-//     //         _id: 1,
-//     //         name: "Appointment",
-//     //         price: 300,
-//     //         buyDate: "2025-01-01",
-//     //         expiryDate: "2025-02-25",
-//     //         status: true,
-//     //         planValidity: 30
-//     //     },
-//     //     {
-//     //         _id: 2,
-//     //         name: "Queueing",
-//     //         price: 200,
-//     //         buyDate: "2025-01-01",
-//     //         expiryDate: "2025-02-25",
-//     //         status: false,
-//     //         planValidity: 60
-//     //     },
-//     // ]
-
-//     return (
-//         <div className={`${style.payment_status_wrapper} ${darkmodeOn && style.dark}`}>
-//             <div>
-//                 <p>Payment</p>
-//             </div>
-
-//             <div className={`${style.payment_status_content_wrapper} ${darkmodeOn && style.dark}`}>
-
-//                 {
-//                     paymentStatusLoading ? (
-//                         <div className={`${style.payment_content_body} ${darkmodeOn && style.dark}`}>
-//                             <Skeleton
-//                                 count={6}
-//                                 height={"6rem"}
-//                                 baseColor={darkmodeOn ? "var(--dark-loader-bg-color)" : "var(--light-loader-bg-color)"}
-//                                 highlightColor={darkmodeOn ? "var(--dark-loader-highlight-color)" : "var(--light-loader-highlight-color)"}
-//                                 style={{ marginBottom: "1rem" }} />
-//                         </div>
-//                     ) : paymentStatusdata?.length > 0 ? (
-//                         <div className={`${style.payment_content_body} ${darkmodeOn && style.dark}`}>
-//                             <div>
-//                                 <p>Customer Name</p>
-//                                 <p>Product Name</p>
-//                                 <p>Price</p>
-//                                 <p>Purchase</p>
-//                                 <p>Expiry</p>
-//                                 <p
-//                                     style={{
-//                                         display: "flex",
-//                                         justifyContent: "center",
-//                                         alignItems: "center"
-//                                     }}
-//                                 >Status</p>
-//                             </div>
-
-
-
-//                             {paymentStatusdata.map((s, index) => (
-//                                 <div key={s?._id}
-//                                     style={{
-//                                         borderBottom: paymentStatusdata.length - 1 === index && "none"
-//                                     }}
-//                                 >
-//                                     <p>{s?.customerName}</p>
-//                                     <p>
-//                                         {
-//                                             (s?.isQueuing && s?.isAppointments) ? ("Queueing, Appointment") :
-//                                                 s?.isQueuing ? ("Queueing") :
-//                                                     s?.isAppointments && ("Appointments")
-//                                         }
-//                                     </p>
-//                                     <p>{adminGetDefaultSalonResponse?.currency}{" "}{s?.amount}</p>
-//                                     <p>{s?.purchaseDate}</p>
-//                                     <p>{s?.paymentExpiryDate}</p>
-//                                     <p
-//                                         style={{
-//                                             height: "3.5rem",
-//                                             width: "8rem",
-//                                             borderRadius: "2rem",
-//                                             backgroundColor: s?.activityStatus ? "var(--color-9)" : "var(--color-11)",
-//                                             color: s?.activityStatus ? "var(--color-8)" : "var(--color-10)",
-//                                             border: s?.activityStatus ? "0.1rem solid var(--color-8)" : "0.1rem solid var(--color-10)",
-//                                             fontWeight: "500",
-//                                             display: "flex",
-//                                             justifyContent: "center",
-//                                             alignItems: "center"
-//                                         }}
-//                                     >{s?.activityStatus ? "Active" : "Inactive"}</p>
-//                                 </div>
-//                             ))}
-
-//                         </div>
-//                     ) : (
-//                         <div className={`${style.payment_content_body_error} ${darkmodeOn && style.dark}`}>
-//                             <p>No payments available</p>
-//                         </div>
-//                     )
-//                 }
-
-//             </div>
-
-//         </div>
-//     )
-// }
-
-// export default PaymentStatus
-
-import React, { useEffect, useRef, useState } from 'react'
-import style from "./PaymentStatus.module.css"
-import { DropdownIcon, SalonThreeDotsIcon, SortDownIcon, SortUpDownArrowIcon, SortUpIcon } from '../../../newicons';
-import { ClickAwayListener, FormControl, MenuItem, Pagination, Select, TextField } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import styled from "@emotion/styled";
-import api from '../../../Redux/api/Api';
-import { useSelector } from 'react-redux';
-import { darkmodeSelector } from '../../../Redux/Admin/Reducers/AdminHeaderReducer';
-import Skeleton from 'react-loading-skeleton';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import style from "./PaymentStatus.module.css";
+import {
+  DropdownIcon,
+  SalonThreeDotsIcon,
+  SortDownIcon,
+  SortUpDownArrowIcon,
+  SortUpIcon,
+} from "../../../newicons";
+import {
+  ClickAwayListener,
+  FormControl,
+  MenuItem,
+  Pagination,
+  Select,
+  TextField,
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../../Redux/api/Api";
+import { useSelector } from "react-redux";
+import { darkmodeSelector } from "../../../Redux/Admin/Reducers/AdminHeaderReducer";
+import Skeleton from "react-loading-skeleton";
+import ButtonLoader from "../../../components/ButtonLoader/ButtonLoader";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const PaymentStatus = () => {
+  const [mobileWidth, setMobileWidth] = useState(
+    window.innerWidth <= 430 ? true : false,
+  );
 
+  useEffect(() => {
+    const resizeHandler = () => {
+      if (window.innerWidth <= 430) {
+        setMobileWidth(true);
+      } else {
+        setMobileWidth(false);
+      }
+    };
+    window.addEventListener("resize", resizeHandler);
 
-  const [paymentStatusdata, setPaymentStatusdata] = useState([])
-  const [paymentStatusLoading, setPaymentStatusLoading] = useState(false)
+    return () => {
+      window.removeEventListener("resize", resizeHandler);
+    };
+  }, []);
 
-  const salonId = useSelector(state => state.AdminLoggedInMiddleware.adminSalonId)
+  const [paymentStatusdata, setPaymentStatusdata] = useState([]);
+  const [PaginationObject, setPaginationObject] = useState({});
+  const [paymentStatusLoading, setPaymentStatusLoading] = useState(false);
 
-  const adminGetDefaultSalon = useSelector(state => state.adminGetDefaultSalon)
+  const salonId = useSelector(
+    (state) => state.AdminLoggedInMiddleware.adminSalonId,
+  );
+
+  const adminGetDefaultSalon = useSelector(
+    (state) => state.adminGetDefaultSalon,
+  );
 
   const {
     loading: adminGetDefaultSalonLoading,
     resolve: adminGetDefaultSalonResolve,
-    response: adminGetDefaultSalonResponse
-  } = adminGetDefaultSalon
+    response: adminGetDefaultSalonResponse,
+  } = adminGetDefaultSalon;
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [rowsPerPage, SetRowsPerPage] = useState(10);
 
   const PaymentistControllerRef = useRef(new AbortController());
 
   useEffect(() => {
     if (salonId !== 0) {
       try {
+        if (mobileWidth) return;
+
         const controller = new AbortController();
         PaymentistControllerRef.current = controller;
 
         const fetchpayments = async () => {
-          setPaymentStatusLoading(true)
-          const { data } = await api.post("/api/salonPayments/getSalonPaymentHistoryBySalonId", {
-            salonId
-          }, { signal: controller.signal })
+          setPaymentStatusLoading(true);
+          const { data } = await api.post(
+            "/api/salonPayments/getSalonPaymentHistoryBySalonId",
+            {
+              salonId,
+              page,
+              limit: rowsPerPage,
+            },
+            { signal: controller.signal },
+          );
 
-          setPaymentStatusdata(data.response)
-          setPaymentStatusLoading(false)
-        }
+          setPaymentStatusdata(data.response);
+          setPaginationObject(data?.pagination);
+          setPage(data?.pagination?.page);
+          setPaymentStatusLoading(false);
+        };
 
-        fetchpayments()
+        fetchpayments();
       } catch (error) {
-        setPaymentStatusLoading(false)
+        setPaymentStatusLoading(false);
       }
     }
 
@@ -222,13 +104,13 @@ const PaymentStatus = () => {
         PaymentistControllerRef.current.abort();
       }
     };
-  }, [salonId])
+  }, [salonId, page, rowsPerPage, mobileWidth]);
 
   // console.log(paymentStatusdata)
 
-  const darkMode = useSelector(darkmodeSelector)
+  const darkMode = useSelector(darkmodeSelector);
 
-  const darkmodeOn = darkMode === "On"
+  const darkmodeOn = darkMode === "On";
 
   // =======================================
 
@@ -242,196 +124,119 @@ const PaymentStatus = () => {
     { id: 7, heading: "Time Period", key: "timeperiod" },
   ];
 
-
-  const [paymenthistoryData, setpaymenthistoryData] = useState([])
-
-  useEffect(() => {
-    if (paymentStatusdata?.length > 0) {
-      setpaymenthistoryData(paymentStatusdata)
-    }
-  }, [paymentStatusdata])
-
-  const [settingsIndex, setSettingsIndex] = useState("")
-
-  const [rowsPerPage, SetRowsPerPage] = useState(10)
-
-  const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [startIndex, setStartIndex] = useState(0)
-  const [endIndex, setEndIndex] = useState(rowsPerPage)
-  const [sortOrder, setSortOrder] = useState("asc")
-  const [sortColumn, setSortColumn] = useState("")
-
-  const [salonPaymenthistoryPaginationData, setSalonPaymenthistoryPaginationData] = useState([])
-
-  useEffect(() => {
-    if (paymenthistoryData.length > 0) {
-      setSalonPaymenthistoryPaginationData(paymenthistoryData.slice(startIndex, endIndex))
-    }
-  }, [paymenthistoryData])
-
-  useEffect(() => {
-    const totalPages = Math.ceil(paymenthistoryData.length / rowsPerPage);
-    setTotalPages(totalPages);
-    const startIndex = (page - 1) * rowsPerPage;
-    const endIndex = Math.min(startIndex + rowsPerPage, paymenthistoryData.length);
-    setStartIndex(startIndex);
-    setEndIndex(endIndex);
-    setSalonPaymenthistoryPaginationData(paymenthistoryData.slice(startIndex, endIndex));
-  }, [paymenthistoryData, page, rowsPerPage]);
-
-
   const handleChange = (event, value) => {
     setPage(value);
-  }
+  };
 
+  const [selectOpen, setSelectOpen] = useState(false);
 
-  const [selectOpen, setSelectOpen] = useState(false)
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
+  // Mobile View
 
+  const [mobileListItems, setMobileListItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
+  // Create a ref for the observer
+  const observer = useRef();
 
-  return (
-    <section className={`${style.section}`}>
-      <div>
-        <h2>Payment History</h2>
-        {/* <button onClick={() => navigate("/admin-salon/createsalon")}>Create</button> */}
-      </div>
+  // The "Last Element" ref: attaches to the last item in the list
+  const lastItemElementRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
 
-      <div className={`${style.list_container}`}>
-
-        {
-          paymentStatusLoading ? (
-            <div className={`${style.list_body_container_loader}`}>
-              <Skeleton
-                count={6}
-                height={"6.5rem"}
-                baseColor={"var(--loader-bg-color)"}
-                highlightColor={"var(--loader-highlight-color)"}
-                style={{ marginBottom: "1rem" }} />
-            </div>
-          ) : paymentStatusdata?.length > 0 ? (
-            <div className={`${style.list_body_container}`}>
-
-              <div className={`${style.headRow}`}>
-                {
-                  headRows.map((item, index) => {
-                    return (
-                      <div key={item.id}>
-                        <button>
-                          {item.heading}
-                        </button>
-                      </div>
-                    )
-                  })
-                }
-
-              </div>
-              {
-                salonPaymenthistoryPaginationData?.map((item, index) => {
-                  return (
-                    <div key={item._id} style={{ borderBottom: (index === endIndex - 1) || (index === salonPaymenthistoryPaginationData.length - 1) ? null : "0.1rem solid var(--border-secondary)" }}>
-                      <div><p>{item.invoiceNumber}</p></div>
-                      <div><p>{item.products?.[0]?.productName}</p></div>
-                      <div><p>{item.purchaseDate}</p></div>
-                      <div><p>{item.paymentExpiryDate}</p></div>
-                      <div><p>{adminGetDefaultSalon?.response?.currency}{" "}{item.products?.[0]?.productPrice}</p></div>
-                      <div><p>{item.paymentIntentId}</p></div>
-                      <div><p>{item?.timePeriod}days</p></div>
-
-                    </div>
-                  )
-                })
-              }
-            </div>
-          ) : (
-            <div className={`${style.list_body_container_error}`}>
-              <p>No payment history available</p>
-            </div>
-          )
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
         }
+      });
 
-        <div className={`${style.pagination_container}`}>
-          <div></div>
-          <div>
-            <Pagination
-              count={totalPages}
-              page={page}
-              onChange={handleChange}
-              sx={{
-                "& .MuiPaginationItem-root": {
-                  color: "var(--text-primary)",
-                  fontSize: "1.4rem",
-                },
-                "& .Mui-selected": { backgroundColor: "var(--bg-secondary) !important", color: "var(--btn-text-color)" },
-              }}
-            />
-          </div>
-          <div>
-            <div>
-              <p>Rows Per Page</p>
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore],
+  );
 
-              <ClickAwayListener onClickAway={() => setSelectOpen(false)}>
-                <div className={`${style.select_container}`}>
-                  <div onClick={() => setSelectOpen((prev) => !prev)}>
-                    <input type="text" value={rowsPerPage} readOnly />
-                    <div><DropdownIcon /></div>
-                  </div>
+  const mobileControllerRef = useRef(null);
 
-                  {
-                    selectOpen ? (<ul>
-                      {
-                        [10, 20, 30, 50].map((item, index) => {
-                          return (
-                            <li key={item} onClick={() => {
-                              setPage(1)
-                              SetRowsPerPage(item)
-                              setSelectOpen(false)
-                            }}
-                              style={{
-                                background: item === rowsPerPage ? "var(--bg-secondary)" : null,
-                                color: item === rowsPerPage ? "var(--btn-text-color)" : null,
-                                borderBottom: index === [10, 20, 30, 50].length - 1 ? "none" : "0.1rem solid var(--border-secondary)"
-                              }}
-                            >{item}</li>
-                          )
-                        })
-                      }
+  const fetchData = async (signal) => {
+    if (salonId !== 0) {
+      setLoading(true);
+      try {
+        const { data } = await api.post(
+          "/api/salonPayments/getSalonPaymentHistoryBySalonId",
+          {
+            salonId,
+            page,
+            limit: rowsPerPage,
+          },
+          { signal },
+        );
 
-                    </ul>) : (null)
-                  }
-                </div>
-              </ClickAwayListener>
+        setMobileListItems((prev) => [...prev, ...data?.response]);
+        setHasMore(data?.response?.length > 0);
+      } catch (error) {
+        if (error.name === "CanceledError" || error.name === "AbortError") {
+          return;
+        }
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
-            </div>
-            <div>
-              <p>{startIndex} - {endIndex}{" "} of {totalPages}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+  useEffect(() => {
+    if (!mobileWidth) return;
 
-      {
-        paymentStatusLoading ? (
-          <div className={style.list_container_mobile_loader}>
-            <Skeleton
-              count={6}
-              height={"14rem"}
-              baseColor={"var(--loader-bg-color)"}
-              highlightColor={"var(--loader-highlight-color)"}
-              style={{ marginBottom: "1rem" }} />
-          </div>
-        ) : paymentStatusdata?.length > 0 ? (
-          <div className={style.list_container_mobile}>
+    // ❌ cancel previous request
+    if (mobileControllerRef.current) {
+      mobileControllerRef.current.abort();
+    }
 
-            {
-              paymentStatusdata?.map((item, index) => {
+    // ✅ create new controller
+    const controller = new AbortController();
+    mobileControllerRef.current = controller;
+
+    fetchData(controller.signal);
+
+    return () => {
+      controller.abort(); // cleanup
+    };
+  }, [page, mobileWidth]);
+
+  return mobileWidth ? (
+    <>
+      <div
+        style={{
+          maxWidth: "400px",
+          margin: "0 auto",
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: "var(--section-bg-color)",
+            padding: "10px",
+          }}
+        >
+          {mobileListItems.length > 0 ? (
+            <>
+              {mobileListItems.map((item, index) => {
+                const isLast = mobileListItems.length === index + 1;
+
                 return (
-                  <div className={style.list_mobile_item} key={item._id}>
+                  <div
+                    ref={isLast ? lastItemElementRef : null}
+                    className={style.list_mobile_item}
+                    key={item._id}
+                  >
                     <div>
                       <p>{item.products?.[0]?.productName}</p>
-                      <p><span>Transaction ID :</span>&nbsp;{item.paymentIntentId}</p>
+                      <p>
+                        <span>Transaction ID :</span>&nbsp;
+                        {item.paymentIntentId}
+                      </p>
                     </div>
 
                     <div>
@@ -443,7 +248,9 @@ const PaymentStatus = () => {
 
                         <div>
                           <p>Validity</p>
-                          <p>{item.purchaseDate} - {item.paymentExpiryDate}</p>
+                          <p>
+                            {item.purchaseDate} - {item.paymentExpiryDate}
+                          </p>
                         </div>
                       </div>
 
@@ -455,75 +262,202 @@ const PaymentStatus = () => {
 
                         <div>
                           <p>Price</p>
-                          <p>{adminGetDefaultSalon?.response?.currency}{" "}{item.products?.[0]?.productPrice}</p>
+                          <p>
+                            {adminGetDefaultSalon?.response?.currency}{" "}
+                            {item.products?.[0]?.productPrice}
+                          </p>
                         </div>
                       </div>
                     </div>
                   </div>
                 );
-              })
-            }
+              })}
 
+              {/* ✅ loader INSIDE list */}
+              {loading && (
+                <div style={{ textAlign: "center", padding: "20px" }}>
+                  <ClipLoader size={35} color="var(--text-primary)" />
+                </div>
+              )}
+            </>
+          ) : (
+            <div
+              style={{
+                height: "70vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <p>No payments history available</p>
+            </div>
+          )}
+        </div>
+
+        {/* {!hasMore && (
+        <div
+          style={{
+            backgroundColor: "var(--section-bg-color)",
+          }}
+        >
+          <p style={{ textAlign: "center", marginBottom: "2rem" }}>
+            No more customers to show.
+          </p>
+        </div>
+      )} */}
+      </div>
+    </>
+  ) : (
+    <section className={`${style.section}`}>
+      <div>
+        <h2>Payment History</h2>
+      </div>
+
+      <div className={`${style.list_container}`}>
+        {paymentStatusLoading ? (
+          <div className={`${style.list_body_container_loader}`}>
+            <Skeleton
+              count={6}
+              height={"6.5rem"}
+              baseColor={"var(--loader-bg-color)"}
+              highlightColor={"var(--loader-highlight-color)"}
+              style={{ marginBottom: "1rem" }}
+            />
+          </div>
+        ) : paymentStatusdata?.length > 0 ? (
+          <div className={`${style.list_body_container}`}>
+            <div className={`${style.headRow}`}>
+              {headRows.map((item, index) => {
+                return (
+                  <div key={item.id}>
+                    <button>{item.heading}</button>
+                  </div>
+                );
+              })}
+            </div>
+            {paymentStatusdata?.map((item, index) => {
+              return (
+                <div
+                  key={item._id}
+                  style={{
+                    borderBottom:
+                      // index === endIndex - 1 ||
+                      index === paymentStatusdata.length - 1
+                        ? null
+                        : "0.1rem solid var(--border-secondary)",
+                  }}
+                >
+                  <div>
+                    <p>{item.invoiceNumber}</p>
+                  </div>
+                  <div>
+                    <p>{item.products?.[0]?.productName}</p>
+                  </div>
+                  <div>
+                    <p>{item.purchaseDate}</p>
+                  </div>
+                  <div>
+                    <p>{item.paymentExpiryDate}</p>
+                  </div>
+                  <div>
+                    <p>
+                      {adminGetDefaultSalon?.response?.currency}{" "}
+                      {item.products?.[0]?.productPrice}
+                    </p>
+                  </div>
+                  <div>
+                    <p>{item.paymentIntentId}</p>
+                  </div>
+                  <div>
+                    <p>{item?.timePeriod}days</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         ) : (
-          <div className={style.list_container_mobile_error}>
+          <div className={`${style.list_body_container_error}`}>
             <p>No payment history available</p>
           </div>
-        )
-      }
+        )}
 
-      {/* <div className={style.list_container_mobile}>
-
-        <div className={style.list_mobile_item}>
+        <div className={`${style.pagination_container}`}>
+          <div></div>
           <div>
-            <p>Queueing</p>
-            <p><span>Transaction ID : pi_3qysvsdv</span></p>
+            <Pagination
+              count={PaginationObject?.totalPages}
+              page={page}
+              onChange={handleChange}
+              sx={{
+                "& .MuiPaginationItem-root": {
+                  color: "var(--text-primary)",
+                  fontSize: "1.4rem",
+                },
+                "& .Mui-selected": {
+                  backgroundColor: "var(--bg-secondary) !important",
+                  color: "var(--btn-text-color)",
+                },
+              }}
+            />
           </div>
-
           <div>
             <div>
-              <div>
-                <p>Invoice No.</p>
-                <p>IQB-MAR-016</p>
-              </div>
+              <p>Rows Per Page</p>
 
-              <div>
-                <p>Validity</p>
-                <p>1 Mar 2025 - 30 Mar 2025</p>
-              </div>
+              <ClickAwayListener onClickAway={() => setSelectOpen(false)}>
+                <div className={`${style.select_container}`}>
+                  <div onClick={() => setSelectOpen((prev) => !prev)}>
+                    <input type="text" value={rowsPerPage} readOnly />
+                    <div>
+                      <DropdownIcon />
+                    </div>
+                  </div>
+
+                  {selectOpen ? (
+                    <ul>
+                      {[10, 20, 30, 50].map((item, index) => {
+                        return (
+                          <li
+                            key={item}
+                            onClick={() => {
+                              setPage(1);
+                              SetRowsPerPage(item);
+                              setSelectOpen(false);
+                            }}
+                            style={{
+                              background:
+                                item === rowsPerPage
+                                  ? "var(--bg-secondary)"
+                                  : null,
+                              color:
+                                item === rowsPerPage
+                                  ? "var(--btn-text-color)"
+                                  : null,
+                              borderBottom:
+                                index === [10, 20, 30, 50].length - 1
+                                  ? "none"
+                                  : "0.1rem solid var(--border-secondary)",
+                            }}
+                          >
+                            {item}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : null}
+                </div>
+              </ClickAwayListener>
             </div>
-
             <div>
-              <div>
-                <p>Plan</p>
-                <p>30 Days</p>
-              </div>
-
-              <div>
-                <p>Price</p>
-                <p>$ 120</p>
-              </div>
+              <p>
+                {PaginationObject?.pageDataCount} of {PaginationObject?.total}
+              </p>
             </div>
           </div>
         </div>
-
-      </div> */}
-
-      {/* <div className={style.list_container_mobile_loader}>
-        <Skeleton
-          count={6}
-          height={"14rem"}
-          baseColor={"var(--loader-bg-color)"}
-          highlightColor={"var(--loader-highlight-color)"}
-          style={{ marginBottom: "1rem" }} />
-      </div> */}
-
-      {/* <div className={style.list_container_mobile_error}>
-        <p>No payment history available</p>
-      </div> */}
-
+      </div>
     </section>
-  )
-}
+  );
+};
 
-export default PaymentStatus
+export default PaymentStatus;
