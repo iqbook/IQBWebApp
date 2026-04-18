@@ -1759,6 +1759,8 @@ const CreateSalon = () => {
           city: cityComp?.long_name || fallbackCity?.long_name || "N/A",
           country: countryComp?.long_name || "N/A",
         });
+      } else {
+        console.log("Not working getAddressFromLatLng");
       }
     });
   };
@@ -1793,6 +1795,8 @@ const CreateSalon = () => {
         updateSalonData({
           timezone: formatted,
         });
+      } else {
+        console.log("Not working getTimezone");
       }
     } catch (err) {
       console.error("Timezone error:", err);
@@ -2183,15 +2187,15 @@ const CreateSalon = () => {
                                 gap: "1rem",
                               }}
                             >
-                              {/* <div>
+                              <div>
                                 <strong>Lat:</strong>{" "}
-                                {latitude && latitude.toFixed(6)}
+                                {latitude}
                               </div>
                               <div>
                                 <strong>Lng:</strong>{" "}
-                                {longitude && longitude.toFixed(6)}
-                              </div> */}
-                              {/* <div>
+                                {longitude}
+                              </div>
+                              <div>
                                 <strong>Address:</strong> {address || "—"}
                               </div>
                               <div>
@@ -2209,9 +2213,9 @@ const CreateSalon = () => {
 
                               <div>
                                 <strong>Timezone:</strong> {timezone || "—"}
-                              </div> */}
+                              </div>
 
-                              <p>
+                              {/* <p>
                                 <span style={{ fontWeight: 700 }}>
                                   Location:
                                 </span>{" "}
@@ -2219,7 +2223,8 @@ const CreateSalon = () => {
                                   .filter(Boolean)
                                   .join(", ")}
                                 {postCode ? ` - ${postCode}` : ""}
-                              </p>
+                                {" "}{timezone}
+                              </p> */}
                             </div>
                           )}
 
