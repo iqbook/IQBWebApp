@@ -63,6 +63,8 @@ import {
 } from "@react-google-maps/api";
 
 const CreateSalon = () => {
+  const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
+
   const email = useSelector(
     (state) => state.AdminLoggedInMiddleware.adminEmail,
   );
@@ -1041,7 +1043,6 @@ const CreateSalon = () => {
     setSalonName(storedData.salonName);
     setSalonEmail(storedData.salonEmail);
     setSalonDesc(storedData.salonDesc);
-    setAddress(storedData.address);
     setWebLink(storedData.webLink);
     setFbLink(storedData.fbLink);
     setInstraLink(storedData.instraLink);
@@ -1049,8 +1050,17 @@ const CreateSalon = () => {
     setTiktokLink(storedData.tiktokLink);
     setPostCode(storedData.postCode);
     setSalonType(storedData.salonType);
+
+    // Business Info step
     setLatitude(storedData.latitude);
     setLongitude(storedData.longitude);
+    setAddress(storedData.address);
+    setCountry(storedData.country);
+    setCity(storedData.city);
+    setTimezone(storedData.timezone);
+    setCountryCode(storedData.countryCode);
+    setCountryCurrency(storedData.countryCurrency);
+    setPostCode(storedData.postCode);
 
     setContactTel(storedData.contactTel);
     setDialCode(storedData.dialCode);
@@ -1676,6 +1686,21 @@ const CreateSalon = () => {
   // };
 
   // React Map
+
+  useEffect(() => {
+    if (latitude && longitude) {
+      const pos = { lat: Number(latitude), lng: Number(longitude) };
+
+      setMarkerPosition(pos);
+      setCenter(pos);
+
+      if (mapRef.current) {
+        mapRef.current.panTo(pos);
+        mapRef.current.setZoom(16);
+      }
+    }
+  }, [latitude, longitude]);
+
   const defaultCenter = {
     lat: 51.5074,
     lng: -0.1278,
@@ -1689,7 +1714,6 @@ const CreateSalon = () => {
 
   const [center, setCenter] = useState(defaultCenter);
   const [markerPosition, setMarkerPosition] = useState(null);
-  // const [mapReset, setMapReset] = useState(false)
 
   const mapRef = useRef(null);
   const inputRef = useRef(null);
@@ -1728,6 +1752,13 @@ const CreateSalon = () => {
         setPostCode(postal?.long_name || "N/A");
         setCity(cityComp?.long_name || fallbackCity?.long_name || "N/A");
         setCountry(countryComp?.long_name || "N/A");
+
+        updateSalonData({
+          address: result.formatted_address,
+          postCode: postal?.long_name || "N/A",
+          city: cityComp?.long_name || fallbackCity?.long_name || "N/A",
+          country: countryComp?.long_name || "N/A",
+        });
       }
     });
   };
@@ -1758,6 +1789,10 @@ const CreateSalon = () => {
         )}:${String(minutes).padStart(2, "0")}`;
 
         setTimezone(formatted);
+
+        updateSalonData({
+          timezone: formatted,
+        });
       }
     } catch (err) {
       console.error("Timezone error:", err);
@@ -1779,6 +1814,15 @@ const CreateSalon = () => {
     setMarkerPosition(newPos);
     setLatitude(e.latLng.lat());
     setLongitude(e.latLng.lng());
+    // console.log(existingData);
+    localStorage.setItem(
+      "salondata",
+      JSON.stringify({
+        ...existingData,
+        ["latitude"]: e.latLng.lat(),
+        ["longitude"]: e.latLng.lng(),
+      }),
+    );
     mapRef.current?.panTo(newPos);
 
     fetchLocationDetails(newPos.lat, newPos.lng);
@@ -1786,7 +1830,7 @@ const CreateSalon = () => {
 
   // 🔍 Global Autocomplete
   useEffect(() => {
-    if (!isLoaded || !inputRef.current || !window.google || !activeStep === 1)
+    if (!isLoaded || !inputRef.current || !window.google || activeStep !== 1)
       return;
 
     autocompleteRef.current = new window.google.maps.places.Autocomplete(
@@ -1816,25 +1860,28 @@ const CreateSalon = () => {
 
       if (!place.geometry) return;
 
-      const location = place.geometry.location;
+      const lat = place.geometry.location.lat();
+      const lng = place.geometry.location.lng();
 
-      const lat = location.lat();
-      const lng = location.lng();
+      const newPos = { lat, lng };
 
-      const newPos = {
-        lat: location.lat(),
-        lng: location.lng(),
-      };
-
+      // ✅ Update states
       setMarkerPosition(newPos);
-
       setLatitude(lat);
       setLongitude(lng);
 
+      // ✅ FIXED (use correct lat/lng)
+      updateSalonData({
+        latitude: lat,
+        longitude: lng,
+      });
+
+      // ✅ Move map
       mapRef.current?.panTo(newPos);
       mapRef.current?.setZoom(16);
 
-      fetchLocationDetails(newPos.lat, newPos.lng);
+      // ✅ Fetch all details
+      fetchLocationDetails(lat, lng);
     });
 
     return () => {
@@ -1844,7 +1891,7 @@ const CreateSalon = () => {
         );
       }
     };
-  }, [isLoaded, activeStep === 1]);
+  }, [isLoaded, activeStep]);
 
   useEffect(() => {
     if (country) {
@@ -1857,6 +1904,10 @@ const CreateSalon = () => {
           let value = data?.response?.[0];
           setCountryCode(value?.countryCode);
           setCountryCurrency(value?.currency);
+          updateSalonData({
+            countryCode: value?.countryCode,
+            countryCurrency: value?.currency,
+          });
         } catch (error) {
           alert("Not able to fetch the country details");
           console.log("Failed to fetch the country ", error);
@@ -1866,6 +1917,18 @@ const CreateSalon = () => {
       fetchSpecificCountryDetails();
     }
   }, [country]);
+
+  const updateSalonData = (newData) => {
+    const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
+
+    localStorage.setItem(
+      "salondata",
+      JSON.stringify({
+        ...existingData,
+        ...newData,
+      }),
+    );
+  };
 
   if (!isLoaded) return <div>Loading...</div>;
 
