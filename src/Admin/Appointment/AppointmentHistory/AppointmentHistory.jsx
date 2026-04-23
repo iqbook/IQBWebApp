@@ -27,6 +27,9 @@ import api from "../../../Redux/api/Api";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const QueHistory = () => {
+  const location = useLocation();
+  const barberId = location.state?.barberId;
+
   const [mobileWidth, setMobileWidth] = useState(
     window.innerWidth <= 430 ? true : false,
   );
@@ -235,8 +238,6 @@ const QueHistory = () => {
     setSelectedDates(formatedDates);
   };
 
-  
-
   const resetHandler = () => {
     setSelectedDates([]);
     SetRowsPerPage(10);
@@ -326,6 +327,7 @@ const QueHistory = () => {
         `/api/appointmentHistory/getAppointmentHistoryBySalonId`,
         {
           salonId,
+          barberId: barberId,
           from: startDate,
           to: endDate,
           page,
@@ -365,7 +367,7 @@ const QueHistory = () => {
     fetchData(controller.signal);
 
     return () => controller.abort();
-  }, [page, query, selectedDates, rowsPerPage, salonId, mobileWidth]);
+  }, [page, query, selectedDates, rowsPerPage, salonId, mobileWidth, barberId]);
 
   return mobileWidth ? (
     <>

@@ -44,7 +44,7 @@ import { ClockIcon, Notificationicon } from "../../../icons";
 
 const BarberList = () => {
   const salonId = useSelector(
-    (state) => state.AdminLoggedInMiddleware.adminSalonId
+    (state) => state.AdminLoggedInMiddleware.adminSalonId,
   );
 
   const getAdminBarberList = useSelector((state) => state.getAdminBarberList);
@@ -68,10 +68,12 @@ const BarberList = () => {
 
   const deleteButtonClicked = (barber) => {
     const confirm = window.confirm(
-      `Are you sure you want to delete ${barber.name}?`
+      `Are you sure you want to delete ${barber.name}?`,
     );
     if (confirm) {
-      dispatch(adminDeleteBarberAction(barber.email, barber, setMobileSettingIndex));
+      dispatch(
+        adminDeleteBarberAction(barber.email, barber, setMobileSettingIndex),
+      );
     }
   };
 
@@ -115,8 +117,8 @@ const BarberList = () => {
         barberOnlineData,
         setCheckMap,
         b,
-        checkMap?.get(`${b.salonId}-${b.barberId}`)
-      )
+        checkMap?.get(`${b.salonId}-${b.barberId}`),
+      ),
     );
   };
 
@@ -143,8 +145,8 @@ const BarberList = () => {
         setCheckMapClock,
         b,
         checkMapClock?.get(`${b.salonId}-${b.barberId}`),
-        setCheckMap
-      )
+        setCheckMap,
+      ),
     );
   };
 
@@ -198,8 +200,8 @@ const BarberList = () => {
         b,
         approveBarberMap?.get(`${b.salonId}-${b.email}`),
         setCheckMap,
-        setCheckMapClock
-      )
+        setCheckMapClock,
+      ),
     );
   };
 
@@ -254,17 +256,17 @@ const BarberList = () => {
       setCheckAllBarbers(false);
     } else {
       setCheckedEmails((prevEmails) =>
-        prevEmails.filter((email) => email !== barber.email)
+        prevEmails.filter((email) => email !== barber.email),
       );
       setCheckMobileNumber((prevMobileNumbers) =>
         prevMobileNumbers.filter(
           (mobileNumber) =>
             mobileNumber !==
-            Number(`${barber?.mobileCountryCode}${barber?.mobileNumber}`)
-        )
+            Number(`${barber?.mobileCountryCode}${barber?.mobileNumber}`),
+        ),
       );
       setCheckBarberNames((prevNames) =>
-        prevNames.filter((name) => name !== barber.name)
+        prevNames.filter((name) => name !== barber.name),
       );
       setCheckAllBarbers(false);
     }
@@ -275,7 +277,7 @@ const BarberList = () => {
       if (!prev) {
         const barberEmails = BarberList.map((b) => b.email);
         const barberMobileNumbers = BarberList.map((b) =>
-          Number(`${b?.mobileCountryCode}${b?.mobileNumber}`)
+          Number(`${b?.mobileCountryCode}${b?.mobileNumber}`),
         );
         const barberNames = BarberList.map((b) => b.name);
         const allCheckedBarbers = BarberList.reduce((acc, barber) => {
@@ -334,8 +336,8 @@ const BarberList = () => {
         maildata,
         setSubject,
         setMessage,
-        setOpenBarberEmail
-      )
+        setOpenBarberEmail,
+      ),
     );
   };
 
@@ -346,7 +348,7 @@ const BarberList = () => {
   };
 
   const adminSendBarberEmail = useSelector(
-    (state) => state.adminSendBarberEmail
+    (state) => state.adminSendBarberEmail,
   );
 
   const { loading: adminSendBarberEmailLoading } = adminSendBarberEmail;
@@ -406,8 +408,8 @@ const BarberList = () => {
         notificationData,
         setBarberTitle,
         setBarberMessage,
-        setOpenBarberMessage
-      )
+        setOpenBarberMessage,
+      ),
     );
 
     // dispatch(adminSendBarberMessageAction(smsdata, setMessage, setOpenBarberMessage))
@@ -420,7 +422,7 @@ const BarberList = () => {
   };
 
   const adminSendNotification = useSelector(
-    (state) => state.adminSendNotification
+    (state) => state.adminSendNotification,
   );
 
   const { loading: adminSendNotificationLoading } = adminSendNotification;
@@ -484,7 +486,7 @@ const BarberList = () => {
 
   const sortFunction = (columnKey) => {
     setSortOrder((prev) =>
-      sortColumn === columnKey && prev === "asc" ? "desc" : "asc"
+      sortColumn === columnKey && prev === "asc" ? "desc" : "asc",
     );
     setSortColumn(columnKey);
   };
@@ -516,17 +518,25 @@ const BarberList = () => {
   const queuehistoryhandler = (item) => {
     localStorage.setItem(
       "QueueHistoryBarber",
-      JSON.stringify({ ...item, barber: true })
+      JSON.stringify({ ...item, barber: true }),
     );
-    navigate("/admin-quehistory");
+    navigate("/admin-quehistory", {
+      state: {
+        barberId: item.barberId,
+      },
+    });
   };
 
   const appointmenthistoryhandler = (item) => {
     localStorage.setItem(
       "AppointmentHistoryBarber",
-      JSON.stringify({ ...item, barber: true })
+      JSON.stringify({ ...item, barber: true }),
     );
-    navigate("/admin-appointmenthistory");
+    navigate("/admin-appointmenthistory", {
+      state: {
+        barberId: item.barberId,
+      },
+    });
   };
 
   const currentSalonType = localStorage.getItem("CurrentSalonType");
@@ -543,8 +553,8 @@ const BarberList = () => {
           {currentSalonType === "Barber Shop"
             ? "Barbers"
             : currentSalonType === "Hair Dresser"
-            ? "Stylists"
-            : "Barber"}{" "}
+              ? "Stylists"
+              : "Barber"}{" "}
           List
         </h2>
         <div>
@@ -836,7 +846,7 @@ const BarberList = () => {
                       onClick={() => toggleHandler(item)}
                       style={{
                         backgroundColor: checkMap?.get(
-                          `${item.salonId}-${item.barberId}`
+                          `${item.salonId}-${item.barberId}`,
                         )
                           ? "#052E16"
                           : "#450a0a",
@@ -853,7 +863,7 @@ const BarberList = () => {
                       onClick={() => toggleClockHandler(item)}
                       style={{
                         backgroundColor: checkMapClock?.get(
-                          `${item.salonId}-${item.barberId}`
+                          `${item.salonId}-${item.barberId}`,
                         )
                           ? "#052E16"
                           : "#450a0a",
@@ -871,7 +881,7 @@ const BarberList = () => {
                       disabled={adminApproveBarberLoading ? true : false}
                       style={{
                         backgroundColor: approveBarberMap?.get(
-                          `${item.salonId}-${item.email}`
+                          `${item.salonId}-${item.email}`,
                         )
                           ? "#052E16"
                           : "#450a0a",
@@ -899,7 +909,7 @@ const BarberList = () => {
                       onClick={(e) => {
                         e.stopPropagation();
                         setSettingsIndex((prev) =>
-                          prev === index ? null : index
+                          prev === index ? null : index,
                         );
                       }}
                     >
@@ -920,13 +930,13 @@ const BarberList = () => {
                               onClick={() => editButtonClicked(item)}
                               disabled={
                                 approveBarberMap?.get(
-                                  `${item.salonId}-${item.email}`
+                                  `${item.salonId}-${item.email}`,
                                 ) === false
                               }
                               style={{
                                 cursor:
                                   approveBarberMap?.get(
-                                    `${item.salonId}-${item.email}`
+                                    `${item.salonId}-${item.email}`,
                                   ) === false
                                     ? "not-allowed"
                                     : "pointer",
@@ -936,8 +946,8 @@ const BarberList = () => {
                               {currentSalonType === "Barber Shop"
                                 ? "barber"
                                 : currentSalonType === "Hair Dresser"
-                                ? "stylist"
-                                : ""}
+                                  ? "stylist"
+                                  : ""}
                             </button>
 
                             <button onClick={() => queuehistoryhandler(item)}>
@@ -970,8 +980,8 @@ const BarberList = () => {
               {currentSalonType === "Barber Shop"
                 ? "barbers"
                 : currentSalonType === "Hair Dresser"
-                ? "stylists"
-                : "barbers"}{" "}
+                  ? "stylists"
+                  : "barbers"}{" "}
               available
             </p>
           </div>
@@ -1129,7 +1139,7 @@ const BarberList = () => {
                       disabled={adminApproveBarberLoading ? true : false}
                     >
                       {approveBarberMap?.get(
-                        `${item.salonId}-${item.email}`
+                        `${item.salonId}-${item.email}`,
                       ) ? (
                         <CheckIcon color={"1ADB6A"} />
                       ) : (
@@ -1151,7 +1161,7 @@ const BarberList = () => {
                       }}
                     >
                       {checkMapClock?.get(
-                        `${item.salonId}-${item.barberId}`
+                        `${item.salonId}-${item.barberId}`,
                       ) ? (
                         <BarberClockIn color={"1ADB6A"} />
                       ) : (
@@ -1207,7 +1217,7 @@ const BarberList = () => {
                     onClick={(e) => {
                       e.stopPropagation();
                       setMobileSettingIndex((prev) =>
-                        prev === index ? null : index
+                        prev === index ? null : index,
                       );
                     }}
                   >
@@ -1228,13 +1238,13 @@ const BarberList = () => {
                           onClick={() => editButtonClicked(item)}
                           disabled={
                             approveBarberMap?.get(
-                              `${item.salonId}-${item.email}`
+                              `${item.salonId}-${item.email}`,
                             ) === false
                           }
                           style={{
                             cursor:
                               approveBarberMap?.get(
-                                `${item.salonId}-${item.email}`
+                                `${item.salonId}-${item.email}`,
                               ) === false
                                 ? "not-allowed"
                                 : "pointer",
@@ -1244,8 +1254,8 @@ const BarberList = () => {
                           {currentSalonType === "Barber Shop"
                             ? "barber"
                             : currentSalonType === "Hair Dresser"
-                            ? "stylist"
-                            : ""}
+                              ? "stylist"
+                              : ""}
                         </button>
                       </li>
                       <li>
@@ -1262,7 +1272,7 @@ const BarberList = () => {
                       <li>
                         <button
                           style={{
-                            color: "red"
+                            color: "red",
                           }}
                           onClick={(e) => {
                             e.stopPropagation();
@@ -1286,8 +1296,8 @@ const BarberList = () => {
             {currentSalonType === "Barber Shop"
               ? "barber"
               : currentSalonType === "Hair Dresser"
-              ? "stylist"
-              : "barbers"}{" "}
+                ? "stylist"
+                : "barbers"}{" "}
             list available
           </p>
         </div>

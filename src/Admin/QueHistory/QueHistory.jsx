@@ -26,6 +26,9 @@ import api from "../../Redux/api/Api";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const QueHistory = () => {
+  const location = useLocation();
+  const barberId = location.state?.barberId;
+
   const [mobileWidth, setMobileWidth] = useState(
     window.innerWidth <= 430 ? true : false,
   );
@@ -321,6 +324,7 @@ const QueHistory = () => {
         `/api/queueHistory/getQueueHistoryBySalonId`,
         {
           salonId,
+          barberId,
           from: startDate,
           to: endDate,
           page,
@@ -360,7 +364,7 @@ const QueHistory = () => {
     fetchData(controller.signal);
 
     return () => controller.abort();
-  }, [page, query, selectedDates, rowsPerPage, salonId, mobileWidth]);
+  }, [page, query, selectedDates, rowsPerPage, salonId, mobileWidth, barberId]);
 
   return mobileWidth ? (
     <div
@@ -822,7 +826,6 @@ const QueHistory = () => {
           </div>
         </div>
       </div>
-
     </section>
   );
 };
