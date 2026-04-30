@@ -12,6 +12,7 @@ import api from "../../api/Api";
 export const getAdminAppointmentHistoryAction =
   (
     salonId,
+    barberId,
     startDate,
     endDate,
     page,
@@ -27,6 +28,7 @@ export const getAdminAppointmentHistoryAction =
         "/api/appointmentHistory/getAppointmentHistoryBySalonId",
         {
           salonId,
+          barberId,
           from: startDate,
           to: endDate,
           page,

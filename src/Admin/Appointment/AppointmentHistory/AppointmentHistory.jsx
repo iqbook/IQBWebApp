@@ -27,8 +27,35 @@ import api from "../../../Redux/api/Api";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const QueHistory = () => {
+  const salonId = useSelector(
+    (state) => state.AdminLoggedInMiddleware.adminSalonId,
+  );
   const location = useLocation();
-  const barberId = location.state?.barberId;
+
+  const [openFilter, setOpenFilter] = useState(false);
+
+  const [filterBarberList, setFilterBarberList] = useState([]);
+  const [selectedFilterBarber, setSelectedFilterBarber] = useState(null);
+
+  useEffect(() => {
+    setSelectedFilterBarber(location.state || null);
+  }, [location.state]);
+
+  useEffect(() => {
+    const fetchBarberListByApptHistory = async () => {
+      try {
+        const { data } = await api.post(`/api/admin/getAppointmentBarbers`, {
+          salonId,
+        });
+
+        setFilterBarberList(data.response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchBarberListByApptHistory();
+  }, []);
 
   const [mobileWidth, setMobileWidth] = useState(
     window.innerWidth <= 430 ? true : false,
@@ -100,12 +127,6 @@ const QueHistory = () => {
 
   const darkMode = useSelector(darkmodeSelector);
 
-  const darkmodeOn = darkMode === "On";
-
-  const salonId = useSelector(
-    (state) => state.AdminLoggedInMiddleware.adminSalonId,
-  );
-
   const dispatch = useDispatch();
 
   const [search, setSearch] = useState("");
@@ -161,6 +182,7 @@ const QueHistory = () => {
         dispatch(
           getAdminAppointmentHistoryAction(
             salonId,
+            selectedFilterBarber?.barberId,
             startDate,
             endDate,
             page,
@@ -174,6 +196,7 @@ const QueHistory = () => {
       dispatch(
         getAdminAppointmentHistoryAction(
           salonId,
+          selectedFilterBarber?.barberId,
           "",
           "",
           page,
@@ -185,7 +208,16 @@ const QueHistory = () => {
     }
 
     return abortIfPending;
-  }, [salonId, dispatch, selectedDates, rowsPerPage, page, query, mobileWidth]);
+  }, [
+    salonId,
+    dispatch,
+    selectedDates,
+    rowsPerPage,
+    page,
+    query,
+    selectedFilterBarber?.barberId,
+    mobileWidth,
+  ]);
 
   const getAdminAppointmentHistory = useSelector(
     (state) => state.getAdminAppointmentHistory,
@@ -257,6 +289,7 @@ const QueHistory = () => {
       customerEmail: "",
       customer: false,
     });
+    setSelectedFilterBarber(null);
   };
 
   // Mobile View
@@ -327,7 +360,7 @@ const QueHistory = () => {
         `/api/appointmentHistory/getAppointmentHistoryBySalonId`,
         {
           salonId,
-          barberId: barberId,
+          barberId: selectedFilterBarber?.barberId,
           from: startDate,
           to: endDate,
           page,
@@ -353,7 +386,6 @@ const QueHistory = () => {
 
   useEffect(() => {
     if (!mobileWidth) return;
-
     // ❌ stop if only 1 date selected
     if (selectedDates.length === 1) return;
 
@@ -367,7 +399,15 @@ const QueHistory = () => {
     fetchData(controller.signal);
 
     return () => controller.abort();
-  }, [page, query, selectedDates, rowsPerPage, salonId, mobileWidth, barberId]);
+  }, [
+    page,
+    query,
+    selectedDates,
+    rowsPerPage,
+    salonId,
+    mobileWidth,
+    selectedFilterBarber?.barberId,
+  ]);
 
   return mobileWidth ? (
     <>
@@ -383,6 +423,9 @@ const QueHistory = () => {
                   value={query}
                   onChange={(e) => {
                     setPage(1);
+                    if (selectedFilterBarber) {
+                      setSelectedFilterBarber(null);
+                    }
                     setQuery(e.target.value);
                   }}
                 />
@@ -401,6 +444,7 @@ const QueHistory = () => {
                   SetRowsPerPage(10);
                   setQuery("");
                   setPage(1);
+                  setSelectedFilterBarber(null);
                 }}
               >
                 <ResetIcon />
@@ -449,6 +493,59 @@ const QueHistory = () => {
               <button onClick={() => setMobileSearchOpen(true)}>
                 <SearchIcon />
               </button>
+
+              <div className={style.filterBarberContainer}>
+                <button
+                  onClick={() => setOpenFilter(true)}
+                  style={{
+                    width: "6rem",
+                  }}
+                >
+                  Filter
+                </button>
+
+                {openFilter && (
+                  <ClickAwayListener onClickAway={() => setOpenFilter(false)}>
+                    <div className={style.filterBarberDropdown}>
+                      <div className={style.listContainer}>
+                        {filterBarberList?.map((item) => {
+                          return (
+                            <div key={item.barberId}>
+                              <input
+                                type="checkbox"
+                                onChange={() => {
+                                  setPage(1);
+                                  setQuery("");
+                                  setSelectedFilterBarber(item);
+                                }}
+                                checked={
+                                  selectedFilterBarber?.barberId ===
+                                  item?.barberId
+                                }
+                              />
+                              <p>{item.name}</p>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      <div className={style.footer}>
+                        <button
+                          onClick={() => {
+                            setPage(1);
+                            setSelectedFilterBarber(null);
+                          }}
+                        >
+                          Reset
+                        </button>
+                        <button onClick={() => setOpenFilter(false)}>
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                  </ClickAwayListener>
+                )}
+              </div>
             </div>
           )}
         </div>
@@ -600,9 +697,62 @@ const QueHistory = () => {
             value={query}
             onChange={(e) => {
               setPage(1);
+              if (selectedFilterBarber) {
+                setSelectedFilterBarber(null);
+              }
               setQuery(e.target.value);
             }}
           />
+
+          <div className={style.filterBarberContainer}>
+            <button
+              onClick={() => setOpenFilter(true)}
+              style={{
+                width: "6rem",
+              }}
+            >
+              Filter
+            </button>
+
+            {openFilter && (
+              <ClickAwayListener onClickAway={() => setOpenFilter(false)}>
+                <div className={style.filterBarberDropdown}>
+                  <div className={style.listContainer}>
+                    {filterBarberList?.map((item) => {
+                      return (
+                        <div key={item.barberId}>
+                          <input
+                            type="checkbox"
+                            onChange={() => {
+                              setPage(1);
+                              setQuery("");
+                              setSelectedFilterBarber(item);
+                            }}
+                            checked={
+                              selectedFilterBarber?.barberId === item?.barberId
+                            }
+                          />
+                          <p>{item.name}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className={style.footer}>
+                    <button
+                      onClick={() => {
+                        setPage(1);
+                        setSelectedFilterBarber(null);
+                      }}
+                    >
+                      Reset
+                    </button>
+                    <button onClick={() => setOpenFilter(false)}>Close</button>
+                  </div>
+                </div>
+              </ClickAwayListener>
+            )}
+          </div>
         </div>
       </div>
 

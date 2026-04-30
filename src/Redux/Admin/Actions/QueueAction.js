@@ -192,6 +192,7 @@ export const adminCancelQueueAction =
 export const getAdminQueueListHistoryAction =
   (
     salonId,
+    barberId,
     startDate,
     endDate,
     // barberId,
@@ -209,9 +210,9 @@ export const getAdminQueueListHistoryAction =
         "/api/queueHistory/getQueueHistoryBySalonId",
         {
           salonId,
+          barberId: barberId,
           from: startDate,
           to: endDate,
-          // barberId: barberId,
           // customerEmail: customerEmail,
           page,
           limit: rowsPerPage,
