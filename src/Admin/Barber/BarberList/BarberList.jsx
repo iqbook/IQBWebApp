@@ -523,6 +523,7 @@ const BarberList = () => {
     navigate("/admin-quehistory", {
       state: {
         barberId: item.barberId,
+        name: item.name,
       },
     });
   };
@@ -535,6 +536,7 @@ const BarberList = () => {
     navigate("/admin-appointmenthistory", {
       state: {
         barberId: item.barberId,
+        name: item.name,
       },
     });
   };
