@@ -101,7 +101,6 @@ const EditSalon = () => {
     }
   }, [AdminSalonLogo]);
 
-
   const email = useSelector(
     (state) => state.AdminLoggedInMiddleware.adminEmail,
   );
@@ -2057,6 +2056,8 @@ const EditSalon = () => {
     }
   }, [country]);
 
+ 
+
   if (!isLoaded) return <div>Loading...</div>;
 
   return (
@@ -2441,7 +2442,6 @@ const EditSalon = () => {
                             <div
                               style={{
                                 marginTop: "1.5rem",
-                                // padding: "14px",
                                 borderRadius: "1rem",
                                 background: "var(--bg-primary)",
                                 display: "flex",
@@ -2449,32 +2449,6 @@ const EditSalon = () => {
                                 gap: "1rem",
                               }}
                             >
-                              {/* <div>
-                                <strong>Lat:</strong> {latitude}
-                              </div>
-                              <div>
-                                <strong>Lng:</strong> {longitude}
-                              </div>
-                              <div>
-                                <strong>Address:</strong> {address || "—"}
-                              </div>
-                              <div>
-                                <strong>City:</strong> {city || "—"}
-                              </div>
-                              <div>
-                                <strong>Country:</strong> {country || "—"}
-                              </div>
-
-                              {postCode && (
-                                <div>
-                                  <strong>PostCode:</strong> {postCode}
-                                </div>
-                              )}
-
-                              <div>
-                                <strong>Timezone:</strong> {timezone || "—"}
-                              </div> */}
-
                               <p>
                                 <span style={{ fontWeight: 700 }}>
                                   Location:
