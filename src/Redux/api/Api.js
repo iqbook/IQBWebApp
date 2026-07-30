@@ -2,8 +2,9 @@ import axios from 'axios';
 
 // const BASE_URL = 'http://localhost:8001';
 
-const BASE_URL = "https://iqb-final.onrender.com"
-// const BASE_URL = "https://iqb-final-dev.onrender.com"
+// const BASE_URL = "https://iqb-final.onrender.com" // live url
+// const BASE_URL = "https://iqb-final-dev.onrender.com" // Dev url
+const BASE_URL = "https://iqb-final-super-vip-service.onrender.com"
 
 export const api = axios.create({
     baseURL: BASE_URL,

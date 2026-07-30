@@ -393,6 +393,8 @@ const EditSalon = () => {
     setServiceTypeOpen(false);
   };
 
+  console.log(vipService)
+
   const fileInputRef = useRef(null);
 
   const handleSalonLogoButtonClick = () => {
@@ -583,8 +585,6 @@ const EditSalon = () => {
 
   const [selectedServices, setSelectedServices] = useState([]);
   const [get_services_loading, set_get_services_loading] = useState(false);
-
-  // console.log("selectedServices ", selectedServices);
 
   const fetch_salon_services = async () => {
     try {
@@ -1538,7 +1538,7 @@ const EditSalon = () => {
           type: "text",
           placeholder: "Select Service Type",
           dropdown: true,
-          value: `${vipService ? "VIP" : "Regular"}`,
+          value: `${vipService}`,
         },
         {
           name: "serviceCategory",
@@ -2056,7 +2056,7 @@ const EditSalon = () => {
     }
   }, [country]);
 
- 
+  const servicesTypeData = ["Regular", "VIP", "Super VIP"];
 
   if (!isLoaded) return <div>Loading...</div>;
 
@@ -2630,16 +2630,18 @@ const EditSalon = () => {
                                         event.stopPropagation()
                                       }
                                     >
-                                      <button
-                                        onClick={() => vipServiceHandler(false)}
-                                      >
-                                        Regular
-                                      </button>
-                                      <button
-                                        onClick={() => vipServiceHandler(true)}
-                                      >
-                                        VIP
-                                      </button>
+                                      {servicesTypeData.map((item) => {
+                                        return (
+                                          <button
+                                            key={item}
+                                            onClick={() =>
+                                              vipServiceHandler(item)
+                                            }
+                                          >
+                                            {item}
+                                          </button>
+                                        );
+                                      })}
                                     </div>
                                   </ClickAwayListener>
                                 )}
