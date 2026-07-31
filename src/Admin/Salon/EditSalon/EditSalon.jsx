@@ -101,7 +101,6 @@ const EditSalon = () => {
     }
   }, [AdminSalonLogo]);
 
-
   const email = useSelector(
     (state) => state.AdminLoggedInMiddleware.adminEmail,
   );
@@ -382,14 +381,14 @@ const EditSalon = () => {
     response: AllTimezones,
   } = getAdminAllTimezone;
 
-  const [vipService, setVipService] = useState(false);
+  const [vipService, setVipService] = useState("Regular");
   const [vipServiceDrop, setVipServiceDrop] = useState(false);
 
   const vipServiceDropHandler = () => {
     setVipServiceDrop((prev) => !prev);
   };
 
-  const vipServiceHandler = (value) => {
+  const serviceTypeHandler = (value) => {
     setVipService(value);
     setServiceTypeOpen(false);
   };
@@ -755,7 +754,7 @@ const EditSalon = () => {
     setSelectedLogo({ url: "", public_id: "" });
     setServiceName("");
     setServicePrice("");
-    setVipService(false);
+    setVipService("Regular");
     setServiceDesc("");
     setServiceEWT("");
     setServiceCode("");
@@ -1433,74 +1432,7 @@ const EditSalon = () => {
           placeholder: "Select business type",
           value: salonType,
           readOnly: true,
-        },
-        // {
-        //   name: "address",
-        //   label: "Salon Address",
-        //   type: "text",
-        //   dropdown: false,
-        //   placeholder: "Enter salon address",
-        //   value: address,
-        //   onChange: (e) => {
-        //     setSalonAddressError("");
-        //     setAddress(e.target.value);
-        //   },
-        //   error: salonAddressError,
-        // },
-        // {
-        //   name: "postcode",
-        //   label: "Salon Post Code",
-        //   type: "text",
-        //   dropdown: false,
-        //   placeholder: "Enter salon postcode",
-        //   value: postCode,
-        //   readOnly: true,
-        // },
-        // {
-        //   name: "lattitude",
-        //   label: "Latitude",
-        //   type: "text",
-        //   dropdown: false,
-        //   placeholder: "Lattiude",
-        //   value: latitude,
-        //   readOnly: true,
-        // },
-        // {
-        //   name: "longitude",
-        //   label: "Longitude",
-        //   type: "text",
-        //   dropdown: false,
-        //   placeholder: "Longitude",
-        //   value: longitude,
-        //   readOnly: true,
-        // },
-        // {
-        //   name: "country",
-        //   label: "Country",
-        //   type: "text",
-        //   dropdown: false,
-        //   placeholder: "Select country",
-        //   value: country,
-        //   readOnly: true,
-        // },
-        // {
-        //   name: "city",
-        //   label: "City",
-        //   type: "text",
-        //   dropdown: false,
-        //   placeholder: "Select city",
-        //   value: city,
-        //   readOnly: true,
-        // },
-        // {
-        //   name: "timezone",
-        //   label: "Timezone",
-        //   type: "text",
-        //   dropdown: false,
-        //   placeholder: "Select timezone",
-        //   value: timezone,
-        //   readOnly: true,
-        // },
+        }
       ],
     },
     {
@@ -1539,7 +1471,7 @@ const EditSalon = () => {
           type: "text",
           placeholder: "Select Service Type",
           dropdown: true,
-          value: `${vipService ? "VIP" : "Regular"}`,
+          value: vipService,
         },
         {
           name: "serviceCategory",
@@ -1814,48 +1746,6 @@ const EditSalon = () => {
   const [serviceTypeOpen, setServiceTypeOpen] = useState(false);
   const [serviceCategoryOpen, setServiceCategoryOpen] = useState(false);
 
-  // React Map logic
-
-  // const { isLoaded } = useJsApiLoader({
-  //   id: "google-map-script",
-  //   googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-  // });
-
-  // const [map, setMap] = React.useState(null);
-  // const [markerPosition, setMarkerPosition] = React.useState(null);
-
-  // const [center, setCenter] = useState({
-  //   lat: currentSalon?.location.coordinates.latitude,
-  //   lng: currentSalon?.location.coordinates.longitude,
-  // });
-
-  // const onLoad = React.useCallback(
-  //   function callback(map) {
-  //     // This is just an example of getting and using the map instance!!! don't just blindly copy!
-  //     const bounds = new window.google.maps.LatLngBounds(center);
-  //     map.fitBounds(bounds);
-
-  //     setMap(map);
-  //   },
-  //   [center]
-  // );
-
-  // const onUnmount = React.useCallback(function callback(map) {
-  //   setMap(null);
-  // }, []);
-
-  // const handleMapClick = (event) => {
-  //   const lat = event.latLng.lat();
-  //   const lng = event.latLng.lng();
-
-  //   // Set marker position to clicked location
-  //   setMarkerPosition({ lat, lng });
-  //   setLatitude(lat);
-  //   setLongitude(lng);
-  // };
-
-  // React Map
-
   useEffect(() => {
     if (latitude && longitude) {
       const pos = { lat: Number(latitude), lng: Number(longitude) };
@@ -2056,6 +1946,8 @@ const EditSalon = () => {
       fetchSpecificCountryDetails();
     }
   }, [country]);
+
+  const servicesTypeList = ["Regular", "VIP", "Super VIP"];
 
   if (!isLoaded) return <div>Loading...</div>;
 
@@ -2656,16 +2548,19 @@ const EditSalon = () => {
                                         event.stopPropagation()
                                       }
                                     >
-                                      <button
-                                        onClick={() => vipServiceHandler(false)}
-                                      >
-                                        Regular
-                                      </button>
-                                      <button
-                                        onClick={() => vipServiceHandler(true)}
-                                      >
-                                        VIP
-                                      </button>
+                                      {servicesTypeList?.map((item) => {
+                                        return (
+                                          <button
+                                            key={item}
+                                            onClick={() =>
+                                              serviceTypeHandler(item)
+                                            }
+                                          >
+                                            {item}
+                                          </button>
+                                        );
+                                      })}
+                                      
                                     </div>
                                   </ClickAwayListener>
                                 )}
