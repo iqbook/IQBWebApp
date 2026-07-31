@@ -124,71 +124,6 @@ const CreateSalon = () => {
   const [longitude, setLongitude] = useState(null);
   const [error, setError] = useState(null);
 
-  // const geoLocationHandler = () => {
-  //   if ("geolocation" in navigator) {
-  //     navigator.geolocation.getCurrentPosition(
-  //       (position) => {
-  //         const latitude = position.coords.latitude;
-  //         const longitude = position.coords.longitude;
-  //         setLatitude(latitude);
-  //         setLongitude(longitude);
-  //         setCenter({ lat: latitude, lng: longitude });
-  //         const existingData =
-  //           JSON.parse(localStorage.getItem("salondata")) || {};
-
-  //         localStorage.setItem(
-  //           "salondata",
-  //           JSON.stringify({
-  //             ...existingData,
-  //             latitude: latitude,
-  //             longitude: longitude,
-  //           }),
-  //         );
-
-  //         setSalonCoordinateError("");
-  //       },
-  //       (error) => {
-  //         if (error.code === error.PERMISSION_DENIED) {
-  //           setError(
-  //             "You denied access to your geolocation. Please enable it in your browser settings.",
-  //           );
-  //         } else {
-  //           setError("Error accessing geolocation: " + error.message);
-  //         }
-  //       },
-  //     );
-  //   } else {
-  //     setError("Geolocation is not available in your browser.");
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if ("geolocation" in navigator) {
-  //     navigator.geolocation.getCurrentPosition(
-  //       (position) => {
-  //         const latitude = position.coords.latitude;
-  //         const longitude = position.coords.longitude;
-
-  //         setCenter({
-  //           lat: latitude,
-  //           lng: longitude,
-  //         });
-  //       },
-  //       (error) => {
-  //         if (error.code === error.PERMISSION_DENIED) {
-  //           setError(
-  //             "You denied access to your geolocation. Please enable it in your browser settings.",
-  //           );
-  //         } else {
-  //           setError("Error accessing geolocation: " + error.message);
-  //         }
-  //       },
-  //     );
-  //   } else {
-  //     setError("Geolocation is not available in your browser.");
-  //   }
-  // }, []);
-
   const [salonEmail, setSalonEmail] = useState("");
   const [salonName, setSalonName] = useState("");
   const [salonDesc, setSalonDesc] = useState("");
@@ -396,9 +331,11 @@ const CreateSalon = () => {
     response: AllTimezones,
   } = getAdminAllTimezone;
 
-  const [vipService, setVipService] = useState(false);
+  const servicesTypeList = ["Regular", "VIP", "Super VIP"];
 
-  const vipServiceHandler = (value) => {
+  const [vipService, setVipService] = useState("Regular");
+
+  const serviceTypeHandler = (value) => {
     setVipService(value);
     setServiceTypeOpen(false);
   };
@@ -660,7 +597,7 @@ const CreateSalon = () => {
     setSelectedLogo({ url: "", public_id: "" });
     setServiceName("");
     setServicePrice("");
-    setVipService(false);
+    setVipService("Regular");
     setServiceDesc("");
     setServiceEWT("");
     setServiceCategoryName("");
@@ -1154,67 +1091,6 @@ const CreateSalon = () => {
           value: salonType,
           error: salonTypeError,
         },
-        // {
-        //   name: "address",
-        //   label: "Salon Address",
-        //   type: "text",
-        //   dropdown: false,
-        //   placeholder: "Enter salon address",
-        //   onChange: setHandler,
-        //   value: address,
-        //   setState: setAddress,
-        //   setError: setSalonAddressError,
-        //   error: salonAddressError,
-        // },
-        // {
-        //   name: "postcode",
-        //   label: "Salon Post Code",
-        //   type: "text",
-        //   dropdown: false,
-        //   placeholder: "Enter salon postcode",
-        //   onChange: setHandler,
-        //   value: postCode,
-        //   setState: setPostCode,
-        //   setError: setPostCodeError,
-        //   error: postCodeError,
-        // },
-        // {
-        //   name: "lattitude",
-        //   label: "Latitude",
-        //   type: "text",
-        //   dropdown: false,
-        //   placeholder: "Lattiude",
-        //   value: latitude,
-        // },
-        // {
-        //   name: "longitude",
-        //   label: "Salon Longitude",
-        //   type: "text",
-        //   dropdown: false,
-        //   placeholder: "Longitude",
-        //   value: longitude,
-        // },
-        // {
-        //   name: "country",
-        //   label: "Country",
-        //   type: "text",
-        //   dropdown: true,
-        //   placeholder: "Select country",
-        // },
-        // {
-        //   name: "city",
-        //   label: "City",
-        //   type: "text",
-        //   dropdown: true,
-        //   placeholder: "Select city",
-        // },
-        // {
-        //   name: "timezone",
-        //   label: "Timezone",
-        //   type: "text",
-        //   dropdown: true,
-        //   placeholder: "Select timezone",
-        // },
       ],
     },
     {
@@ -1257,7 +1133,7 @@ const CreateSalon = () => {
           type: "text",
           placeholder: "Select Service Type",
           dropdown: true,
-          value: `${vipService ? "VIP" : "Regular"}`,
+          value: vipService,
         },
         {
           name: "serviceCategory",
@@ -1634,56 +1510,6 @@ const CreateSalon = () => {
   const [timezoneOpen, setTimezoneOpen] = useState(false);
   const [serviceTypeOpen, setServiceTypeOpen] = useState(false);
   const [serviceCategoryOpen, setServiceCategoryOpen] = useState(false);
-
-  // React Map logic
-
-  // const { isLoaded } = useJsApiLoader({
-  //   id: "google-map-script",
-  //   googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-  // });
-
-  // const [map, setMap] = React.useState(null);
-  // const [markerPosition, setMarkerPosition] = React.useState(null);
-
-  // const [center, setCenter] = useState({
-  //   lat: 37.7749,
-  //   lng: -122.4194,
-  // });
-
-  // const onLoad = React.useCallback(
-  //   function callback(map) {
-  //     // This is just an example of getting and using the map instance!!! don't just blindly copy!
-  //     const bounds = new window.google.maps.LatLngBounds(center);
-  //     map.fitBounds(bounds);
-
-  //     setMap(map);
-  //   },
-  //   [center],
-  // );
-
-  // const onUnmount = React.useCallback(function callback(map) {
-  //   setMap(null);
-  // }, []);
-
-  // const handleMapClick = (event) => {
-  //   const lat = event.latLng.lat();
-  //   const lng = event.latLng.lng();
-
-  //   // Set marker position to clicked location
-  //   setMarkerPosition({ lat, lng });
-  //   setLatitude(lat);
-  //   setLongitude(lng);
-
-  //   const existingData = JSON.parse(localStorage.getItem("salondata")) || {};
-  //   localStorage.setItem(
-  //     "salondata",
-  //     JSON.stringify({
-  //       ...existingData,
-  //       ["latitude"]: lat,
-  //       ["longitude"]: lng,
-  //     }),
-  //   );
-  // };
 
   // React Map
 
@@ -2179,7 +2005,6 @@ const CreateSalon = () => {
                             <div
                               style={{
                                 marginTop: "1.5rem",
-                                // padding: "14px",
                                 borderRadius: "1rem",
                                 background: "var(--bg-primary)",
                                 display: "flex",
@@ -2187,34 +2012,6 @@ const CreateSalon = () => {
                                 gap: "1rem",
                               }}
                             >
-                              {/* <div>
-                                <strong>Lat:</strong>{" "}
-                                {latitude}
-                              </div>
-                              <div>
-                                <strong>Lng:</strong>{" "}
-                                {longitude}
-                              </div>
-                              <div>
-                                <strong>Address:</strong> {address || "—"}
-                              </div>
-                              <div>
-                                <strong>City:</strong> {city || "—"}
-                              </div>
-                              <div>
-                                <strong>Country:</strong> {country || "—"}
-                              </div>
-
-                              {postCode && (
-                                <div>
-                                  <strong>PostCode:</strong> {postCode}
-                                </div>
-                              )}
-
-                              <div>
-                                <strong>Timezone:</strong> {timezone || "—"}
-                              </div> */}
-
                               <p>
                                 <span style={{ fontWeight: 700 }}>
                                   Location:
@@ -2262,7 +2059,6 @@ const CreateSalon = () => {
                                 borderRadius: "0.8rem",
                                 border: "0.1rem solid var(--border-secondary)",
                                 backgroundColor: "var(--section-bg-color)",
-                                // color: "#333",
                                 color: "var(--text-primary)",
                                 fontSize: "1.5rem",
                                 cursor: "pointer",
@@ -2289,524 +2085,6 @@ const CreateSalon = () => {
                             </button>
                           </div>
                         </div>
-
-                        {/* {field.dropdown ? (
-                          field.name === "businesstype" ? (
-                            <>
-                              <div
-                                className={`${style.select_container}`}
-                                onClick={() =>
-                                  setBusinessTypeOpen((prev) => !prev)
-                                }
-                              >
-                                <input
-                                  type={field.type}
-                                  name={field.name}
-                                  value={field.value}
-                                  placeholder={field.placeholder}
-                                  readOnly
-                                />
-                                <div>
-                                  <DropdownIcon />
-                                </div>
-
-                                {businessTypeOpen ? (
-                                  <ClickAwayListener
-                                    onClickAway={() =>
-                                      setBusinessTypeOpen(false)
-                                    }
-                                  >
-                                    <div
-                                      className={`${style.select_dropdown_container}`}
-                                      onClick={(event) =>
-                                        event.stopPropagation()
-                                      }
-                                    >
-                                      <button
-                                        onClick={() =>
-                                          field.salonTypeHandler("Barber Shop")
-                                        }
-                                      >
-                                        Barber Shop
-                                      </button>
-                                      <button
-                                        onClick={() =>
-                                          field.salonTypeHandler("Hair Dresser")
-                                        }
-                                      >
-                                        Hair Dresser
-                                      </button>
-                                    </div>
-                                  </ClickAwayListener>
-                                ) : null}
-                              </div>
-                              {salonTypeError ? (
-                                <p style={{ color: "red", fontSize: "1.4rem" }}>
-                                  {salonTypeError}
-                                </p>
-                              ) : null}
-                            </>
-                          ) 
-                          
-                          : field.name === "country" ? (
-                            <>
-                              <div
-                                className={`${style.select_container}`}
-                                onClick={() => setCountryOpen((prev) => !prev)}
-                              >
-                                <input
-                                  type={field.type}
-                                  name={field.name}
-                                  value={country}
-                                  placeholder={field.placeholder}
-                                  readOnly
-                                />
-                                <div>
-                                  <DropdownIcon />
-                                </div>
-
-                                {countryOpen ? (
-                                  <ClickAwayListener
-                                    onClickAway={() => setCountryOpen(false)}
-                                  >
-                                    <div
-                                      className={`${style.select_search_dropdown_container}`}
-                                      onClick={(event) =>
-                                        event.stopPropagation()
-                                      }
-                                    >
-                                      <div
-                                        className={`${style.search_box} ${darkmodeOn && style.dark}`}
-                                      >
-                                        <input
-                                          type="text"
-                                          placeholder="Search Country"
-                                          value={searchCountry}
-                                          onChange={(e) =>
-                                            searchCountryHandler(e.target.value)
-                                          }
-                                        />
-
-                                        <div>
-                                          <SearchIcon />
-                                        </div>
-                                      </div>
-                                      {getAdminAllCountriesLoading ? (
-                                        <Skeleton
-                                          count={2}
-                                          height={"4rem"}
-                                          width={"100%"}
-                                          baseColor={"var(--loader-bg-color)"}
-                                          highlightColor={
-                                            "var(--loader-highlight-color)"
-                                          }
-                                          style={{
-                                            borderRadius: "0.3rem",
-                                            marginBottom: "1rem",
-                                          }}
-                                        />
-                                      ) : getAdminAllCountriesResolve &&
-                                        copyCountriesdata?.length > 0 ? (
-                                        copyCountriesdata?.map((c) => (
-                                          <button
-                                            key={c._id}
-                                            onClick={() => setCountryHandler(c)}
-                                          >
-                                            {c.name}
-                                          </button>
-                                        ))
-                                      ) : (
-                                        <div>
-                                          <p
-                                            style={{
-                                              position: "absolute",
-                                              top: "60%",
-                                              left: "50%",
-                                              transform:
-                                                "translate(-50%, -50%)",
-                                              fontSize: "1.4rem",
-                                            }}
-                                          >
-                                            No countries available
-                                          </p>
-                                        </div>
-                                      )}
-                                    </div>
-                                  </ClickAwayListener>
-                                ) : null}
-                              </div>
-                              {countryError ? (
-                                <p style={{ color: "red", fontSize: "1.4rem" }}>
-                                  {countryError}
-                                </p>
-                              ) : null}
-                            </>
-                          ) : field.name === "city" ? (
-                            countryCodePresent ? (
-                              <>
-                                <div
-                                  className={`${style.select_container}`}
-                                  onClick={() => setCityOpen((prev) => !prev)}
-                                >
-                                  <input
-                                    type={field.type}
-                                    name={field.name}
-                                    value={city}
-                                    placeholder={field.placeholder}
-                                    readOnly
-                                  />
-                                  <div>
-                                    <DropdownIcon />
-                                  </div>
-
-                                  {cityOpen ? (
-                                    <ClickAwayListener
-                                      onClickAway={() => setCityOpen(false)}
-                                    >
-                                      <div
-                                        className={`${style.select_search_dropdown_container}`}
-                                        onClick={(event) =>
-                                          event.stopPropagation()
-                                        }
-                                      >
-                                        <div
-                                          className={`${style.search_box} ${darkmodeOn && style.dark}`}
-                                        >
-                                          <input
-                                            type="text"
-                                            placeholder="Search City"
-                                            value={searchCity}
-                                            onChange={(e) =>
-                                              searchCityHandler(e.target.value)
-                                            }
-                                          />
-
-                                          <div>
-                                            <SearchIcon />
-                                          </div>
-                                        </div>
-
-                                        {getAdminAllCitiesLoading ? (
-                                          <Skeleton
-                                            count={2}
-                                            height={"4rem"}
-                                            width={"100%"}
-                                            baseColor={"var(--loader-bg-color)"}
-                                            highlightColor={
-                                              "var(--loader-highlight-color)"
-                                            }
-                                            style={{
-                                              borderRadius: "0.3rem",
-                                              marginBottom: "1rem",
-                                            }}
-                                          />
-                                        ) : getAdminAllCitiesResolve &&
-                                          copyCitiesData?.length > 0 ? (
-                                          copyCitiesData.map((c, index) => (
-                                            <button
-                                              key={index}
-                                              onClick={() => setCityHandler(c)}
-                                            >
-                                              {c.name}
-                                            </button>
-                                          ))
-                                        ) : (
-                                          <div>
-                                            <p
-                                              style={{
-                                                position: "absolute",
-                                                top: "60%",
-                                                left: "50%",
-                                                transform:
-                                                  "translate(-50%, -50%)",
-                                                fontSize: "1.4rem",
-                                              }}
-                                            >
-                                              No cities available
-                                            </p>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </ClickAwayListener>
-                                  ) : null}
-                                </div>
-                                {!countryCodePresent ? (
-                                  <p
-                                    style={{ color: "red", fontSize: "1.4rem" }}
-                                  >
-                                    Please select country
-                                  </p>
-                                ) : (
-                                  cityError && (
-                                    <p
-                                      style={{
-                                        color: "red",
-                                        fontSize: "1.4rem",
-                                      }}
-                                    >
-                                      {cityError}
-                                    </p>
-                                  )
-                                )}
-                              </>
-                            ) : null
-                          ) : (
-                            field.name === "timezone" &&
-                            (countryCodePresent ? (
-                              <>
-                                <div
-                                  className={`${style.select_container}`}
-                                  onClick={() =>
-                                    setTimezoneOpen((prev) => !prev)
-                                  }
-                                >
-                                  <input
-                                    type={field.type}
-                                    name={field.name}
-                                    value={timezone}
-                                    placeholder={field.placeholder}
-                                    readOnly
-                                  />
-                                  <div>
-                                    <DropdownIcon />
-                                  </div>
-
-                                  {timezoneOpen ? (
-                                    <ClickAwayListener
-                                      onClickAway={() => setTimezoneOpen(false)}
-                                    >
-                                      <div
-                                        className={`${style.select_dropdown_container}`}
-                                        onClick={(event) =>
-                                          event.stopPropagation()
-                                        }
-                                      >
-                                        {getAdminAllTimezoneLoading ? (
-                                          <div
-                                            style={{
-                                              height: "100%",
-                                              width: "100%",
-                                              display: "grid",
-                                              placeItems: "center",
-                                            }}
-                                          >
-                                            <ButtonLoader color={"#000"} />
-                                          </div>
-                                        ) : getAdminAllTimezoneResolve &&
-                                          AllTimezones?.length > 0 ? (
-                                          AllTimezones.map((c, index) => (
-                                            <button
-                                              key={index}
-                                              onClick={() =>
-                                                setTimezoneHandler(c)
-                                              }
-                                            >
-                                              {c}
-                                            </button>
-                                          ))
-                                        ) : (
-                                          <div
-                                            style={{
-                                              display: "grid",
-                                              placeItems: "center",
-                                              width: "100%",
-                                              height: "100%",
-                                            }}
-                                          >
-                                            <p style={{ fontSize: "1.4rem" }}>
-                                              No timezone available
-                                            </p>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </ClickAwayListener>
-                                  ) : null}
-                                </div>
-                                {!countryCodePresent ? (
-                                  <p
-                                    style={{ color: "red", fontSize: "1.4rem" }}
-                                  >
-                                    Please select country
-                                  </p>
-                                ) : (
-                                  timezoneError && (
-                                    <p
-                                      style={{
-                                        color: "red",
-                                        fontSize: "1.4rem",
-                                      }}
-                                    >
-                                      {timezoneError}
-                                    </p>
-                                  )
-                                )}
-                              </>
-                            ) : null)
-                          )
-                        ) : field.name === "address" ? (
-                          <>
-                            <input
-                              type={field.type}
-                              name={field.name}
-                              value={field.value}
-                              placeholder={field.placeholder}
-                              onChange={(e) =>
-                                field.onChange(
-                                  field.setState,
-                                  e.target.value,
-                                  field.name,
-                                  field.setError,
-                                )
-                              }
-                            />
-                            {field.error ? (
-                              <p style={{ color: "red", fontSize: "1.4rem" }}>
-                                {field.error}
-                              </p>
-                            ) : null}
-                          </>
-                        ) : field.name === "postcode" ? (
-                          <>
-                            <input
-                              type={field.type}
-                              name={field.name}
-                              value={field.value}
-                              placeholder={field.placeholder}
-                              onChange={(e) => {
-                                const value = e.target.value;
-                                if (!/^[a-zA-Z0-9]*$/.test(value)) {
-                                  setPostCodeError(
-                                    "Postcode must only contain letters and numbers",
-                                  );
-                                  return;
-                                }
-                                setHandler(
-                                  setPostCode,
-                                  value,
-                                  "postCode",
-                                  setPostCodeError,
-                                );
-                              }}
-                            />
-                            {field.error ? (
-                              <p style={{ color: "red", fontSize: "1.4rem" }}>
-                                {field.error}
-                              </p>
-                            ) : null}
-                          </>
-                        ) : (
-                          <>
-                            <input
-                              type={field.type}
-                              name={field.name}
-                              value={field.value}
-                              placeholder={field.placeholder}
-                              readOnly
-                            />
-                            {salonCoordinateError ? (
-                              <p style={{ color: "red", fontSize: "1.4rem" }}>
-                                {salonCoordinateError}
-                              </p>
-                            ) : null}
-                          </>
-                        )}
-
-                        {field.name === "longitude" && (
-                          <>
-                            <p style={{ fontWeight: 700 }}>
-                              * Select your salon's exact location on the map to
-                              automatically set its latitude and longitude.
-                            </p>
-                            <div
-                              style={{
-                                height: "30rem",
-                                backgroundColor: "#efefef",
-                                borderRadius: "0.6rem",
-                                overflow: "hidden",
-                              }}
-                            >
-                              {isLoaded ? (
-                                <GoogleMap
-                                  mapContainerStyle={{
-                                    width: "100%",
-                                    height: "30rem",
-                                  }}
-                                  center={center}
-                                  zoom={10}
-                                  onLoad={onLoad}
-                                  onUnmount={onUnmount}
-                                  onClick={handleMapClick}
-                                  options={{
-                                    disableDefaultUI: false, // Keep basic controls like zoom
-                                    streetViewControl: false, // 🚫 Remove Pegman / Street View
-                                    mapTypeControl: false, // 🚫 Remove Satellite / Terrain switcher
-                                    fullscreenControl: true, // ✅ Keep fullscreen option if needed
-                                    zoomControl: true, // ✅ Keep zoom buttons
-                                  }}
-                                >
-                                  {markerPosition && (
-                                    <OverlayView
-                                      position={markerPosition}
-                                      mapPaneName={
-                                        OverlayView.OVERLAY_MOUSE_TARGET
-                                      }
-                                    >
-                                      <div
-                                        style={{
-                                          display: "flex",
-                                          flexDirection: "column",
-                                          alignItems: "center",
-                                          transform: "translate(-50%, -100%)",
-                                        }}
-                                      >
-                                        <div
-                                          style={{
-                                            width: "5rem",
-                                            height: "5rem",
-                                            borderRadius: "0.6rem",
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                          }}
-                                        >
-                                          <img
-                                            src="/mapPointer.png"
-                                            alt=""
-                                            style={{
-                                              width: "100%",
-                                              height: "100%",
-                                              objectFit: "contain",
-                                            }}
-                                          />
-                                        </div>
-
-                                        <div
-                                          style={{
-                                            marginTop: "0.8rem",
-                                            backgroundColor: "#fff",
-                                            padding: "0.4rem 0.8rem",
-                                            borderRadius: "0.4rem",
-                                            boxShadow:
-                                              "0 2px 6px rgba(0,0,0,0.2)",
-                                            fontSize: "1.4rem",
-                                            fontWeight: "bold",
-                                            color: "#333",
-                                            whiteSpace: "nowrap",
-                                            border: "0.1rem solid #ccc",
-                                          }}
-                                        >
-                                          {salonName}
-                                        </div>
-                                      </div>
-                                    </OverlayView>
-                                  )}
-                                </GoogleMap>
-                              ) : (
-                                <></>
-                              )}
-                            </div>
-                          </>
-                        )} */}
                       </div>
                     ))}
 
@@ -2899,7 +2177,19 @@ const CreateSalon = () => {
                                         event.stopPropagation()
                                       }
                                     >
-                                      <button
+                                      {servicesTypeList.map((item) => {
+                                        return (
+                                          <button
+                                            key={item}
+                                            onClick={() =>
+                                              serviceTypeHandler(item)
+                                            }
+                                          >
+                                            {item}
+                                          </button>
+                                        );
+                                      })}
+                                      {/* <button
                                         onClick={() => vipServiceHandler(false)}
                                       >
                                         Regular
@@ -2908,7 +2198,7 @@ const CreateSalon = () => {
                                         onClick={() => vipServiceHandler(true)}
                                       >
                                         VIP
-                                      </button>
+                                      </button> */}
                                     </div>
                                   </ClickAwayListener>
                                 )}
@@ -3061,13 +2351,14 @@ const CreateSalon = () => {
                                       src={ser?.serviceIcon.url || ""}
                                       alt=""
                                     />
-                                    {ser.vipService ? (
+                                    {/* {ser.vipService ? (
                                       <span>
                                         <CrownIcon />
                                       </span>
-                                    ) : null}
+                                    ) : null} */}
                                   </div>
                                   <p>{ser.serviceName}</p>
+                                  <p>{ser.vipService}</p>
                                   <p>{ser.serviceDesc}</p>
                                   <p>{ser.serviceCategory}</p>
                                   <p>{ser.serviceCategoryName}</p>
@@ -3111,7 +2402,7 @@ const CreateSalon = () => {
                                   </div>
                                   <div>
                                     <p>{ser.serviceName}</p>
-                                    <p>{ser.vipService ? "VIP" : "Regular"}</p>
+                                    <p>{ser.vipService}</p>
                                     <p>{ser.serviceDesc}</p>
                                     <p>{ser.serviceCategoryName}</p>
                                   </div>

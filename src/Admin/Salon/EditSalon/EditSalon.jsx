@@ -1432,7 +1432,7 @@ const EditSalon = () => {
           placeholder: "Select business type",
           value: salonType,
           readOnly: true,
-        }
+        },
       ],
     },
     {
@@ -2560,7 +2560,6 @@ const EditSalon = () => {
                                           </button>
                                         );
                                       })}
-                                      
                                     </div>
                                   </ClickAwayListener>
                                 )}
@@ -2724,14 +2723,15 @@ const EditSalon = () => {
                                         alt=""
                                       />
 
-                                      {ser.vipService ? (
+                                      {/* {ser.vipService ? (
                                         <span>
                                           <CrownIcon />
                                         </span>
-                                      ) : null}
+                                      ) : null} */}
                                     </div>
 
                                     <p>{ser.serviceName}</p>
+                                    <p>{ser.vipService}</p>
                                     <p>{ser.serviceDesc}</p>
                                     <p>{ser.serviceCategoryName}</p>
                                   </div>
@@ -2884,9 +2884,7 @@ const EditSalon = () => {
                                     </div>
                                     <div>
                                       <p>{ser.serviceName}</p>
-                                      <p>
-                                        {ser.vipService ? "VIP" : "Regular"}
-                                      </p>
+                                      <p>{ser.vipService}</p>
                                       <p>{ser.serviceDesc}</p>
                                       <p>{ser.serviceCategoryName}</p>
                                     </div>
