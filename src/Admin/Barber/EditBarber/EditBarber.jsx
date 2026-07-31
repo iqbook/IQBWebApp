@@ -45,7 +45,7 @@ const EditBarber = () => {
   const [AllSalonServices, setAllSalonServices] = useState([]);
   // Redux selectors
   const adminAllSalonServices = useSelector(
-    (state) => state.adminAllSalonServices
+    (state) => state.adminAllSalonServices,
   );
 
   const {
@@ -61,7 +61,7 @@ const EditBarber = () => {
   }, [allSalonServices]);
 
   const salonId = useSelector(
-    (state) => state.AdminLoggedInMiddleware.adminSalonId
+    (state) => state.AdminLoggedInMiddleware.adminSalonId,
   );
   const location = useLocation();
   const navigate = useNavigate();
@@ -78,17 +78,17 @@ const EditBarber = () => {
   const [mobileNumber, setMobileNumber] = useState(
     `${
       currentBarber?.mobileCountryCode
-    }${currentBarber?.mobileNumber?.toString()}`
+    }${currentBarber?.mobileNumber?.toString()}`,
   );
   const [countryCode, setCountryCode] = useState(
-    currentBarber?.mobileCountryCode
+    currentBarber?.mobileCountryCode,
   );
   const [dateOfBirth, setDateOfBirth] = useState(
-    currentBarber?.dateOfBirth?.split("T")[0]
+    currentBarber?.dateOfBirth?.split("T")[0],
   );
 
   const [currentBarberServices, setCurrentBarberServices] = useState(
-    currentBarber?.barberServices
+    currentBarber?.barberServices,
   );
 
   const [getBarberCurrentProfilePic, setGetBarberCurrentProfilePic] =
@@ -101,7 +101,7 @@ const EditBarber = () => {
           `/api/admin/getBarberProfilePictureByAdmin`,
           {
             email: currentBarber?.email,
-          }
+          },
         );
 
         setSalonLogo(data?.response?.profile?.[0]?.url);
@@ -132,20 +132,20 @@ const EditBarber = () => {
   // Delete service handler
   const deleteServiceHandler = (service) => {
     const originalService = allSalonServices.find(
-      (s) => s.serviceId === service.serviceId
+      (s) => s.serviceId === service.serviceId,
     );
 
     if (originalService) {
       setCurrentBarberServices(
-        currentBarberServices.filter((f) => f.serviceId !== service.serviceId)
+        currentBarberServices.filter((f) => f.serviceId !== service.serviceId),
       );
 
       setAllSalonServices(
         AllSalonServices.map((ser) =>
           ser.serviceId === service.serviceId
             ? { ...ser, serviceEWT: originalService.serviceEWT }
-            : ser
-        )
+            : ser,
+        ),
       );
     }
   };
@@ -210,7 +210,7 @@ const EditBarber = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       // console.log(data)
@@ -385,16 +385,16 @@ const EditBarber = () => {
         currentBarberServices.map((ser) =>
           ser.serviceId === service.serviceId
             ? { ...ser, barberServiceEWT: numericValue }
-            : ser
-        )
+            : ser,
+        ),
       );
     } else {
       setAllSalonServices(
         allSalonServices.map((ser) =>
           ser.serviceId === service.serviceId
             ? { ...ser, serviceEWT: numericValue }
-            : ser
-        )
+            : ser,
+        ),
       );
     }
   };
@@ -428,7 +428,7 @@ const EditBarber = () => {
   };
 
   const adminGetDefaultSalon = useSelector(
-    (state) => state.adminGetDefaultSalon
+    (state) => state.adminGetDefaultSalon,
   );
 
   const { response: adminGetDefaultSalonResponse } = adminGetDefaultSalon;
@@ -492,8 +492,8 @@ const EditBarber = () => {
         currentSalonType === "Barber Shop"
           ? "Barber"
           : currentSalonType === "Hair Dresser"
-          ? "Stylist"
-          : ""
+            ? "Stylist"
+            : ""
       } Information`,
       fields: [
         {
@@ -504,8 +504,8 @@ const EditBarber = () => {
             currentSalonType === "Barber Shop"
               ? "barber"
               : currentSalonType === "Hair Dresser"
-              ? "stylist"
-              : ""
+                ? "stylist"
+                : ""
           } name`,
           value: name,
           onChange: (e) => {
@@ -522,8 +522,8 @@ const EditBarber = () => {
             currentSalonType === "Barber Shop"
               ? "barber"
               : currentSalonType === "Hair Dresser"
-              ? "stylist"
-              : ""
+                ? "stylist"
+                : ""
           } email`,
           value: email,
           readOnly: true,
@@ -536,8 +536,8 @@ const EditBarber = () => {
             currentSalonType === "Barber Shop"
               ? "barber"
               : currentSalonType === "Hair Dresser"
-              ? "stylist"
-              : ""
+                ? "stylist"
+                : ""
           } nickname`,
           value: nickName,
           onChange: (e) => {
@@ -554,8 +554,8 @@ const EditBarber = () => {
             currentSalonType === "Barber Shop"
               ? "barber"
               : currentSalonType === "Hair Dresser"
-              ? "stylist"
-              : ""
+                ? "stylist"
+                : ""
           } mobile number`,
         },
         {
@@ -566,8 +566,8 @@ const EditBarber = () => {
             currentSalonType === "Barber Shop"
               ? "barber"
               : currentSalonType === "Hair Dresser"
-              ? "stylist"
-              : ""
+                ? "stylist"
+                : ""
           } date of birth`,
         },
         {
@@ -583,15 +583,15 @@ const EditBarber = () => {
         currentSalonType === "Barber Shop"
           ? "Barber"
           : currentSalonType === "Hair Dresser"
-          ? "Stylist"
-          : ""
+            ? "Stylist"
+            : ""
       } Services`,
       name: `${
         currentSalonType === "Barber Shop"
           ? "barber"
           : currentSalonType === "Hair Dresser"
-          ? "stylist"
-          : ""
+            ? "stylist"
+            : ""
       }services`,
       fields: [],
     },
@@ -709,8 +709,8 @@ const EditBarber = () => {
           {currentSalonType === "Barber Shop"
             ? "Barbers"
             : currentSalonType === "Hair Dresser"
-            ? "Stylists"
-            : ""}
+              ? "Stylists"
+              : ""}
         </h2>
       </div>
 
@@ -756,8 +756,8 @@ const EditBarber = () => {
                   currentSalonType === "Barber Shop"
                     ? "Barber"
                     : currentSalonType === "Hair Dresser"
-                    ? "Stylist"
-                    : ""
+                      ? "Stylist"
+                      : ""
                 } Information` && (
                 <StepContent>
                   <main className={`${style.form_container}`}>
@@ -895,8 +895,8 @@ const EditBarber = () => {
                   currentSalonType === "Barber Shop"
                     ? "Barber"
                     : currentSalonType === "Hair Dresser"
-                    ? "Stylist"
-                    : ""
+                      ? "Stylist"
+                      : ""
                 } Services` && (
                 <StepContent>
                   <main className={`${style.service_container}`}>
@@ -918,19 +918,20 @@ const EditBarber = () => {
                                         alt={s?.serviceName}
                                       />
 
-                                      {s.vipService ? (
+                                      {/* {s.vipService ? (
                                         <span>
                                           <CrownIcon />
                                         </span>
-                                      ) : null}
+                                      ) : null} */}
                                     </div>
-
+                                    {console.log(s?.vipService)}
                                     <p>{s?.serviceName}</p>
+                                    <p>{s?.vipService}</p>
                                     <p>{s?.serviceDesc}</p>
                                   </div>
 
                                   {currentBarberServices.find(
-                                    (c) => c.serviceId === s.serviceId
+                                    (c) => c.serviceId === s.serviceId,
                                   ) ? (
                                     <button
                                       style={{
@@ -967,11 +968,11 @@ const EditBarber = () => {
                                         type="text"
                                         value={
                                           currentBarberServices?.find(
-                                            (c) => c.serviceId === s.serviceId
+                                            (c) => c.serviceId === s.serviceId,
                                           )
                                             ? currentBarberServices?.find(
                                                 (c) =>
-                                                  c.serviceId === s.serviceId
+                                                  c.serviceId === s.serviceId,
                                               ).barberServiceEWT
                                             : s.serviceEWT
                                         }
@@ -998,13 +999,13 @@ const EditBarber = () => {
                                   </div>
                                   <div>
                                     <p>{s?.serviceName}</p>
-                                    <p>{s?.vipService ? "VIP" : "Regular"}</p>
+                                    <p>{s?.vipService}</p>
                                     <p>{s?.serviceDesc}</p>
                                   </div>
                                 </div>
 
                                 {currentBarberServices.find(
-                                  (c) => c.serviceId === s.serviceId
+                                  (c) => c.serviceId === s.serviceId,
                                 ) ? (
                                   <button
                                     style={{
@@ -1040,10 +1041,11 @@ const EditBarber = () => {
                                       type="text"
                                       value={
                                         currentBarberServices?.find(
-                                          (c) => c.serviceId === s.serviceId
+                                          (c) => c.serviceId === s.serviceId,
                                         )
                                           ? currentBarberServices?.find(
-                                              (c) => c.serviceId === s.serviceId
+                                              (c) =>
+                                                c.serviceId === s.serviceId,
                                             ).barberServiceEWT
                                           : s.serviceEWT
                                       }
@@ -1066,7 +1068,9 @@ const EditBarber = () => {
                             alignItems: "center",
                           }}
                         >
-                          <p style={{ fontWeight: "600"}}>This salon has no services</p>
+                          <p style={{ fontWeight: "600" }}>
+                            This salon has no services
+                          </p>
                         </div>
                       )}
 
@@ -1081,10 +1085,10 @@ const EditBarber = () => {
                         onClick={handleNext}
                         // disabled={currentBarberServices.length === 0}
                         style={{
-                          cursor: "pointer"
-                            // currentBarberServices.length === 0
-                            //   ? "not-allowed"
-                            //   : "pointer",
+                          cursor: "pointer",
+                          // currentBarberServices.length === 0
+                          //   ? "not-allowed"
+                          //   : "pointer",
                         }}
                       >
                         {index === steps.length - 1 ? "Finish" : "Continue"}

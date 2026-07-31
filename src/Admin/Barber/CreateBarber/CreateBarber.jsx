@@ -45,7 +45,7 @@ import api from "../../../Redux/api/Api";
 
 const CreateBarber = () => {
   const salonId = useSelector(
-    (state) => state.AdminLoggedInMiddleware.adminSalonId
+    (state) => state.AdminLoggedInMiddleware.adminSalonId,
   );
 
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ const CreateBarber = () => {
   const [dateOfBirth, setDateOfBirth] = useState("");
 
   const adminProfile = useSelector(
-    (state) => state.AdminLoggedInMiddleware.entiredata.user[0]
+    (state) => state.AdminLoggedInMiddleware.entiredata.user[0],
   );
 
   const AllSalonServicesControllerRef = useRef(new AbortController());
@@ -80,7 +80,7 @@ const CreateBarber = () => {
   }, [salonId, dispatch, adminProfile]);
 
   const adminAllSalonServices = useSelector(
-    (state) => state.adminAllSalonServices
+    (state) => state.adminAllSalonServices,
   );
 
   const {
@@ -226,7 +226,7 @@ const CreateBarber = () => {
                     headers: {
                       "Content-Type": "multipart/form-data",
                     },
-                  }
+                  },
                 );
 
                 toast.success("Barber profile pic uploaded successfully", {
@@ -429,7 +429,7 @@ const CreateBarber = () => {
           ["mobileNumber"]: phone,
           ["dialCode"]: country?.dialCode,
           ["countryflag"]: country?.iso2,
-        })
+        }),
       );
     } else {
       setInvalidNumber(true);
@@ -448,12 +448,12 @@ const CreateBarber = () => {
       JSON.stringify({
         ...existingData,
         [localname]: value,
-      })
+      }),
     );
   };
 
   const adminGetDefaultSalon = useSelector(
-    (state) => state.adminGetDefaultSalon
+    (state) => state.adminGetDefaultSalon,
   );
 
   const { response: adminGetDefaultSalonResponse } = adminGetDefaultSalon;
@@ -489,7 +489,7 @@ const CreateBarber = () => {
       setDateOfBirth,
       formattedDate,
       "dateOfBirth",
-      setDateOfBirthError
+      setDateOfBirthError,
     );
     setOpenCalender(false);
   };
@@ -523,8 +523,8 @@ const CreateBarber = () => {
         currentSalonType === "Barber Shop"
           ? "Barbers"
           : currentSalonType === "Hair Dresser"
-          ? "Stylists"
-          : ""
+            ? "Stylists"
+            : ""
       } Information`,
       fields: [
         {
@@ -535,8 +535,8 @@ const CreateBarber = () => {
             currentSalonType === "Barber Shop"
               ? "barber"
               : currentSalonType === "Hair Dresser"
-              ? "stylist"
-              : ""
+                ? "stylist"
+                : ""
           } name`,
           value: name,
           setState: setName,
@@ -551,8 +551,8 @@ const CreateBarber = () => {
             currentSalonType === "Barber Shop"
               ? "barber"
               : currentSalonType === "Hair Dresser"
-              ? "stylist"
-              : ""
+                ? "stylist"
+                : ""
           } email`,
           value: email,
           setState: setEmail,
@@ -567,8 +567,8 @@ const CreateBarber = () => {
             currentSalonType === "Barber Shop"
               ? "barber"
               : currentSalonType === "Hair Dresser"
-              ? "stylist"
-              : ""
+                ? "stylist"
+                : ""
           } nickname`,
           value: nickName,
           setState: setNickName,
@@ -583,8 +583,8 @@ const CreateBarber = () => {
             currentSalonType === "Barber Shop"
               ? "barber"
               : currentSalonType === "Hair Dresser"
-              ? "stylist"
-              : ""
+                ? "stylist"
+                : ""
           } mobile number`,
         },
         {
@@ -595,8 +595,8 @@ const CreateBarber = () => {
             currentSalonType === "Barber Shop"
               ? "barber"
               : currentSalonType === "Hair Dresser"
-              ? "stylist"
-              : ""
+                ? "stylist"
+                : ""
           } date of birth`,
         },
         {
@@ -612,15 +612,15 @@ const CreateBarber = () => {
         currentSalonType === "Barber Shop"
           ? "Barber"
           : currentSalonType === "Hair Dresser"
-          ? "Stylist"
-          : ""
+            ? "Stylist"
+            : ""
       } Services`,
       name: `${
         currentSalonType === "Barber Shop"
           ? "barber"
           : currentSalonType === "Hair Dresser"
-          ? "stylist"
-          : ""
+            ? "stylist"
+            : ""
       }services`,
       fields: [],
     },
@@ -778,8 +778,8 @@ const CreateBarber = () => {
           {currentSalonType === "Barber Shop"
             ? "Barbers"
             : currentSalonType === "Hair Dresser"
-            ? "Stylists"
-            : ""}
+              ? "Stylists"
+              : ""}
         </h2>
       </div>
 
@@ -825,8 +825,8 @@ const CreateBarber = () => {
                   currentSalonType === "Barber Shop"
                     ? "Barbers"
                     : currentSalonType === "Hair Dresser"
-                    ? "Stylists"
-                    : ""
+                      ? "Stylists"
+                      : ""
                 } Information` && (
                 <StepContent>
                   <main className={`${style.form_container}`}>
@@ -942,7 +942,7 @@ const CreateBarber = () => {
                                   field.setState,
                                   e.target.value,
                                   field.name,
-                                  field.setError
+                                  field.setError,
                                 )
                               }
                             />
@@ -970,13 +970,12 @@ const CreateBarber = () => {
                   currentSalonType === "Barber Shop"
                     ? "Barber"
                     : currentSalonType === "Hair Dresser"
-                    ? "Stylist"
-                    : ""
+                      ? "Stylist"
+                      : ""
                 } Services` && (
                 <StepContent>
                   <main className={`${style.service_container}`}>
                     <div>
-                      
                       {adminAllSalonServicesResolve &&
                       allSalonServices?.length > 0 ? (
                         <>
@@ -993,13 +992,13 @@ const CreateBarber = () => {
                                     </div>
                                     <div>
                                       <p>{s?.serviceName}</p>
-                                      <p>{s?.vipService ? "VIP" : "Regular"}</p>
+                                      <p>{s?.vipService}</p>
                                       <p>{s?.serviceDesc}</p>
                                     </div>
                                   </div>
 
                                   {chooseServices.find(
-                                    (c) => c._id === s._id
+                                    (c) => c._id === s._id,
                                   ) ? (
                                     <button
                                       style={{
@@ -1037,7 +1036,7 @@ const CreateBarber = () => {
                                         onChange={(e) => {
                                           const value = e.target.value.replace(
                                             /[^0-9]/g,
-                                            ""
+                                            "",
                                           ); // Only keep digits
                                           handleEWTChange(s._id, value);
                                         }}
@@ -1064,19 +1063,20 @@ const CreateBarber = () => {
                                           alt={s?.serviceName}
                                         />
 
-                                        {s.vipService ? (
+                                        {/* {s.vipService ? (
                                           <span>
                                             <CrownIcon />
                                           </span>
-                                        ) : null}
+                                        ) : null} */}
                                       </div>
 
                                       <p>{s?.serviceName}</p>
+                                      <p>{s?.vipService}</p>
                                       <p>{s?.serviceDesc}</p>
                                     </div>
 
                                     {chooseServices.find(
-                                      (c) => c._id === s._id
+                                      (c) => c._id === s._id,
                                     ) ? (
                                       <button
                                         style={{
@@ -1116,7 +1116,7 @@ const CreateBarber = () => {
                                             const value =
                                               e.target.value.replace(
                                                 /[^0-9]/g,
-                                                ""
+                                                "",
                                               ); // Only keep digits
                                             handleEWTChange(s._id, value);
                                           }}
@@ -1157,10 +1157,10 @@ const CreateBarber = () => {
                         onClick={handleNext}
                         // disabled={chooseServices.length === 0}
                         style={{
-                          cursor: "pointer"
-                            // chooseServices.length === 0
-                            //   ? "not-allowed"
-                            //   : "pointer",
+                          cursor: "pointer",
+                          // chooseServices.length === 0
+                          //   ? "not-allowed"
+                          //   : "pointer",
                         }}
                       >
                         {index === steps.length - 1 ? "Finish" : "Continue"}
@@ -1186,8 +1186,8 @@ const CreateBarber = () => {
               {currentSalonType === "Barber Shop"
                 ? "barber"
                 : currentSalonType === "Hair Dresser"
-                ? "stylist"
-                : ""}
+                  ? "stylist"
+                  : ""}
               .
             </p>
             <div>

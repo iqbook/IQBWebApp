@@ -674,11 +674,11 @@ const EditProfile = () => {
                                                     <div>
                                                         <img src={s?.serviceIcon?.url} alt={s?.serviceName} />
 
-                                                        {s.vipService ? <span><CrownIcon /></span> : null}
+                                                        {/* {s.vipService ? <span><CrownIcon /></span> : null} */}
                                                     </div>
                                                     <div>
                                                         <p>{s?.serviceName}</p>
-                                                        <p>{s?.vipService ? "VIP" : "Regular"}</p>
+                                                        <p>{s?.vipService}</p>
                                                         <p>{s?.serviceDesc}</p>
                                                     </div>
                                                 </div>
