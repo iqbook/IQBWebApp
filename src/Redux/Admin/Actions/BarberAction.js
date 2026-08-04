@@ -141,6 +141,62 @@ export const changeAdminBarberOnlineStatusAction = (barberOnlinedata, setCheckMa
     }
 }
 
+export const changeBarberBarberOnlineStatusAction = (barberOnlinedata, setCheckMap, b, originalIsOnline) => async (dispatch) => {
+    try {
+        dispatch({ type: CHANGE_ADMIN_BARBER_ONLINESTATUS_REQ })
+
+        const { data } = await api.post(`/api/barber/changeBarberOnlineStatus`, barberOnlinedata)
+
+        dispatch({
+            type: CHANGE_ADMIN_BARBER_ONLINESTATUS_SUCCESS,
+            payload: data
+        })
+    } catch (error) {
+
+        if (error?.response?.status === 500) {
+            dispatch({
+                type: CHANGE_ADMIN_BARBER_ONLINESTATUS_FAIL,
+                payload: "Something went wrong !"
+            });
+
+            toast.error("Something went wrong !", {
+                duration: 3000,
+                style: {
+                    fontSize: "var(--font-size-2)",
+                    borderRadius: '0.3rem',
+                    background: '#333',
+                    color: '#fff',
+                },
+            });
+
+            return;
+        }
+
+        dispatch({
+            type: CHANGE_ADMIN_BARBER_ONLINESTATUS_FAIL,
+            payload: error?.response?.data
+        });
+
+        toast.error(error?.response?.data?.message, {
+            duration: 3000,
+            style: {
+                fontSize: "var(--font-size-2)",
+                borderRadius: '0.3rem',
+                background: '#333',
+                color: '#fff',
+            },
+        });
+
+        // Revert to original state
+        setCheckMap((prevCheckMap) => {
+            const newCheckMap = new Map(prevCheckMap);
+            const key = `${b.salonId}-${b.barberId}`;
+            newCheckMap.set(key, originalIsOnline);
+            return newCheckMap;
+        });
+    }
+}
+
 
 export const changeAdminBarberClockStatusAction = (barberClockdata, setCheckMapClock, b, originalIsClock, setCheckMap) => async (dispatch) => {
     try {

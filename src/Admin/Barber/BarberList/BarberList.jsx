@@ -12,6 +12,7 @@ import {
   MessageIcon,
   OfflineIcon,
   OnlineIcon,
+  VipIcon,
   SalonThreeDotsIcon,
   SortDownIcon,
   SortUpDownArrowIcon,
@@ -82,7 +83,23 @@ const BarberList = () => {
       const initialCheckMap = new Map();
       BarberList.forEach((barber) => {
         const key = `${barber.salonId}-${barber.barberId}`;
-        initialCheckMap.set(key, barber.isOnline || false);
+        let status = "Offline";
+        if (
+          barber.onlineStatus === "Only VIP" ||
+          barber.status === "Only VIP" ||
+          barber.isOnline === "Only VIP"
+        ) {
+          status = "Only VIP";
+        } else if (
+          barber.isOnline === true ||
+          barber.isOnline === "Online" ||
+          barber.onlineStatus === "Online"
+        ) {
+          status = "Online";
+        } else {
+          status = "Offline";
+        }
+        initialCheckMap.set(key, status);
       });
       setCheckMap(initialCheckMap);
 
@@ -97,19 +114,20 @@ const BarberList = () => {
 
   const [checkMap, setCheckMap] = useState(new Map());
 
-  const toggleHandler = (b) => {
+  const handleStatusChange = (b, newStatus) => {
     setCheckMap((prevCheckMap) => {
       const newCheckMap = new Map(prevCheckMap);
       const key = `${b.salonId}-${b.barberId}`;
-      const newIsOnline = !newCheckMap.get(key) || false; // Toggle the value
-      newCheckMap.set(key, newIsOnline);
+      newCheckMap.set(key, newStatus);
       return newCheckMap;
     });
+
+    // API part commented out for now
 
     const barberOnlineData = {
       barberId: b.barberId,
       salonId: b.salonId,
-      isOnline: !checkMap?.get(`${b.salonId}-${b.barberId}`) || false,
+      isOnline: newStatus,
     };
 
     dispatch(
@@ -120,6 +138,7 @@ const BarberList = () => {
         checkMap?.get(`${b.salonId}-${b.barberId}`),
       ),
     );
+
   };
 
   const [checkMapClock, setCheckMapClock] = useState(new Map());
@@ -546,7 +565,7 @@ const BarberList = () => {
   // Hair Dresser
   // Barber Shop
 
-  const deleteBarber = async () => {};
+  const deleteBarber = async () => { };
 
   return (
     <section className={`${style.section}`}>
@@ -779,9 +798,8 @@ const BarberList = () => {
                       />
                     ) : (
                       <button
-                        className={`${
-                          item.key === "name" ? style.name_head_btn : ""
-                        }`}
+                        className={`${item.key === "name" ? style.name_head_btn : ""
+                          }`}
                         onClick={() => sortFunction(item.key)}
                       >
                         {item.key === "name" ? (
@@ -819,7 +837,7 @@ const BarberList = () => {
                   style={{
                     borderBottom:
                       index === endIndex - 1 ||
-                      index === barberPaginationData.length - 1
+                        index === barberPaginationData.length - 1
                         ? null
                         : "0.1rem solid var(--border-secondary)",
                   }}
@@ -844,20 +862,48 @@ const BarberList = () => {
                   </div>
 
                   <div>
-                    <button
-                      onClick={() => toggleHandler(item)}
-                      style={{
-                        backgroundColor: checkMap?.get(
-                          `${item.salonId}-${item.barberId}`,
-                        )
+                    {(() => {
+                      const currentStatus =
+                        checkMap?.get(`${item.salonId}-${item.barberId}`) ||
+                        "Offline";
+                      const statusBgColor =
+                        currentStatus === "Online"
                           ? "#052E16"
-                          : "#450a0a",
-                      }}
-                    >
-                      {checkMap?.get(`${item.salonId}-${item.barberId}`)
-                        ? "Online"
-                        : "Offline"}
-                    </button>
+                          : currentStatus === "Only VIP"
+                            ? "#D573F3"
+                            : "#450a0a";
+                      return (
+                        <select
+                          value={currentStatus}
+                          onChange={(e) =>
+                            handleStatusChange(item, e.target.value)
+                          }
+                          className={style.status_select}
+                          style={{
+                            backgroundColor: statusBgColor,
+                          }}
+                        >
+                          <option
+                            value="Online"
+                            style={{ backgroundColor: "#052E16", color: "#fff" }}
+                          >
+                            Online
+                          </option>
+                          <option
+                            value="Offline"
+                            style={{ backgroundColor: "#450a0a", color: "#fff" }}
+                          >
+                            Offline
+                          </option>
+                          <option
+                            value="Only VIP"
+                            style={{ backgroundColor: "#581c87", color: "#fff" }}
+                          >
+                            Only VIP
+                          </option>
+                        </select>
+                      );
+                    })()}
                   </div>
 
                   <div>
@@ -1116,19 +1162,31 @@ const BarberList = () => {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        toggleHandler(item);
+                        const currentStatus =
+                          checkMap?.get(`${item.salonId}-${item.barberId}`) ||
+                          "Offline";
+                        const nextStatus =
+                          currentStatus === "Online"
+                            ? "Offline"
+                            : currentStatus === "Offline"
+                              ? "Only VIP"
+                              : "Online";
+                        handleStatusChange(item, nextStatus);
                       }}
                     >
-                      {checkMap?.get(`${item.salonId}-${item.barberId}`) ? (
+                      {checkMap?.get(`${item.salonId}-${item.barberId}`) ===
+                        "Online" ? (
                         <OnlineIcon color={"1ADB6A"} />
+                      ) : checkMap?.get(`${item.salonId}-${item.barberId}`) ===
+                        "Only VIP" ? (
+                        <VipIcon color={"#D573F3"} />
                       ) : (
                         <OfflineIcon color={"FC3232"} />
                       )}
                     </button>
                     <p>
-                      {checkMap?.get(`${item.salonId}-${item.barberId}`)
-                        ? "Online"
-                        : "Offline"}
+                      {checkMap?.get(`${item.salonId}-${item.barberId}`) ||
+                        "Offline"}
                     </p>
                   </div>
 

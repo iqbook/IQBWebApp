@@ -1,7 +1,7 @@
 // This icons are used in latest design
 
 import { BsCalendar2X, BsGraphUp, BsInstagram, BsSunFill } from "react-icons/bs";
-import { FaChevronLeft, FaChevronRight, FaFacebookF, FaRegCalendarAlt, FaUsers, FaUsersSlash, FaWifi } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaCrown, FaFacebookF, FaRegCalendarAlt, FaUsers, FaUsersSlash, FaWifi } from "react-icons/fa";
 import { FaChevronDown, FaChevronUp, FaFilter, FaUser } from "react-icons/fa6";
 import { FiPieChart } from "react-icons/fi";
 import { IoArrowDownSharp, IoArrowUpSharp, IoCheckmarkCircleOutline, IoChevronDownOutline, IoPerson, IoPersonCircleOutline, IoSearch, IoSettingsSharp } from "react-icons/io5";
@@ -66,6 +66,7 @@ export const OtpEmailIcon = LuMailWarning
 export const MobileSiderbarMenuIcon = RiMenuFill
 export const OnlineIcon = FaWifi
 export const OfflineIcon = MdOutlineWifiOff
+export const VipIcon = FaCrown
 export const OffAppointmentIcon = BsCalendar2X
 export const QueueOnlineIcon = FaUsers
 export const QueueOfflineIcon = FaUsersSlash

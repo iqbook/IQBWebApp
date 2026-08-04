@@ -855,8 +855,8 @@ const Dashboard = () => {
                   {currentSalonType === "Barber Shop"
                     ? "Barbers"
                     : currentSalonType === "Hair Dresser"
-                    ? "Stylists"
-                    : "barbers"}{" "}
+                      ? "Stylists"
+                      : "barbers"}{" "}
                   On Duty
                 </p>
                 <p>
@@ -864,8 +864,8 @@ const Dashboard = () => {
                   {currentSalonType === "Barber Shop"
                     ? "barbers"
                     : currentSalonType === "Hair Dresser"
-                    ? "stylists"
-                    : "barbers"}{" "}
+                      ? "stylists"
+                      : "barbers"}{" "}
                   are available
                 </p>
               </div>
@@ -904,8 +904,8 @@ const Dashboard = () => {
                     {currentSalonType === "Barber Shop"
                       ? "barbers"
                       : currentSalonType === "Hair Dresser"
-                      ? "stylists"
-                      : "barbers"}{" "}
+                        ? "stylists"
+                        : "barbers"}{" "}
                     available
                   </p>
                 </div>
@@ -953,15 +953,15 @@ const Dashboard = () => {
                         reportData?.queue?.queueTrend === "Rise"
                           ? "#00A36C"
                           : reportData?.queue?.queueTrend === "Fall"
-                          ? "rgb(244, 67, 54)"
-                          : "",
+                            ? "rgb(244, 67, 54)"
+                            : "",
                     }}
                   >
                     {reportData?.queue?.queueTrend === "Rise"
                       ? "+"
                       : reportData?.queue?.queueTrend === "Fall"
-                      ? "-"
-                      : ""}
+                        ? "-"
+                        : ""}
                     {reportData?.queue?.percentageChangelast30Days}%
                   </span>{" "}
                   from last 30 days
@@ -1028,15 +1028,15 @@ const Dashboard = () => {
                               ? "#f44336"
                               : reportData?.appointment?.appointmentTrend ===
                                 "Rise"
-                              ? "#00A36C"
-                              : "",
+                                ? "#00A36C"
+                                : "",
                         }}
                       >
                         {reportData?.appointment?.appointmentTrend === "Fall"
                           ? "-"
                           : reportData?.appointment?.appointmentTrend === "Rise"
-                          ? "+"
-                          : ""}
+                            ? "+"
+                            : ""}
                         {reportData?.appointment?.percentageChangeLastWeek}%
                       </span>{" "}
                       from last 7 days

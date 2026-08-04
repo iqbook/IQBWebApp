@@ -28,7 +28,8 @@
             align-items: center;
             gap: 2rem;
 
-            &>button {
+            &>button,
+            &>select {
                 color: #fff;
                 border: none;
                 border-radius: var(--border-radius-primary);
@@ -37,11 +38,20 @@
                 -ms-border-radius: var(--border-radius-primary);
                 -o-border-radius: var(--border-radius-primary);
                 font-size: var(--font-primary);
-                cursor: not-allowed;
+                cursor: pointer;
                 outline: none;
                 height: 2.8rem;
                 letter-spacing: 0.5px;
-                padding-inline: 1rem;
+                padding-inline: 1rem 2.2rem;
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%228%22%20viewBox%3D%220%200%2012%208%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M1.41%200L6%204.58L10.59%200L12%201.41l-6%206l-6-6z%22%2F%3E%3C%2Fsvg%3E");
+                background-repeat: no-repeat;
+                background-position: right 0.7rem center;
+                background-size: 0.8rem auto;
+                font-family: inherit;
+                transition: background-color 0.2s ease-in-out;
             }
         }
 

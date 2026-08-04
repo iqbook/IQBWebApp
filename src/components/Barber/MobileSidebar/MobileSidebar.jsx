@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { STATUS_COLORS } from "../../../constants/statusColors.js";
 import style from "./MobileSidebar.module.css";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import Header from "../DashboardHeader/DashboardHeader.jsx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { changeBarberBarberOnlineStatusAction } from "../../../Redux/Admin/Actions/BarberAction.js";
 import { darkmodeSelector } from "../../../Redux/Admin/Reducers/AdminHeaderReducer.js";
 import { ClickAwayListener, Modal } from "@mui/material";
 import {
@@ -90,8 +92,45 @@ const MobileSidebar = () => {
   ];
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [online, setOnline] = useState(false);
+  const [barberOnlineStatus, setBarberOnlineStatus] = useState("Offline");
+
+  useEffect(() => {
+    if (barberProfile) {
+      if (
+        barberProfile.onlineStatus === "Only VIP" ||
+        barberProfile.status === "Only VIP" ||
+        barberProfile.isOnline === "Only VIP"
+      ) {
+        setBarberOnlineStatus("Only VIP");
+      } else if (barberProfile.isOnline) {
+        setBarberOnlineStatus("Online");
+      } else {
+        setBarberOnlineStatus("Offline");
+      }
+    }
+  }, [barberProfile]);
+
+  const handleBarberStatusChange = (newStatus) => {
+    const previousStatus = barberOnlineStatus;
+    setBarberOnlineStatus(newStatus);
+
+    const barberOnlineData = {
+      barberId: barberProfile?.barberId || barberProfile?._id,
+      salonId: barberProfile?.salonId,
+      isOnline: newStatus,
+    };
+
+    dispatch(
+      changeBarberBarberOnlineStatusAction(
+        barberOnlineData,
+        setBarberOnlineStatus,
+        barberProfile,
+        previousStatus,
+      )
+    );
+  };
 
   return (
     <section className={`${style.mobile_container}`}>
@@ -190,17 +229,43 @@ const MobileSidebar = () => {
                 </div>
 
                 <div className={`${style.online_container}`}>
-                  <p>{barberProfile?.isOnline ? "Online" : "Offline"}</p>
-                  <Switch
-                    width={40}
-                    height={18}
-                    handleDiameter={14}
-                    offColor="#F44336"
-                    onColor="#00A36C"
-                    readOnly
-                    checked={barberProfile?.isOnline}
-                    onChange={() => {}}
-                  />
+                  <p>{barberOnlineStatus}</p>
+                  <select
+                    value={barberOnlineStatus}
+                    onChange={(e) => handleBarberStatusChange(e.target.value)}
+                    style={{
+                      backgroundColor:
+                        barberOnlineStatus === "Online"
+                          ? STATUS_COLORS.ONLINE
+                          : barberOnlineStatus === "Only VIP"
+                          ? STATUS_COLORS.ONLY_VIP
+                          : STATUS_COLORS.OFFLINE,
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "0.5rem",
+                      padding: "0.4rem 2.2rem 0.4rem 0.8rem",
+                      fontSize: "1.2rem",
+                      outline: "none",
+                      cursor: "pointer",
+                      appearance: "none",
+                      WebkitAppearance: "none",
+                      MozAppearance: "none",
+                      backgroundImage: `url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%228%22%20viewBox%3D%220%200%2012%208%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M1.41%200L6%204.58L10.59%200L12%201.41l-6%206l-6-6z%22%2F%3E%3C%2Fsvg%3E")`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "right 0.6rem center",
+                      backgroundSize: "0.8rem auto",
+                    }}
+                  >
+                    <option value="Online" style={{ backgroundColor: STATUS_COLORS.ONLINE, color: "#fff" }}>
+                      Online
+                    </option>
+                    <option value="Offline" style={{ backgroundColor: STATUS_COLORS.OFFLINE, color: "#fff" }}>
+                      Offline
+                    </option>
+                    <option value="Only VIP" style={{ backgroundColor: STATUS_COLORS.ONLY_VIP, color: "#fff" }}>
+                      Only VIP
+                    </option>
+                  </select>
                 </div>
 
                 <div className={`${style.online_container}`}>

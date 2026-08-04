@@ -261,6 +261,9 @@ import { BarberLogoutAction } from '../../../Redux/Barber/Actions/AuthAction'
 import { ClickAwayListener } from '@mui/material';
 import { MobileSiderbarMenuIcon, SidebarCloseIcon, SidebarOpenIcon } from '../../../newicons'
 
+import { changeBarberBarberOnlineStatusAction } from '../../../Redux/Admin/Actions/BarberAction'
+import { STATUS_COLORS } from '../../../constants/statusColors'
+
 const DashboardHeader = ({ sidebar, setSidebar, mobileSidebar, setMobileSidebar }) => {
 
     const navigate = useNavigate()
@@ -334,8 +337,45 @@ const DashboardHeader = ({ sidebar, setSidebar, mobileSidebar, setMobileSidebar 
 
     const [salonlistdrop, setSalonlistdrop] = useState(false)
 
-    const [onlineState, setOnlineState] = useState(false)
-    const [profileOpen, setProfileOpen] = useState(false)
+    const [barberOnlineStatus, setBarberOnlineStatus] = useState("Offline");
+
+    useEffect(() => {
+        if (barberProfile) {
+            if (
+                barberProfile.onlineStatus === "Only VIP" ||
+                barberProfile.status === "Only VIP" ||
+                barberProfile.isOnline === "Only VIP"
+            ) {
+                setBarberOnlineStatus("Only VIP");
+            } else if (barberProfile.isOnline) {
+                setBarberOnlineStatus("Online");
+            } else {
+                setBarberOnlineStatus("Offline");
+            }
+        }
+    }, [barberProfile]);
+
+    const handleBarberStatusChange = (newStatus) => {
+        const previousStatus = barberOnlineStatus;
+        setBarberOnlineStatus(newStatus);
+
+        const barberOnlineData = {
+            barberId: barberProfile?.barberId || barberProfile?._id,
+            salonId: barberProfile?.salonId,
+            isOnline: newStatus,
+        };
+
+        dispatch(
+            changeBarberBarberOnlineStatusAction(
+                barberOnlineData,
+                setBarberOnlineStatus,
+                barberProfile,
+                previousStatus,
+            )
+        );
+    };
+
+    const [profileOpen, setProfileOpen] = useState(false);
 
 
     const currentTheme = useSelector(state => state.ThemeSelector)
@@ -367,11 +407,33 @@ const DashboardHeader = ({ sidebar, setSidebar, mobileSidebar, setMobileSidebar 
 
             <div>
                 <div>
-                    <button
-                        style={{
-                            background: barberProfile?.isOnline ? "#00A36C" : "rgb(244, 67, 54)",
-                        }}
-                    >{barberProfile?.isOnline ? "Online" : "Offline"}</button>
+                    {(() => {
+                        const statusBgColor =
+                            barberOnlineStatus === "Online"
+                                ? STATUS_COLORS.ONLINE
+                                : barberOnlineStatus === "Only VIP"
+                                    ? STATUS_COLORS.ONLY_VIP
+                                    : STATUS_COLORS.OFFLINE;
+                        return (
+                            <select
+                                value={barberOnlineStatus}
+                                onChange={(e) => handleBarberStatusChange(e.target.value)}
+                                style={{
+                                    backgroundColor: statusBgColor,
+                                }}
+                            >
+                                <option value="Online" style={{ backgroundColor: STATUS_COLORS.ONLINE, color: "#fff" }}>
+                                    Online
+                                </option>
+                                <option value="Offline" style={{ backgroundColor: STATUS_COLORS.OFFLINE, color: "#fff" }}>
+                                    Offline
+                                </option>
+                                <option value="Only VIP" style={{ backgroundColor: STATUS_COLORS.ONLY_VIP, color: "#fff" }}>
+                                    Only VIP
+                                </option>
+                            </select>
+                        );
+                    })()}
 
                     <button
                         style={{
@@ -441,7 +503,7 @@ const DashboardHeader = ({ sidebar, setSidebar, mobileSidebar, setMobileSidebar 
                 <button onClick={() => setMobileSidebar((prev) => !prev)}>{mobileSidebar ? <MobileSiderbarMenuIcon /> : <MobileSiderbarMenuIcon />}</button>
                 <h3>IQB</h3>
             </div>
-            
+
 
         </header>
     )
