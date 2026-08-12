@@ -187,13 +187,8 @@ export const changeBarberBarberOnlineStatusAction = (barberOnlinedata, setCheckM
             },
         });
 
-        // Revert to original state
-        setCheckMap((prevCheckMap) => {
-            const newCheckMap = new Map(prevCheckMap);
-            const key = `${b.salonId}-${b.barberId}`;
-            newCheckMap.set(key, originalIsOnline);
-            return newCheckMap;
-        });
+        // Revert to original status string
+        setCheckMap(originalIsOnline);
     }
 }
 

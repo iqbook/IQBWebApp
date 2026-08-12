@@ -99,12 +99,10 @@ const MobileSidebar = () => {
   useEffect(() => {
     if (barberProfile) {
       if (
-        barberProfile.onlineStatus === "Only VIP" ||
-        barberProfile.status === "Only VIP" ||
         barberProfile.isOnline === "Only VIP"
       ) {
         setBarberOnlineStatus("Only VIP");
-      } else if (barberProfile.isOnline) {
+      } else if (barberProfile.isOnline === "Online" || barberProfile.isOnline === true) {
         setBarberOnlineStatus("Online");
       } else {
         setBarberOnlineStatus("Offline");
@@ -172,11 +170,10 @@ const MobileSidebar = () => {
                         {section.menuItems.map((item) => (
                           <li
                             key={item.id}
-                            className={`${
-                              location.pathname.includes(item?.url)
+                            className={`${location.pathname.includes(item?.url)
                                 ? style.activeMenu
                                 : ""
-                            }`}
+                              }`}
                           >
                             <Link
                               to={item?.url}
@@ -238,8 +235,8 @@ const MobileSidebar = () => {
                         barberOnlineStatus === "Online"
                           ? STATUS_COLORS.ONLINE
                           : barberOnlineStatus === "Only VIP"
-                          ? STATUS_COLORS.ONLY_VIP
-                          : STATUS_COLORS.OFFLINE,
+                            ? STATUS_COLORS.ONLY_VIP
+                            : STATUS_COLORS.OFFLINE,
                       color: "#fff",
                       border: "none",
                       borderRadius: "0.5rem",
@@ -278,7 +275,7 @@ const MobileSidebar = () => {
                     onColor="#00A36C"
                     readOnly
                     checked={barberProfile?.isClockedIn}
-                    onChange={() => {}}
+                    onChange={() => { }}
                   />
                 </div>
               </nav>

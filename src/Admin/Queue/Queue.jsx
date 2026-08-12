@@ -698,9 +698,11 @@ const Queue = () => {
                         setChoosebarber(b?.name);
                       }}
                       style={{
-                        borderLeft: b.isOnline
+                        borderLeft: (b.isOnline === "Online" || b.isOnline === true)
                           ? "0.5rem solid #00A36C"
-                          : "0.5rem solid rgb(244, 67, 54)",
+                          : b.isOnline === "Only VIP"
+                            ? "0.5rem solid #D573F3"
+                            : "0.5rem solid rgb(244, 67, 54)",
                       }}
                     >
                       <div>
@@ -708,9 +710,11 @@ const Queue = () => {
                         <div
                           className={style.barber_online_dot}
                           style={{
-                            backgroundColor: b.isOnline
+                            backgroundColor: (b.isOnline === "Online" || b.isOnline === true)
                               ? "#00A36C"
-                              : "rgb(244, 67, 54)",
+                              : b.isOnline === "Only VIP"
+                                ? "#D573F3"
+                                : "rgb(244, 67, 54)",
                           }}
                         ></div>
                       </div>

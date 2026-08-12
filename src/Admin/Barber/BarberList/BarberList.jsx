@@ -85,15 +85,11 @@ const BarberList = () => {
         const key = `${barber.salonId}-${barber.barberId}`;
         let status = "Offline";
         if (
-          barber.onlineStatus === "Only VIP" ||
-          barber.status === "Only VIP" ||
           barber.isOnline === "Only VIP"
         ) {
           status = "Only VIP";
         } else if (
-          barber.isOnline === true ||
-          barber.isOnline === "Online" ||
-          barber.onlineStatus === "Online"
+          barber.isOnline === "Online"
         ) {
           status = "Online";
         } else {

@@ -342,12 +342,10 @@ const DashboardHeader = ({ sidebar, setSidebar, mobileSidebar, setMobileSidebar 
     useEffect(() => {
         if (barberProfile) {
             if (
-                barberProfile.onlineStatus === "Only VIP" ||
-                barberProfile.status === "Only VIP" ||
                 barberProfile.isOnline === "Only VIP"
             ) {
                 setBarberOnlineStatus("Only VIP");
-            } else if (barberProfile.isOnline) {
+            } else if (barberProfile.isOnline === "Online" || barberProfile.isOnline === true) {
                 setBarberOnlineStatus("Online");
             } else {
                 setBarberOnlineStatus("Offline");
